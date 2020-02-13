@@ -10,7 +10,7 @@ Add your own name (do not add the names for others!) to the section below.
 
 | 📸 | Name | Email |
 |---|---|---|
-| ![](https://avatars2.githubusercontent.com/u/19258977?s=400&u=d8726efdbf4b7309885c706d8b4e1755d795a1e6&v=4) | Ziang Qiu | z.qiu@student.tudelft.nl |
+| <img src="https://avatars2.githubusercontent.com/u/19258977?s=400&u=d8726efdbf4b7309885c706d8b4e1755d795a1e6&v=4" width="75" height="75"> | Ziang Qiu | z.qiu@student.tudelft.nl |
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
