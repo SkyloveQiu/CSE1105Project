@@ -5,15 +5,15 @@ In the 'Points of action' part you will also find some topics to cover in/after 
 
 ---
 
-Date:           17/02/2020
-Main focus:     Preparing the Client TA meeting
-Chair:          TBD
+Date:           17/02/2020\
+Main focus:     Preparing the Client TA meeting\
+Chair:          TBD\
 Note taker:     TBD
 
 In italics you will find some additional explanations of the agenda points. You will find mostly the same points in the next agendas.
 
 # Opening
-Present:
+Present:\
 Absent:
 
 # Approval of the agenda
