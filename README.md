@@ -12,7 +12,7 @@ Add your own name (do not add the names for others!) to the section below.
 |---|---|---|
 | <img src="https://avatars2.githubusercontent.com/u/19258977?s=400&u=d8726efdbf4b7309885c706d8b4e1755d795a1e6&v=4" width="75" height="75"> | Ziang Qiu | z.qiu@student.tudelft.nl | 
 | <img src="https://secure.gravatar.com/avatar/27a4a10c0f6c90530a0e209b187ba51d?s=800&d=identicon" width="75" height="75"> | Niels van den Dool| n.vandendool@student.tudelft.nl |
-| <img src="https://i.ibb.co/8dT2v5p/51fdd2c1e1331eb5abb39ed9ad3ffc0c.gif" width="75" height="75"> | Andrei-Cristian Ionescu | A.C.Ionescu-1@student.tudelft.nl | 
+| <img src="https://ibb.co/CMNvC7Z" width="75" height="75"> | Andrei-Cristian Ionescu | A.C.Ionescu-1@student.tudelft.nl | 
 
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
