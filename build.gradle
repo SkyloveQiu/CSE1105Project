@@ -20,8 +20,8 @@ subprojects {
         set('snippetsDir', file("build/generated-snippets"))
     }
 
-    sourceCompatibility = 13
-
+    sourceCompatibility = 11
+    mainClassName = "nl.tudelft.oopp.group43.project.Application"
     jacocoTestCoverageVerification {
         violationRules {
             rule {
