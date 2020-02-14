@@ -2,7 +2,7 @@
 
 Database -------------------------- SQL\
 Front-end ------------------------- OpenFX\
-Server ------------------------------ Spring\
+Server ------------------------------ Spring
 
 Database -> Einar and Niels\
 Front-end -> Cristian and Thom\
@@ -11,12 +11,12 @@ Server -> Andrei and Andrew
 *When code conflict occurs: discuss with other person what to do DONT FORCE PUSH*
 
 ## TODO'S
-	- Schedule\
-	- Design / rough sketch (Adobe Xd)\
-	- Write out notes CTA Meeting and put them in Drive\
-	- What needs to be done for every part\
-		○ Database\
-		○ Server\
+	- Schedule
+	- Design / rough sketch (Adobe Xd)
+	- Write out notes CTA Meeting and put them in Drive
+	- What needs to be done for every part
+		○ Database
+		○ Server
 		○ Front-end
         
 Questions for CTA:\
@@ -26,7 +26,7 @@ Questions for CTA:\
 	- How far in the future can you reserve?\
 	- Guest feature\
     - Bike/food?\
-    - Did you want an administrator? Do you want one in the future?\
+    - Did you want an administrator? Do you want one in the future?
 
 ## Deadlines and stuff
 
@@ -90,11 +90,13 @@ Containing: \
 WEEK 2
 - Database for users completely
 - Login page (client-side)
-- Api for login and registration (server)\
+- Api for login and registration (server)
+
 WEEK 3
 - Database for buildings and rooms
 - Database for schedule partially
 - API for booking + calendar
-- front-end main screen completely, building page, room page\
+- front-end main screen completely, building page, room page
+
 WEEK 4
 - DEMO
