@@ -12,7 +12,7 @@ Add your own name (do not add the names for others!) to the section below.
 |---|---|---|
 | <img src="https://avatars2.githubusercontent.com/u/19258977?s=400&u=d8726efdbf4b7309885c706d8b4e1755d795a1e6&v=4" width="75" height="75"> | Ziang Qiu | z.qiu@student.tudelft.nl | 
 | <img src="https://secure.gravatar.com/avatar/27a4a10c0f6c90530a0e209b187ba51d?s=800&d=identicon" width="75" height="75"> | Niels van den Dool| n.vandendool@student.tudelft.nl |
-| <img src="https://ibb.co/CMNvC7Z" width="75" height="75"> | Andrei-Cristian Ionescu | A.C.Ionescu-1@student.tudelft.nl | 
+| <img src="https://img.favpng.com/11/8/22/usopp-monkey-d-luffy-mr-krabs-sandy-cheeks-tony-tony-chopper-png-favpng-PuYeWXasWku1GbUNbPm6Lu1nG.jpg" width="75" height="75"> | Andrei-Cristian Ionescu | A.C.Ionescu-1@student.tudelft.nl | 
 | <img src="https://img.favpng.com/0/10/6/u9752u4e91u8bc0uff08fate-of-ascensionuff09-mobile-game-android-ios-gamer-png-favpng-6vmziKn54Sk5Zq0Mk8XS3RrWi.jpg" width="75" height="75"> | Thom Breugelmans| t.l.breugelmans@student.tudelft.nl |
 | <img src="https://i.kym-cdn.com/photos/images/facebook/001/564/773/6cf.jpg" width="75" height="75"> |Einar de Gruyl | E.A.deGruyl@student.tudelft.nl |
 | <img src="https://img.favpng.com/15/8/9/information-technology-diploma-informatics-3d-computer-graphics-png-favpng-JdE38vAEJxKKgDXwEggurwQCM.jpg" width="75" height="75"> |Cristian Botocan | c.botocan@student.tudelft.nl |
