@@ -6,7 +6,7 @@ Server ------------------------------ Spring\
 
 Database -> Einar and Niels\
 Front-end -> Cristian and Thom\
-Server -> Andrei and Andrew\
+Server -> Andrei and Andrew
 
 *When code conflict occurs: discuss with other person what to do DONT FORCE PUSH*
 
@@ -67,15 +67,15 @@ Week 9:\
 	Presentations
 
 ## Database
-	- Users with password (in hashcode)\
+	- Users with password (in hashcode)
 	- Buildings + rooms and information
 
 ## Server
-	- API user login w/ token\
-	- API building + rooms information / depends on request\
-	- API for building list\
-	- API for reserving\
-	- API for delete\
+	- API user login w/ token
+	- API building + rooms information / depends on request
+	- API for building list
+	- API for reserving
+	- API for delete
     - API for clock/calendar
 
 ## Front-end
@@ -90,11 +90,11 @@ Containing: \
 WEEK 2
 - Database for users completely
 - Login page (client-side)
-- Api for login and registration (server)
+- Api for login and registration (server)\
 WEEK 3
 - Database for buildings and rooms
 - Database for schedule partially
 - API for booking + calendar
-- front-end main screen completely, building page, 
+- front-end main screen completely, building page, room page\
 WEEK 4
 - DEMO
