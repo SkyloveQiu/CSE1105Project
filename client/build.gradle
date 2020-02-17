@@ -7,6 +7,12 @@ mainClassName = "nl.tudelft.oopp.demo.MainApp"
 dependencies {
     testCompile("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+    // https://mvnrepository.com/artifact/org.json/json
+    // compile group: 'org.json', name: 'json', version: '20190722'
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+
 }
 
 javafx {
