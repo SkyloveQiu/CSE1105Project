@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class RoomControler {
+public class RoomController {
     /**
      * This is the summary for checkstyle.
      *
