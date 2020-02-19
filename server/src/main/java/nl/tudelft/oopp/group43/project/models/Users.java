@@ -35,25 +35,6 @@ public class Users {
 
     @Column(name = "last_name")
     private String lastName;
-<<<<<<< HEAD
-    private String netId;
-    private String rules;
-    private String type;
-
-    /**
-     * constructor the user.
-     * @param firstName the first name
-     * @param lastName the last name
-     * @param netId user's netID
-     *
-     */
-    public Users(String firstName,String lastName,String netId,String rules, String type) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.netId = netId;
-        this.rules = rules;
-        this.type = type;
-=======
 
     @Column(name = "email")
     private String email;
@@ -82,7 +63,6 @@ public class Users {
 
     public boolean hashed_pass(String password) {
         return this.hash.equals(Hashing.sha256().hashString(hash, StandardCharsets.UTF_8).toString());
->>>>>>> 70ae42532f630b72042007eb8582714ef435c823
     }
 
     public String getUsername() {

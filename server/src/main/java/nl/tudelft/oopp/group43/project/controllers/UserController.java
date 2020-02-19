@@ -20,14 +20,10 @@ public class UserController {
 
 
     @GetMapping("/user")
-<<<<<<< HEAD
-    public String greeting(@RequestParam(value = "firstName", defaultValue = "Andrew") String firstName,@RequestParam(value = "lastName", defaultValue = "Andrew")String lastname,@RequestParam(value = "netID", defaultValue = "unknown")String netID) {
-        return "hello";
-=======
     @ResponseBody
     public List<Users> getUser(){
         return repository.findAll();
->>>>>>> 70ae42532f630b72042007eb8582714ef435c823
+
     }
 
     @PutMapping("/user/{username}")
