@@ -13,16 +13,13 @@ import javax.persistence.Table;
 import java.nio.charset.StandardCharsets;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class Users {
 
-
+    @Id
     @Column(name = "id")
     private Integer id;
 
-    @Id
-    @Column(name = "username")
-    private String username;
 
     @Column(name = "hash")
     private String hash;
@@ -39,6 +36,11 @@ public class Users {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "type")
+    private String type;
     //empty constructor
     public Users() {
     }
@@ -52,7 +54,6 @@ public class Users {
                  @JsonProperty("last_name") String lastName,
                  @JsonProperty("email") String email) {
         this.id = id;
-        this.username = username;
         this.hash = Hashing.sha256().hashString(hash, Charsets.UTF_8).toString();
         this.salt = salt;
         this.firstName = firstName;
@@ -63,10 +64,6 @@ public class Users {
 
     public boolean hashed_pass(String password) {
         return this.hash.equals(Hashing.sha256().hashString(hash, StandardCharsets.UTF_8).toString());
-    }
-
-    public String getUsername() {
-        return this.username;
     }
 
     public String getEmail() {
