@@ -19,6 +19,7 @@ public class MainPageDisplay extends Application {
         Parent root = loader.load();
 
         primaryStage.setScene(new Scene(root));
+        primaryStage.setTitle("Campus Management - Main Menu");
         primaryStage.show();
     }
 
