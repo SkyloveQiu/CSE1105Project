@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="nl.tudelft.oopp.demo.controllers.MainSceneController">
     <Label text="Hello world!"/>
     <Label text="This is a simple demo application."/>
