@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @GetMapping("/user")
-    public Users greeting(@RequestParam(value = "firstName", defaultValue = "Andrew") String firstName,@RequestParam(value = "lastName", defaultValue = "Andrew")String lastname,@RequestParam(value = "netID", defaultValue = "unknown")String netID) {
-        return new Users(firstName,lastname,netID);
+    public String greeting(@RequestParam(value = "firstName", defaultValue = "Andrew") String firstName,@RequestParam(value = "lastName", defaultValue = "Andrew")String lastname,@RequestParam(value = "netID", defaultValue = "unknown")String netID) {
+        return "hello";
     }
 
 }
