@@ -2,14 +2,15 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import nl.tudelft.oopp.group43.utilities.GenerateRandomSalt;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 
 @Entity
@@ -17,9 +18,6 @@ import java.nio.charset.StandardCharsets;
 @Table(name = "user")
 public class Users {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
 
 
     @Column(name = "hash")
@@ -42,8 +40,6 @@ public class Users {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "type")
-    private String type;
 
     //empty constructor
     public Users() {
@@ -54,8 +50,8 @@ public class Users {
                  @JsonProperty("first_name") String firstName,
                  @JsonProperty("last_name") String lastName,
                  @JsonProperty("email") String email,
-                 @JsonProperty("role") String role,
-                 @JsonProperty("type") String type) {
+                 @JsonProperty("role") String role
+                 ) {
 
 
         this.salt = GenerateRandomSalt.generateSafeToken();
@@ -64,7 +60,7 @@ public class Users {
         this.lastName = lastName;
         this.email = email;
         this.role = role;
-        this.type = type;
+
 
     }
 
@@ -80,19 +76,19 @@ public class Users {
         return Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString();
     }
 
-    public Integer getId() {
-        return id;
-    }
+
 
 
     public String getEmail() {
         return this.email;
     }
 
+
     public String getPassword() {
         return this.hash;
     }
 
+    @JsonIgnore
     public String getHash() {
         return hash;
     }
@@ -111,7 +107,7 @@ public class Users {
 
 
     public void setHash(String salt) {
-        this.hash = Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString();
+        this.hash = Hashing.sha256().hashString(this.hash + salt, StandardCharsets.UTF_8).toString();
     }
 
     public void setSalt(String salt) {
@@ -126,7 +122,16 @@ public class Users {
         return role;
     }
 
-    public String getType() {
-        return type;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Users)) return false;
+        Users users = (Users) o;
+        return  getHash().equals(users.getHash()) &&
+                getSalt().equals(users.getSalt()) &&
+                getFirstName().equals(users.getFirstName()) &&
+                getLastName().equals(users.getLastName()) &&
+                getEmail().equals(users.getEmail()) &&
+                getRole().equals(users.getRole());
     }
 }
