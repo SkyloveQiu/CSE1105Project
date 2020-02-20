@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import nl.tudelft.oopp.group43.project.models.Users;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,16 +23,31 @@ public class UserController {
     @GetMapping("/user")
     @ResponseBody
     public List<Users> getUser(){
+        System.out.println("gog");
         return repository.findAll();
 
     }
 
-    @PutMapping("/user/{username}")
+    @PutMapping("/user/{email}")
     @ResponseBody
-    public String updateUser(@RequestBody Users userWithNewInfo, @PathVariable String username){
+    public String updateUser(@RequestBody Users userWithNewInfo, @PathVariable String email){
+
         String password = userWithNewInfo.getPassword();
-        if(password.equals(repository.getOne(username).getPassword())){
-            repository.save(userWithNewInfo);
+
+        String salt = repository.getOne(email).getSalt();
+
+        // to do all updates
+        Users a = repository.getOne(email);
+        //update current entry with new name
+        a.setLastName("lastNamee");
+
+        userWithNewInfo.setHash(salt);
+        userWithNewInfo.setSalt(salt);
+
+        if(userWithNewInfo.getHash().equals(repository.getOne(email).getPassword()))
+        {
+
+            repository.save(a);
             return "USER UPDATED!";
         } else {
             return "WRONG PASSWORD!";
@@ -41,8 +57,9 @@ public class UserController {
     @PutMapping("/user")
     @ResponseBody
     public String createUser(@RequestBody Users newUser){
+        newUser.setHash("");
         repository.save(newUser);
-        return "NEW USER: " + newUser.getUsername();
+        return "NEW USER: " + newUser.getEmail();
     }
 
 
