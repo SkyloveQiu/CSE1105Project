@@ -1,6 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
+
 import nl.tudelft.oopp.group43.project.models.Users;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@EnableJpaRepositories("nl.tudelft.oopp.group43.project.repositories")
 @RestController
 public class UserController {
 
@@ -23,12 +22,11 @@ public class UserController {
     @GetMapping("/user")
     @ResponseBody
     public List<Users> getUser(){
-        System.out.println("gog");
         return repository.findAll();
 
     }
 
-    @PutMapping("/user/{email}")
+    @PutMapping("/users/{email}")
     @ResponseBody
     public String updateUser(@RequestBody Users userWithNewInfo, @PathVariable String email){
 
@@ -57,7 +55,7 @@ public class UserController {
     @PutMapping("/user")
     @ResponseBody
     public String createUser(@RequestBody Users newUser){
-        newUser.setHash("");
+        newUser.setHash(newUser.getSalt());
         repository.save(newUser);
         return "NEW USER: " + newUser.getEmail();
     }
