@@ -22,6 +22,7 @@ public class UserController {
     @GetMapping("/user")
     @ResponseBody
     public List<Users> getUser(){
+        System.out.println("gog");
         return repository.findAll();
     }
 
@@ -41,7 +42,7 @@ public class UserController {
     @ResponseBody
     public String createUser(@RequestBody Users newUser){
         repository.save(newUser);
-        return "NEW USER: " + newUser.getUsername();
+        return "NEW USER: " + newUser.getEmail();
     }
 
 

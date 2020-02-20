@@ -5,24 +5,20 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import nl.tudelft.oopp.group43.utilities.GenerateRandomSalt;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class Users {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Id
-    @Column(name = "username")
-    private String username;
 
     @Column(name = "hash")
     private String hash;
@@ -39,34 +35,40 @@ public class Users {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "type")
+    private String type;
+
     //empty constructor
     public Users() {
     }
 
     @JsonCreator
-    public Users(@JsonProperty("id") Integer id,
-                 @JsonProperty("username") String username,
-                 @JsonProperty("hash") String hash,
-                 @JsonProperty("salt") String salt,
+    public Users(@JsonProperty("hash") String hash,
                  @JsonProperty("first_name") String firstName,
                  @JsonProperty("last_name") String lastName,
-                 @JsonProperty("email") String email) {
+                 @JsonProperty("email") String email,
+                 @JsonProperty("role") String role,
+                 @JsonProperty("type") String type){
+
+
         this.id = id;
-        this.username = username;
-        this.hash = Hashing.sha256().hashString(hash, Charsets.UTF_8).toString();
-        this.salt = salt;
+        this.salt = GenerateRandomSalt.generateSafeToken();
+        this.hash = Hashing.sha256().hashString(hash+salt, Charsets.UTF_8).toString();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.role=role;
+        this.type=type;
 
     }
 
     public boolean hashed_pass(String password) {
-        return this.hash.equals(Hashing.sha256().hashString(hash, StandardCharsets.UTF_8).toString());
-    }
-
-    public String getUsername() {
-        return this.username;
+        String copy = new String(hash);
+        copy+=this.salt;
+        return copy.equals(Hashing.sha256().hashString(hash+salt, StandardCharsets.UTF_8).toString());
     }
 
     public String getEmail() {
@@ -88,7 +90,21 @@ public class Users {
 
     public String getSalt() {
         return salt;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String getType() {
+        return type;
     }
 }
