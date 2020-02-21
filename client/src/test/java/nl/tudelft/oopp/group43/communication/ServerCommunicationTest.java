@@ -1,4 +1,4 @@
-package nl.tudelft.oopp.demo.communication;
+package nl.tudelft.oopp.group43.communication;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -9,6 +9,6 @@ public class ServerCommunicationTest {
 
     @Test
     public void testRandomQuote() {
-        assertNotNull(ServerCommunication.getQuote());
+        assertNotNull(ServerCommunication.getUser());
     }
 }

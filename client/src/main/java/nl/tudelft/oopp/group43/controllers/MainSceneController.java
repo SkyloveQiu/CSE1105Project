@@ -1,7 +1,7 @@
-package nl.tudelft.oopp.demo.controllers;
+package nl.tudelft.oopp.group43.controllers;
 
 import javafx.scene.control.Alert;
-import nl.tudelft.oopp.demo.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.json.simple.JSONObject;

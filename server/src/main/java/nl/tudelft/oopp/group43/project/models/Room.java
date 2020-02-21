@@ -1,98 +1,91 @@
 package nl.tudelft.oopp.group43.project.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Generated;
+
+
+import javax.persistence.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 
 
+@Entity
+@DynamicUpdate
+@Table(name = "room")
 public class Room {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "room_name")
     private String roomName;
-    private String buildingName;
-    private ResultSet result;
-    private String plainTextData;
 
 
-    /**
-     * Describes a room from a certain building.
-     *
-     * @param buildingName The name of the building
-     * @param roomName     The roomName
-     * @throws SQLException just an exception
-     */
-    public Room(String buildingName, String roomName) throws SQLException {
+    @Column(name = "building_number")
+    private int buildingNumber;
 
-        this.buildingName = buildingName;
-        this.roomName = roomName;
-        plainTextData = "";
-        //include name verification for room - prevent sql injection
+    @Column(name = "description")
+    private String description;
 
-        Statement st = null;
+    @Column(name = "attributes")
+    private String attributes;
 
-        String query = "SELECT * FROM movies WHERE scenes_in_db =" + Integer.parseInt(buildingName);
+    public Room() {
+    }
 
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/starwars", "postgres", "aura5090")) {
-            st = connection.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            while (rs.next()) {
+    public Room(@JsonProperty("id") int id,
+                @JsonProperty("room_name") String roomName,
+                @JsonProperty("building_number") int buildingNumber,
+                @JsonProperty("description") String description,
+                @JsonProperty("attributes") String attributes){
 
-                int id = rs.getInt("id");
-                System.out.println("DEBUG id: " + id + '\n');
-                String title = rs.getString("title");
-                System.out.println("DEBUG title: " + title + '\n');
-                int scenesInDB = rs.getInt("scenes_in_db");
-                int scenesInMovie = rs.getInt("scenes_in_movies");
+        this.id=id;
+        this.roomName=roomName;
+        this.buildingNumber=buildingNumber;
+        this.description=description;
+        this.attributes=attributes;
 
-                plainTextData += id + " " + title + " " + scenesInDB + " " + scenesInMovie + "   |||   ";
-
-
-            }
-        } catch (SQLException e) {
-            System.out.println("Connection failure.");
-            e.printStackTrace();
-        } finally {
-            if (st != null) {
-                st.close();
-            }
-        }
 
     }
 
-    /**
-     * Gets the room Name.
-     *
-     * @return the roomName
-     */
+    public int getId() {
+        return id;
+    }
+
     public String getRoomName() {
         return roomName;
     }
 
-    /**
-     * Gets the building Name.
-     *
-     * @return the buildingName
-     */
-    public String getBuildingName() {
-        return buildingName;
+    public int getBuildingNumber() {
+        return buildingNumber;
     }
 
-    /**
-     * Gets the result of the query.
-     *
-     * @return the ResultSet of the query
-     */
-    public ResultSet getResult() {
-        return result;
+    public String getDescription() {
+        return description;
     }
 
-    /**
-     * Nothing to describe here.
-     *
-     * @return plain text
-     */
-    public String getPlainTextData() {
-        return plainTextData;
+    public String getAttributes() {
+        return attributes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Room)) return false;
+        Room room = (Room) o;
+        return getId() == room.getId() &&
+                getBuildingNumber() == room.getBuildingNumber() &&
+                getRoomName().equals(room.getRoomName()) &&
+                getDescription().equals(room.getDescription()) &&
+                getAttributes().equals(room.getAttributes());
+    }
+
 }
