@@ -7,9 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.hash.Hashing;
 import nl.tudelft.oopp.group43.utilities.GenerateRandomSalt;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 
 @Entity
@@ -19,8 +21,8 @@ public class User {
 
 
 
-    @Column(name = "hash")
-    private String hash;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "salt")
     private String salt;
@@ -39,13 +41,15 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @ManyToMany
+    private Set<Role> roles;
 
     //empty constructor
     public User() {
     }
 
     @JsonCreator
-    public User(@JsonProperty("hash") String hash,
+    public User(@JsonProperty("password") String password,
                 @JsonProperty("first_name") String firstName,
                 @JsonProperty("last_name") String lastName,
                 @JsonProperty("email") String email,
@@ -54,7 +58,7 @@ public class User {
 
 
         this.salt = GenerateRandomSalt.generateSafeToken();
-        this.hash = hash;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -66,13 +70,13 @@ public class User {
     public boolean hashed_pass(String password) {
         String copy = new String(salt);
         copy += this.salt;
-        return password.equals(Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString());
+        return password.equals(Hashing.sha256().hashString(password + salt, StandardCharsets.UTF_8).toString());
     }
 
     public String hashed_pass_return_string() {
-        String copy = new String(hash);
+        String copy = new String(password);
         copy += this.salt;
-        return Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString();
+        return Hashing.sha256().hashString(password + salt, StandardCharsets.UTF_8).toString();
     }
 
 
@@ -83,13 +87,9 @@ public class User {
     }
 
 
-    public String getPassword() {
-        return this.hash;
-    }
 
-    @JsonIgnore
-    public String getHash() {
-        return hash;
+    public String getPassword() {
+        return password;
     }
 
     public String getSalt() {
@@ -106,7 +106,7 @@ public class User {
 
 
     public void setHash(String salt) {
-        this.hash = Hashing.sha256().hashString(this.hash + salt, StandardCharsets.UTF_8).toString();
+        this.password = Hashing.sha256().hashString(this.password + salt, StandardCharsets.UTF_8).toString();
     }
 
     public void setSalt(String salt) {
@@ -126,11 +126,20 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return  getHash().equals(user.getHash()) &&
+        return  getPassword().equals(user.getPassword()) &&
                 getSalt().equals(user.getSalt()) &&
                 getFirstName().equals(user.getFirstName()) &&
                 getLastName().equals(user.getLastName()) &&
                 getEmail().equals(user.getEmail()) &&
                 getRole().equals(user.getRole());
+    }
+
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
