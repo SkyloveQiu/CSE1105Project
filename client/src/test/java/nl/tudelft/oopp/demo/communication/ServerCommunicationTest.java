@@ -9,6 +9,6 @@ public class ServerCommunicationTest {
 
     @Test
     public void testRandomQuote() {
-        assertNotNull(ServerCommunication.getQuote());
+        assertNotNull(ServerCommunication.getUser());
     }
 }
