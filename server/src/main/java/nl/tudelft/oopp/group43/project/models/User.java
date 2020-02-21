@@ -10,13 +10,12 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 
 @Entity
 @DynamicUpdate
 @Table(name = "user")
-public class Users {
+public class User {
 
 
 
@@ -42,15 +41,15 @@ public class Users {
 
 
     //empty constructor
-    public Users() {
+    public User() {
     }
 
     @JsonCreator
-    public Users(@JsonProperty("hash") String hash,
-                 @JsonProperty("first_name") String firstName,
-                 @JsonProperty("last_name") String lastName,
-                 @JsonProperty("email") String email,
-                 @JsonProperty("role") String role
+    public User(@JsonProperty("hash") String hash,
+                @JsonProperty("first_name") String firstName,
+                @JsonProperty("last_name") String lastName,
+                @JsonProperty("email") String email,
+                @JsonProperty("role") String role
                  ) {
 
 
@@ -125,13 +124,13 @@ public class Users {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Users)) return false;
-        Users users = (Users) o;
-        return  getHash().equals(users.getHash()) &&
-                getSalt().equals(users.getSalt()) &&
-                getFirstName().equals(users.getFirstName()) &&
-                getLastName().equals(users.getLastName()) &&
-                getEmail().equals(users.getEmail()) &&
-                getRole().equals(users.getRole());
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return  getHash().equals(user.getHash()) &&
+                getSalt().equals(user.getSalt()) &&
+                getFirstName().equals(user.getFirstName()) &&
+                getLastName().equals(user.getLastName()) &&
+                getEmail().equals(user.getEmail()) &&
+                getRole().equals(user.getRole());
     }
 }
