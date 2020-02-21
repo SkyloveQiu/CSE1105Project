@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Entity
 @DynamicUpdate
-@Table(name = "user")
+@Table(name = "room")
 public class Room {
 
 
@@ -27,6 +27,7 @@ public class Room {
 
     @Column(name = "room_name")
     private String roomName;
+
 
     @Column(name = "building_number")
     private int buildingNumber;
