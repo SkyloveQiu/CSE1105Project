@@ -87,8 +87,10 @@ public class UserController {
 //    }
 
     @PostMapping("/registration")
-    public String registration(@RequestBody User userForm, BindingResult bindingResult) {
-        System.out.println("we have recieve message!");
+    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult,Model model) {
+        System.out.println("we have receive message!");
+        System.out.println(userForm.toString());
+        userForm.setSalt();
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {

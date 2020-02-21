@@ -19,13 +19,15 @@ import java.util.Set;
 @Table(name = "user")
 public class User {
 
+    @Id
+    @Column(name = "email")
+    private String email;
 
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "salt")
-    private String salt;
+
 
     @Column(name = "first_name")
     private String firstName;
@@ -34,12 +36,14 @@ public class User {
     private String lastName;
 
 
-    @Id
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "role")
     private String role;
+
+
+    @Column(name = "salt")
+    private String salt;
+
+
 
     @ManyToMany
     private Set<Role> roles;
@@ -104,13 +108,28 @@ public class User {
         return lastName;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public void setHash(String salt) {
         this.password = Hashing.sha256().hashString(this.password + salt, StandardCharsets.UTF_8).toString();
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setSalt() {
+        this.salt = GenerateRandomSalt.generateSafeToken();
     }
 
     public void setLastName(String lastName) {
@@ -134,6 +153,18 @@ public class User {
                 getRole().equals(user.getRole());
     }
 
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 
     public Set<Role> getRoles() {
         return roles;

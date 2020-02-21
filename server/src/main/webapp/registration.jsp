@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -19,11 +20,12 @@
 
         <form:form method="POST" modelAttribute="userForm" class="form-signin">
             <h2 class="form-signin-heading">Create your account</h2>
-            <spring:bind path="username">
+
+            <spring:bind path="email">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="username" class="form-control" placeholder="Username"
+                    <form:input type="text" path="email" class="form-control" placeholder="email"
                                 autofocus="true"></form:input>
-                    <form:errors path="username"></form:errors>
+                    <form:errors path="email"></form:errors>
                 </div>
             </spring:bind>
 
@@ -34,13 +36,28 @@
                 </div>
             </spring:bind>
 
-            <spring:bind path="passwordConfirm">
+            <spring:bind path="firstName">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="password" path="passwordConfirm" class="form-control"
-                                placeholder="Confirm your password"></form:input>
-                    <form:errors path="passwordConfirm"></form:errors>
+                    <form:input type="firstName" path="firstName" class="form-control" placeholder="firstName"></form:input>
+                    <form:errors path="firstName"></form:errors>
                 </div>
             </spring:bind>
+
+            <spring:bind path="lastName">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input type="lastName" path="lastName" class="form-control" placeholder="lastName"></form:input>
+                    <form:errors path="lastName"></form:errors>
+                </div>
+            </spring:bind>
+
+            <spring:bind path="role">
+                <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input type="role" path="role" class="form-control" placeholder="role"></form:input>
+                    <form:errors path="role"></form:errors>
+                </div>
+            </spring:bind>
+
+
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
         </form:form>
