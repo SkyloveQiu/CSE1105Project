@@ -1,4 +1,4 @@
-package nl.tudelft.oopp.demo.views;
+package nl.tudelft.oopp.group43.views;
 
 import java.io.IOException;
 import java.net.URL;

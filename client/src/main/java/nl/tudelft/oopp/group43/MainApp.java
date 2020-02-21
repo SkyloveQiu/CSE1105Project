@@ -1,6 +1,6 @@
-package nl.tudelft.oopp.demo;
+package nl.tudelft.oopp.group43;
 
-import nl.tudelft.oopp.demo.views.MainPageDisplay;
+import nl.tudelft.oopp.group43.views.MainPageDisplay;
 
 public class MainApp {
     public static void main(String[] args) {
