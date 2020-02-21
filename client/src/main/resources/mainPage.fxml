@@ -3,26 +3,41 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheets/mainPage.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.demo.controllers.MainPageController">
    <children>
-      <Pane prefHeight="400.0" prefWidth="600.0">
+      <GridPane layoutY="30.0" prefHeight="370.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="60.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" percentWidth="40.0"/>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100.0" vgrow="SOMETIMES"/>
+         </rowConstraints>
          <children>
-            <AnchorPane prefHeight="26.0" prefWidth="600.0" styleClass="menu-bar">
-               <children>
-                  <Label layoutX="264.0" prefHeight="30.0" prefWidth="71.0" text="Main Menu">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-         </children></Pane>
-      <Pane fx:id="menubar" layoutX="-170.0" prefHeight="400.0" prefWidth="169.0" styleClass="menu">
+            <ScrollPane fx:id="reservations" prefHeight="370.0" prefWidth="414.0">
+      </ScrollPane>
+      
+                  <ScrollPane fx:id="buildings" prefHeight="370.0" prefWidth="387.0" GridPane.columnIndex="1">
+      </ScrollPane>
+         </children>
+      </GridPane>
+
+      <Label alignment="center" prefHeight="30.0" prefWidth="600.0" styleClass="menubar" text="Main Menu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+
+      <Pane fx:id="menubar" layoutX="-180.0" prefHeight="400.0" prefWidth="169.0" styleClass="menu" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Accordion layoutY="30.0" prefHeight="43.0" prefWidth="170.0" styleClass="menu">
               <panes>

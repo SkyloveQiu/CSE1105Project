@@ -1,16 +1,19 @@
 package nl.tudelft.oopp.demo.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-//import javafx.scene.transform.Translate;
 
 public class MainPageController {
 
     private boolean clicked = false;
 
+    @FXML
+    private Button menubutton;
+
+    @FXML
+    private Pane menubar;
     /**
      * Handles clicking the button.
      */
@@ -18,17 +21,15 @@ public class MainPageController {
     public void buttonClicked(ActionEvent event) {
         this.clicked = !this.clicked;
 
-        Scene scene = (Scene) ((Node) event.getSource()).getScene();
-        Pane menuBar = (Pane) scene.lookup("#menubar");
-        Button btn = (Button) scene.lookup("#menubutton");
+//        Scene scene = (Scene) ((Node) event.getSource()).getScene();
 
-        if(this.clicked) {
-            menuBar.relocate(0.0, 0.0);
-            btn.setText("Close");
+        if(clicked) {
+            menubar.relocate(0.0, 0.0);
+            menubutton.setText("Close");
         }
         else {
-            menuBar.relocate(-170.0, 0.0);
-            btn.setText("Menu");
+            menubar.relocate(-180.0, 0.0);
+            menubutton.setText("Menu");
         }
     }
 }
