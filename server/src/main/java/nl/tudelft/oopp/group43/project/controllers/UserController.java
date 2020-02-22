@@ -91,7 +91,7 @@ public class UserController {
         System.out.println("we have receive message!");
         userForm.setSalt();
         userForm.setHash(userForm.getSalt());
-        String a = "{sha256}";
+        String a = "";
         a+=userForm.getPassword();
         userForm.setEncriptedHash(a);
         System.out.println(userForm.toString());
