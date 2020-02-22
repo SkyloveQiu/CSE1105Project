@@ -89,8 +89,12 @@ public class UserController {
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult,Model model) {
         System.out.println("we have receive message!");
-        System.out.println(userForm.toString());
         userForm.setSalt();
+        userForm.setHash(userForm.getSalt());
+        String a = "{sha256}";
+        a+=userForm.getPassword();
+        userForm.setEncriptedHash(a);
+        System.out.println(userForm.toString());
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {

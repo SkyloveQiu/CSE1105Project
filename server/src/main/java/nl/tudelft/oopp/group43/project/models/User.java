@@ -128,6 +128,11 @@ public class User {
         this.password = Hashing.sha256().hashString(this.password + salt, StandardCharsets.UTF_8).toString();
     }
 
+
+    public void setEncriptedHash(String actualpass) {
+        this.password = actualpass;
+    }
+
     public void setSalt() {
         this.salt = GenerateRandomSalt.generateSafeToken();
     }
