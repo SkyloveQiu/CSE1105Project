@@ -1,8 +1,8 @@
 package nl.tudelft.oopp.group43.project.service;
 
 public interface SecurityService {
-    String findLoggedInEmail();
+    String findLoggedInUsername();
 
-    void autoLogin(String email, String password);
+    void autoLogin(String username, String password);
 
 }

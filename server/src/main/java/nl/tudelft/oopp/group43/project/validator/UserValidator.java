@@ -23,11 +23,11 @@ public class UserValidator implements Validator {
     public void validate(Object target, Errors errors) {
         User user = (User) target;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"email","NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"username","NotEmpty");
 
-        String email = user.getEmail();
+        String email = user.getUsername();
         if (isValidEmailAddress(email) == false) {
-            errors.rejectValue("email","not a valid email address");
+            errors.rejectValue("username","not a valid email address");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");

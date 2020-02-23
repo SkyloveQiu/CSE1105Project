@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Controller
 public class UserController {
@@ -89,12 +88,9 @@ public class UserController {
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult,Model model) {
         System.out.println("we have receive message!");
-        userForm.setSalt();
-        userForm.setHash(userForm.getSalt());
-        String a = "";
-        a+=userForm.getPassword();
-        userForm.setEncriptedHash(a);
         System.out.println(userForm.toString());
+//        userForm.setSalt();
+//        userForm.setHash(userForm.getSalt());
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -103,7 +99,7 @@ public class UserController {
 
         userService.save(userForm);
 
-        securityService.autoLogin(userForm.getEmail(), userForm.getPassword());
+        securityService.autoLogin(userForm.getUsername(), userForm.getPassword());
 
         return "redirect:/welcome";
     }
