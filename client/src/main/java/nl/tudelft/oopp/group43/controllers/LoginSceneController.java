@@ -101,18 +101,18 @@ public class LoginSceneController  {
       System.out.println("amiwenfi");
       
    }*/
-    // @SuppressWarnings("unchecked")
+
+    @SuppressWarnings("unchecked")
     @FXML
-    private void registerClicked(ActionEvent event) throws IOException
-    {
+    private void registerClicked(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        URL xmlUrl = getClass().getResource("/RegisterScene.fxml");
+        loader.setLocation(xmlUrl);
+        Parent root = loader.load();
 
-       Parent nextRegisteView = FXMLLoader.load(getClass().getResource("RegisterScene.fxml"));
-
-        Scene nextRegisterScene = new Scene (nextRegisteView);
-
-       Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(nextRegisterScene);
-        window.show();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
 
