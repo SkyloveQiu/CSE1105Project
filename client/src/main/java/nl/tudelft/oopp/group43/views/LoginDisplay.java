@@ -1,4 +1,4 @@
-package nl.tudelft.oopp.demo.views;
+package nl.tudelft.oopp.group43.views;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -1,4 +1,4 @@
-package nl.tudelft.oopp.demo.controllers;
+package nl.tudelft.oopp.group43.controllers;
 
 import javafx.application.Application;
 import javafx.fxml.FXML;
