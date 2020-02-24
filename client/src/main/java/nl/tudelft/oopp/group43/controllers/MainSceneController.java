@@ -20,7 +20,7 @@ public class MainSceneController {
         alert.setHeaderText(null);
 
         try {
-            Object obj = parser.parse(ServerCommunication.getBuilding());
+            Object obj = parser.parse(ServerCommunication.getBuildings());
             JSONObject user = (JSONObject) obj;
             alert.setContentText("User: " + user.get("firstName") + "\nLastname: " + user.get("lastName"));
         }
