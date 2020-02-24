@@ -46,6 +46,7 @@
               </panes>
             </Accordion>
             <Button layoutX="6.0" layoutY="73.0" onAction="#toRoomPage" prefHeight="30.0" prefWidth="98.0" text="to Room Page" />
+            <Button layoutX="6.0" layoutY="116.0" onAction="#toLoginPage" prefHeight="30.0" prefWidth="98.0" text="to Login Page" />
          </children>
       </Pane>
    </children>

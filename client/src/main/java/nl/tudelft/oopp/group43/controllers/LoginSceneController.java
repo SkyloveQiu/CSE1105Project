@@ -13,7 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.demo.views.RegisterDisplay;
+import nl.tudelft.oopp.group43.views.RegisterDisplay;
 
 
 import javafx.event.ActionEvent;
