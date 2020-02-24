@@ -10,7 +10,7 @@ public class ServerCommunication {
     private static HttpClient client = HttpClient.newBuilder().build();
 
     /**
-     * Retrieves a quote from the server.
+     * Retrieves all buildings from the server.
      * @return the body of a get request to the server.
      * @throws Exception if communication with the server fails.
      */
@@ -30,6 +30,11 @@ public class ServerCommunication {
         return response.body();
     }
 
+    /**
+     * Retrieves rooms from the server.
+     * @return the body of a get request to the server.
+     * @throws Exception if communication with the server fails.
+     */
     public static String getRooms() {
         HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/room")).build();
         HttpResponse<String> response = null;
@@ -46,6 +51,11 @@ public class ServerCommunication {
         return response.body();
     }
 
+    /**
+     * Retrieves users from the server.
+     * @return the body of a get request to the server.
+     * @throws Exception if communication with the server fails.
+     */
     public static String getUsers() {
         HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/users")).build();
         HttpResponse<String> response = null;
