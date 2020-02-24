@@ -26,11 +26,12 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
+        System.out.println(response.body());
         return response.body();
     }
 
     public static String getRooms() {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/building")).build();
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/room")).build();
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -41,11 +42,12 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
+        System.out.println(response.body());
         return response.body();
     }
 
     public static String getUsers() {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/building")).build();
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/users")).build();
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -56,6 +58,7 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
+        System.out.println(response.body());
         return response.body();
     }
 

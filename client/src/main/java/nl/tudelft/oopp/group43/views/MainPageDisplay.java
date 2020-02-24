@@ -48,41 +48,41 @@ public class MainPageDisplay extends Application {
             }
         });
 
-//        Button btn2 = new Button();
-//        btn2.setLayoutX(50.0);
-//        btn2.setLayoutY(60.0);
-//        btn2.setText("rooms");
-//        btn2.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("An room for you");
-//                alert.setHeaderText(null);
-//
-//                alert.setContentText(ServerCommunication.getRooms());
-//
-//                alert.showAndWait();
-//            }
-//        });
-//
-//        Button btn3 = new Button();
-//        btn3.setLayoutX(50.0);
-//        btn3.setLayoutY(80.0);
-//        btn3.setText("users");
-//        btn3.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("An user for you");
-//                alert.setHeaderText(null);
-//
-//                alert.setContentText(ServerCommunication.getUsers());
-//
-//                alert.showAndWait();
-//            }
-//        });
+        Button btn2 = new Button();
+        btn2.setLayoutX(50.0);
+        btn2.setLayoutY(80.0);
+        btn2.setText("rooms");
+        btn2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("An room for you");
+                alert.setHeaderText(null);
 
-        Pane pane = new Pane(btn1);
+                alert.setContentText(ServerCommunication.getRooms());
+
+                alert.showAndWait();
+            }
+        });
+
+        Button btn3 = new Button();
+        btn3.setLayoutX(50.0);
+        btn3.setLayoutY(120.0);
+        btn3.setText("users");
+        btn3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("An user for you");
+                alert.setHeaderText(null);
+
+                alert.setContentText(ServerCommunication.getUsers());
+
+                alert.showAndWait();
+            }
+        });
+
+        Pane pane = new Pane(btn1, btn2, btn3);
         sp.setContent(pane);
 
         primaryStage.setScene(scene);
