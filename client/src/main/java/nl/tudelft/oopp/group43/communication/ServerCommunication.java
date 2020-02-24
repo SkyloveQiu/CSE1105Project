@@ -26,7 +26,6 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
-        System.out.println(response.body());
         return response.body();
     }
 
@@ -47,7 +46,6 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
-        System.out.println(response.body());
         return response.body();
     }
 
@@ -68,7 +66,6 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
-        System.out.println(response.body());
         return response.body();
     }
 

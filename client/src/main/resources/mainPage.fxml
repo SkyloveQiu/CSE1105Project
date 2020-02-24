@@ -26,12 +26,10 @@
          <children>
             <ScrollPane fx:id="buildings" fitToWidth="true" prefHeight="370.0" prefWidth="414.0">
                <content>
-                  <GridPane fx:id="buildings_grid" gridLinesVisible="true" hgap="20.0" prefHeight="115.0" prefWidth="358.0" vgap="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane fx:id="buildings_grid" gridLinesVisible="true" alignment="TOP_LEFT" hgap="20.0" prefHeight="115.0" prefWidth="358.0" vgap="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="25" />
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50" />
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.views.MainPageDisplay;
 
 import java.io.IOException;
 import java.net.URL;
@@ -50,6 +51,7 @@ public class MainPageController {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.setTitle("Campus Management - Room Menu");
         stage.show();
     }
 
@@ -63,6 +65,7 @@ public class MainPageController {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+        stage.setTitle("Campus Management - Login Page");
         stage.show();
     }
 }
