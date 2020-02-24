@@ -14,8 +14,8 @@ public class ServerCommunication {
      * @return the body of a get request to the server.
      * @throws Exception if communication with the server fails.
      */
-    public static String getUser() {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8080/user")).build();
+    public static String getBuilding() {
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://145.94.195.73:8000/building")).build();
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
