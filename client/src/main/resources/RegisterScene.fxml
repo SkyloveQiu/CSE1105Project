@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.demo.controllers.RegisterSceneController">
+<VBox xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RegisterSceneController">
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: deepskyblue;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar layoutY="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -28,10 +28,12 @@
          <RadioButton fx:id="other" layoutX="330.0" layoutY="269.0" mnemonicParsing="false" text="Other" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="351.0" AnchorPane.rightAnchor="176.0" AnchorPane.topAnchor="269.0" />
          <RadioButton fx:id="employee" layoutX="151.0" layoutY="269.0" mnemonicParsing="false" text="Employee" AnchorPane.bottomAnchor="113.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="376.0" AnchorPane.topAnchor="269.0" />
          <Label fx:id="emailCheck" layoutX="324.0" layoutY="149.0" textFill="#d51414" />
-         <Label fx:id="passwordCheck" layoutX="323.0" layoutY="188.0" prefHeight="18.0" prefWidth="56.0" textFill="#d51414" />
+         <Label fx:id="passwordCheck" layoutX="323.0" layoutY="188.0" prefHeight="18.0" prefWidth="220.0" textFill="#d51414" />
          <Label fx:id="cpasswordCheck" layoutX="324.0" layoutY="228.0" textFill="#d51414" />
          <Label fx:id="termsCheck" layoutX="286.0" layoutY="309.0" textFill="#d51414" />
          <Label fx:id="roleCheck" layoutX="428.0" layoutY="270.0" textFill="#d51414" />
+         <Label fx:id="firstNameCheck" layoutX="95.0" layoutY="96.0" textFill="#d51414" />
+         <Label fx:id="lastNameCheck" layoutX="374.0" layoutY="96.0" textFill="#d51414" />
    </children>
 </AnchorPane>
 </VBox>

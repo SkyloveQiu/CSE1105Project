@@ -3,11 +3,17 @@ package nl.tudelft.oopp.group43.views;
 import java.io.IOException;
 import java.net.URL;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 
 public class MainPageDisplay extends Application {
 
@@ -20,9 +26,25 @@ public class MainPageDisplay extends Application {
         loader.setLocation(xmlUrl);
         Parent root = loader.load();
 
-        ScrollPane buildings = new ScrollPane();
+        Scene scene = new Scene(root);
+        ScrollPane sp = (ScrollPane) scene.lookup("#buildings");
 
-        primaryStage.setScene(new Scene(root));
+        ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                GridPane gp = (GridPane) scene.lookup("#buildings_grid");
+                for(RowConstraints rc : gp.getRowConstraints()) {
+                    double newSize = ((double) newValue - 100.0)/4;
+                    rc.setPrefHeight(newSize);
+                    rc.setMinHeight(newSize);
+                    rc.setMaxHeight(newSize);
+                    System.out.println(newSize);
+                }
+            }
+        };
+        sp.widthProperty().addListener(resizeListener);
+
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Campus Management - Main Menu");
         primaryStage.show();
     }
