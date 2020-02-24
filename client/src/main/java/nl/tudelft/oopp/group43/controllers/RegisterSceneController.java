@@ -38,7 +38,10 @@ public class RegisterSceneController {
     private Label termsCheck;
     @FXML
     private Label roleCheck;
-
+    @FXML
+    private Label firstNameCheck;
+    @FXML
+    private Label lastNameCheck;
 
     /**
      * this method check if any field is empty - exception password fi
@@ -64,10 +67,14 @@ public class RegisterSceneController {
        if(passwordString.isEmpty() || cpasswordString.isEmpty() || lastNameString.isEmpty() || firstNameString.isEmpty() || emailString.isEmpty())
        {
            empty = true;
-          // if(firstNameString.isEmpty())
-            ///   message = message + "You did not complete the first name field" + "\n";
-        ///   if(lastNameString.isEmpty())
-           //    message = message + "You did not complete the last name  field" + "\n";
+            if(firstNameString.isEmpty())
+                firstNameCheck.setText("You did not complete the first name field");
+            else
+                firstNameCheck.setText("");
+            if(lastNameString.isEmpty())
+                lastNameCheck.setText("You did not complete the last name field");
+            else
+                lastNameCheck.setText("");
            if(emailString.isEmpty())
                emailCheck.setText("You did not complete the email field");
            else

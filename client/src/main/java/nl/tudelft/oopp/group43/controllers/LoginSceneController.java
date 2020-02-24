@@ -7,16 +7,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.views.RegisterDisplay;
 
 
 import javafx.event.ActionEvent;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +26,10 @@ public class LoginSceneController  {
   private TextField email;
   @FXML
   private PasswordField password;
-
+  @FXML
+  private Label emailCheck;
+  @FXML
+  private Label passwordCheck;
 
 
    /* @FXML
@@ -38,38 +39,41 @@ public class LoginSceneController  {
     }*/
 
 
-    private String checkEmpty()
+    private boolean checkEmpty()
   {
       String emailString = email.getText();
       String passwordString = password.getText();
+
+      boolean okEmpty = false;
 
       if(emailString.isEmpty() || passwordString.isEmpty())
       {
-          String message = new String();
           if(emailString.isEmpty())
-              message = message + "You did not complete the email field" + "\n";
+              emailCheck.setText("You did not complete the email field");
+          else
+              emailCheck.setText("");
           if(passwordString.isEmpty())
-              message = message + "You did not complete the password field";
-          return message;
+             passwordCheck.setText("You did not complete the password field");
+          else
+             passwordCheck.setText("");
+          okEmpty = true;
       }
-      else
-          return null;
+     return okEmpty;
   }
   @FXML
+  @SuppressWarnings("unchecked")
   private void loginClicked(ActionEvent event)
   {
-      String messageEmpty =  checkEmpty();
-      if(messageEmpty != null)
-      {
-          Alert alert = new Alert(Alert.AlertType.INFORMATION);
-          alert.setHeaderText(null);
-          alert.setContentText(messageEmpty);
-          alert.showAndWait();
-          return;
-      }
+      boolean okEmpty =  checkEmpty();
+     if(okEmpty == true)
+         return;
 
-      String emailString = email.getText();
-      String passwordString = password.getText();
+     // String emailString = email.getText();
+     // String passwordString = password.getText();
+      JSONObject newUser = new JSONObject();
+      newUser.put("Email", (String)email.getText());
+      newUser.put("Password", (String)password.getText());
+
 
 
 
@@ -101,18 +105,18 @@ public class LoginSceneController  {
       System.out.println("amiwenfi");
       
    }*/
-    // @SuppressWarnings("unchecked")
+
+    @SuppressWarnings("unchecked")
     @FXML
-    private void registerClicked(ActionEvent event) throws IOException
-    {
+    private void registerClicked(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        URL xmlUrl = getClass().getResource("/RegisterScene.fxml");
+        loader.setLocation(xmlUrl);
+        Parent root = loader.load();
 
-       Parent nextRegisteView = FXMLLoader.load(getClass().getResource("RegisterScene.fxml"));
-
-        Scene nextRegisterScene = new Scene (nextRegisteView);
-
-       Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        window.setScene(nextRegisterScene);
-        window.show();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
 
