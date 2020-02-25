@@ -22,9 +22,12 @@ import java.net.URL;
 public class MainPageContent implements Runnable {
 
     private Stage stage;
+    private Scene scene;
+    private Label[] labelArr;
 
     public MainPageContent(Stage stage) {
         this.stage = stage;
+        this.scene = stage.getScene();
     }
 
     /**
@@ -55,38 +58,48 @@ public class MainPageContent implements Runnable {
                 }
             };
 
+            labelArr = new Label[jsonArray.size()];
+
             if(jsonArray.size() > 2) {
                 int size = jsonArray.size();
-                double rowHeight = (gp.getWidth() - 20.0) / 2;
-                while(size > 2) {
+                double rowHeight = (gp.getWidth() - 20.0) / MainPageConfig.getColumnCount();
+                while(size > MainPageConfig.getColumnCount()) {
                     RowConstraints rc = new RowConstraints();
                     rc.setPrefHeight(rowHeight);
                     rc.setMinHeight(rowHeight);
                     rc.setMaxHeight(rowHeight);
                     gp.getRowConstraints().add(rc);
-                    size -= 2;
+                    size -= MainPageConfig.getColumnCount();
                 }
             }
 
             int row = 0;
             for(int i = 0; i < jsonArray.size(); i++) {
-                if(i % 2 == 0 && i != 0) { row++; }
-                JSONObject obj = (JSONObject) jsonArray.get(i);
-                Label label = new Label();
-                label.setPrefWidth(Integer.MAX_VALUE);
-                label.setMaxWidth(Integer.MAX_VALUE);
-                label.setMinWidth(0);
-                label.setStyle("-fx-background-color: #daebeb");
-                label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
-
-                label.addEventFilter(MouseEvent.MOUSE_CLICKED, onClick);
-
-                gp.add(label, i % 2, row);
+                if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
+                addLabel(i, row, gp, jsonArray, onClick);
             }
 
             Label label = (Label) stage.getScene().lookup("#titlebar");
             label.setText("Main Menu");
+
+            MainPageConfig.setLabel(labelArr);
         }
         catch(ParseException e) {}
+    }
+
+    private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, EventHandler<MouseEvent> onClick) {
+        JSONObject obj = (JSONObject) jsonArray.get(i);
+        Label label = new Label();
+        label.setPrefWidth(Integer.MAX_VALUE);
+        label.setMaxWidth(Integer.MAX_VALUE);
+        label.setMinWidth(0);
+        label.setStyle("-fx-background-color: #daebeb");
+        label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
+
+        label.addEventFilter(MouseEvent.MOUSE_CLICKED, onClick);
+
+        gp.add(label, i % MainPageConfig.getColumnCount(), row);
+
+        labelArr[i] = label;
     }
 }
