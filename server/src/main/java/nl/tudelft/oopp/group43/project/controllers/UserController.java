@@ -2,20 +2,21 @@ package nl.tudelft.oopp.group43.project.controllers;
 
 
 import nl.tudelft.oopp.group43.project.models.User;
+import nl.tudelft.oopp.group43.project.payload.JwtRespones;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import nl.tudelft.oopp.group43.project.service.SecurityService;
 import nl.tudelft.oopp.group43.project.service.UserService;
 import nl.tudelft.oopp.group43.project.validator.UserValidator;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 public class UserController {
 
 
@@ -68,14 +69,6 @@ public class UserController {
 //    }
 
 
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        System.out.println("hello");
-        model.addAttribute("userForm", new User());
-
-        return "registration";
-    }
-
 //
 //
 //    @PutMapping("/user")
@@ -86,7 +79,7 @@ public class UserController {
 //    }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult,Model model) {
+    public ResponseEntity<JwtRespones> registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
         System.out.println("we have receive message!");
         System.out.println(userForm.toString());
 //        userForm.setSalt();
@@ -94,30 +87,26 @@ public class UserController {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         userService.save(userForm);
 
-        securityService.autoLogin(userForm.getUsername(), userForm.getPassword());
-
-        return "redirect:/welcome";
-    }
-    @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
-
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
-
-        return "login";
+        User user = securityService.autoLogin(userForm.getUsername(), userForm.getPassword());
+        JwtRespones jwtRespones = new JwtRespones(user.getToken(),user.getUsername(),user.getRole());
+        return new ResponseEntity<>(jwtRespones, HttpStatus.OK);
     }
 
-    @GetMapping({"/", "/welcome"})
-    public String welcome(Model model) {
-        return "welcome";
-    }
 
+    @PostMapping("/token")
+    public ResponseEntity<JwtRespones> getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
+        User user = securityService.autoLogin(username,password);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        JwtRespones jwtRespones = new JwtRespones(user.getToken(),user.getUsername(),user.getRole());
+        return new ResponseEntity<>(jwtRespones, HttpStatus.OK);
+
+    }
 
 }

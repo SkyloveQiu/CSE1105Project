@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.project.service;
 
+import nl.tudelft.oopp.group43.project.models.User;
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +13,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-public class SecurityServiceImpl implements SecurityService{
+public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
@@ -33,15 +40,25 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     @Override
-    public void autoLogin(String username, String password) {
+    public User autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,password,userDetails.getAuthorities());
+        String token = UUID.randomUUID().toString();
+        User user = userRepository.findByUsername(username);
 
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        System.out.println(usernamePasswordAuthenticationToken.isAuthenticated());
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            logger.debug(String.format("Auto login % successfully!"), username);
+            System.out.println(usernamePasswordAuthenticationToken.getCredentials());
+            System.out.println(token);
+            user.setToken(token);
+            return user;
         }
+        return null;
+
     }
+
+
+
+
 }

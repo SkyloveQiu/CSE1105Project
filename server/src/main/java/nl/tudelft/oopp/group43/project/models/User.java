@@ -22,8 +22,6 @@ public class User {
     @Column(name = "password")
     private String password;
 
-
-
     @Column(name = "first_name")
     private String firstName;
 
@@ -34,11 +32,19 @@ public class User {
     @Column(name = "role")
     private String role;
 
-
+    @Column(name = "token")
+    private String token;
 //    @Column(name = "salt")
 //    private String salt;
 
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     @ManyToMany
     private Set<Role> roles;
