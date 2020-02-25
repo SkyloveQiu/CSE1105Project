@@ -82,6 +82,11 @@ public class MainPageDisplay extends Application {
         launch(args);
     }
 
+    /**
+     * Adds all buildings as content using a new Thread
+     * Doing this removes initial startup lag
+     * @param stage Stage is passed as parameter to get all Nodes
+     */
     private void addBuildings(Stage stage) {
         //Adds the building content in a separate Thread
         Thread thread = new Thread(new Runnable() {
@@ -101,6 +106,12 @@ public class MainPageDisplay extends Application {
         thread.start();
     }
 
+    /**
+     * Updates the grid when it gets resized
+     * Namely by adding columns when it hit a certain size point (700.0)
+     * and adding or removing rows accordingly
+     * @param gp the GridPane that gets updates
+     */
     private void updateGrid(GridPane gp) {
         gp.getChildren().removeAll(MainPageConfig.getLabel());
 

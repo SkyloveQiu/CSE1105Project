@@ -87,6 +87,14 @@ public class MainPageContent implements Runnable {
         catch(ParseException e) {}
     }
 
+    /**
+     * Adds a label to the building GridPane
+     * @param i the current index in the label-array
+     * @param row the current working row in the GridPane
+     * @param gp the GridPane to which the labels get added
+     * @param jsonArray the JSONArray containing all the buildings to add
+     * @param onClick the Handler that gets added to the labels and activates when clicked on
+     */
     private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, EventHandler<MouseEvent> onClick) {
         JSONObject obj = (JSONObject) jsonArray.get(i);
         Label label = new Label();
