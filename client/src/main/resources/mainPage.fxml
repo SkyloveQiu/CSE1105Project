@@ -45,7 +45,7 @@
          </children>
       </GridPane>
 
-      <Label alignment="center" prefHeight="30.0" prefWidth="600.0" styleClass="menubar" text="Main Menu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <Label fx:id="titlebar" alignment="center" prefHeight="30.0" prefWidth="600.0" styleClass="menubar" text="Main Menu" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
             <Font size="14.0" />
          </font>
