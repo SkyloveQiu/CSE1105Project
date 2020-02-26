@@ -1,13 +1,19 @@
 package nl.tudelft.oopp.group43.classes;
 
+import com.sun.tools.javac.Main;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -36,10 +42,12 @@ public class MainPageContent implements Runnable {
     public void run() {
         JSONParser json = new JSONParser();
         GridPane gp = (GridPane) stage.getScene().lookup("#buildings_grid");
+        Accordion accordion = (Accordion) stage.getScene().lookup("#building_list");
+        Pane menuPane = (Pane) stage.getScene().lookup("#menubar");
 
         try {
             JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getBuilding());
-            EventHandler<MouseEvent> onClick = new EventHandler<MouseEvent>() {
+            EventHandler<MouseEvent> labelClick = new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
                     FXMLLoader loader = new FXMLLoader();
@@ -57,6 +65,29 @@ public class MainPageContent implements Runnable {
                     stage.show();
                 }
             };
+
+            EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    if(!MainPageConfig.isAccordionExpanded()) {
+                        for(Node node : menuPane.getChildren()) {
+                            if(!node.equals(accordion)) {
+                                node.relocate(node.getLayoutX(), node.getLayoutY() + MainPageConfig.getAccordionHeight());
+                                MainPageConfig.setAccordionExpanded(true);
+                            }
+                        }
+                    }
+                    else if(MainPageConfig.isAccordionExpanded()){
+                        for(Node node : menuPane.getChildren()) {
+                            if(!node.equals(accordion)) {
+                                node.relocate(node.getLayoutX(), node.getLayoutY() - MainPageConfig.getAccordionHeight());
+                                MainPageConfig.setAccordionExpanded(false);
+                            }
+                        }
+                    }
+                }
+            };
+            accordion.addEventFilter(MouseEvent.MOUSE_CLICKED, accordionClick);
 
             labelArr = new Label[jsonArray.size()];
 
@@ -76,8 +107,10 @@ public class MainPageContent implements Runnable {
             int row = 0;
             for(int i = 0; i < jsonArray.size(); i++) {
                 if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
-                addLabel(i, row, gp, jsonArray, onClick);
+                addLabel(i, row, gp, jsonArray, labelClick);
             }
+
+            addBuildingList(labelArr, accordion, labelClick);
 
             Label label = (Label) stage.getScene().lookup("#titlebar");
             label.setText("Main Menu");
@@ -109,5 +142,44 @@ public class MainPageContent implements Runnable {
         gp.add(label, i % MainPageConfig.getColumnCount(), row);
 
         labelArr[i] = label;
+    }
+
+    /**
+     * Adds the buildings to the side menu
+     * @param labelArr  The array containing all building labels
+     * @param acc The Accordion where to add the buildings
+     * @param event Event that happens when the Label gets clicked
+     */
+    private void addBuildingList(Label[] labelArr, Accordion acc, EventHandler<MouseEvent> event) {
+        TitledPane tp = acc.getPanes().get(0);
+        Pane pane = new Pane();
+        double pos = 0.0;
+
+        for(int i = 0; i < labelArr.length; i++) {
+            Label label = new Label();
+
+            label.setText(labelArr[i].getText().replaceAll("\\n", " "));
+            label.addEventFilter(MouseEvent.MOUSE_CLICKED, event);
+            label.setPrefWidth(acc.getPrefWidth());
+            label.setMaxWidth(acc.getPrefWidth());
+            label.setMinWidth(0);
+            label.setStyle("-fx-background-color: #daebeb");
+            label.setLayoutY(pos);
+
+            pane.getChildren().add(label);
+
+            pos += 20.0;
+        }
+        pane.setMinHeight(pos);
+        ScrollPane sp = new ScrollPane();
+        sp.setContent(pane);
+        sp.setPadding(new Insets(18.0,0.0,0.0,0.0));
+        sp.setLayoutY(18.0);
+        sp.setMinSize(150.0, 250.0);
+        sp.setMaxSize(150.0, 250.0);
+
+        tp.setMinHeight(250.0);
+        tp.setContent(sp);
+        MainPageConfig.setAccordionHeight(tp.getMinHeight());
     }
 }

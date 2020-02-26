@@ -53,13 +53,13 @@
 
       <Pane fx:id="menubar" layoutX="-180.0" prefHeight="400.0" prefWidth="169.0" styleClass="menu" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Accordion layoutY="30.0" prefHeight="43.0" prefWidth="170.0" styleClass="menu">
-              <panes>
-                <TitledPane animated="false" text="Buildings" />
-              </panes>
+            <Accordion fx:id="building_list" layoutY="30.0" prefHeight="43.0" prefWidth="155.0" styleClass="menu">
+               <panes>
+                  <TitledPane animated="false" text="Buildings" />
+               </panes>
             </Accordion>
-            <Button layoutX="6.0" layoutY="73.0" onAction="#toRoomPage" prefHeight="30.0" prefWidth="98.0" text="to Room Page" />
-            <Button layoutX="6.0" layoutY="116.0" onAction="#toLoginPage" prefHeight="30.0" prefWidth="98.0" text="to Login Page" />
+            <Button layoutX="6.0" layoutY="65.0" onAction="#toRoomPage" prefHeight="30.0" prefWidth="155.0" text="to Room Page" />
+            <Button layoutX="6.0" layoutY="100.0" onAction="#toLoginPage" prefHeight="30.0" prefWidth="155.0" text="to Login Page" />
          </children>
       </Pane>
 
