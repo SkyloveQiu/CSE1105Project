@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginSceneController  {
+import static nl.tudelft.oopp.group43.controllers.RegisterSceneController.emailValid;
+
+public class LoginSceneController  implements Initializable{
 
   @FXML
   private TextField email;
@@ -32,79 +34,80 @@ public class LoginSceneController  {
   private Label passwordCheck;
 
 
-   /* @FXML
-    public void initialize(URL url, ResourceBundle rb)
-    {
-
-    }*/
-
 
     private boolean checkEmpty()
   {
-      String emailString = email.getText();
-      String passwordString = password.getText();
 
-      boolean okEmpty = false;
-
-      if(emailString.isEmpty() || passwordString.isEmpty())
-      {
-          if(emailString.isEmpty())
-              emailCheck.setText("You did not complete the email field");
-          else
-              emailCheck.setText("");
-          if(passwordString.isEmpty())
-             passwordCheck.setText("You did not complete the password field");
-          else
-             passwordCheck.setText("");
-          okEmpty = true;
-      }
-     return okEmpty;
+       boolean okEmpty = emptyEmail();
+       okEmpty = (emptyPassword() && okEmpty );
+       return okEmpty;
   }
+
+
   @FXML
   @SuppressWarnings("unchecked")
   private void loginClicked(ActionEvent event)
-  {
+  {//  System.out.println("am intrat in functie");
       boolean okEmpty =  checkEmpty();
-     if(okEmpty == true)
+     if(okEmpty == false)
          return;
 
-     // String emailString = email.getText();
+     //String emailString = email.getText();
      // String passwordString = password.getText();
       JSONObject newUser = new JSONObject();
-      newUser.put("Email", (String)email.getText());
-      newUser.put("Password", (String)password.getText());
+      newUser.put("username", (String)email.getText());
+      newUser.put("password", (String)password.getText());
+
+      System.out.println(newUser.toJSONString());
+
+     // emailCheck.setText("The password or the username is wrong");
+      System.out.println("The final of the function");
+
 
 
 
 
   }
 
+  @FXML
+  @SuppressWarnings("unchecked")
+  private boolean emptyEmail() {
+      email.getText();
+      if (email.getText().isEmpty()) {
+          emailCheck.setText("You did not complete the email field");
+          return false;
+      }
 
-    //private Scene loginScene;
+      else {
+          if (emailValid(email.getText()) == false) {
+              emailCheck.setText("The email is not valid");
+              return false;
+          }
+          else {
+              emailCheck.setText("");
+              return true;
+          }
 
-   /* private void registerClicked()
-    {
-        System.out.println("mamaiNDN");
-    }*/
+      }
+  }
 
 
-    /*@SuppressWarnings("unchecked")
-    public void registerClicked()
-    {
+  @FXML
+  @SuppressWarnings("unchecked")
+  private boolean emptyPassword()
+  {
+      String passwordString = password.getText();
+      if(passwordString.isEmpty()) {
+          passwordCheck.setText("You did not complete the password field");
+          return false;
+      }
+      else {
+          passwordCheck.setText("");
+          return true;
+      }
 
-       // RegisterDisplay.main(new String [0]);
-      // System.out.println("am ajuns aici");
-        Parent nextRegisteView = FXMLLoader.load(getClass().getResource("/RegisterScene.fxml"));
-        Scene nextRegisterScene = new Scene (nextRegisteView);
+  }
 
-       Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-
-        window.setScene(nextRegisterScene);
-        window.show();
-
-      System.out.println("amiwenfi");
-      
-   }*/
 
     @SuppressWarnings("unchecked")
     @FXML
@@ -117,6 +120,13 @@ public class LoginSceneController  {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        //emailCheck.setText("");
     }
 
 
