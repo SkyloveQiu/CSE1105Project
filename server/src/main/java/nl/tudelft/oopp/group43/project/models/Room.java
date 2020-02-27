@@ -32,8 +32,6 @@ public class Room {
     @Column(name = "building_number")
     private int buildingNumber;
 
-    @Column(name = "description")
-    private String description;
 
     @Column(name = "attributes")
     private String attributes;
@@ -44,13 +42,11 @@ public class Room {
     public Room(@JsonProperty("id") int id,
                 @JsonProperty("room_name") String roomName,
                 @JsonProperty("building_number") int buildingNumber,
-                @JsonProperty("description") String description,
                 @JsonProperty("attributes") String attributes){
 
         this.id=id;
         this.roomName=roomName;
         this.buildingNumber=buildingNumber;
-        this.description=description;
         this.attributes=attributes;
 
 
@@ -68,10 +64,6 @@ public class Room {
         return buildingNumber;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public String getAttributes() {
         return attributes;
     }
@@ -84,7 +76,6 @@ public class Room {
         return getId() == room.getId() &&
                 getBuildingNumber() == room.getBuildingNumber() &&
                 getRoomName().equals(room.getRoomName()) &&
-                getDescription().equals(room.getDescription()) &&
                 getAttributes().equals(room.getAttributes());
     }
 
