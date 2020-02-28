@@ -10,7 +10,7 @@ public class ServerCommunication {
     private static HttpClient client = HttpClient.newBuilder().build();
 
     /**
-     * Retrieves a quote from the server.
+     * Retrieves all buildings from the server.
      * @return the body of a get request to the server.
      * @throws Exception if communication with the server fails.
      */
