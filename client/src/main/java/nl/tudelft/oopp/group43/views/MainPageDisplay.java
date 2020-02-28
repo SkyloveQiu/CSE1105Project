@@ -1,32 +1,24 @@
 package nl.tudelft.oopp.group43.views;
 
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import java.io.IOException;
 import java.net.URL;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.communication.ServerCommunication;
-import nl.tudelft.oopp.group43.controllers.MainPageController;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import nl.tudelft.oopp.group43.classes.MainPageConfig;
+import nl.tudelft.oopp.group43.classes.MainPageContent;
 
 public class MainPageDisplay extends Application {
-
-    private boolean clicked = false;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -43,8 +35,30 @@ public class MainPageDisplay extends Application {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 GridPane gp = (GridPane) scene.lookup("#buildings_grid");
+                if((double) newValue >= 700.0 && gp.getColumnCount() < 3) {
+                    for(ColumnConstraints cc : gp.getColumnConstraints()) {
+                        cc.setPercentWidth(33.33);
+                    }
+                    ColumnConstraints cc = new ColumnConstraints();
+                    cc.setPercentWidth(33.33);
+                    gp.getColumnConstraints().add(cc);
+                    MainPageConfig.setColumnCount(3);
+
+                    updateGrid(gp);
+                }
+
+                if((double) newValue < 700.0 && gp.getColumnCount() > 2) {
+                    gp.getColumnConstraints().remove(2);
+                    for(ColumnConstraints cc : gp.getColumnConstraints()) {
+                        cc.setPercentWidth(50.0);
+                    }
+                    MainPageConfig.setColumnCount(2);
+
+                    updateGrid(gp);
+                }
+
                 for(RowConstraints rc : gp.getRowConstraints()) {
-                    double newSize = ((double) newValue - 60.0)/2;
+                    double newSize = ((double) newValue - 60.0)/MainPageConfig.getColumnCount();
                     rc.setPrefHeight(newSize);
                     rc.setMinHeight(newSize);
                     rc.setMaxHeight(newSize);
@@ -53,11 +67,15 @@ public class MainPageDisplay extends Application {
         };
         sp.widthProperty().addListener(resizeListener);
 
+        addBuildings(primaryStage);
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Campus Management - Main Menu");
         primaryStage.show();
 
-        addBuildings(primaryStage);
+        // Sets label for letting user know it is being loaded
+        Label label = (Label) scene.lookup("#titlebar");
+        label.setText(label.getText() + " - BUILDINGS ARE BEING LOADED");
     }
 
     public static void main(String[] args) {
@@ -65,63 +83,59 @@ public class MainPageDisplay extends Application {
     }
 
     /**
-     * adds all buildings in the database to the main page
-     * @param stage the Stage where to add the buildings to
+     * Adds all buildings as content using a new Thread
+     * Doing this removes initial startup lag
+     * @param stage Stage is passed as parameter to get all Nodes
      */
     private void addBuildings(Stage stage) {
-        JSONParser json = new JSONParser();
-        GridPane gp = (GridPane) stage.getScene().lookup("#buildings_grid");
+        //Adds the building content in a separate Thread
+        Thread thread = new Thread(new Runnable() {
 
-        try {
-            JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getBuilding());
-            EventHandler<MouseEvent> onClick = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    FXMLLoader loader = new FXMLLoader();
-                    URL xmlUrl = getClass().getResource("/roomPageScene.fxml");
-                    loader.setLocation(xmlUrl);
-                    Parent root = null;
-                    try {
-                        root = loader.load();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+            @Override
+            public void run() {
+                Runnable r = new MainPageContent(stage);
 
-                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                }
-            };
+                try { Thread.sleep(500); }
+                catch(InterruptedException e) {}
 
-            if(jsonArray.size() > 2) {
-                int size = jsonArray.size();
-                double rowHeight = (gp.getWidth() - 20.0) / 2;
-                while(size > 2) {
-                    RowConstraints rc = new RowConstraints();
-                    rc.setPrefHeight(rowHeight);
-                    rc.setMinHeight(rowHeight);
-                    rc.setMaxHeight(rowHeight);
-                    gp.getRowConstraints().add(rc);
-                    size -= 2;
-                }
+                Platform.runLater(r);
             }
+        });
+        // Prevents JVM shutdown
+        thread.setDaemon(true);
+        thread.start();
+    }
 
-            int row = 0;
-            for(int i = 0; i < jsonArray.size(); i++) {
-                if(i % 2 == 0 && i != 0) { row++; }
-                JSONObject obj = (JSONObject) jsonArray.get(i);
-                Label label = new Label();
-                label.setPrefWidth(Integer.MAX_VALUE);
-                label.setMaxWidth(Integer.MAX_VALUE);
-                label.setMinWidth(0);
-                label.setStyle("-fx-background-color: #daebeb");
-                label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
+    /**
+     * Updates the grid when it gets resized
+     * Namely by adding columns when it hit a certain size point (700.0)
+     * and adding or removing rows accordingly
+     * @param gp the GridPane that gets updates
+     */
+    private void updateGrid(GridPane gp) {
+        gp.getChildren().removeAll(MainPageConfig.getLabel());
 
-                label.addEventFilter(MouseEvent.MOUSE_CLICKED, onClick);
-
-                gp.add(label, i % 2, row);
+        int rows = (int) MainPageConfig.getLabel().length / MainPageConfig.getColumnCount();
+        if(MainPageConfig.getLabel().length % MainPageConfig.getColumnCount() != 0) { rows++; }
+        if(rows < gp.getRowCount()) {
+            for(int i = gp.getRowCount()-1; i >= rows; i--) {
+                gp.getRowConstraints().remove(i);
             }
         }
-        catch(ParseException e) {}
+        while(rows > gp.getRowCount()) {
+            RowConstraints rc = new RowConstraints();
+            double newSize = ((double) gp.getWidth() - 60.0)/MainPageConfig.getColumnCount();
+            rc.setPrefHeight(newSize);
+            rc.setMinHeight(newSize);
+            rc.setMaxHeight(newSize);
+            gp.getRowConstraints().add(rc);
+        }
+
+        int row = 0;
+        for(int i = 0; i < MainPageConfig.getLabel().length; i++) {
+            if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
+            gp.add(MainPageConfig.getLabel()[i], i % MainPageConfig.getColumnCount(), row);
+        }
     }
+
 }

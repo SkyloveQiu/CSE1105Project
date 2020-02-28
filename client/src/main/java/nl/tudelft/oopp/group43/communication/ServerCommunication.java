@@ -26,14 +26,10 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
+        System.out.println(response.body());
         return response.body();
     }
 
-    /**
-     * Retrieves rooms from the server.
-     * @return the body of a get request to the server.
-     * @throws Exception if communication with the server fails.
-     */
     public static String getRooms() {
         HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/room")).build();
         HttpResponse<String> response = null;
@@ -46,14 +42,10 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
+        System.out.println(response.body());
         return response.body();
     }
 
-    /**
-     * Retrieves users from the server.
-     * @return the body of a get request to the server.
-     * @throws Exception if communication with the server fails.
-     */
     public static String getUsers() {
         HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/users")).build();
         HttpResponse<String> response = null;
@@ -66,6 +58,7 @@ public class ServerCommunication {
         if (response.statusCode() != 200) {
             System.out.println("Status: " + response.statusCode());
         }
+        System.out.println(response.body());
         return response.body();
     }
 

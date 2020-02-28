@@ -14,7 +14,7 @@ public class GenerateRandomSalt {
 
     public static String generateSafeToken() {
         SecureRandom rand = new SecureRandom();
-        int length = rand.nextInt(25);
+        int length = 10;
 
 
         StringBuilder sb = new StringBuilder(length);

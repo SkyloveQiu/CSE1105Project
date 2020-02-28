@@ -10,9 +10,9 @@
    <children>
       <AnchorPane layoutX="288.0" layoutY="-1.0" prefHeight="431.0" prefWidth="340.0" style="-fx-background-color: deepskyblue;">
          <children>
-            <PasswordField fx:id="password" layoutX="77.0" layoutY="189.0" prefHeight="26.0" prefWidth="234.0" promptText="Password" AnchorPane.bottomAnchor="215.0" AnchorPane.leftAnchor="78.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="189.0" />
+            <PasswordField fx:id="password" layoutX="77.0" layoutY="189.0" onKeyTyped="#emptyPassword" prefHeight="26.0" prefWidth="234.0" promptText="Password" AnchorPane.bottomAnchor="215.0" AnchorPane.leftAnchor="78.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="189.0" />
             <Button layoutX="108.0" layoutY="251.0" mnemonicParsing="false" onAction="#loginClicked" prefHeight="26.0" prefWidth="129.0" style="-fx-background-color: #2424bd;" text="LOGIN" textFill="WHITE" AnchorPane.bottomAnchor="154.0" AnchorPane.leftAnchor="108.0" AnchorPane.rightAnchor="102.4" AnchorPane.topAnchor="251.0" />
-            <TextField fx:id="email" layoutX="78.0" layoutY="101.0" prefHeight="26.0" prefWidth="234.0" promptText="Email" AnchorPane.bottomAnchor="304.0" AnchorPane.leftAnchor="78.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="101.0" />
+            <TextField fx:id="email" layoutX="78.0" layoutY="101.0" onKeyTyped="#emptyEmail" prefHeight="26.0" prefWidth="234.0" promptText="Email" AnchorPane.bottomAnchor="304.0" AnchorPane.leftAnchor="78.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="101.0" />
             <Label layoutX="27.0" layoutY="96.0" prefHeight="36.0" prefWidth="35.0" text="Email" textFill="#06540d" />
             <Label layoutX="15.0" layoutY="190.0" text="Password" textFill="#06540d" AnchorPane.bottomAnchor="216.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="190.0" />
             <Button fx:id="registerButton" layoutX="137.0" layoutY="373.0" mnemonicParsing="false" onAction="#registerClicked" prefHeight="25.0" prefWidth="72.0" style="-fx-background-color: #2424bd;" text="REGISTER" textFill="WHITE" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="131.0" AnchorPane.topAnchor="373.0" />

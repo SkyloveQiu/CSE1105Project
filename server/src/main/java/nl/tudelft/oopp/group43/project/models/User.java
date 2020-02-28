@@ -2,14 +2,11 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.hash.Hashing;
-import nl.tudelft.oopp.group43.utilities.GenerateRandomSalt;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 
 @Entity
@@ -17,13 +14,13 @@ import java.nio.charset.StandardCharsets;
 @Table(name = "user")
 public class User {
 
+    @Id
+    @Column(name = "email")
+    private String username;
 
 
-    @Column(name = "hash")
-    private String hash;
-
-    @Column(name = "salt")
-    private String salt;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "first_name")
     private String firstName;
@@ -32,67 +29,77 @@ public class User {
     private String lastName;
 
 
-    @Id
-    @Column(name = "email")
-    private String email;
-
     @Column(name = "role")
     private String role;
 
+    @Column(name = "token")
+    private String token;
+//    @Column(name = "salt")
+//    private String salt;
+
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @ManyToMany
+    private Set<Role> roles;
 
     //empty constructor
     public User() {
     }
 
     @JsonCreator
-    public User(@JsonProperty("hash") String hash,
+    public User(@JsonProperty("password") String password,
                 @JsonProperty("first_name") String firstName,
                 @JsonProperty("last_name") String lastName,
-                @JsonProperty("email") String email,
+                @JsonProperty("username") String username,
                 @JsonProperty("role") String role
                  ) {
 
 
-        this.salt = GenerateRandomSalt.generateSafeToken();
-        this.hash = hash;
+//        this.salt = GenerateRandomSalt.generateSafeToken();
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.username = username;
         this.role = role;
 
 
     }
 
-    public boolean hashed_pass(String password) {
-        String copy = new String(salt);
-        copy += this.salt;
-        return password.equals(Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString());
+//    public boolean hashed_pass(String password) {
+//        String copy = new String(salt);
+//        copy += this.salt;
+//        return password.equals(Hashing.sha256().hashString(password + salt, StandardCharsets.UTF_8).toString());
+//    }
+//
+//    public String hashed_pass_return_string() {
+//        String copy = new String(password);
+//        copy += this.salt;
+//        return Hashing.sha256().hashString(password + salt, StandardCharsets.UTF_8).toString();
+//    }
+
+
+
+
+    public String getUsername() {
+        return this.username;
     }
 
-    public String hashed_pass_return_string() {
-        String copy = new String(hash);
-        copy += this.salt;
-        return Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString();
-    }
 
 
-
-    public String getEmail() {
-        return this.email;
-    }
-    
     public String getPassword() {
-        return this.hash;
+        return password;
     }
 
-    @JsonIgnore
-    public String getHash() {
-        return hash;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
+//    public String getSalt() {
+//        return salt;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -102,14 +109,34 @@ public class User {
         return lastName;
     }
 
-
-    public void setHash(String salt) {
-        this.hash = Hashing.sha256().hashString(this.hash + salt, StandardCharsets.UTF_8).toString();
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setPassword(String password) {
+        this.password = password;
     }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+//    public void setHash(String salt) {
+//        this.password = this.password + salt;
+//    }
+
+
+    public void setEncriptedHash(String actualpass) {
+        this.password = actualpass;
+    }
+
+//    public void setSalt() {
+//        this.salt = GenerateRandomSalt.generateSafeToken();
+//    }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
@@ -124,11 +151,30 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return  getHash().equals(user.getHash()) &&
-                getSalt().equals(user.getSalt()) &&
+        return  getPassword().equals(user.getPassword()) &&
                 getFirstName().equals(user.getFirstName()) &&
                 getLastName().equals(user.getLastName()) &&
-                getEmail().equals(user.getEmail()) &&
+                getUsername().equals(user.getUsername()) &&
                 getRole().equals(user.getRole());
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + username + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

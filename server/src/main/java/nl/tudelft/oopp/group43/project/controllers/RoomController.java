@@ -9,6 +9,7 @@ import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -31,6 +32,12 @@ public class RoomController {
     public String createRoom(@RequestBody Room newRoom){
         repository.save(newRoom);
         return "NEW ROOM: " + newRoom.getRoomName();
+    }
+
+    @GetMapping("/room/{buildingNumber}")
+    @ResponseBody
+    public List<Room> getRoomByBuildingNumber(@PathVariable int buildingNumber){
+        return repository.findRoomByBuildingNumber(buildingNumber);
     }
 
 }
