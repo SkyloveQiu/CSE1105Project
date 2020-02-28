@@ -47,7 +47,7 @@ public class LoginSceneController  implements Initializable{
   @FXML
   @SuppressWarnings("unchecked")
   private void loginClicked(ActionEvent event)
-  {//  System.out.println("am intrat in functie");
+  {
       boolean okEmpty =  checkEmpty();
      if(okEmpty == false)
          return;
@@ -112,14 +112,9 @@ public class LoginSceneController  implements Initializable{
     @SuppressWarnings("unchecked")
     @FXML
     private void registerClicked(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/RegisterScene.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        RegisterDisplay rd = new RegisterDisplay();
+        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
 

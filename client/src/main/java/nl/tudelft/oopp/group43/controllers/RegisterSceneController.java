@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -106,15 +107,8 @@ public class RegisterSceneController {
 
 
         //Move to a the next Scene - MainPage
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/mainPage.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-
+        MainPageDisplay mp = new MainPageDisplay();
+        mp.start((Stage) ((Node) event.getSource()).getScene().getWindow());
 
 
     }
@@ -185,22 +179,27 @@ public class RegisterSceneController {
     @SuppressWarnings("unchecked")
     private boolean checkPassword()
     {
+        boolean ok = true;
        if(password.getText().isEmpty()) {
            passwordCheck.setText("You did not complete the password field");
            return false;
        }
        else {
-           passwordCheck.setText("");
+           if(password.getText().length() <8 || password.getText().length()>32) {
+               passwordCheck.setText("The password must have more than 8 characters and maximum 32 characters");
+               ok = false;
+           }
+           else
+               passwordCheck.setText("");
            if (cpassword.getText().isEmpty() || !password.getText().equals(cpassword.getText())) {
                cpasswordCheck.setText("The passwords don't match");
                return false;
            }
-            else{
-                   cpasswordCheck.setText("");
-                   return true;
+            else
+                return  ok;
            }
 
-       }
+
     }
 
     @FXML
@@ -257,25 +256,16 @@ public class RegisterSceneController {
     @SuppressWarnings("unchecked")
     private boolean checkRole()
     {
-        int s = 0;
-        if(student.isSelected())
-            s++;
-        if(employee.isSelected())
-            s++;
-        if(other.isSelected())
-            s++;
-        if(s==1) {
-            roleCheck.setText("");
-            return true;
-        }
-        else
-        {
-            if(s==0)
-                roleCheck.setText("You did not choose any role");
-            else
-                roleCheck.setText("You have to choose just one role");
-            return false;
-        }
+      if(!student.isSelected() && !employee.isSelected() && !other.isSelected()) {
+          roleCheck.setText("You did not choose any role");
+          return false;
+      }
+      else
+      {
+          roleCheck.setText("");
+          return true;
+      }
+
     }
 }
 
