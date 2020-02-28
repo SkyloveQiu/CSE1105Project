@@ -7,10 +7,12 @@ public class JwtRespones {
     private String role;
     private String firstName;
     private String lastName;
+    private int status;
 
-    public JwtRespones(String token,String username,String role,String firstName,String lastName){
+    public JwtRespones(String token,String username,String role,String firstName,String lastName,int status){
         this.token = token;
         this.username = username;
+        this.status = status;
         this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -42,6 +44,30 @@ public class JwtRespones {
 
     public String getRole() {
         return role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void setRole(String role) {
