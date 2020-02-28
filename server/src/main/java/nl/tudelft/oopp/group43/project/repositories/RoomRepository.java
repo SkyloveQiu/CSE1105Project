@@ -13,4 +13,6 @@ public interface RoomRepository extends JpaRepository<Room, Integer> {
     public List<Room> findRoomByBuildingNumber(@Param("building_number") int buildingNumber);
 
 
+
+
 }
