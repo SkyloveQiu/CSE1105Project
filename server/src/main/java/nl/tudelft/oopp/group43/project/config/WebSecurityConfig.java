@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(final WebSecurity webSecurity) {
         webSecurity.ignoring().antMatchers("/home/**");
-        webSecurity.ignoring().antMatchers("/registeration");
+        webSecurity.ignoring().antMatchers("/registration");
     }
 
     @Bean

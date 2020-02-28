@@ -30,6 +30,10 @@ public class UserValidator implements Validator {
             errors.rejectValue("username","not a valid email address");
         }
 
+        if (userService.findByUsername(user.getUsername()) != null) {
+            errors.rejectValue("username","one email address can only register one account.");
+        }
+
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
         if (user.getPassword().length() < 8 || user.getPassword().length() > 100) {
             errors.rejectValue("password", "Size.userForm.password");

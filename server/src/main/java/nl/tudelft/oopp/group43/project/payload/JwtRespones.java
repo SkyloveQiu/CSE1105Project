@@ -5,11 +5,15 @@ public class JwtRespones {
     private String type = "Bearer";
     private String username;
     private String role;
+    private String firstName;
+    private String lastName;
 
-    public JwtRespones(String token,String username,String role){
+    public JwtRespones(String token,String username,String role,String firstName,String lastName){
         this.token = token;
         this.username = username;
         this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getToken() {
