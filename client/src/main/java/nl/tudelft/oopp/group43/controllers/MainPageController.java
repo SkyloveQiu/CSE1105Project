@@ -69,37 +69,4 @@ public class MainPageController {
         stage.setTitle("Campus Management - Login Page");
         stage.show();
     }
-
-    @SuppressWarnings("unchecked")
-    public void showUsers(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("An user for you");
-        alert.setHeaderText(null);
-
-        alert.setContentText(ServerCommunication.getUsers());
-
-        alert.showAndWait();
-    }
-
-    @SuppressWarnings("unchecked")
-    public void showRooms(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("An user for you");
-        alert.setHeaderText(null);
-
-        alert.setContentText(ServerCommunication.getRooms());
-
-        alert.showAndWait();
-    }
-
-    @SuppressWarnings("unchecked")
-    public void showBuildings(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("An user for you");
-        alert.setHeaderText(null);
-
-        alert.setContentText(ServerCommunication.getBuilding());
-
-        alert.showAndWait();
-    }
 }
