@@ -9,7 +9,9 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @DynamicUpdate
@@ -26,6 +28,18 @@ public class Building {
 
     @Column(name = "address")
     String address;
+
+    @OneToMany
+    private List<FoodOrder> foodOrders;
+
+    @OneToMany
+    private List<BuildingFoodProduct> buildingFoodProducts;
+
+    @OneToMany(mappedBy = "building")
+     private Set<Room> rooms;
+
+
+
 
     public Building() {
     }

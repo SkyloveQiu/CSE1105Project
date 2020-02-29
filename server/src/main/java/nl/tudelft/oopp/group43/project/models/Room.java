@@ -28,13 +28,16 @@ public class Room {
     @Column(name = "room_name")
     private String roomName;
 
-
     @Column(name = "building_number")
     private int buildingNumber;
 
 
     @Column(name = "attributes")
     private String attributes;
+
+    @ManyToOne
+    @JoinColumn(name="rooms")
+    private Building building;
 
     public Room() {
     }
