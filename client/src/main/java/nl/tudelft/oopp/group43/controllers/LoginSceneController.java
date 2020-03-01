@@ -10,11 +10,15 @@ import javafx.scene.SubScene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
+import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import nl.tudelft.oopp.group43.views.RegisterDisplay;
 
 
 import javafx.event.ActionEvent;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +26,7 @@ import java.util.ResourceBundle;
 
 import static nl.tudelft.oopp.group43.controllers.RegisterSceneController.emailValid;
 
-public class LoginSceneController  implements Initializable{
+public class LoginSceneController{
 
   @FXML
   private TextField email;
@@ -34,44 +38,54 @@ public class LoginSceneController  implements Initializable{
   private Label passwordCheck;
 
 
-
-    private boolean checkEmpty()
-  {
+    /**
+     * Checks if all fields are complete and valid.
+     * @return true if all fields are complete and valid, false otherwise
+     */
+    boolean checkEmpty()
+    {
 
        boolean okEmpty = emptyEmail();
        okEmpty = (emptyPassword() && okEmpty );
        return okEmpty;
-  }
+    }
 
 
-  @FXML
-  @SuppressWarnings("unchecked")
-  private void loginClicked(ActionEvent event)
-  {
-      boolean okEmpty =  checkEmpty();
+
+    /**
+     * If you press the login button, either you can be redirected to the main page if all fields are valid,
+     * or you have to change something in your fields
+     * @param event - login button is pressed
+     * @throws IOException - if loading the Register Page fails
+     * @throws ParseException - if something goes wrong with the JSON Parser from the loginToken method.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void loginClicked(ActionEvent event) throws IOException, ParseException {
+        boolean okEmpty =  checkEmpty();
      if(okEmpty == false)
          return;
 
-     //String emailString = email.getText();
-     // String passwordString = password.getText();
-      JSONObject newUser = new JSONObject();
-      newUser.put("username", (String)email.getText());
-      newUser.put("password", (String)password.getText());
+      String response = ServerCommunication.loginToken(email.getText(), password.getText());
 
-      System.out.println(newUser.toJSONString());
-
-     // emailCheck.setText("The password or the username is wrong");
-      System.out.println("The final of the function");
-
-
-
+      if(response.equals("OK"))
+      {
+          emailCheck.setText("");
+          MainPageDisplay md = new MainPageDisplay();
+          md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+      }
+      else
+          emailCheck.setText("Wrong passsword or email");
+    }
 
 
-  }
-
-  @FXML
-  @SuppressWarnings("unchecked")
-  private boolean emptyEmail() {
+    /**
+     * Checks if the email field is empty and show special messages to the user.
+     * @return true if the email field is not empty and valid, false otherwise
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private boolean emptyEmail() {
       email.getText();
       if (email.getText().isEmpty()) {
           emailCheck.setText("You did not complete the email field");
@@ -87,15 +101,20 @@ public class LoginSceneController  implements Initializable{
               emailCheck.setText("");
               return true;
           }
-
       }
-  }
+
+    }
 
 
-  @FXML
-  @SuppressWarnings("unchecked")
-  private boolean emptyPassword()
-  {
+
+    /**
+     * Checks if the password field is empty and show special messages to the user.
+     * @return true if the password field is not empty and valid, false otherwise
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private boolean emptyPassword()
+    {
       String passwordString = password.getText();
       if(passwordString.isEmpty()) {
           passwordCheck.setText("You did not complete the password field");
@@ -105,24 +124,20 @@ public class LoginSceneController  implements Initializable{
           passwordCheck.setText("");
           return true;
       }
+    }
 
-  }
 
 
+    /**
+     * If you press the register button, you will be redirected to the Register Page
+     * @param event - register button is pressed
+     * @throws IOException - if loading the Register Page fails
+     */
     @SuppressWarnings("unchecked")
     @FXML
     private void registerClicked(ActionEvent event) throws IOException {
-
         RegisterDisplay rd = new RegisterDisplay();
         rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
-
-
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        //emailCheck.setText("");
-    }
-
 
 }

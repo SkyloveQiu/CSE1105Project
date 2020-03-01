@@ -105,7 +105,7 @@ public class UserController {
         }
 
         userService.save(userForm);
-
+        tokenService.save(userForm);
         User user = securityService.autoLogin(userForm.getUsername(), password);
         JwtRespones jwtRespones = new JwtRespones(user.getToken(),user.getUsername(),user.getRole(),user.getFirstName(),user.getLastName(),HttpStatus.OK.value());
         return new ResponseEntity<>(jwtRespones, HttpStatus.OK);

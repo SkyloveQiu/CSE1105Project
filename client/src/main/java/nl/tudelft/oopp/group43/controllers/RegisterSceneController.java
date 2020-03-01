@@ -10,9 +10,9 @@ import javafx.scene.control.*;
 
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.views.MainPageDisplay;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -56,6 +56,12 @@ public class RegisterSceneController {
     private static final String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
     private static final Pattern emailPattern = Pattern.compile(emailRegex);
 
+
+    /**
+     * Checks if the email is valid
+     * @param email - the string which represents the email
+     * @return true if the email is valid, false otherwise
+     */
     public static boolean emailValid(String email)
     {
         if(email == null)
@@ -64,10 +70,14 @@ public class RegisterSceneController {
         return matcher.matches();
     }
 
+
+
     /**
-     * this method check if any field is empty - exception password fi
+     * Checks if all fields are complete and valid.
+     * @return true if all fields are complete and valid, false otherwise
      */
     private boolean checkEmpty() {
+
        boolean empty = checkEmail();
        empty = (checkFirstName() && empty);
        empty = (checkLastName() && empty);
@@ -80,13 +90,20 @@ public class RegisterSceneController {
     }
 
 
+
+    /**
+     *  If you press the confirm button, either you can be redirected to the login page if all fields are valid,
+     *  or you have to change something in your fields
+     * @param event - pressing the button
+     * @throws IOException - if loading the Login Display fails
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private void confirmClicked(ActionEvent event)  throws IOException{
-        System.out.print("Ive pressed the button");
+
         if (checkEmpty()== false)
             return;
-        System.out.println("I can send a JSON message");
+
         String role;
         if (employee.isSelected())
             role = "employee";
@@ -95,26 +112,28 @@ public class RegisterSceneController {
         else
             role = "other";
 
-        JSONObject newUser = new JSONObject();
-        newUser.put("firstName", (String) firstName.getText());
-        newUser.put("lastName", (String) lastName.getText());
-        newUser.put("username", (String) email.getText());
-        newUser.put("password", (String) password.getText());
-        newUser.put("role", role);
+        String response = ServerCommunication.confirmRegistration(firstName.getText(), lastName.getText(), email.getText(), password.getText(), role);
+        if(response.equals("OK"))
+        {
+            emailCheck.setText("");
 
-
-        System.out.println(newUser.toJSONString());
-
-
-        //Move to a the next Scene - MainPage
-        MainPageDisplay mp = new MainPageDisplay();
-        mp.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-
+            LoginDisplay ld = new LoginDisplay();
+            ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        }
+        else
+            emailCheck.setText("The email already exists!");
 
     }
 
-    @SuppressWarnings("unchecked")
+
+
+    /**
+     * If you press the back button, you will be redirected to the Login Page
+     * @param event - pressing the button
+     * @throws IOException - if loading the Login Page fails
+     */
     @FXML
+    @SuppressWarnings("unchecked")
     private void backClicked(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -127,6 +146,10 @@ public class RegisterSceneController {
         stage.show();
     }
 
+    /**
+     * Checks if the first name field is empty and show special messages to the user.
+     * @return true if the first name field is not empty, false otherwise
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkFirstName() {
@@ -140,6 +163,10 @@ public class RegisterSceneController {
         }
     }
 
+    /**
+     * Checks if the last name field is empty and show special messages to the user.
+     * @return true if the last name field is not empty, false otherwise
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkLastName()
@@ -154,6 +181,10 @@ public class RegisterSceneController {
         }
     }
 
+    /**
+     * Checks if the email field is empty and show special messages to the user.
+     * @return true if the email field is not empty and valid, false otherwise
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkEmail()
@@ -175,6 +206,11 @@ public class RegisterSceneController {
         }
     }
 
+    /**
+     * Checks if the password field is empty and show special messages to the user.
+     * + a password must be between 8 and 32 characters
+     * @return true if the password field is not empty and valid, false otherwise
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkPassword()
@@ -202,6 +238,10 @@ public class RegisterSceneController {
 
     }
 
+    /**
+     *  Checks if the confirm password field is empty and show special messages to the user.
+     *  @return true if the confirm password field is not empty and valid, false otherwise
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkCPassword()
@@ -222,6 +262,10 @@ public class RegisterSceneController {
         }
     }
 
+    /**
+     * This method was created to show messages everytime the user select or deselect the check box
+     * @param event - the check box is selected or not
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private void checkBoxCheck(ActionEvent event)
@@ -229,6 +273,10 @@ public class RegisterSceneController {
         checkBoxCheck();
     }
 
+    /**
+     * Checks if the terms field is selected and show special messages to the user.
+     * @return true if the terms field is selected, false otherwise
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkBoxCheck()
@@ -244,6 +292,10 @@ public class RegisterSceneController {
 
     }
 
+    /**
+     * This method was created to show messages everytime the user select or deselect a role
+     * @param event - a radio button is pressed
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private void roleCheck(ActionEvent event)
@@ -252,6 +304,10 @@ public class RegisterSceneController {
     }
 
 
+    /**
+     * Checks if the a role field is selected and show special messages to the user.
+     * @return true if one role is selected, false otherwise
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkRole()
