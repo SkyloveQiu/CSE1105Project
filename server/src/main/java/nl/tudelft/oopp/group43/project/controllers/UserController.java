@@ -99,26 +99,28 @@ public class UserController {
             for (ObjectError index : list){
                 message.append(index.getDefaultMessage());
             }
-            ErrorResponse errorResponse = new ErrorResponse("registration fail",message.toString());
+            ErrorResponse errorResponse = new ErrorResponse("registration fail",message.toString(),HttpStatus.FORBIDDEN.value());
 
-            return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
+            return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
         }
 
         userService.save(userForm);
-
+        tokenService.save(userForm);
         User user = securityService.autoLogin(userForm.getUsername(), password);
-        JwtRespones jwtRespones = new JwtRespones(user.getToken(),user.getUsername(),user.getRole(),user.getFirstName(),user.getLastName());
+        JwtRespones jwtRespones = new JwtRespones(user.getToken(),user.getUsername(),user.getRole(),user.getFirstName(),user.getLastName(),HttpStatus.OK.value());
         return new ResponseEntity<>(jwtRespones, HttpStatus.OK);
     }
 
 
     @PostMapping("/token")
-    public ResponseEntity<JwtRespones> getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
+    public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
         User user = securityService.autoLogin(username,password);
+
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ErrorResponse errorResponse = new ErrorResponse("auth fail","username or password wrong",HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
         }
-        JwtRespones jwtRespones = new JwtRespones(user.getToken(),user.getUsername(),user.getRole(),user.getFirstName(),user.getLastName());
+        JwtRespones jwtRespones = new JwtRespones(user.getToken(),user.getUsername(),user.getRole(),user.getFirstName(),user.getLastName(),HttpStatus.OK.value());
         tokenService.save(user);
         return new ResponseEntity<>(jwtRespones, HttpStatus.OK);
 
