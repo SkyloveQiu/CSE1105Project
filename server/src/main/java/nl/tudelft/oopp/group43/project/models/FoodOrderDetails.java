@@ -1,60 +1,87 @@
 package nl.tudelft.oopp.group43.project.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import nl.tudelft.oopp.group43.project.keys.OrderDetailsKey;
-import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 
 @Entity
-@DynamicUpdate
-@Table(name = "food_order_details")
-public class FoodOrderDetails implements Serializable {
+@Table(name="food_order_details"
+    ,catalog="CSE1105Project"
+)
+public class FoodOrderDetails  implements java.io.Serializable {
 
-    @EmbeddedId
-    private OrderDetailsKey orderIdPlusProductId;
 
-    @Column(name = "amount")
-    int amount;
+     private FoodOrderDetailsId id;
+     private FoodProduct foodProduct;
+     private FoodOrder foodOrder;
+     private int amount;
 
     public FoodOrderDetails() {
     }
 
-    public FoodOrderDetails(@JsonProperty("food_order_id") int orderId,
-                            @JsonProperty("food_product_id") int productId,
-                            @JsonProperty("amount") int amount) {
+    public FoodOrderDetails(FoodOrderDetailsId id, FoodProduct foodProduct, FoodOrder foodOrder, int amount) {
+       this.id = id;
+       this.foodProduct = foodProduct;
+       this.foodOrder = foodOrder;
+       this.amount = amount;
+    }
+   
+     @EmbeddedId
 
-
-        orderIdPlusProductId = new OrderDetailsKey(orderId,productId);
-        this.amount=amount;
+    
+    @AttributeOverrides( {
+        @AttributeOverride(name="foodOrderId", column=@Column(name="food_order_id", nullable=false) ), 
+        @AttributeOverride(name="foodProductId", column=@Column(name="food_product_id", nullable=false) ) } )
+    public FoodOrderDetailsId getId() {
+        return this.id;
+    }
+    
+    public void setId(FoodOrderDetailsId id) {
+        this.id = id;
     }
 
-    public int getOrderId() {
-        return orderIdPlusProductId.getOrderId();
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="food_product_id", nullable=false, insertable=false, updatable=false)
+    public FoodProduct getFoodProduct() {
+        return this.foodProduct;
+    }
+    
+    public void setFoodProduct(FoodProduct foodProduct) {
+        this.foodProduct = foodProduct;
     }
 
-    public int getProductId() {
-        return orderIdPlusProductId.getProductId();
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="food_order_id", nullable=false, insertable=false, updatable=false)
+    public FoodOrder getFoodOrder() {
+        return this.foodOrder;
+    }
+    
+    public void setFoodOrder(FoodOrder foodOrder) {
+        this.foodOrder = foodOrder;
     }
 
+    
+    @Column(name="amount", nullable=false)
     public int getAmount() {
-        return amount;
+        return this.amount;
+    }
+    
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FoodOrderDetails)) return false;
-        FoodOrderDetails that = (FoodOrderDetails) o;
-        return getOrderId() == that.getOrderId() &&
-                getProductId() == that.getProductId() &&
-                getAmount() == that.getAmount();
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getOrderId(), getProductId());
-    }
+
+
 }
+
+

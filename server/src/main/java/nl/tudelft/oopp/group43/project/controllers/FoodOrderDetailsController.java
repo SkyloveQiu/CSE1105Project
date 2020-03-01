@@ -26,6 +26,7 @@ public class FoodOrderDetailsController {
     @ResponseBody
     public String CreateFoodProductDetails(@RequestBody FoodOrderDetails newFoodOrderDetails){
         repository.save(newFoodOrderDetails);
-        return "NEW FOOD ORDER DETAILS FOR ID: " + newFoodOrderDetails.getOrderId();
+        return "ok";
+       // return "NEW FOOD ORDER DETAILS FOR ID: " + newFoodOrderDetails.getOrderId();
     }
 }

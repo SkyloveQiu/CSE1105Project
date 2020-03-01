@@ -1,58 +1,94 @@
 package nl.tudelft.oopp.group43.project.models;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import nl.tudelft.oopp.group43.project.keys.BuildingFoodProductKey;
-import org.hibernate.annotations.DynamicUpdate;
 
+import java.math.BigDecimal;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Objects;
+
 
 @Entity
-@DynamicUpdate
-@Table(name = "building_food_product")
-public class BuildingFoodProduct {
+@Table(name="building_food_product"
+    ,catalog="CSE1105Project"
+)
+public class BuildingFoodProduct  implements java.io.Serializable {
 
-    @EmbeddedId
-    BuildingFoodProductKey buildingAndFoodProduct;
 
-    @Column(name = "price")
-    double price;
+     private BuildingFoodProductId id;
+     private Building building;
+     private FoodProduct foodProduct;
+     private BigDecimal price;
 
     public BuildingFoodProduct() {
     }
 
-    public BuildingFoodProduct(@JsonProperty("building") int building,
-                               @JsonProperty("food_product") int foodProduct,
-                               @JsonProperty("price") double price) {
+	
+    public BuildingFoodProduct(BuildingFoodProductId id, Building building, FoodProduct foodProduct) {
+        this.id = id;
+        this.building = building;
+        this.foodProduct = foodProduct;
+    }
+    public BuildingFoodProduct(BuildingFoodProductId id, Building building, FoodProduct foodProduct, BigDecimal price) {
+       this.id = id;
+       this.building = building;
+       this.foodProduct = foodProduct;
+       this.price = price;
+    }
+   
+     @EmbeddedId
 
-        buildingAndFoodProduct = new BuildingFoodProductKey(building, foodProduct);
+    
+    @AttributeOverrides( {
+        @AttributeOverride(name="building", column=@Column(name="building", nullable=false) ), 
+        @AttributeOverride(name="foodProduct", column=@Column(name="food_product", nullable=false) ) } )
+    public BuildingFoodProductId getId() {
+        return this.id;
+    }
+    
+    public void setId(BuildingFoodProductId id) {
+        this.id = id;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="building", nullable=false, insertable=false, updatable=false)
+    public Building getBuilding() {
+        return this.building;
+    }
+    
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="food_product", nullable=false, insertable=false, updatable=false)
+    public FoodProduct getFoodProduct() {
+        return this.foodProduct;
+    }
+    
+    public void setFoodProduct(FoodProduct foodProduct) {
+        this.foodProduct = foodProduct;
+    }
+
+    
+    @Column(name="price", precision=10)
+    public BigDecimal getPrice() {
+        return this.price;
+    }
+    
+    public void setPrice(BigDecimal price) {
         this.price = price;
-
     }
 
-    public int getBuilding() {
-        return buildingAndFoodProduct.getBuilding();
-    }
 
-    public int getFoodProduct() {
-        return buildingAndFoodProduct.getFoodProduct();
-    }
 
-    public double getPrice() {
-        return price;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BuildingFoodProduct)) return false;
-        BuildingFoodProduct that = (BuildingFoodProduct) o;
-        return Double.compare(that.getPrice(), getPrice()) == 0 &&
-                Objects.equals(buildingAndFoodProduct, that.buildingAndFoodProduct);
-    }
 
 }
+
+

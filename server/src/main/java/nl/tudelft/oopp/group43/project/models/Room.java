@@ -1,85 +1,86 @@
 package nl.tudelft.oopp.group43.project.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Generated;
 
 
-import javax.persistence.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@DynamicUpdate
-@Table(name = "room")
-public class Room {
+@Table(name="room"
+    ,catalog="CSE1105Project"
+    , uniqueConstraints = @UniqueConstraint(columnNames={"room_name", "building_number"}) 
+)
+public class Room  implements java.io.Serializable {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
-
-    @Column(name = "room_name")
-    private String roomName;
-
-    @Column(name = "building_number")
-    private int buildingNumber;
-
-
-    @Column(name = "attributes")
-    private String attributes;
-
-    @ManyToOne
-    @JoinColumn(name="rooms")
-    private Building building;
+     private Integer id;
+     private Building building;
+     private String roomName;
+     private char attributes;
 
     public Room() {
     }
 
-    public Room(@JsonProperty("id") int id,
-                @JsonProperty("room_name") String roomName,
-                @JsonProperty("building_number") int buildingNumber,
-                @JsonProperty("attributes") String attributes){
+    public Room(Building building, String roomName, char attributes) {
+       this.building = building;
+       this.roomName = roomName;
+       this.attributes = attributes;
+    }
+   
+     @Id @GeneratedValue(strategy=IDENTITY)
 
-        this.id=id;
-        this.roomName=roomName;
-        this.buildingNumber=buildingNumber;
-        this.attributes=attributes;
-
-
+    
+    @Column(name="id", unique=true, nullable=false)
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public int getId() {
-        return id;
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="building_number", nullable=false)
+    public Building getBuilding() {
+        return this.building;
+    }
+    
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
+    
+    @Column(name="room_name", nullable=false)
     public String getRoomName() {
-        return roomName;
+        return this.roomName;
+    }
+    
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
-    public int getBuildingNumber() {
-        return buildingNumber;
+    
+    @Column(name="attributes", nullable=false, length=0)
+    public char getAttributes() {
+        return this.attributes;
+    }
+    
+    public void setAttributes(char attributes) {
+        this.attributes = attributes;
     }
 
-    public String getAttributes() {
-        return attributes;
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Room)) return false;
-        Room room = (Room) o;
-        return getId() == room.getId() &&
-                getBuildingNumber() == room.getBuildingNumber() &&
-                getRoomName().equals(room.getRoomName()) &&
-                getAttributes().equals(room.getAttributes());
-    }
+
 
 }
+
+

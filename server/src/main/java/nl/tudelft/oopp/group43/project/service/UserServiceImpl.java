@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByToken(token);
         if (user != null) {
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            for (Role role : user.getRoles()){
+            for (Role role : (ArrayList<Role>)user.getRoles()){
                 grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
             }
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
