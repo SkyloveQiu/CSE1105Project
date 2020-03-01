@@ -13,16 +13,14 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="building"
-    ,catalog="CSE1105Project"
-)
+@Table(name="building")
 public class Building  implements java.io.Serializable {
 
 
      private int buildingNumber;
      private String buildingName;
      private String address;
-     private char openingHours;
+     private String openingHours;
      private Set foodOrders = new HashSet(0);
      private Set rooms = new HashSet(0);
      private Set buildingFoodProducts = new HashSet(0);
@@ -31,13 +29,13 @@ public class Building  implements java.io.Serializable {
     }
 
 	
-    public Building(int buildingNumber, String buildingName, String address, char openingHours) {
+    public Building(int buildingNumber, String buildingName, String address, String openingHours) {
         this.buildingNumber = buildingNumber;
         this.buildingName = buildingName;
         this.address = address;
         this.openingHours = openingHours;
     }
-    public Building(int buildingNumber, String buildingName, String address, char openingHours, Set foodOrders, Set rooms, Set buildingFoodProducts) {
+    public Building(int buildingNumber, String buildingName, String address, String openingHours, Set foodOrders, Set rooms, Set buildingFoodProducts) {
        this.buildingNumber = buildingNumber;
        this.buildingName = buildingName;
        this.address = address;
@@ -80,17 +78,17 @@ public class Building  implements java.io.Serializable {
     }
 
     
-    @Column(name="opening_hours", nullable=false, length=0)
-    public char getOpeningHours() {
+    @Column(name="opening_hours", nullable=false)
+    public String getOpeningHours() {
         return this.openingHours;
     }
     
-    public void setOpeningHours(char openingHours) {
+    public void setOpeningHours(String openingHours) {
         this.openingHours = openingHours;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="building")
-    public Set getFoodOrders() {
+    public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }
     
@@ -99,7 +97,7 @@ public class Building  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="building")
-    public Set getRooms() {
+    public Set<Room> getRooms() {
         return this.rooms;
     }
     
@@ -108,7 +106,7 @@ public class Building  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="building")
-    public Set getBuildingFoodProducts() {
+    public Set<BuildingFoodProduct> getBuildingFoodProducts() {
         return this.buildingFoodProducts;
     }
     

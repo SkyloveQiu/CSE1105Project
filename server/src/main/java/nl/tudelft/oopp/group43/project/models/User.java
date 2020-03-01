@@ -16,13 +16,11 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="user"
-    ,catalog="CSE1105Project"
-)
+@Table(name="user")
 public class User  implements java.io.Serializable {
 
 
-     private String email;
+     private String username;
      private String firstName;
      private String lastName;
      private String password;
@@ -37,10 +35,10 @@ public class User  implements java.io.Serializable {
 
 	
     public User(String email) {
-        this.email = email;
+        this.username = email;
     }
     public User(String email, String firstName, String lastName, String password, String role, String token, Set reservations, Set foodOrders, Set roles) {
-       this.email = email;
+       this.username = email;
        this.firstName = firstName;
        this.lastName = lastName;
        this.password = password;
@@ -55,12 +53,12 @@ public class User  implements java.io.Serializable {
 
     
     @Column(name="email", unique=true, nullable=false)
-    public String getEmail() {
-        return this.email;
+    public String getUsername() {
+        return this.username;
     }
     
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String email) {
+        this.username = email;
     }
 
     
@@ -94,10 +92,7 @@ public class User  implements java.io.Serializable {
     }
 
 
-    public String getUsername() {
-        return this.email;
-    }
-    
+
     @Column(name="role")
     public String getRole() {
         return this.role;
@@ -118,7 +113,7 @@ public class User  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="user")
-    public Set getReservations() {
+    public Set<Reservation> getReservations() {
         return this.reservations;
     }
     
@@ -127,7 +122,7 @@ public class User  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="user")
-    public Set getFoodOrders() {
+    public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }
     
@@ -136,10 +131,10 @@ public class User  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="user_roles", catalog="CSE1105Project", joinColumns = { 
+    @JoinTable(name="user_roles", joinColumns = {
         @JoinColumn(name="users_email", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="roles_id", nullable=false, updatable=false) })
-    public Set getRoles() {
+    public Set<Role> getRoles() {
         return this.roles;
     }
     

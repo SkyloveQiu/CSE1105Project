@@ -17,9 +17,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="role"
-    ,catalog="CSE1105Project"
-)
+@Table(name="role")
 public class Role  implements java.io.Serializable {
 
 
@@ -58,10 +56,10 @@ public class Role  implements java.io.Serializable {
     }
 
 @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="user_roles", catalog="CSE1105Project", joinColumns = { 
+    @JoinTable(name="user_roles",  joinColumns = {
         @JoinColumn(name="roles_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="users_email", nullable=false, updatable=false) })
-    public Set getUsers() {
+    public Set<User> getUsers() {
         return this.users;
     }
     

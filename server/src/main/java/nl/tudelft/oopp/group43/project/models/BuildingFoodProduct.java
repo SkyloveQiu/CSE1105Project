@@ -15,9 +15,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="building_food_product"
-    ,catalog="CSE1105Project"
-)
+@Table(name="building_food_product")
 public class BuildingFoodProduct  implements java.io.Serializable {
 
 
@@ -42,9 +40,7 @@ public class BuildingFoodProduct  implements java.io.Serializable {
        this.price = price;
     }
    
-     @EmbeddedId
-
-    
+    @EmbeddedId
     @AttributeOverrides( {
         @AttributeOverride(name="building", column=@Column(name="building", nullable=false) ), 
         @AttributeOverride(name="foodProduct", column=@Column(name="food_product", nullable=false) ) } )

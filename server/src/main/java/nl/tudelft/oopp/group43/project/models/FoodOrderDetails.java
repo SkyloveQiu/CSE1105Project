@@ -14,9 +14,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="food_order_details"
-    ,catalog="CSE1105Project"
-)
+@Table(name="food_order_details")
 public class FoodOrderDetails  implements java.io.Serializable {
 
 

@@ -17,7 +17,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="food_product"
-    ,catalog="CSE1105Project"
 )
 public class FoodProduct  implements java.io.Serializable {
 

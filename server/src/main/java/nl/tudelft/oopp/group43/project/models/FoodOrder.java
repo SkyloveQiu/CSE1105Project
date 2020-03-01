@@ -20,9 +20,7 @@ import javax.persistence.TemporalType;
 
 
 @Entity
-@Table(name="food_order"
-    ,catalog="CSE1105Project"
-)
+@Table(name="food_order")
 public class FoodOrder  implements java.io.Serializable {
 
 
@@ -104,7 +102,7 @@ public class FoodOrder  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="foodOrder")
-    public Set getFoodOrderDetailses() {
+    public Set<FoodOrder> getFoodOrderDetailses() {
         return this.foodOrderDetailses;
     }
     
