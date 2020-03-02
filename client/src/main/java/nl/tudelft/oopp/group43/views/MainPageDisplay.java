@@ -2,23 +2,28 @@ package nl.tudelft.oopp.group43.views;
 
 import java.io.IOException;
 import java.net.URL;
+
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.classes.MainPageConfig;
+import nl.tudelft.oopp.group43.classes.MainPageContent;
 
 public class MainPageDisplay extends Application {
 
-    private boolean clicked = false;
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -28,69 +33,119 @@ public class MainPageDisplay extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
-
         ScrollPane sp = (ScrollPane) scene.lookup("#buildings");
+        GridPane gp = (GridPane) scene.lookup("#buildings_grid");
 
-        Button btn1 = new Button();
-        btn1.setLayoutX(50.0);
-        btn1.setLayoutY(40.0);
-        btn1.setText("buildings");
-        btn1.setOnAction(new EventHandler<ActionEvent>() {
+        ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
             @Override
-            public void handle(ActionEvent event) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("An building for you");
-                alert.setHeaderText(null);
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                GridPane gp = (GridPane) scene.lookup("#buildings_grid");
+                if ((double) newValue >= 700.0 && gp.getColumnCount() < 3) {
+                    for (ColumnConstraints cc : gp.getColumnConstraints()) {
+                        cc.setPercentWidth(33.33);
+                    }
+                    ColumnConstraints cc = new ColumnConstraints();
+                    cc.setPercentWidth(33.33);
+                    gp.getColumnConstraints().add(cc);
+                    MainPageConfig.setColumnCount(3);
 
-                alert.setContentText(ServerCommunication.getBuilding());
+                    updateGrid(gp);
+                }
 
-                alert.showAndWait();
+                if ((double) newValue < 700.0 && gp.getColumnCount() > 2) {
+                    gp.getColumnConstraints().remove(2);
+                    for (ColumnConstraints cc : gp.getColumnConstraints()) {
+                        cc.setPercentWidth(50.0);
+                    }
+                    MainPageConfig.setColumnCount(2);
+
+                    updateGrid(gp);
+                }
+
+                for (RowConstraints rc : gp.getRowConstraints()) {
+                    double newSize = ((double) newValue - 60.0) / MainPageConfig.getColumnCount();
+                    rc.setPrefHeight(newSize);
+                    rc.setMinHeight(newSize);
+                    rc.setMaxHeight(newSize);
+                }
             }
-        });
+        };
+        sp.widthProperty().addListener(resizeListener);
 
-        Button btn2 = new Button();
-        btn2.setLayoutX(50.0);
-        btn2.setLayoutY(80.0);
-        btn2.setText("rooms");
-        btn2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("An room for you");
-                alert.setHeaderText(null);
-
-                alert.setContentText(ServerCommunication.getRooms());
-
-                alert.showAndWait();
-            }
-        });
-
-        Button btn3 = new Button();
-        btn3.setLayoutX(50.0);
-        btn3.setLayoutY(120.0);
-        btn3.setText("users");
-        btn3.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("An user for you");
-                alert.setHeaderText(null);
-
-                alert.setContentText(ServerCommunication.getUsers());
-
-                alert.showAndWait();
-            }
-        });
-
-        Pane pane = new Pane(btn1, btn2, btn3);
-        sp.setContent(pane);
+        addBuildings(primaryStage);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Campus Management - Main Menu");
         primaryStage.show();
+
+        // Sets label for letting user know it is being loaded
+        Label label = (Label) scene.lookup("#titlebar");
+        label.setText(label.getText() + " - BUILDINGS ARE BEING LOADED");
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    /**
+     * Adds all buildings as content using a new Thread.
+     * Doing this removes initial startup lag.
+     *
+     * @param stage Stage is passed as parameter to get all Nodes
+     */
+    private void addBuildings(Stage stage) {
+        //Adds the building content in a separate Thread
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                Runnable r = new MainPageContent(stage);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Platform.runLater(r);
+            }
+        });
+        // Prevents JVM shutdown
+        thread.setDaemon(true);
+        thread.start();
     }
+
+    /**
+     * Updates the grid when it gets resized.
+     * Namely by adding columns when it hit a certain size point (700.0)
+     * and adding or removing rows accordingly.
+     *
+     * @param gp the GridPane that gets updates
+     */
+    private void updateGrid(GridPane gp) {
+        gp.getChildren().removeAll(MainPageConfig.getLabel());
+
+        int rows = MainPageConfig.getLabel().length / MainPageConfig.getColumnCount();
+        if (MainPageConfig.getLabel().length % MainPageConfig.getColumnCount() != 0) {
+            rows++;
+        }
+        if (rows < gp.getRowCount()) {
+            for (int i = gp.getRowCount() - 1; i >= rows; i--) {
+                gp.getRowConstraints().remove(i);
+            }
+        }
+        while (rows > gp.getRowCount()) {
+            RowConstraints rc = new RowConstraints();
+            double newSize = (gp.getWidth() - 60.0) / MainPageConfig.getColumnCount();
+            rc.setPrefHeight(newSize);
+            rc.setMinHeight(newSize);
+            rc.setMaxHeight(newSize);
+            gp.getRowConstraints().add(rc);
+        }
+
+        int row = 0;
+        for (int i = 0; i < MainPageConfig.getLabel().length; i++) {
+            if (i % MainPageConfig.getColumnCount() == 0 && i != 0) {
+                row++;
+            }
+            gp.add(MainPageConfig.getLabel()[i], i % MainPageConfig.getColumnCount(), row);
+        }
+    }
+
 }
