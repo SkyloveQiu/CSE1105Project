@@ -1,6 +1,8 @@
 package nl.tudelft.oopp.group43.classes;
 
-import com.sun.tools.javac.Main;
+import java.io.IOException;
+import java.net.URL;
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -22,9 +24,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
-import java.net.URL;
-
 public class MainPageContent implements Runnable {
 
     private Stage stage;
@@ -37,7 +36,7 @@ public class MainPageContent implements Runnable {
     }
 
     /**
-     * adds all buildings in the database to the main page
+     * adds all buildings in the database to the main page.
      */
     public void run() {
         JSONParser json = new JSONParser();
@@ -69,17 +68,16 @@ public class MainPageContent implements Runnable {
             EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
-                    if(!MainPageConfig.isAccordionExpanded()) {
-                        for(Node node : menuPane.getChildren()) {
-                            if(!node.equals(accordion)) {
+                    if (!MainPageConfig.isAccordionExpanded()) {
+                        for (Node node : menuPane.getChildren()) {
+                            if (!node.equals(accordion)) {
                                 node.relocate(node.getLayoutX(), node.getLayoutY() + MainPageConfig.getAccordionHeight());
                                 MainPageConfig.setAccordionExpanded(true);
                             }
                         }
-                    }
-                    else if(MainPageConfig.isAccordionExpanded()){
-                        for(Node node : menuPane.getChildren()) {
-                            if(!node.equals(accordion)) {
+                    } else if (MainPageConfig.isAccordionExpanded()) {
+                        for (Node node : menuPane.getChildren()) {
+                            if (!node.equals(accordion)) {
                                 node.relocate(node.getLayoutX(), node.getLayoutY() - MainPageConfig.getAccordionHeight());
                                 MainPageConfig.setAccordionExpanded(false);
                             }
@@ -91,10 +89,10 @@ public class MainPageContent implements Runnable {
 
             labelArr = new Label[jsonArray.size()];
 
-            if(jsonArray.size() > 2) {
+            if (jsonArray.size() > 2) {
                 int size = jsonArray.size();
                 double rowHeight = (gp.getWidth() - 20.0) / MainPageConfig.getColumnCount();
-                while(size > MainPageConfig.getColumnCount()) {
+                while (size > MainPageConfig.getColumnCount()) {
                     RowConstraints rc = new RowConstraints();
                     rc.setPrefHeight(rowHeight);
                     rc.setMinHeight(rowHeight);
@@ -105,8 +103,10 @@ public class MainPageContent implements Runnable {
             }
 
             int row = 0;
-            for(int i = 0; i < jsonArray.size(); i++) {
-                if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
+            for (int i = 0; i < jsonArray.size(); i++) {
+                if (i % MainPageConfig.getColumnCount() == 0 && i != 0) {
+                    row++;
+                }
                 addLabel(i, row, gp, jsonArray, labelClick);
             }
 
@@ -116,17 +116,19 @@ public class MainPageContent implements Runnable {
             label.setText("Main Menu");
 
             MainPageConfig.setLabel(labelArr);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        catch(ParseException e) {}
     }
 
     /**
-     * Adds a label to the building GridPane
-     * @param i the current index in the label-array
-     * @param row the current working row in the GridPane
-     * @param gp the GridPane to which the labels get added
+     * Adds a label to the building GridPane.
+     *
+     * @param i         the current index in the label-array
+     * @param row       the current working row in the GridPane
+     * @param gp        the GridPane to which the labels get added
      * @param jsonArray the JSONArray containing all the buildings to add
-     * @param onClick the Handler that gets added to the labels and activates when clicked on
+     * @param onClick   the Handler that gets added to the labels and activates when clicked on
      */
     private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, EventHandler<MouseEvent> onClick) {
         JSONObject obj = (JSONObject) jsonArray.get(i);
@@ -145,17 +147,18 @@ public class MainPageContent implements Runnable {
     }
 
     /**
-     * Adds the buildings to the side menu
-     * @param labelArr  The array containing all building labels
-     * @param acc The Accordion where to add the buildings
-     * @param event Event that happens when the Label gets clicked
+     * Adds the buildings to the side menu.
+     *
+     * @param labelArr The array containing all building labels
+     * @param acc      The Accordion where to add the buildings
+     * @param event    Event that happens when the Label gets clicked
      */
     private void addBuildingList(Label[] labelArr, Accordion acc, EventHandler<MouseEvent> event) {
-        TitledPane tp = acc.getPanes().get(0);
+        final TitledPane tp = acc.getPanes().get(0);
         Pane pane = new Pane();
         double pos = 0.0;
 
-        for(int i = 0; i < labelArr.length; i++) {
+        for (int i = 0; i < labelArr.length; i++) {
             Label label = new Label();
 
             label.setText(labelArr[i].getText().replaceAll("\\n", " "));
@@ -173,7 +176,7 @@ public class MainPageContent implements Runnable {
         pane.setMinHeight(pos);
         ScrollPane sp = new ScrollPane();
         sp.setContent(pane);
-        sp.setPadding(new Insets(18.0,0.0,0.0,0.0));
+        sp.setPadding(new Insets(18.0, 0.0, 0.0, 0.0));
         sp.setLayoutY(18.0);
         sp.setMinSize(150.0, 250.0);
         sp.setMaxSize(150.0, 250.0);

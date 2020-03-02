@@ -1,9 +1,10 @@
 package nl.tudelft.oopp.group43.views;
 
-import javafx.application.Platform;
 import java.io.IOException;
 import java.net.URL;
+
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,10 @@ import nl.tudelft.oopp.group43.classes.MainPageContent;
 
 public class MainPageDisplay extends Application {
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -35,8 +40,8 @@ public class MainPageDisplay extends Application {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 GridPane gp = (GridPane) scene.lookup("#buildings_grid");
-                if((double) newValue >= 700.0 && gp.getColumnCount() < 3) {
-                    for(ColumnConstraints cc : gp.getColumnConstraints()) {
+                if ((double) newValue >= 700.0 && gp.getColumnCount() < 3) {
+                    for (ColumnConstraints cc : gp.getColumnConstraints()) {
                         cc.setPercentWidth(33.33);
                     }
                     ColumnConstraints cc = new ColumnConstraints();
@@ -47,9 +52,9 @@ public class MainPageDisplay extends Application {
                     updateGrid(gp);
                 }
 
-                if((double) newValue < 700.0 && gp.getColumnCount() > 2) {
+                if ((double) newValue < 700.0 && gp.getColumnCount() > 2) {
                     gp.getColumnConstraints().remove(2);
-                    for(ColumnConstraints cc : gp.getColumnConstraints()) {
+                    for (ColumnConstraints cc : gp.getColumnConstraints()) {
                         cc.setPercentWidth(50.0);
                     }
                     MainPageConfig.setColumnCount(2);
@@ -57,8 +62,8 @@ public class MainPageDisplay extends Application {
                     updateGrid(gp);
                 }
 
-                for(RowConstraints rc : gp.getRowConstraints()) {
-                    double newSize = ((double) newValue - 60.0)/MainPageConfig.getColumnCount();
+                for (RowConstraints rc : gp.getRowConstraints()) {
+                    double newSize = ((double) newValue - 60.0) / MainPageConfig.getColumnCount();
                     rc.setPrefHeight(newSize);
                     rc.setMinHeight(newSize);
                     rc.setMaxHeight(newSize);
@@ -78,13 +83,10 @@ public class MainPageDisplay extends Application {
         label.setText(label.getText() + " - BUILDINGS ARE BEING LOADED");
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     /**
-     * Adds all buildings as content using a new Thread
-     * Doing this removes initial startup lag
+     * Adds all buildings as content using a new Thread.
+     * Doing this removes initial startup lag.
+     *
      * @param stage Stage is passed as parameter to get all Nodes
      */
     private void addBuildings(Stage stage) {
@@ -95,8 +97,11 @@ public class MainPageDisplay extends Application {
             public void run() {
                 Runnable r = new MainPageContent(stage);
 
-                try { Thread.sleep(500); }
-                catch(InterruptedException e) {}
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 Platform.runLater(r);
             }
@@ -107,24 +112,27 @@ public class MainPageDisplay extends Application {
     }
 
     /**
-     * Updates the grid when it gets resized
+     * Updates the grid when it gets resized.
      * Namely by adding columns when it hit a certain size point (700.0)
-     * and adding or removing rows accordingly
+     * and adding or removing rows accordingly.
+     *
      * @param gp the GridPane that gets updates
      */
     private void updateGrid(GridPane gp) {
         gp.getChildren().removeAll(MainPageConfig.getLabel());
 
-        int rows = (int) MainPageConfig.getLabel().length / MainPageConfig.getColumnCount();
-        if(MainPageConfig.getLabel().length % MainPageConfig.getColumnCount() != 0) { rows++; }
-        if(rows < gp.getRowCount()) {
-            for(int i = gp.getRowCount()-1; i >= rows; i--) {
+        int rows = MainPageConfig.getLabel().length / MainPageConfig.getColumnCount();
+        if (MainPageConfig.getLabel().length % MainPageConfig.getColumnCount() != 0) {
+            rows++;
+        }
+        if (rows < gp.getRowCount()) {
+            for (int i = gp.getRowCount() - 1; i >= rows; i--) {
                 gp.getRowConstraints().remove(i);
             }
         }
-        while(rows > gp.getRowCount()) {
+        while (rows > gp.getRowCount()) {
             RowConstraints rc = new RowConstraints();
-            double newSize = ((double) gp.getWidth() - 60.0)/MainPageConfig.getColumnCount();
+            double newSize = (gp.getWidth() - 60.0) / MainPageConfig.getColumnCount();
             rc.setPrefHeight(newSize);
             rc.setMinHeight(newSize);
             rc.setMaxHeight(newSize);
@@ -132,8 +140,10 @@ public class MainPageDisplay extends Application {
         }
 
         int row = 0;
-        for(int i = 0; i < MainPageConfig.getLabel().length; i++) {
-            if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
+        for (int i = 0; i < MainPageConfig.getLabel().length; i++) {
+            if (i % MainPageConfig.getColumnCount() == 0 && i != 0) {
+                row++;
+            }
             gp.add(MainPageConfig.getLabel()[i], i % MainPageConfig.getColumnCount(), row);
         }
     }
