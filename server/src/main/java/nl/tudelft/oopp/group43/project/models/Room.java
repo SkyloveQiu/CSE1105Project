@@ -15,21 +15,19 @@ import javax.persistence.UniqueConstraint;
 
 
 @Entity
-@Table(name="room"
-    , uniqueConstraints = @UniqueConstraint(columnNames={"room_name", "building_number"})
-)
+@Table(name="room")
 public class Room  implements java.io.Serializable {
 
 
      private Integer id;
      private Building building;
      private String roomName;
-     private char attributes;
+     private String attributes;
 
     public Room() {
     }
 
-    public Room(Building building, String roomName, char attributes) {
+    public Room(Building building, String roomName, String attributes) {
        this.building = building;
        this.roomName = roomName;
        this.attributes = attributes;
@@ -69,11 +67,11 @@ public class Room  implements java.io.Serializable {
 
     
     @Column(name="attributes", nullable=false, length=0)
-    public char getAttributes() {
+    public String getAttributes() {
         return this.attributes;
     }
     
-    public void setAttributes(char attributes) {
+    public void setAttributes(String attributes) {
         this.attributes = attributes;
     }
 

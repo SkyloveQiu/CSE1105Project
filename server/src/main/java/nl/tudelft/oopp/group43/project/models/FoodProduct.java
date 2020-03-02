@@ -25,8 +25,8 @@ public class FoodProduct  implements java.io.Serializable {
      private String name;
      private String description;
      private BigDecimal price;
-     private Set buildingFoodProducts = new HashSet(0);
-     private Set foodOrderDetailses = new HashSet(0);
+     private Set<BuildingFoodProduct> buildingFoodProducts = new HashSet(0);
+     private Set<FoodOrderDetails> foodOrderDetailses = new HashSet(0);
 
     public FoodProduct() {
     }
@@ -88,7 +88,7 @@ public class FoodProduct  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="foodProduct")
-    public Set getBuildingFoodProducts() {
+    public Set<BuildingFoodProduct> getBuildingFoodProducts() {
         return this.buildingFoodProducts;
     }
     
@@ -97,7 +97,7 @@ public class FoodProduct  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="foodProduct")
-    public Set getFoodOrderDetailses() {
+    public Set<FoodOrderDetails> getFoodOrderDetailses() {
         return this.foodOrderDetailses;
     }
     

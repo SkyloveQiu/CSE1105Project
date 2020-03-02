@@ -21,9 +21,9 @@ public class Building  implements java.io.Serializable {
      private String buildingName;
      private String address;
      private String openingHours;
-     private Set foodOrders = new HashSet(0);
-     private Set rooms = new HashSet(0);
-     private Set buildingFoodProducts = new HashSet(0);
+     private Set<FoodOrder> foodOrders = new HashSet(0);
+     private Set<Room> rooms = new HashSet(0);
+     private Set<BuildingFoodProduct> buildingFoodProducts = new HashSet(0);
 
     public Building() {
     }
@@ -96,7 +96,7 @@ public class Building  implements java.io.Serializable {
         this.foodOrders = foodOrders;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="building")
+@OneToMany(fetch=FetchType.LAZY)
     public Set<Room> getRooms() {
         return this.rooms;
     }
@@ -105,7 +105,7 @@ public class Building  implements java.io.Serializable {
         this.rooms = rooms;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="building")
+@OneToMany(fetch=FetchType.LAZY)
     public Set<BuildingFoodProduct> getBuildingFoodProducts() {
         return this.buildingFoodProducts;
     }

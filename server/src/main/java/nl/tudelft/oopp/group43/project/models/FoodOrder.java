@@ -101,7 +101,7 @@ public class FoodOrder  implements java.io.Serializable {
         this.time = time;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="foodOrder")
+@OneToMany(fetch=FetchType.LAZY)
     public Set<FoodOrder> getFoodOrderDetailses() {
         return this.foodOrderDetailses;
     }

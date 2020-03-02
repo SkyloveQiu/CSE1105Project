@@ -26,9 +26,9 @@ public class User  implements java.io.Serializable {
      private String password;
      private String role;
      private String token;
-     private Set reservations = new HashSet(0);
-     private Set foodOrders = new HashSet(0);
-     private Set roles = new HashSet(0);
+     private Set<Reservation> reservations = new HashSet(0);
+     private Set<FoodOrder> foodOrders = new HashSet(0);
+     private Set<Role> roles = new HashSet(0);
 
     public User() {
     }
