@@ -2,6 +2,8 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 
+import net.minidev.json.annotate.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +22,9 @@ public class Room  implements java.io.Serializable {
 
 
      private Integer id;
+     @JsonIgnore
      private Building building;
+
      private String roomName;
      private String attributes;
 
@@ -34,8 +38,6 @@ public class Room  implements java.io.Serializable {
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
-
-    
     @Column(name="id", unique=true, nullable=false)
     public Integer getId() {
         return this.id;
@@ -45,12 +47,13 @@ public class Room  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="building_number", nullable=false)
     public Building getBuilding() {
         return this.building;
     }
-    
+
     public void setBuilding(Building building) {
         this.building = building;
     }

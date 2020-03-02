@@ -49,9 +49,7 @@ public class User  implements java.io.Serializable {
        this.roles = roles;
     }
    
-     @Id 
-
-    
+    @Id
     @Column(name="email", unique=true, nullable=false)
     public String getUsername() {
         return this.username;
@@ -130,10 +128,7 @@ public class User  implements java.io.Serializable {
         this.foodOrders = foodOrders;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="user_roles", joinColumns = {
-        @JoinColumn(name="users_email", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="roles_id", nullable=false, updatable=false) })
+@ManyToMany(fetch=FetchType.EAGER)
     public Set<Role> getRoles() {
         return this.roles;
     }

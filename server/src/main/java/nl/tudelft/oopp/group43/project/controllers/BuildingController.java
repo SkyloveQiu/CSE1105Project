@@ -29,7 +29,6 @@ public class BuildingController {
         return repository.findAll();
     }
 
-    //TODO Make it secure.
 
     @PutMapping("/building")
     @ResponseBody
