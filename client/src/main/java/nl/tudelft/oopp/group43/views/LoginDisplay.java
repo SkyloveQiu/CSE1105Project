@@ -1,17 +1,14 @@
 package nl.tudelft.oopp.group43.views;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 
-import static javafx.application.Application.launch;
+import javafx.application.Application;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class LoginDisplay extends Application {
 
@@ -27,7 +24,8 @@ public class LoginDisplay extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) {launch(args);}
-
+    public static void main(String[] args) {
+        launch(args);
+    }
 
 }

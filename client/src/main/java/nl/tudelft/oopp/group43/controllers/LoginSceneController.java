@@ -1,81 +1,70 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import static nl.tudelft.oopp.group43.controllers.RegisterSceneController.emailValid;
+
+import java.io.IOException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SubScene;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
-import nl.tudelft.oopp.group43.views.LoginDisplay;
 import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import nl.tudelft.oopp.group43.views.RegisterDisplay;
 
-
-import javafx.event.ActionEvent;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+public class LoginSceneController {
 
-import static nl.tudelft.oopp.group43.controllers.RegisterSceneController.emailValid;
-
-public class LoginSceneController{
-
-  @FXML
-  private TextField email;
-  @FXML
-  private PasswordField password;
-  @FXML
-  private Label emailCheck;
-  @FXML
-  private Label passwordCheck;
+    @FXML
+    private TextField email;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Label emailCheck;
+    @FXML
+    private Label passwordCheck;
 
 
     /**
      * Checks if all fields are complete and valid.
      * @return true if all fields are complete and valid, false otherwise
      */
-    boolean checkEmpty()
-    {
+    boolean checkEmpty() {
 
-       boolean okEmpty = emptyEmail();
-       okEmpty = (emptyPassword() && okEmpty );
-       return okEmpty;
+        boolean okEmpty = emptyEmail();
+        okEmpty = (emptyPassword() && okEmpty);
+        return okEmpty;
     }
-
 
 
     /**
      * If you press the login button, either you can be redirected to the main page if all fields are valid,
-     * or you have to change something in your fields
+     * or you have to change something in your fields.
      * @param event - login button is pressed
-     * @throws IOException - if loading the Register Page fails
+     * @throws IOException    - if loading the Register Page fails
      * @throws ParseException - if something goes wrong with the JSON Parser from the loginToken method.
      */
     @FXML
     @SuppressWarnings("unchecked")
     private void loginClicked(ActionEvent event) throws IOException, ParseException {
-        boolean okEmpty =  checkEmpty();
-     if(okEmpty == false)
-         return;
+        boolean okEmpty = checkEmpty();
+        if (okEmpty == false) {
+            return;
+        }
 
-      String response = ServerCommunication.loginToken(email.getText(), password.getText());
+        String response = ServerCommunication.loginToken(email.getText(), password.getText());
 
-      if(response.equals("OK"))
-      {
-          emailCheck.setText("");
-          MainPageDisplay md = new MainPageDisplay();
-          md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-      }
-      else
-          emailCheck.setText("Wrong passsword or email");
+        if (response.equals("OK")) {
+            emailCheck.setText("");
+            MainPageDisplay md = new MainPageDisplay();
+            md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        } else {
+            emailCheck.setText("Wrong passsword or email");
+        }
     }
 
 
@@ -86,25 +75,21 @@ public class LoginSceneController{
     @FXML
     @SuppressWarnings("unchecked")
     private boolean emptyEmail() {
-      email.getText();
-      if (email.getText().isEmpty()) {
-          emailCheck.setText("You did not complete the email field");
-          return false;
-      }
-
-      else {
-          if (emailValid(email.getText()) == false) {
-              emailCheck.setText("The email is not valid");
-              return false;
-          }
-          else {
-              emailCheck.setText("");
-              return true;
-          }
-      }
+        email.getText();
+        if (email.getText().isEmpty()) {
+            emailCheck.setText("You did not complete the email field");
+            return false;
+        } else {
+            if (emailValid(email.getText()) == false) {
+                emailCheck.setText("The email is not valid");
+                return false;
+            } else {
+                emailCheck.setText("");
+                return true;
+            }
+        }
 
     }
-
 
 
     /**
@@ -113,23 +98,20 @@ public class LoginSceneController{
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean emptyPassword()
-    {
-      String passwordString = password.getText();
-      if(passwordString.isEmpty()) {
-          passwordCheck.setText("You did not complete the password field");
-          return false;
-      }
-      else {
-          passwordCheck.setText("");
-          return true;
-      }
+    private boolean emptyPassword() {
+        String passwordString = password.getText();
+        if (passwordString.isEmpty()) {
+            passwordCheck.setText("You did not complete the password field");
+            return false;
+        } else {
+            passwordCheck.setText("");
+            return true;
+        }
     }
 
 
-
     /**
-     * If you press the register button, you will be redirected to the Register Page
+     * If you press the register button, you will be redirected to the Register Page.
      * @param event - register button is pressed
      * @throws IOException - if loading the Register Page fails
      */

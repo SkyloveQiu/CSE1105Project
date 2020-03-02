@@ -1,26 +1,30 @@
 package nl.tudelft.oopp.group43.controllers;
 
-import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-
-import javafx.event.ActionEvent;
-import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.communication.ServerCommunication;
-import nl.tudelft.oopp.group43.views.LoginDisplay;
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
+
 public class RegisterSceneController {
 
+    private static final String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")"
+            + "@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    private static final Pattern emailPattern = Pattern.compile(emailRegex);
     @FXML
     private PasswordField password;
     @FXML
@@ -53,82 +57,80 @@ public class RegisterSceneController {
     private Label firstNameCheck;
     @FXML
     private Label lastNameCheck;
-    private static final String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-    private static final Pattern emailPattern = Pattern.compile(emailRegex);
-
 
     /**
-     * Checks if the email is valid
+     * Checks if the email is valid.
+     *
      * @param email - the string which represents the email
      * @return true if the email is valid, false otherwise
      */
-    public static boolean emailValid(String email)
-    {
-        if(email == null)
+    public static boolean emailValid(String email) {
+        if (email == null) {
             return false;
+        }
         Matcher matcher = emailPattern.matcher(email);
         return matcher.matches();
     }
 
 
-
     /**
      * Checks if all fields are complete and valid.
+     *
      * @return true if all fields are complete and valid, false otherwise
      */
     private boolean checkEmpty() {
 
-       boolean empty = checkEmail();
-       empty = (checkFirstName() && empty);
-       empty = (checkLastName() && empty);
-       empty = (checkPassword() && empty);
-       empty = (checkCPassword() && empty);
-       empty = (checkRole() && empty);
-       empty = (checkBoxCheck() && empty);
+        boolean empty = checkEmail();
+        empty = (checkFirstName() && empty);
+        empty = (checkLastName() && empty);
+        empty = (checkPassword() && empty);
+        empty = (checkCPassword() && empty);
+        empty = (checkRole() && empty);
+        empty = (checkBoxCheck() && empty);
 
         return empty;
     }
 
-
-
     /**
-     *  If you press the confirm button, either you can be redirected to the login page if all fields are valid,
-     *  or you have to change something in your fields
+     * If you press the confirm button, either you can be redirected to the login page if all fields are valid,
+     * or you have to change something in your fields.
+     *
      * @param event - pressing the button
      * @throws IOException - if loading the Login Display fails
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void confirmClicked(ActionEvent event)  throws IOException{
+    private void confirmClicked(ActionEvent event) throws IOException {
 
-        if (checkEmpty()== false)
+        if (checkEmpty() == false) {
             return;
+        }
 
         String role;
-        if (employee.isSelected())
+        if (employee.isSelected()) {
             role = "employee";
-        else if (student.isSelected())
+        } else if (student.isSelected()) {
             role = "student";
-        else
+        } else {
             role = "other";
+        }
 
         String response = ServerCommunication.confirmRegistration(firstName.getText(), lastName.getText(), email.getText(), password.getText(), role);
-        if(response.equals("OK"))
-        {
+        if (response.equals("OK")) {
             emailCheck.setText("");
 
             LoginDisplay ld = new LoginDisplay();
             ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-        }
-        else
+        } else {
             emailCheck.setText("The email already exists!");
+        }
 
     }
 
 
-
     /**
-     * If you press the back button, you will be redirected to the Login Page
+     * If you press the back button, you will be redirected to the Login Page.
+     *
      * @param event - pressing the button
      * @throws IOException - if loading the Login Page fails
      */
@@ -148,6 +150,7 @@ public class RegisterSceneController {
 
     /**
      * Checks if the first name field is empty and show special messages to the user.
+     *
      * @return true if the first name field is not empty, false otherwise
      */
     @FXML
@@ -156,8 +159,7 @@ public class RegisterSceneController {
         if (firstName.getText().isEmpty()) {
             firstNameCheck.setText("You did not complete the first name field");
             return false;
-        }
-        else {
+        } else {
             firstNameCheck.setText("");
             return true;
         }
@@ -165,17 +167,16 @@ public class RegisterSceneController {
 
     /**
      * Checks if the last name field is empty and show special messages to the user.
+     *
      * @return true if the last name field is not empty, false otherwise
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean checkLastName()
-    {
-        if(lastName.getText().isEmpty()) {
+    private boolean checkLastName() {
+        if (lastName.getText().isEmpty()) {
             lastNameCheck.setText("You did not complete the last name field");
             return false;
-        }
-        else {
+        } else {
             lastNameCheck.setText("");
             return true;
         }
@@ -183,23 +184,20 @@ public class RegisterSceneController {
 
     /**
      * Checks if the email field is empty and show special messages to the user.
+     *
      * @return true if the email field is not empty and valid, false otherwise
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean checkEmail()
-    {
-        if(email.getText().isEmpty()) {
+    private boolean checkEmail() {
+        if (email.getText().isEmpty()) {
             emailCheck.setText("You did not complete the email field");
             return false;
-        }
-        else
-        {
-            if(emailValid(email.getText())== false) {
+        } else {
+            if (emailValid(email.getText()) == false) {
                 emailCheck.setText("The email is not valid");
                 return false;
-            }
-            else {
+            } else {
                 emailCheck.setText("");
                 return true;
             }
@@ -209,53 +207,50 @@ public class RegisterSceneController {
     /**
      * Checks if the password field is empty and show special messages to the user.
      * + a password must be between 8 and 32 characters
+     *
      * @return true if the password field is not empty and valid, false otherwise
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean checkPassword()
-    {
+    private boolean checkPassword() {
         boolean ok = true;
-       if(password.getText().isEmpty()) {
-           passwordCheck.setText("You did not complete the password field");
-           return false;
-       }
-       else {
-           if(password.getText().length() <8 || password.getText().length()>32) {
-               passwordCheck.setText("The password must have more than 8 characters and maximum 32 characters");
-               ok = false;
-           }
-           else
-               passwordCheck.setText("");
-           if (cpassword.getText().isEmpty() || !password.getText().equals(cpassword.getText())) {
-               cpasswordCheck.setText("The passwords don't match");
-               return false;
-           }
-            else
-                return  ok;
-           }
+        if (password.getText().isEmpty()) {
+            passwordCheck.setText("You did not complete the password field");
+            return false;
+        } else {
+            if (password.getText().length() < 8 || password.getText().length() > 32) {
+                passwordCheck.setText("The password must have more than 8 characters and maximum 32 characters");
+                ok = false;
+            } else {
+                passwordCheck.setText("");
+            }
+            if (cpassword.getText().isEmpty() || !password.getText().equals(cpassword.getText())) {
+                cpasswordCheck.setText("The passwords don't match");
+                return false;
+            } else {
+                return ok;
+            }
+        }
 
 
     }
 
     /**
-     *  Checks if the confirm password field is empty and show special messages to the user.
-     *  @return true if the confirm password field is not empty and valid, false otherwise
+     * Checks if the confirm password field is empty and show special messages to the user.
+     *
+     * @return true if the confirm password field is not empty and valid, false otherwise
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean checkCPassword()
-    {
-        if(cpassword.getText().isEmpty()) {
+    private boolean checkCPassword() {
+        if (cpassword.getText().isEmpty()) {
             cpasswordCheck.setText("You did not complete the confirm password field");
             return false;
-        }
-        else {
+        } else {
             if (password.getText().isEmpty() || !password.getText().equals(cpassword.getText())) {
                 cpasswordCheck.setText("The passwords don't match");
                 return false;
-            }
-            else {
+            } else {
                 cpasswordCheck.setText("");
                 return true;
             }
@@ -263,29 +258,28 @@ public class RegisterSceneController {
     }
 
     /**
-     * This method was created to show messages everytime the user select or deselect the check box
+     * This method was created to show messages every time the user select or deselect the check box.
+     *
      * @param event - the check box is selected or not
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void checkBoxCheck(ActionEvent event)
-    {
+    private void checkBoxCheck(ActionEvent event) {
         checkBoxCheck();
     }
 
     /**
      * Checks if the terms field is selected and show special messages to the user.
+     *
      * @return true if the terms field is selected, false otherwise
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean checkBoxCheck()
-    {
-        if(!check.isSelected()) {
+    private boolean checkBoxCheck() {
+        if (!check.isSelected()) {
             termsCheck.setText("You have to accept the terms and condtions");
             return false;
-        }
-        else {
+        } else {
             termsCheck.setText("");
             return true;
         }
@@ -293,34 +287,32 @@ public class RegisterSceneController {
     }
 
     /**
-     * This method was created to show messages everytime the user select or deselect a role
+     * This method was created to show messages every time the user select or deselect a role.
+     *
      * @param event - a radio button is pressed
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void roleCheck(ActionEvent event)
-    {
-       checkRole();
+    private void roleCheck(ActionEvent event) {
+        checkRole();
     }
 
 
     /**
      * Checks if the a role field is selected and show special messages to the user.
+     *
      * @return true if one role is selected, false otherwise
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean checkRole()
-    {
-      if(!student.isSelected() && !employee.isSelected() && !other.isSelected()) {
-          roleCheck.setText("You did not choose any role");
-          return false;
-      }
-      else
-      {
-          roleCheck.setText("");
-          return true;
-      }
+    private boolean checkRole() {
+        if (!student.isSelected() && !employee.isSelected() && !other.isSelected()) {
+            roleCheck.setText("You did not choose any role");
+            return false;
+        } else {
+            roleCheck.setText("");
+            return true;
+        }
 
     }
 }
