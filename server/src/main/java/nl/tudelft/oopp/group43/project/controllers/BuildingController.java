@@ -46,7 +46,12 @@ public class BuildingController {
 
         return repository.getJoined();
 
+    }
 
+    @DeleteMapping("building/{buildingNumber}")
+    @ResponseBody
+    public void removeFoodReservation(@PathVariable int buildingNumber) {
+        repository.deleteById(buildingNumber);
     }
 
 

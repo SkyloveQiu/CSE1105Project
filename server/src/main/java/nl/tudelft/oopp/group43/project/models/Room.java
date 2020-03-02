@@ -35,9 +35,6 @@ public class Room {
     @Column(name = "attributes")
     private String attributes;
 
-    @ManyToOne
-    @JoinColumn(name="rooms")
-    private Building building;
 
     public Room() {
     }
