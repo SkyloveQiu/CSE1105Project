@@ -1,13 +1,10 @@
 package nl.tudelft.oopp.group43.classes;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
@@ -19,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.views.RoomPageDisplay;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -46,24 +44,6 @@ public class MainPageContent implements Runnable {
 
         try {
             JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getBuilding());
-            EventHandler<MouseEvent> labelClick = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    FXMLLoader loader = new FXMLLoader();
-                    URL xmlUrl = getClass().getResource("/roomPageScene.fxml");
-                    loader.setLocation(xmlUrl);
-                    Parent root = null;
-                    try {
-                        root = loader.load();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                }
-            };
 
             EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
                 @Override
@@ -103,14 +83,12 @@ public class MainPageContent implements Runnable {
             }
 
             int row = 0;
-            for (int i = 0; i < jsonArray.size(); i++) {
-                if (i % MainPageConfig.getColumnCount() == 0 && i != 0) {
-                    row++;
-                }
-                addLabel(i, row, gp, jsonArray, labelClick);
+            for(int i = 0; i < jsonArray.size(); i++) {
+                if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
+                addLabel(i, row, gp, jsonArray, stage);
             }
 
-            addBuildingList(labelArr, accordion, labelClick);
+            addBuildingList(labelArr, accordion, stage);
 
             Label label = (Label) stage.getScene().lookup("#titlebar");
             label.setText("Main Menu");
@@ -128,9 +106,9 @@ public class MainPageContent implements Runnable {
      * @param row       the current working row in the GridPane
      * @param gp        the GridPane to which the labels get added
      * @param jsonArray the JSONArray containing all the buildings to add
-     * @param onClick   the Handler that gets added to the labels and activates when clicked on
+     * @param stage the stage to pass to the room page
      */
-    private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, EventHandler<MouseEvent> onClick) {
+    private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, Stage stage) {
         JSONObject obj = (JSONObject) jsonArray.get(i);
         Label label = new Label();
         label.setPrefWidth(Integer.MAX_VALUE);
@@ -138,8 +116,19 @@ public class MainPageContent implements Runnable {
         label.setMinWidth(0);
         label.setStyle("-fx-background-color: #daebeb");
         label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
+        label.setId(Long.toString((Long) obj.get("building_number")));
 
-        label.addEventFilter(MouseEvent.MOUSE_CLICKED, onClick);
+        EventHandler<MouseEvent> labelClick = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                RoomPageDisplay rd = new RoomPageDisplay();
+                try {
+                    rd.start(stage, Long.toString((Long) obj.get("building_number")));
+                } catch (IOException ex) { }
+            }
+        };
+
+        label.addEventFilter(MouseEvent.MOUSE_CLICKED, labelClick);
 
         gp.add(label, i % MainPageConfig.getColumnCount(), row);
 
@@ -151,15 +140,25 @@ public class MainPageContent implements Runnable {
      *
      * @param labelArr The array containing all building labels
      * @param acc      The Accordion where to add the buildings
-     * @param event    Event that happens when the Label gets clicked
+     * @param stage    Stage of the window
      */
-    private void addBuildingList(Label[] labelArr, Accordion acc, EventHandler<MouseEvent> event) {
+    private void addBuildingList(Label[] labelArr, Accordion acc, Stage stage) {
         final TitledPane tp = acc.getPanes().get(0);
         Pane pane = new Pane();
         double pos = 0.0;
 
         for (int i = 0; i < labelArr.length; i++) {
             Label label = new Label();
+
+            EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    RoomPageDisplay rd = new RoomPageDisplay();
+                    try {
+                        rd.start(stage, label.getId());
+                    } catch (IOException ex) { }
+                }
+            };
 
             label.setText(labelArr[i].getText().replaceAll("\\n", " "));
             label.addEventFilter(MouseEvent.MOUSE_CLICKED, event);

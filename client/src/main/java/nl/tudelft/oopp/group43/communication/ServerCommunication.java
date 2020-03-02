@@ -153,5 +153,28 @@ public class ServerCommunication {
 
     }
 
+    /**
+     * Gets the rooms from a specific building from the database through the API.
+     * @param buildingID the ID of the building from which we want all the rooms
+     * @return a String with a JSONArray in which all rooms from that building are present
+     */
+    public static String getRoomsFromBuilding(String buildingID) {
+        String url = "http://localhost:8000/room/" + buildingID;
+
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        if (response.statusCode() != 200) {
+            System.out.println("Status: " + response.statusCode());
+        }
+        System.out.println(response.body());
+        return response.body();
+    }
+
 }
 
