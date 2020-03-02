@@ -40,4 +40,10 @@ public class RoomController {
         return repository.findRoomByBuildingNumber(buildingNumber);
     }
 
+    @DeleteMapping("room/{roomId}")
+    @ResponseBody
+    public void removeFoodReservation(@PathVariable int roomId) {
+        repository.deleteById(roomId);
+    }
+
 }
