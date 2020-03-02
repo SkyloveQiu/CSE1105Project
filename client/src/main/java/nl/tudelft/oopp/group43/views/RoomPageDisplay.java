@@ -41,8 +41,10 @@ public class RoomPageDisplay {
         try {
             String response = ServerCommunication.getRoomsFromBuilding(buildingID);
             GridPane roomList = (GridPane) scene.lookup("#room_list");
-            roomList.getChildren().add(0, new Label("Loading Rooms..."));
+            Label load = new Label("Loading Rooms...");
+            roomList.getChildren().add(0, load);
             System.out.println(response);
+            roomList.setGridLinesVisible(true);
 
             /*
             Checks if the rooms are in JSONArray format or in JSONObject format.
@@ -56,22 +58,24 @@ public class RoomPageDisplay {
                     JSONObject obj = (JSONObject) rooms.get(i);
 
                     Label label = new Label();
-                    label.setText((String) obj.get("id"));
+                    label.setText((String) obj.get("room_name"));
                     if(i > 0) {
                         RowConstraints rc = new RowConstraints();
                         rc.setPrefHeight(30.0);
+                        rc.setMinHeight(30.0);
+                        rc.setMaxHeight(30.0);
                         roomList.getRowConstraints().add(rc);
+                    }else {
+                        load.setText("");
                     }
-                    roomList.getChildren().add(i, label);
+                    roomList.add(label, 0, i);
                 }
             } else if(response.charAt(0) == '{') {
                 JSONObject obj = (JSONObject) json.parse(response);
 
                 roomList.getChildren().add(0, new Label((String) obj.get("id")));
             } else {
-                Label label = new Label();
-                label.setText("Oops, something went wrong,\nplease check your internet connection and try again");
-                roomList.getChildren().add(label);
+                load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
             }
         } catch(ParseException e) { }
     }
