@@ -1,4 +1,4 @@
-## Example agenda
+## Agenda 02-03
 
 This is the agenda for 2th of March. 
 
