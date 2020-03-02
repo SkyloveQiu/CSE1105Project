@@ -6,8 +6,8 @@ This is the agenda for 2th of March.
 
 Date:           02/03/2020\
 Main focus:     Discussing the current state 2.0 \
-Chair:          Thom\
-Note taker:     Niels
+Chair:          Cristian\
+Note taker:     Thom
 
 Notes:
 
