@@ -4,6 +4,9 @@ import com.sun.xml.bind.v2.TODO;
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
+import org.hibernate.HibernateException;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -39,13 +42,10 @@ public class BuildingController {
 
 
 
-    @GetMapping("/building2")
+    @DeleteMapping("building/{buildingId}")
     @ResponseBody
-    public List<Building> getBuildingJoin(){
-
-        return repository.getJoined();
-
-
+    public void removeFoodReservation(@PathVariable int buildingId) {
+        repository.deleteById(buildingId);
     }
 
 

@@ -2,18 +2,14 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 
 @Entity
@@ -22,7 +18,8 @@ public class Room  implements java.io.Serializable {
 
 
      private Integer id;
-     @JsonIgnore
+
+
      private Building building;
 
      private String roomName;
@@ -47,9 +44,10 @@ public class Room  implements java.io.Serializable {
         this.id = id;
     }
 
-
+    @JsonBackReference
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="building_number", nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     public Building getBuilding() {
         return this.building;
     }
