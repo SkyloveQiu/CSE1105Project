@@ -1,11 +1,11 @@
-##Dot
+## Dot
 
 Definition of tasks - sufficient
 
 * Whenever we create an issue, we should implement a clear Definition of Done.
 * Add a weight to the task, so we know how important it is.
 
-##Dow
+## Dow
 
 Distribution of work - excellent
 
@@ -13,21 +13,21 @@ Distribution of work - excellent
 * More communication in the database duo.
 * More communication in general between client and server-side.
 
-##Com
+## Com
 
 Communication - sufficient
 
 * Merge requests: development to master needs all people. Feature to development requires 3 people.
 * (During the TA-meeting Jordy stated that 3 or 4 should be enough)
 
-##S-R
+## S-R
 
 Self-reflection - insufficient
 
 * We are doing that at this moment.
 * Weekly reports of how it went: what went well and what went wrong? How do we improve on that?
 
-##RtF
+## RtF
 
 Responsiveness to TA feedback - sufficient
 
@@ -35,42 +35,42 @@ Responsiveness to TA feedback - sufficient
 * We took a look and discussed it.
 
 
-##Prep/flow
+## Prep/flow
 
 Preperation / flow - /
 
-##CTA
+## CTA
 
 Client TA - /
 
-##OD
+## OD
 
 Object Design - sufficient
 
 * We didn't know what to change.
 * After TA-meeting it was clear we could adjust the structure so inheritance is done better.
 
-##Style
+## Style
 
 Style - insufficient
 
 * We worked on it for the client the hours before the TA-meeting, using checkstyle.
 * Server side will also do checkstyle.
 
-##Testing
+## Testing
 
 Testing - insufficient
 
 * Less than 40% features was tested. We should work more with jUnit and checkstyle.
 
-##Tools
+## Tools
 
 Tools usage - insufficient
 
 * We are not using the Continues Integretion flow. From now on we will.
 * We didn't use checkstyle and jUnit yet. Will be used.
 
-##Git
+## Git
 
 Git usage - sufficient
 
@@ -79,7 +79,7 @@ Git usage - sufficient
 * Andrei suggests giving the feature a number and a description in the title.
 * Commit messages are gonna be clearer.
 
-##Code reviewing
+## Code reviewing
 
 Code reviewing - sufficient
 
