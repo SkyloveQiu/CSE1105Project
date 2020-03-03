@@ -1,9 +1,13 @@
 package nl.tudelft.oopp.group43.project.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +35,7 @@ public class Building implements java.io.Serializable {
     private Set<FoodOrder> foodOrders = new HashSet(0);
 
     @ElementCollection
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Room> rooms = new HashSet(0);
 
     @ElementCollection
@@ -49,7 +54,7 @@ public class Building implements java.io.Serializable {
         this.openingHours = openingHours;
     }
 
-    @JsonIgnore
+
     public Building(int buildingNumber, String buildingName, String address, String openingHours, Set foodOrders, Set rooms, Set buildingFoodProducts) {
         this.buildingNumber = buildingNumber;
         this.buildingName = buildingName;
@@ -99,37 +104,37 @@ public class Building implements java.io.Serializable {
         this.openingHours = openingHours;
     }
 
-    @JsonIgnore
-    @OneToMany(targetEntity=FoodOrder.class, mappedBy="building", fetch=FetchType.LAZY)
+
+    @OneToMany(targetEntity=FoodOrder.class, mappedBy="building", fetch=FetchType.LAZY, cascade = CascadeType.ALL , orphanRemoval = true )
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }
 
-    @JsonSetter
+
     public void setFoodOrders(Set foodOrders) {
         this.foodOrders = foodOrders;
     }
 
-    @JsonIgnore
-    @OneToMany(targetEntity=Room.class, mappedBy="building", fetch=FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(targetEntity=Room.class, mappedBy="building", fetch=FetchType.EAGER,cascade = CascadeType.REMOVE,orphanRemoval = true)
     public Set<Room> getRooms() {
         return this.rooms;
     }
 
-    @JsonSetter
+
     public void setRooms(Set rooms) {
         this.rooms = rooms;
     }
 
 
 
-    @JsonIgnore
-    @OneToMany(targetEntity=BuildingFoodProduct.class, mappedBy="building", fetch=FetchType.LAZY)
+
+    @OneToMany(targetEntity=BuildingFoodProduct.class, mappedBy="building", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<BuildingFoodProduct> getBuildingFoodProducts() {
         return this.buildingFoodProducts;
     }
 
-    @JsonSetter
+
     public void setBuildingFoodProducts(Set buildingFoodProducts) {
         this.buildingFoodProducts = buildingFoodProducts;
     }
