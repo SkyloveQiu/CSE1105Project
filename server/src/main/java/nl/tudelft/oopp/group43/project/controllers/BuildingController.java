@@ -5,15 +5,11 @@ import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import org.springframework.web.bind.annotation.GetMapping;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 
 
@@ -30,12 +26,13 @@ public class BuildingController {
     }
 
 
-    @PutMapping("/building")
+    @PostMapping("/building")
     @ResponseBody
-    public String CreateBuilding(@RequestBody Building newBuilding){
+    public String CreateBuilding(@ModelAttribute("newBuilding") Building newBuilding){
         repository.save(newBuilding);
         return "NEW BUILDING: " + newBuilding.getBuildingName();
     }
+
 
 
 

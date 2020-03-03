@@ -2,6 +2,10 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -47,6 +51,20 @@ public class User  implements java.io.Serializable {
        this.reservations = reservations;
        this.foodOrders = foodOrders;
        this.roles = roles;
+    }
+
+    @JsonCreator
+    public User(@JsonProperty("password") String password,
+                @JsonProperty("first_name") String firstName,
+                @JsonProperty("last_name") String lastName,
+                @JsonProperty("username") String username,
+                @JsonProperty("role") String role
+    ){
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.role = role;
     }
    
     @Id
@@ -110,7 +128,9 @@ public class User  implements java.io.Serializable {
         this.token = token;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
+
+    @JsonIgnore
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="user")
     public Set<Reservation> getReservations() {
         return this.reservations;
     }
@@ -119,7 +139,8 @@ public class User  implements java.io.Serializable {
         this.reservations = reservations;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="user")
+    @JsonIgnore
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="user")
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }
@@ -128,7 +149,8 @@ public class User  implements java.io.Serializable {
         this.foodOrders = foodOrders;
     }
 
-@ManyToMany(fetch=FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(fetch=FetchType.EAGER)
     public Set<Role> getRoles() {
         return this.roles;
     }
