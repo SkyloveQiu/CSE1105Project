@@ -1,6 +1,5 @@
 package nl.tudelft.oopp.group43.project.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import nl.tudelft.oopp.group43.project.models.Role;
@@ -29,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (Role role : (ArrayList<Role>) user.getRoles()) {
+        for (Role role : user.getRoles()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
