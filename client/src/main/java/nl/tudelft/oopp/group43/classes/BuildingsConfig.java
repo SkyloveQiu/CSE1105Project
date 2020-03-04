@@ -2,7 +2,7 @@ package nl.tudelft.oopp.group43.classes;
 
 import javafx.scene.control.Label;
 
-public class MainPageConfig {
+public class BuildingsConfig {
 
     private static int buildingColumnCount = 2;
     private static Label[] label;
@@ -78,6 +78,6 @@ public class MainPageConfig {
      * @param accordionHeight a double with the height
      */
     public static void setAccordionHeight(double accordionHeight) {
-        MainPageConfig.accordionHeight = accordionHeight;
+        BuildingsConfig.accordionHeight = accordionHeight;
     }
 }

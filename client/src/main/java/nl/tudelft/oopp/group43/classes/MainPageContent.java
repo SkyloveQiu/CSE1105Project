@@ -15,12 +15,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.views.RoomPageDisplay;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+
+
 
 public class MainPageContent implements Runnable {
 
@@ -48,18 +53,18 @@ public class MainPageContent implements Runnable {
             EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
-                    if (!MainPageConfig.isAccordionExpanded()) {
+                    if (!BuildingsConfig.isAccordionExpanded()) {
                         for (Node node : menuPane.getChildren()) {
                             if (!node.equals(accordion)) {
-                                node.relocate(node.getLayoutX(), node.getLayoutY() + MainPageConfig.getAccordionHeight());
-                                MainPageConfig.setAccordionExpanded(true);
+                                node.relocate(node.getLayoutX(), node.getLayoutY() + BuildingsConfig.getAccordionHeight());
+                                BuildingsConfig.setAccordionExpanded(true);
                             }
                         }
-                    } else if (MainPageConfig.isAccordionExpanded()) {
+                    } else if (BuildingsConfig.isAccordionExpanded()) {
                         for (Node node : menuPane.getChildren()) {
                             if (!node.equals(accordion)) {
-                                node.relocate(node.getLayoutX(), node.getLayoutY() - MainPageConfig.getAccordionHeight());
-                                MainPageConfig.setAccordionExpanded(false);
+                                node.relocate(node.getLayoutX(), node.getLayoutY() - BuildingsConfig.getAccordionHeight());
+                                BuildingsConfig.setAccordionExpanded(false);
                             }
                         }
                     }
@@ -71,20 +76,22 @@ public class MainPageContent implements Runnable {
 
             if (jsonArray.size() > 2) {
                 int size = jsonArray.size();
-                double rowHeight = (gp.getWidth() - 20.0) / MainPageConfig.getColumnCount();
-                while (size > MainPageConfig.getColumnCount()) {
+                double rowHeight = (gp.getWidth() - 20.0) / BuildingsConfig.getColumnCount();
+                while (size > BuildingsConfig.getColumnCount()) {
                     RowConstraints rc = new RowConstraints();
                     rc.setPrefHeight(rowHeight);
                     rc.setMinHeight(rowHeight);
                     rc.setMaxHeight(rowHeight);
                     gp.getRowConstraints().add(rc);
-                    size -= MainPageConfig.getColumnCount();
+                    size -= BuildingsConfig.getColumnCount();
                 }
             }
 
             int row = 0;
-            for(int i = 0; i < jsonArray.size(); i++) {
-                if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
+            for (int i = 0; i < jsonArray.size(); i++) {
+                if (i % BuildingsConfig.getColumnCount() == 0 && i != 0) {
+                    row++;
+                }
                 addLabel(i, row, gp, jsonArray, stage);
             }
 
@@ -93,7 +100,7 @@ public class MainPageContent implements Runnable {
             Label label = (Label) stage.getScene().lookup("#titlebar");
             label.setText("Main Menu");
 
-            MainPageConfig.setLabel(labelArr);
+            BuildingsConfig.setLabel(labelArr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -106,7 +113,7 @@ public class MainPageContent implements Runnable {
      * @param row       the current working row in the GridPane
      * @param gp        the GridPane to which the labels get added
      * @param jsonArray the JSONArray containing all the buildings to add
-     * @param stage the stage to pass to the room page
+     * @param stage     the stage to pass to the room page
      */
     private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, Stage stage) {
         JSONObject obj = (JSONObject) jsonArray.get(i);
@@ -124,13 +131,15 @@ public class MainPageContent implements Runnable {
                 RoomPageDisplay rd = new RoomPageDisplay();
                 try {
                     rd.start(stage, Long.toString((Long) obj.get("building_number")));
-                } catch (IOException ex) { }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         };
 
         label.addEventFilter(MouseEvent.MOUSE_CLICKED, labelClick);
 
-        gp.add(label, i % MainPageConfig.getColumnCount(), row);
+        gp.add(label, i % BuildingsConfig.getColumnCount(), row);
 
         labelArr[i] = label;
     }
@@ -156,7 +165,9 @@ public class MainPageContent implements Runnable {
                     RoomPageDisplay rd = new RoomPageDisplay();
                     try {
                         rd.start(stage, label.getId());
-                    } catch (IOException ex) { }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             };
 
@@ -182,6 +193,6 @@ public class MainPageContent implements Runnable {
 
         tp.setMinHeight(250.0);
         tp.setContent(sp);
-        MainPageConfig.setAccordionHeight(tp.getMinHeight());
+        BuildingsConfig.setAccordionHeight(tp.getMinHeight());
     }
 }

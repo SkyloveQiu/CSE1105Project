@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.views;
 
+import java.io.IOException;
+import java.net.URL;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,14 +16,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
-import java.net.URL;
+
+
 
 public class RoomPageDisplay {
 
     /**
      * Loads the Room Page for a specific building with all of its content.
-     * @param stage The stage of the application we want to change the view of
+     *
+     * @param stage      The stage of the application we want to change the view of
      * @param buildingID The ID of the building of which we want the rooms
      * @throws IOException Throws an IOException if it cant find the FXML scene
      */
@@ -51,33 +55,35 @@ public class RoomPageDisplay {
             If it is something other than this it means there was an error with the server communication.
             If that happens it shows an 'useful' error :).
              */
-            if(response.charAt(0) == '[') {
+            if (response.charAt(0) == '[') {
                 JSONArray rooms = (JSONArray) json.parse(response);
 
-                for(int i = 0; i < rooms.size(); i++) {
+                for (int i = 0; i < rooms.size(); i++) {
                     JSONObject obj = (JSONObject) rooms.get(i);
 
                     Label label = new Label();
                     label.setText((String) obj.get("room_name"));
-                    if(i > 0) {
+                    if (i > 0) {
                         RowConstraints rc = new RowConstraints();
                         rc.setPrefHeight(30.0);
                         rc.setMinHeight(30.0);
                         rc.setMaxHeight(30.0);
                         roomList.getRowConstraints().add(rc);
-                    }else {
+                    } else {
                         load.setText("");
                     }
                     roomList.add(label, 0, i);
                 }
-            } else if(response.charAt(0) == '{') {
+            } else if (response.charAt(0) == '{') {
                 JSONObject obj = (JSONObject) json.parse(response);
 
                 roomList.getChildren().add(0, new Label((String) obj.get("id")));
             } else {
                 load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
             }
-        } catch(ParseException e) { }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 }
