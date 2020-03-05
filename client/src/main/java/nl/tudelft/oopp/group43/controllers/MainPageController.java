@@ -66,16 +66,9 @@ public class MainPageController {
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void toLoginPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/loginScene.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Campus Management - Login Page");
-        stage.show();
+    private void toLoginPage(ActionEvent event) throws IOException{
+        LoginDisplay ld = new LoginDisplay();
+        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
 

@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.project.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import nl.tudelft.oopp.group43.project.models.Role;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.repositories.RoleRepository;
@@ -9,11 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Service
@@ -26,8 +25,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bcryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(new HashSet<>(roleRepository.findAll()));
         userRepository.save(user);
     }
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByToken(token);
         if (user != null) {
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            for (Role role : user.getRoles()){
+            for (Role role : (ArrayList<Role>) user.getRoles()) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
             }
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);

@@ -1,16 +1,12 @@
 package nl.tudelft.oopp.group43.controllers;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -137,15 +133,8 @@ public class RegisterSceneController {
     @FXML
     @SuppressWarnings("unchecked")
     private void backClicked(ActionEvent event) throws IOException {
-
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/LoginScene.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        LoginDisplay ld = new LoginDisplay();
+        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
     /**

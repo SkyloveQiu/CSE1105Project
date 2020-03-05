@@ -24,9 +24,9 @@ public class ReservationController {
         return repository.findAll();
     }
 
-    //TODO Make it secure.
 
-    @PutMapping("/reservation")
+
+    @PostMapping("/reservation")
     @ResponseBody
     public String CreateBuilding(@RequestBody Reservation newReservation){
         repository.save(newReservation);
