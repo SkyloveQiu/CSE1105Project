@@ -27,9 +27,10 @@ public class DeleteBuildingDisplay extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+
         addBuildings(primaryStage);
 
-        primaryStage.setScene(scene);
         primaryStage.setTitle("Campus Management -  Delete Buildings");
         primaryStage.show();
 

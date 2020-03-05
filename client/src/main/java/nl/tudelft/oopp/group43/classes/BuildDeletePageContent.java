@@ -2,12 +2,11 @@ package nl.tudelft.oopp.group43.classes;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -43,11 +42,9 @@ public class BuildDeletePageContent implements Runnable {
                     lock.wait();
                 }
 
-                Accordion accordion = (Accordion) stage.getScene().lookup("#building_list");
                 Label msg = (Label) stage.getScene().lookup("#deleteMsg");
                 Label[] labelArr = BuildingsConfig.getLabel();
-                addBuildingList(labelArr, accordion, stage, msg);
-
+                addBuildingList(labelArr, msg);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -61,12 +58,10 @@ public class BuildDeletePageContent implements Runnable {
      * Adds the buildings to the accordion of the  Delete page.
      *
      * @param labelArr The array containing all building labels.
-     * @param acc      The Accordion where to add the buildings.
-     * @param stage    Stage of the window.
      * @param msg      The msg for the warning message.
      */
-    private void addBuildingList(Label[] labelArr, Accordion acc, Stage stage, Label msg) {
-        final TitledPane tp = acc.getPanes().get(0);
+    private void addBuildingList(Label[] labelArr, Label msg) {
+        final ScrollPane sp = (ScrollPane) scene.lookup("#building_list");
         Pane pane = new Pane();
         double pos = 0.0;
         String text = "Are you sure that you want to delete ";
@@ -75,46 +70,45 @@ public class BuildDeletePageContent implements Runnable {
         for (int i = 0; i < labelArr.length; i++) {
             Label label = new Label();
 
-
             label.setText(labelArr[i].getText().replaceAll("\\n", " "));
 
+            // handles the building labels being clicked + highlighting the selected building
             EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
                     msg.setText(text + label.getText() + "building?");
+                    for (Node n : pane.getChildren()) {
+                        n.setStyle("-fx-border-color: black; -fx-border-width: 3;");
+                    }
+                    label.setStyle("-fx-border-color: blue; -fx-border-width: 3;");
                 }
             };
 
 
             label.addEventFilter(MouseEvent.MOUSE_CLICKED, event);
-            label.setPrefWidth(acc.getPrefWidth());
-            label.setMaxWidth(acc.getPrefWidth());
+            label.setMaxWidth(Integer.MAX_VALUE);
+            label.setPrefWidth(500);
             label.setMinWidth(0);
+            label.setMinHeight(30.0);
             label.setStyle("-fx-background-color: #daebeb");
+            label.setStyle("-fx-border-color: black; -fx-border-width: 3;");
             label.setLayoutY(pos);
 
             pane.getChildren().add(label);
 
-            pos += 20.0;
+            pos += 35.0;
         }
         pane.setMinHeight(pos);
-        ScrollPane sp = new ScrollPane();
-        sp.setContent(pane);
-        sp.setPadding(new Insets(18.0, 0.0, 0.0, 0.0));
-        sp.setLayoutY(18.0);
+        sp.setLayoutY(40.0);
+        sp.setLayoutX(40.0);
         sp.setMinSize(150.0, 250.0);
-        sp.setMaxSize(150.0, 250.0);
 
-        tp.setMinHeight(250.0);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                tp.setContent(sp);
+                sp.setContent(pane);
             }
         });
-
-
-        BuildingsConfig.setAccordionHeight(tp.getMinHeight());
     }
 
 
