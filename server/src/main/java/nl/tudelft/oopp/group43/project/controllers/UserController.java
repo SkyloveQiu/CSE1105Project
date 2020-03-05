@@ -1,27 +1,26 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
 
-import java.util.List;
+import com.nimbusds.oauth2.sdk.ErrorObject;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.payload.JwtRespones;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
-import nl.tudelft.oopp.group43.project.service.EmailService;
 import nl.tudelft.oopp.group43.project.service.SecurityService;
 import nl.tudelft.oopp.group43.project.service.TokenService;
 import nl.tudelft.oopp.group43.project.service.UserService;
 import nl.tudelft.oopp.group43.project.validator.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -41,9 +40,6 @@ public class UserController {
 
     @Autowired
     private UserRepository repository;
-
-    @Autowired
-    private EmailService emailService;
 
 //
 //    @GetMapping("/user")
@@ -88,12 +84,6 @@ public class UserController {
 //        repository.save(newUser);
 //        return "NEW USER: " + newUser.getEmail();
 //    }
-
-
-    @GetMapping("/mail")
-    public void sendEmail() {
-        emailService.sendEmail("ziang.qiu@gmail.com");
-    }
 
     @PostMapping("/registration")
     public ResponseEntity registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {

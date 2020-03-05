@@ -2,6 +2,8 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,9 +31,21 @@ public class Reservation  implements java.io.Serializable {
      private Integer roomId;
      private Date startingDate;
      private Date endDate;
+
      private Set<FoodOrder> foodOrders = new HashSet(0);
 
     public Reservation() {
+    }
+
+    public Reservation(@JsonProperty("user") User user,
+                       @JsonProperty("room_id") Integer roomId,
+                       @JsonProperty("starting_date") Date startingDate,
+                       @JsonProperty("end_date") Date endDate) {
+        this.user = user;
+        this.roomId = roomId;
+        this.startingDate = startingDate;
+        this.endDate = endDate;
+
     }
 
     public Reservation(User user, Integer roomId, Date startingDate, Date endDate, Set foodOrders) {
@@ -54,7 +68,7 @@ public class Reservation  implements java.io.Serializable {
         this.reservationId = reservationId;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="user_id")
     public User getUser() {
         return this.user;
@@ -95,6 +109,7 @@ public class Reservation  implements java.io.Serializable {
     }
 
     @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }

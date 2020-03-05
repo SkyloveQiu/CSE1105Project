@@ -2,6 +2,9 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +32,8 @@ public class FoodOrder  implements java.io.Serializable {
      private Reservation reservation;
      private User user;
      private Date time;
-     private Set foodOrderDetailses = new HashSet(0);
+
+     private Set foodOrderDetails = new HashSet(0);
 
     public FoodOrder() {
     }
@@ -41,12 +45,12 @@ public class FoodOrder  implements java.io.Serializable {
         this.user = user;
         this.time = time;
     }
-    public FoodOrder(Building building, Reservation reservation, User user, Date time, Set foodOrderDetailses) {
+    public FoodOrder(Building building, Reservation reservation, User user, Date time, Set foodOrderDetails) {
        this.building = building;
        this.reservation = reservation;
        this.user = user;
        this.time = time;
-       this.foodOrderDetailses = foodOrderDetailses;
+       this.foodOrderDetails = foodOrderDetails;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -61,7 +65,8 @@ public class FoodOrder  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+    @JsonManagedReference(value= "foodOrder")
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="building", nullable=false)
     public Building getBuilding() {
         return this.building;
@@ -101,13 +106,14 @@ public class FoodOrder  implements java.io.Serializable {
         this.time = time;
     }
 
-@OneToMany(fetch=FetchType.LAZY)
-    public Set<FoodOrder> getFoodOrderDetailses() {
-        return this.foodOrderDetailses;
+    @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn
+    public Set<FoodOrder> getFoodOrderDetails() {
+        return this.foodOrderDetails;
     }
     
-    public void setFoodOrderDetailses(Set foodOrderDetailses) {
-        this.foodOrderDetailses = foodOrderDetailses;
+    public void setFoodOrderDetails(Set foodOrderDetails) {
+        this.foodOrderDetails = foodOrderDetails;
     }
 
 

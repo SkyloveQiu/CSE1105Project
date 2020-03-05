@@ -9,10 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BuildingRepository extends JpaRepository<Building, Integer> {
 
-    @Query("SELECT b,r from Building b,Room r WHERE b = r.building")
-    List<Building> getJoined();
 
-    Building findBuildingBybuildingNumber(int buildingNumber);
+
+    Building findBuildingByBuildingNumber(int buildingNumber);
 
 }
 

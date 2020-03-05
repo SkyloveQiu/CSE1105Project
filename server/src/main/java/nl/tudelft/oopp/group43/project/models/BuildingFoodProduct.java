@@ -2,6 +2,9 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.math.BigDecimal;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -52,7 +55,8 @@ public class BuildingFoodProduct  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+    @JsonManagedReference(value= "buildingFoodProducts")
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="building", nullable=false, insertable=false, updatable=false)
     public Building getBuilding() {
         return this.building;
