@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
 import nl.tudelft.oopp.group43.views.RegisterDisplay;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
 
 public class MainPageController {
 
