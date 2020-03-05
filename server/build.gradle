@@ -48,9 +48,13 @@ dependencies {
 	compile("javax.servlet:jstl")
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile("org.apache.tomcat.embed:tomcat-embed-jasper")
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.5.RELEASE'
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	//testImplementation 'org.springframework.security:spring-security-test'
 }
