@@ -12,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
+import nl.tudelft.oopp.group43.views.RegisterDisplay;
 import nl.tudelft.oopp.group43.views.LoginDisplay;
 
 public class MainPageController {
@@ -58,10 +60,30 @@ public class MainPageController {
         stage.show();
     }
 
+    /**
+     * If you press the confirm button, you will be redirected to the login page if all fields are valid.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Login Scene fails
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private void toLoginPage(ActionEvent event) throws IOException{
         LoginDisplay ld = new LoginDisplay();
         ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
+
+
+    /**
+     * If you press the delete building button, you will be redirected to the delete building scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Delete Building Scene fails
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void toDeleteBuilding(ActionEvent event) throws IOException {
+
+        DeleteBuildingDisplay rd = new DeleteBuildingDisplay();
+        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+    }
+
 }

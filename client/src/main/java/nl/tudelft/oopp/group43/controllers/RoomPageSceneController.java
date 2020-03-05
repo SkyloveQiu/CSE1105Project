@@ -50,9 +50,9 @@ public class RoomPageSceneController {
     }
 
     /**
-     * Moves you to the login page
-     * @param event the event passed by the button when clicked
-     * @throws IOException throws this exception when
+     * Moves you to the login page.
+     * @param event the event passed by the button when clicked.
+     * @throws IOException throws this exception when.
      */
     @FXML
     @SuppressWarnings("unchecked")
