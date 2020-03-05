@@ -1,82 +1,84 @@
 package nl.tudelft.oopp.group43.project.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Generated;
+
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import javax.persistence.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Objects;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 
 @Entity
-@DynamicUpdate
-@Table(name = "room")
-public class Room {
+@Table(name="room")
+public class Room  implements java.io.Serializable {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
-
-    @Column(name = "room_name")
-    private String roomName;
-
-    @Column(name = "building_number")
-    private int buildingNumber;
+     private Integer id;
 
 
-    @Column(name = "attributes")
-    private String attributes;
+     private Building building;
 
+     private String roomName;
+     private String attributes;
 
     public Room() {
     }
 
-    public Room(@JsonProperty("id") int id,
-                @JsonProperty("room_name") String roomName,
-                @JsonProperty("building_number") int buildingNumber,
-                @JsonProperty("attributes") String attributes){
-
-        this.id=id;
-        this.roomName=roomName;
-        this.buildingNumber=buildingNumber;
-        this.attributes=attributes;
-
-
+    public Room(Building building, String roomName, String attributes) {
+       this.building = building;
+       this.roomName = roomName;
+       this.attributes = attributes;
+    }
+   
+     @Id @GeneratedValue(strategy=IDENTITY)
+    @Column(name="id", unique=true, nullable=false)
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public int getId() {
-        return id;
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="building_number", nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    public Building getBuilding() {
+        return this.building;
     }
 
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    
+    @Column(name="room_name", nullable=false)
     public String getRoomName() {
-        return roomName;
+        return this.roomName;
+    }
+    
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
-    public int getBuildingNumber() {
-        return buildingNumber;
-    }
-
+    
+    @Column(name="attributes", nullable=false, length=0)
     public String getAttributes() {
-        return attributes;
+        return this.attributes;
+    }
+    
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Room)) return false;
-        Room room = (Room) o;
-        return getId() == room.getId() &&
-                getBuildingNumber() == room.getBuildingNumber() &&
-                getRoomName().equals(room.getRoomName()) &&
-                getAttributes().equals(room.getAttributes());
-    }
+
+
 
 }
+
+

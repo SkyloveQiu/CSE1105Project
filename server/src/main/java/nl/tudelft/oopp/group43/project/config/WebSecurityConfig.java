@@ -43,15 +43,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.provider = authenticationProvider;
     }
 
+    @Bean
+    public BCryptPasswordEncoder bcryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
     @Override
     public void configure(final WebSecurity webSecurity) {
         webSecurity.ignoring().antMatchers("/home/**");
         webSecurity.ignoring().antMatchers("/registration");
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -79,8 +80,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception { 
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bcryptPasswordEncoder());
     }
 
     @Bean

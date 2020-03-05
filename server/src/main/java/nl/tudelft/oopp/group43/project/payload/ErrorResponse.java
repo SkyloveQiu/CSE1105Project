@@ -6,7 +6,13 @@ public class ErrorResponse {
     private String message;
     private int status;
 
-    public ErrorResponse(String error, String message,int status) {
+    /**
+     * init the class.
+     * @param error the error.
+     * @param message the message.
+     * @param status the status.
+     */
+    public ErrorResponse(String error, String message, int status) {
         this.error = error;
         this.message = message;
         this.status = status;

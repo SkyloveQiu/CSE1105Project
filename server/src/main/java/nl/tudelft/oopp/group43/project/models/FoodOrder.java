@@ -1,81 +1,118 @@
 package nl.tudelft.oopp.group43.project.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
+
 import java.util.Date;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 
 @Entity
-@DynamicUpdate
-@Table(name = "food_order")
-public class FoodOrder {
+@Table(name="food_order")
+public class FoodOrder  implements java.io.Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    int id;
 
-    @Column(name = "user")
-    String user;
-
-    @Column(name = "building")
-    int building;
-
-    @Column(name = "reservation")
-    int reservation;
-
-    @Column(name = "time")
-    java.util.Date time;
-
+     private Integer id;
+     private Building building;
+     private Reservation reservation;
+     private User user;
+     private Date time;
+     private Set foodOrderDetailses = new HashSet(0);
 
     public FoodOrder() {
     }
 
-    public FoodOrder(@JsonProperty("id") int id,
-                     @JsonProperty("user") String user,
-                     @JsonProperty("building") int building,
-                     @JsonProperty("reservation") int reservation,
-                     @JsonProperty("time") java.util.Date time) {
+	
+    public FoodOrder(Building building, Reservation reservation, User user, Date time) {
+        this.building = building;
+        this.reservation = reservation;
+        this.user = user;
+        this.time = time;
+    }
+    public FoodOrder(Building building, Reservation reservation, User user, Date time, Set foodOrderDetailses) {
+       this.building = building;
+       this.reservation = reservation;
+       this.user = user;
+       this.time = time;
+       this.foodOrderDetailses = foodOrderDetailses;
+    }
+   
+     @Id @GeneratedValue(strategy=IDENTITY)
 
-        this.id=id;
-        this.user=user;
-        this.building=building;
-        this.reservation=reservation;
-        this.time=time;
+    
+    @Column(name="id", unique=true, nullable=false)
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public int getId() {
-        return id;
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="building", nullable=false)
+    public Building getBuilding() {
+        return this.building;
+    }
+    
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
-    public String getUser() {
-        return user;
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="reservation", nullable=false)
+    public Reservation getReservation() {
+        return this.reservation;
+    }
+    
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
-    public int getBuilding() {
-        return building;
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user", nullable=false)
+    public User getUser() {
+        return this.user;
+    }
+    
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getReservation() {
-        return reservation;
-    }
-
+    @Temporal(TemporalType.TIME)
+    @Column(name="time", nullable=false, length=8)
     public Date getTime() {
-        return time;
+        return this.time;
+    }
+    
+    public void setTime(Date time) {
+        this.time = time;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FoodOrder)) return false;
-        FoodOrder foodOrder = (FoodOrder) o;
-        return getId() == foodOrder.getId() &&
-                getBuilding() == foodOrder.getBuilding() &&
-                getReservation() == foodOrder.getReservation() &&
-                Objects.equals(getUser(), foodOrder.getUser()) &&
-                Objects.equals(getTime(), foodOrder.getTime());
+@OneToMany(fetch=FetchType.LAZY)
+    public Set<FoodOrder> getFoodOrderDetailses() {
+        return this.foodOrderDetailses;
     }
+    
+    public void setFoodOrderDetailses(Set foodOrderDetailses) {
+        this.foodOrderDetailses = foodOrderDetailses;
+    }
+
+
+
 
 }
+
+

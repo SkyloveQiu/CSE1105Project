@@ -1,6 +1,5 @@
 package nl.tudelft.oopp.group43.project.service;
 
-
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
