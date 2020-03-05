@@ -4,8 +4,9 @@ plugins {
 	id 'org.asciidoctor.convert' version '1.5.8'
 	id 'java'
 	id 'application'
-}
 
+}
+apply plugin: 'checkstyle'
 
 mainClassName='nl.tudelft.oopp.group43.project.Application'
 group = 'nl.tudelft.oopp.group43'
@@ -24,6 +25,15 @@ repositories {
 
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
+}
+
+checkstyle {
+	toolVersion "8.25"
+	configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+
+	ignoreFailures = false
+	maxErrors = 0
+	maxWarnings = 0
 }
 
 dependencies {

@@ -19,6 +19,14 @@ public class AuthenticationProvider extends AbstractUserDetailsAuthenticationPro
 
     }
 
+    /**
+     * check user's token.
+     * @param username the username you want to find.
+     * @param authentication the token the user have.
+     * @return the result of check.
+     * @throws AuthenticationException the token is not found.
+     */
+
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         String token = authentication.getCredentials().toString();
