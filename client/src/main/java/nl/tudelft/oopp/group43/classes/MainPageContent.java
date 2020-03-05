@@ -1,11 +1,10 @@
 package nl.tudelft.oopp.group43.classes;
 
-import com.sun.tools.javac.Main;
+import java.io.IOException;
+
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
@@ -17,13 +16,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.views.RoomPageDisplay;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.io.IOException;
-import java.net.URL;
 
 public class MainPageContent implements Runnable {
 
@@ -37,7 +34,7 @@ public class MainPageContent implements Runnable {
     }
 
     /**
-     * adds all buildings in the database to the main page
+     * adds all buildings in the database to the main page.
      */
     public void run() {
         JSONParser json = new JSONParser();
@@ -47,39 +44,20 @@ public class MainPageContent implements Runnable {
 
         try {
             JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getBuilding());
-            EventHandler<MouseEvent> labelClick = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    FXMLLoader loader = new FXMLLoader();
-                    URL xmlUrl = getClass().getResource("/roomPageScene.fxml");
-                    loader.setLocation(xmlUrl);
-                    Parent root = null;
-                    try {
-                        root = loader.load();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-
-                    Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                }
-            };
 
             EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
-                    if(!MainPageConfig.isAccordionExpanded()) {
-                        for(Node node : menuPane.getChildren()) {
-                            if(!node.equals(accordion)) {
+                    if (!MainPageConfig.isAccordionExpanded()) {
+                        for (Node node : menuPane.getChildren()) {
+                            if (!node.equals(accordion)) {
                                 node.relocate(node.getLayoutX(), node.getLayoutY() + MainPageConfig.getAccordionHeight());
                                 MainPageConfig.setAccordionExpanded(true);
                             }
                         }
-                    }
-                    else if(MainPageConfig.isAccordionExpanded()){
-                        for(Node node : menuPane.getChildren()) {
-                            if(!node.equals(accordion)) {
+                    } else if (MainPageConfig.isAccordionExpanded()) {
+                        for (Node node : menuPane.getChildren()) {
+                            if (!node.equals(accordion)) {
                                 node.relocate(node.getLayoutX(), node.getLayoutY() - MainPageConfig.getAccordionHeight());
                                 MainPageConfig.setAccordionExpanded(false);
                             }
@@ -91,10 +69,10 @@ public class MainPageContent implements Runnable {
 
             labelArr = new Label[jsonArray.size()];
 
-            if(jsonArray.size() > 2) {
+            if (jsonArray.size() > 2) {
                 int size = jsonArray.size();
                 double rowHeight = (gp.getWidth() - 20.0) / MainPageConfig.getColumnCount();
-                while(size > MainPageConfig.getColumnCount()) {
+                while (size > MainPageConfig.getColumnCount()) {
                     RowConstraints rc = new RowConstraints();
                     rc.setPrefHeight(rowHeight);
                     rc.setMinHeight(rowHeight);
@@ -107,28 +85,30 @@ public class MainPageContent implements Runnable {
             int row = 0;
             for(int i = 0; i < jsonArray.size(); i++) {
                 if(i % MainPageConfig.getColumnCount() == 0 && i != 0) { row++; }
-                addLabel(i, row, gp, jsonArray, labelClick);
+                addLabel(i, row, gp, jsonArray, stage);
             }
 
-            addBuildingList(labelArr, accordion, labelClick);
+            addBuildingList(labelArr, accordion, stage);
 
             Label label = (Label) stage.getScene().lookup("#titlebar");
             label.setText("Main Menu");
 
             MainPageConfig.setLabel(labelArr);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        catch(ParseException e) {}
     }
 
     /**
-     * Adds a label to the building GridPane
-     * @param i the current index in the label-array
-     * @param row the current working row in the GridPane
-     * @param gp the GridPane to which the labels get added
+     * Adds a label to the building GridPane.
+     *
+     * @param i         the current index in the label-array
+     * @param row       the current working row in the GridPane
+     * @param gp        the GridPane to which the labels get added
      * @param jsonArray the JSONArray containing all the buildings to add
-     * @param onClick the Handler that gets added to the labels and activates when clicked on
+     * @param stage the stage to pass to the room page
      */
-    private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, EventHandler<MouseEvent> onClick) {
+    private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, Stage stage) {
         JSONObject obj = (JSONObject) jsonArray.get(i);
         Label label = new Label();
         label.setPrefWidth(Integer.MAX_VALUE);
@@ -136,8 +116,19 @@ public class MainPageContent implements Runnable {
         label.setMinWidth(0);
         label.setStyle("-fx-background-color: #daebeb");
         label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
+        label.setId(Long.toString((Long) obj.get("building_number")));
 
-        label.addEventFilter(MouseEvent.MOUSE_CLICKED, onClick);
+        EventHandler<MouseEvent> labelClick = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                RoomPageDisplay rd = new RoomPageDisplay();
+                try {
+                    rd.start(stage, Long.toString((Long) obj.get("building_number")));
+                } catch (IOException ex) { }
+            }
+        };
+
+        label.addEventFilter(MouseEvent.MOUSE_CLICKED, labelClick);
 
         gp.add(label, i % MainPageConfig.getColumnCount(), row);
 
@@ -145,18 +136,29 @@ public class MainPageContent implements Runnable {
     }
 
     /**
-     * Adds the buildings to the side menu
-     * @param labelArr  The array containing all building labels
-     * @param acc The Accordion where to add the buildings
-     * @param event Event that happens when the Label gets clicked
+     * Adds the buildings to the side menu.
+     *
+     * @param labelArr The array containing all building labels
+     * @param acc      The Accordion where to add the buildings
+     * @param stage    Stage of the window
      */
-    private void addBuildingList(Label[] labelArr, Accordion acc, EventHandler<MouseEvent> event) {
-        TitledPane tp = acc.getPanes().get(0);
+    private void addBuildingList(Label[] labelArr, Accordion acc, Stage stage) {
+        final TitledPane tp = acc.getPanes().get(0);
         Pane pane = new Pane();
         double pos = 0.0;
 
-        for(int i = 0; i < labelArr.length; i++) {
+        for (int i = 0; i < labelArr.length; i++) {
             Label label = new Label();
+
+            EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    RoomPageDisplay rd = new RoomPageDisplay();
+                    try {
+                        rd.start(stage, label.getId());
+                    } catch (IOException ex) { }
+                }
+            };
 
             label.setText(labelArr[i].getText().replaceAll("\\n", " "));
             label.addEventFilter(MouseEvent.MOUSE_CLICKED, event);
@@ -173,7 +175,7 @@ public class MainPageContent implements Runnable {
         pane.setMinHeight(pos);
         ScrollPane sp = new ScrollPane();
         sp.setContent(pane);
-        sp.setPadding(new Insets(18.0,0.0,0.0,0.0));
+        sp.setPadding(new Insets(18.0, 0.0, 0.0, 0.0));
         sp.setLayoutY(18.0);
         sp.setMinSize(150.0, 250.0);
         sp.setMaxSize(150.0, 250.0);

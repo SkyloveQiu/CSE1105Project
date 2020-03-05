@@ -54,4 +54,10 @@ public class RoomController {
         return roomList;
     }
 
+    @DeleteMapping("room/{roomId}")
+    @ResponseBody
+    public void removeFoodReservation(@PathVariable int roomId) {
+        repository.deleteById(roomId);
+    }
+
 }
