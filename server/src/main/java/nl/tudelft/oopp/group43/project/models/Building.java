@@ -34,8 +34,7 @@ public class Building implements java.io.Serializable {
     private Set<FoodOrder> foodOrders = new HashSet(0);
 
     @ElementCollection
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn
+    @OneToMany(targetEntity=Room.class, mappedBy="building", fetch=FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
     private Set<Room> rooms = new HashSet(0);
 
     @ElementCollection
@@ -118,7 +117,6 @@ public class Building implements java.io.Serializable {
     }
 
     @JsonBackReference(value= "room")
-    @OneToMany(targetEntity=Room.class, mappedBy="building", fetch=FetchType.EAGER,cascade = CascadeType.REMOVE,orphanRemoval = true)
     public Set<Room> getRooms() {
         return this.rooms;
     }

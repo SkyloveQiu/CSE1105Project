@@ -22,7 +22,6 @@ public class Room  implements java.io.Serializable {
 
      private Integer id;
 
-
      private Building building;
 
      private String roomName;
@@ -51,6 +50,7 @@ public class Room  implements java.io.Serializable {
     }
 
 
+
     @JsonManagedReference(value= "room")
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="building_number", nullable=false)
@@ -76,7 +76,7 @@ public class Room  implements java.io.Serializable {
     }
 
     
-    @Column(name="attributes", nullable=false, length=0)
+    @Column(name="attributes", nullable=false)
     public String getAttributes() {
         return this.attributes;
     }

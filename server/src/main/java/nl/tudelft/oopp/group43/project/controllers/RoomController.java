@@ -35,6 +35,7 @@ public class RoomController {
 
 // {"building":{"building_number":32,"building_name":"EWI","address":"MEK","opening_hours":"34"},
 // "room_name":"32","attributes":"32","id":3}
+//or {"building":{"building_number":33},"room_name":"32","attributes":"32","id":3}
     @PostMapping("/room")
     @ResponseBody
     public String createRoom(@RequestBody Room newRoom){
@@ -45,14 +46,23 @@ public class RoomController {
     @GetMapping("/room/{buildingNumber}")
     @ResponseBody
     public List<Room> getRoomByBuildingNumber(@PathVariable int buildingNumber){
-        Building result = buildingRepository.findBuildingBybuildingNumber(buildingNumber);
+        Building result = buildingRepository.findBuildingByBuildingNumber(buildingNumber);
         Set<Room> roomSet = result.getRooms();
+
+        System.out.println(roomSet.isEmpty());
         Iterator<Room> roomIterator = roomSet.iterator();
         List<Room> roomList = new ArrayList<Room>();
         while (roomIterator.hasNext()) {
             roomList.add(roomIterator.next());
+            System.out.println(roomList.get(0));
         }
         return roomList;
+    }
+
+    @DeleteMapping("room/{roomId}")
+    @ResponseBody
+    public void removeRoom(@PathVariable int roomId) {
+        roomRepository.deleteById(roomId);
     }
 
 }
