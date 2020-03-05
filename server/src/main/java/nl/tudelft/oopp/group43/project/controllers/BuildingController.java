@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.sun.xml.bind.v2.TODO;
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
@@ -32,14 +33,13 @@ public class BuildingController {
         return repository.findAll();
     }
 
-
-    @PutMapping("/building")
+// {"building_number":33,"building_name":"EWI","address":"32","opening_hours":"32"}
+    @PostMapping(value = "/building")
     @ResponseBody
     public String CreateBuilding(@RequestBody Building newBuilding){
         repository.save(newBuilding);
         return "NEW BUILDING: " + newBuilding.getBuildingName();
     }
-
 
 
     @DeleteMapping("building/{buildingId}")

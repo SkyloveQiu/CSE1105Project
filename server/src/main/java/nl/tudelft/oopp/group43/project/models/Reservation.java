@@ -29,6 +29,7 @@ public class Reservation  implements java.io.Serializable {
      private Integer roomId;
      private Date startingDate;
      private Date endDate;
+
      private Set<FoodOrder> foodOrders = new HashSet(0);
 
     public Reservation() {
@@ -95,6 +96,7 @@ public class Reservation  implements java.io.Serializable {
     }
 
     @OneToMany(fetch=FetchType.LAZY)
+    @JoinColumn
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }

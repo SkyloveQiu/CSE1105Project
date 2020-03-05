@@ -33,8 +33,9 @@ public class RoomController {
         return roomRepository.findAll();
     }
 
-
-    @PutMapping("/room")
+// {"building":{"building_number":32,"building_name":"EWI","address":"MEK","opening_hours":"34"},
+// "room_name":"32","attributes":"32","id":3}
+    @PostMapping("/room")
     @ResponseBody
     public String createRoom(@RequestBody Room newRoom){
         roomRepository.save(newRoom);

@@ -1,9 +1,7 @@
 package nl.tudelft.oopp.group43.project.models;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.OnDelete;
@@ -32,18 +30,22 @@ public class Building implements java.io.Serializable {
     private String openingHours;
 
     @ElementCollection
+    @JoinColumn
     private Set<FoodOrder> foodOrders = new HashSet(0);
 
     @ElementCollection
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
     private Set<Room> rooms = new HashSet(0);
 
     @ElementCollection
+    @JoinColumn
     private Set<BuildingFoodProduct> buildingFoodProducts = new HashSet(0);
 
     public Building() {
     }
 
+    @JsonCreator
     public Building(@JsonProperty("building_number") int buildingNumber,
                     @JsonProperty("building_name")String buildingName,
                     @JsonProperty("address")String address,
@@ -104,7 +106,7 @@ public class Building implements java.io.Serializable {
         this.openingHours = openingHours;
     }
 
-
+    @JsonBackReference(value= "foodOrder")
     @OneToMany(targetEntity=FoodOrder.class, mappedBy="building", fetch=FetchType.LAZY, cascade = CascadeType.ALL , orphanRemoval = true )
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
@@ -115,7 +117,7 @@ public class Building implements java.io.Serializable {
         this.foodOrders = foodOrders;
     }
 
-    @JsonManagedReference
+    @JsonBackReference(value= "room")
     @OneToMany(targetEntity=Room.class, mappedBy="building", fetch=FetchType.EAGER,cascade = CascadeType.REMOVE,orphanRemoval = true)
     public Set<Room> getRooms() {
         return this.rooms;
@@ -128,7 +130,7 @@ public class Building implements java.io.Serializable {
 
 
 
-
+    @JsonBackReference(value= "buildingFoodProducts")
     @OneToMany(targetEntity=BuildingFoodProduct.class, mappedBy="building", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     public Set<BuildingFoodProduct> getBuildingFoodProducts() {
         return this.buildingFoodProducts;

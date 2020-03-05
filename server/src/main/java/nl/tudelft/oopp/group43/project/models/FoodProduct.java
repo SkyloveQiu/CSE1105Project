@@ -5,14 +5,9 @@ package nl.tudelft.oopp.group43.project.models;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 
 @Entity
@@ -25,8 +20,10 @@ public class FoodProduct  implements java.io.Serializable {
      private String name;
      private String description;
      private BigDecimal price;
+     @JoinColumn
      private Set<BuildingFoodProduct> buildingFoodProducts = new HashSet(0);
-     private Set<FoodOrderDetails> foodOrderDetailses = new HashSet(0);
+    @JoinColumn
+     private Set<FoodOrderDetails> foodOrderDetails = new HashSet(0);
 
     public FoodProduct() {
     }
@@ -37,12 +34,12 @@ public class FoodProduct  implements java.io.Serializable {
         this.description = description;
         this.price = price;
     }
-    public FoodProduct(String name, String description, BigDecimal price, Set buildingFoodProducts, Set foodOrderDetailses) {
+    public FoodProduct(String name, String description, BigDecimal price, Set buildingFoodProducts, Set foodOrderDetails) {
        this.name = name;
        this.description = description;
        this.price = price;
        this.buildingFoodProducts = buildingFoodProducts;
-       this.foodOrderDetailses = foodOrderDetailses;
+       this.foodOrderDetails = foodOrderDetails;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -97,12 +94,12 @@ public class FoodProduct  implements java.io.Serializable {
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="foodProduct")
-    public Set<FoodOrderDetails> getFoodOrderDetailses() {
-        return this.foodOrderDetailses;
+    public Set<FoodOrderDetails> getFoodOrderDetails() {
+        return this.foodOrderDetails;
     }
     
-    public void setFoodOrderDetailses(Set foodOrderDetailses) {
-        this.foodOrderDetailses = foodOrderDetailses;
+    public void setFoodOrderDetails(Set foodOrderDetails) {
+        this.foodOrderDetails = foodOrderDetails;
     }
 
 

@@ -30,8 +30,12 @@ public class User  implements java.io.Serializable {
      private String password;
      private String role;
      private String token;
+
+
      private Set<Reservation> reservations = new HashSet(0);
+
      private Set<FoodOrder> foodOrders = new HashSet(0);
+
      private Set<Role> roles = new HashSet(0);
 
     public User() {
@@ -150,7 +154,10 @@ public class User  implements java.io.Serializable {
     }
 
     @JsonIgnore
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", catalog = "CSE1105Project", joinColumns = {
+            @JoinColumn(name = "users_email", nullable = false, updatable = false) }, inverseJoinColumns = {
+            @JoinColumn(name = "roles_id", nullable = false, updatable = false) })
     public Set<Role> getRoles() {
         return this.roles;
     }

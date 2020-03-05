@@ -3,6 +3,9 @@ package nl.tudelft.oopp.group43.project.models;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -23,18 +26,21 @@ public class Room  implements java.io.Serializable {
      private Building building;
 
      private String roomName;
+
      private String attributes;
 
     public Room() {
     }
 
-    public Room(Building building, String roomName, String attributes) {
+    public Room(@JsonProperty("building") Building building,
+                @JsonProperty("room_name") String roomName,
+                @JsonProperty("attributes") String attributes) {
        this.building = building;
        this.roomName = roomName;
        this.attributes = attributes;
     }
    
-     @Id @GeneratedValue(strategy=IDENTITY)
+    @Id @GeneratedValue(strategy=IDENTITY)
     @Column(name="id", unique=true, nullable=false)
     public Integer getId() {
         return this.id;
@@ -44,13 +50,16 @@ public class Room  implements java.io.Serializable {
         this.id = id;
     }
 
-    @JsonBackReference
+
+    @JsonManagedReference(value= "room")
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="building_number", nullable=false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     public Building getBuilding() {
         return this.building;
     }
+
+
 
     public void setBuilding(Building building) {
         this.building = building;
