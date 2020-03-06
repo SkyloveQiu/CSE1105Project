@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
 import nl.tudelft.oopp.group43.views.LoginDisplay;
+import nl.tudelft.oopp.group43.views.ReservationDisplay;
 
 public class MainPageController {
 
@@ -48,15 +49,8 @@ public class MainPageController {
      */
     @SuppressWarnings("unchecked")
     public void toRoomPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/roomPageScene.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Campus Management - Room Menu");
-        stage.show();
+        ReservationDisplay rd = new ReservationDisplay();
+        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
     /**
