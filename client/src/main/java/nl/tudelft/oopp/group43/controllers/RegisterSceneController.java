@@ -14,6 +14,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.views.LoginDisplay;
 
 public class RegisterSceneController {
@@ -117,6 +118,9 @@ public class RegisterSceneController {
 
             LoginDisplay ld = new LoginDisplay();
             ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+
+            // Removes the register scene from the scene stack to prevent weird issues.
+            BackButton.popScene();
         } else {
             emailCheck.setText("The email already exists!");
         }

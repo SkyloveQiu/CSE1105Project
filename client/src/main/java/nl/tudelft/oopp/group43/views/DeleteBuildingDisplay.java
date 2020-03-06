@@ -9,12 +9,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import nl.tudelft.oopp.group43.classes.BuildDeletePageContent;
 import nl.tudelft.oopp.group43.classes.BuildingData;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
-
+import nl.tudelft.oopp.group43.components.BackButton;
 
 
 public class DeleteBuildingDisplay extends Application {
@@ -27,6 +28,14 @@ public class DeleteBuildingDisplay extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
+        /*
+        Add the back button to the scene
+         */
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("delete");
+
         primaryStage.setScene(scene);
 
         addBuildings(primaryStage);
