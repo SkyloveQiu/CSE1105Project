@@ -7,10 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.components.BackButton;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -35,6 +37,14 @@ public class RoomPageDisplay {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
+        /*
+        Add the back button to the scene
+         */
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+        // A pre push of the buildingID of this roompage for later use
+        btn.pushScene(buildingID);
 
         stage.setScene(scene);
         stage.setTitle("Campus Management - Room Page");

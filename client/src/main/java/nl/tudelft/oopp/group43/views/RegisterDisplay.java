@@ -9,7 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.components.BackButton;
 
 public class RegisterDisplay extends Application {
     @Override
@@ -18,7 +20,15 @@ public class RegisterDisplay extends Application {
         URL xmlUrl = getClass().getResource("/RegisterScene.fxml");
         loader.setLocation(xmlUrl);
         Parent root = loader.load();
+
         Scene scene = new Scene(root);
+        /*
+        Add the back button to the scene
+         */
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("register");
 
         ToggleGroup radioButtons = new ToggleGroup();
 
