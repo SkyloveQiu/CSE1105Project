@@ -1,7 +1,8 @@
 package nl.tudelft.oopp.group43.project.models;
 
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -11,7 +12,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,17 +25,18 @@ import javax.persistence.TemporalType;
 
 
 @Entity
-@Table(name="reservation")
-public class Reservation  implements java.io.Serializable {
+@Table(name = "reservation")
+public class Reservation implements java.io.Serializable {
 
 
-     private Integer reservationId;
-     private User user;
-     private Integer roomId;
-     private Date startingDate;
-     private Date endDate;
+    private Integer reservationId;
+    private User user;
+    private Integer roomId;
+    private Date startingDate;
+    private Date endDate;
 
-     private Set<FoodOrder> foodOrders = new HashSet(0);
+    @JsonBackReference(value = "foodOrder")
+    private Set<FoodOrder> foodOrders = new HashSet(0);
 
     public Reservation() {
     }
@@ -49,76 +53,73 @@ public class Reservation  implements java.io.Serializable {
     }
 
     public Reservation(User user, Integer roomId, Date startingDate, Date endDate, Set foodOrders) {
-       this.user = user;
-       this.roomId = roomId;
-       this.startingDate = startingDate;
-       this.endDate = endDate;
-       this.foodOrders = foodOrders;
+        this.user = user;
+        this.roomId = roomId;
+        this.startingDate = startingDate;
+        this.endDate = endDate;
+        this.foodOrders = foodOrders;
     }
-   
-     @Id @GeneratedValue(strategy=IDENTITY)
 
-    
-    @Column(name="reservation_id", unique=true, nullable=false)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "reservation_id", unique = true, nullable = false)
     public Integer getReservationId() {
         return this.reservationId;
     }
-    
+
     public void setReservationId(Integer reservationId) {
         this.reservationId = reservationId;
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     public User getUser() {
         return this.user;
     }
-    
+
     public void setUser(User user) {
         this.user = user;
     }
 
-    
-    @Column(name="room_id")
+
+    @Column(name = "room_id")
     public Integer getRoomId() {
         return this.roomId;
     }
-    
+
     public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="starting_date", length=19)
+    @Column(name = "starting_date", length = 19)
     public Date getStartingDate() {
         return this.startingDate;
     }
-    
+
     public void setStartingDate(Date startingDate) {
         this.startingDate = startingDate;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="end_date", length=19)
+    @Column(name = "end_date", length = 19)
     public Date getEndDate() {
         return this.endDate;
     }
-    
+
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }
-    
+
     public void setFoodOrders(Set foodOrders) {
         this.foodOrders = foodOrders;
     }
-
-
 
 
 }
