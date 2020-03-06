@@ -12,12 +12,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.BuildingsConfig;
 import nl.tudelft.oopp.group43.classes.MainPageContent;
+import nl.tudelft.oopp.group43.components.BackButton;
 
 public class MainPageDisplay extends Application {
 
@@ -35,6 +37,13 @@ public class MainPageDisplay extends Application {
         Scene scene = new Scene(root);
         ScrollPane sp = (ScrollPane) scene.lookup("#buildings");
         GridPane gp = (GridPane) scene.lookup("#buildings_grid");
+        /*
+        Add the back button to the scene
+         */
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        BackButton btn = new BackButton();
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("main");
 
         ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
             @Override
