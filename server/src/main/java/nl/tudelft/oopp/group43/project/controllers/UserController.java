@@ -89,4 +89,9 @@ public class UserController {
 
     }
 
+
+    @PostMapping("/api/hello")
+    public String get() {
+        return "ok";
+    }
 }

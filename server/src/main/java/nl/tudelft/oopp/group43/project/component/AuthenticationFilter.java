@@ -1,12 +1,11 @@
 package nl.tudelft.oopp.group43.project.component;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,8 +17,6 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-
-    private static final String AUTHORIZATION = org.springframework.http.HttpHeaders.AUTHORIZATION;
 
     public AuthenticationFilter(final RequestMatcher requiresAuth) {
         super(requiresAuth);
@@ -36,9 +33,10 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        Optional tokenParam = Optional.ofNullable(request.getHeader(AUTHORIZATION));
-        String token = request.getHeader(AUTHORIZATION);
-        token = StringUtils.removeStart(token, "Bearer").trim();
+        Map<String,String[]> map = request.getParameterMap();
+        String token = map.get("token")[0];
+
+        System.out.println(token);
         Authentication requestAuthentication = new UsernamePasswordAuthenticationToken(token, token);
         return getAuthenticationManager().authenticate(requestAuthentication);
     }
