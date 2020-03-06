@@ -1,10 +1,10 @@
 package nl.tudelft.oopp.group43.components;
 
-import javafx.scene.control.Button;
-import org.junit.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import javafx.scene.control.Button;
+import org.junit.Test;
 
 public class BackButtonTest {
 
