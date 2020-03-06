@@ -5,7 +5,6 @@ import static javafx.application.Application.launch;
 import java.io.IOException;
 import java.net.URL;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +15,15 @@ import nl.tudelft.oopp.group43.components.BackButton;
 
 public class ReservationDisplay {
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    /**
+     * Starts the reservation page.
+     * @param primaryStage the stage of which the scene needs to be changed
+     * @throws IOException throws an exception when there is a problem loading the scene
+     */
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         URL xmlUrl = getClass().getResource("/reservationPage.fxml");
@@ -36,10 +44,6 @@ public class ReservationDisplay {
         primaryStage.setTitle("Campus Management - Reservation Menu");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     private void startTimetableThread(Stage stage) {

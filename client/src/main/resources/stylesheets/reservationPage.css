@@ -5,3 +5,7 @@
 .menubar {
     -fx-background-color: deepskyblue;
 }
+
+.time:hover {
+    -fx-background-color: #aab7bb;
+}
