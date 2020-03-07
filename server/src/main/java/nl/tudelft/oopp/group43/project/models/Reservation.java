@@ -8,20 +8,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
-
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 @Entity
@@ -61,7 +50,7 @@ public class Reservation implements java.io.Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "reservation_id", unique = true, nullable = false)
     public Integer getReservationId() {
         return this.reservationId;

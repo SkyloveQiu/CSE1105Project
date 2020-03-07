@@ -14,6 +14,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     boolean existsReservationByStartingDateAndAndEndDateAndRoomId(Date startingDate, Date endDate, int id);
 
+    
     List<Reservation> findByStartingDateGreaterThanEqualAndEndDateLessThanEqualAndRoomId(
             Date startingDate,
             Date endDate,

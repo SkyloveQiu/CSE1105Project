@@ -5,8 +5,11 @@ import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Reservation;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import nl.tudelft.oopp.group43.project.repositories.ReservationRepository;
+import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.joda.time.Interval;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import nl.tudelft.oopp.group43.project.models.User;
 
@@ -26,6 +29,12 @@ public class ReservationController {
 
     @Autowired
     private ReservationRepository repository;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @GetMapping("/reservation")
@@ -71,6 +80,11 @@ public class ReservationController {
             if (newReservation.getStartingDate().getMinutes() != 00 || newReservation.getStartingDate().getSeconds() != 00)
                 return "INVALID TIME SLOT";
 
+            if(!roomRepository.existsRoomById(newReservation.getRoomId()))
+                return "INVALID ROOM NUMBER";
+
+           if(!userRepository.existsUserByUsername(newReservation.getUser().getUsername()))
+               return "INVALID USERNAME";
 
             repository.save(newReservation);
             return "NEW RESERVATION: " + newReservation.getReservationId();
