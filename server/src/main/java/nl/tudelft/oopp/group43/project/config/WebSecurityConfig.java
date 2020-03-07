@@ -40,7 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     AuthenticationProvider provider;
 
 
-
     @Override
     public void configure(final WebSecurity webSecurity) {
         webSecurity.ignoring().antMatchers("/home/**");

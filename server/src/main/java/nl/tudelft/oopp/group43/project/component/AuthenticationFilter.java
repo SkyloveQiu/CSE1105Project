@@ -23,13 +23,12 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
-
 public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private static final String AUTHORIZATION = org.springframework.http.HttpHeaders.AUTHORIZATION  ;
+    private static final String AUTHORIZATION = org.springframework.http.HttpHeaders.AUTHORIZATION;
 
     public AuthenticationFilter(final RequestMatcher requiresAuth) {
         super(requiresAuth);
@@ -41,27 +40,29 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
+
     /**
      * check the auth token is valid or not. if not throw exception.
-     * @param request the request user made.
+     *
+     * @param request  the request user made.
      * @param response the response of the server.
      * @return the result of the work.
      * @throws AuthenticationException auth not found.
-     * @throws IOException can't read the database.
-     * @throws ServletException internet problem.
+     * @throws IOException             can't read the database.
+     * @throws ServletException        internet problem.
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         Optional tokenParam = Optional.ofNullable(request.getHeader(AUTHORIZATION)); //Authorization: Bearer TOKEN
-        String token= request.getHeader(AUTHORIZATION);
-        token= StringUtils.removeStart(token, "Bearer").trim();
+        String token = request.getHeader(AUTHORIZATION);
+        token = StringUtils.removeStart(token, "Bearer").trim();
         System.out.println(token);
         User user = userService.findByToken(token);
         if (user == null) {
             throw new AuthenticationCredentialsNotFoundException("user can not be found");
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,token, userDetails.getAuthorities());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
         return authentication;
     }
 
