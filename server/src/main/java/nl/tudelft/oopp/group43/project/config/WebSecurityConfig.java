@@ -24,6 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -32,41 +33,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    /**
-     * make the api under "api" part needs auth.
-     */
     private static final RequestMatcher PROTECTED_URLS = new OrRequestMatcher(
             new AntPathRequestMatcher("/api/**")
     );
 
     AuthenticationProvider provider;
 
-    /**
-     * init the authentication provider.
-     * @param authenticationProvider the provider of auth.
-     */
-    public WebSecurityConfig(final AuthenticationProvider authenticationProvider) {
-        super();
-        this.provider = authenticationProvider;
-    }
 
-    /**
-     * init the bcrypt password encoder.
-     * @return the init of the encoder.
-     */
-    @Bean
-    public BCryptPasswordEncoder bcryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-    /**
-     * the config of the project, for ignoring part.
-     * @param webSecurity the init of web security.
-     */
     @Override
     public void configure(final WebSecurity webSecurity) {
         webSecurity.ignoring().antMatchers("/home/**");
         webSecurity.ignoring().antMatchers("/registration");
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -95,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bcryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
     @Bean
