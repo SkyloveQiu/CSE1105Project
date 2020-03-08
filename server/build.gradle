@@ -4,9 +4,8 @@ plugins {
 	id 'org.asciidoctor.convert' version '1.5.8'
 	id 'java'
 	id 'application'
-
 }
-apply plugin: 'checkstyle'
+
 
 mainClassName='nl.tudelft.oopp.group43.project.Application'
 group = 'nl.tudelft.oopp.group43'
@@ -25,15 +24,6 @@ repositories {
 
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
-}
-
-checkstyle {
-	toolVersion "8.25"
-	configFile = rootProject.file('config/checkstyle/checkstyle.xml')
-
-	ignoreFailures = false
-	maxErrors = 0
-	maxWarnings = 0
 }
 
 dependencies {
@@ -59,7 +49,8 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile("org.apache.tomcat.embed:tomcat-embed-jasper")
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.5.RELEASE'
-	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.5.RELEASE'
+	compile group: 'joda-time', name: 'joda-time', version: '2.3'
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

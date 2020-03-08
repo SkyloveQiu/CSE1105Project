@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface RoomRepository extends JpaRepository<Room, Integer> {
 
 
+    boolean existsRoomById(int id);
+
 }
