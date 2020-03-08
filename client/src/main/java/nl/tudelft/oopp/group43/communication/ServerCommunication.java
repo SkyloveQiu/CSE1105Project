@@ -1,7 +1,10 @@
 package nl.tudelft.oopp.group43.communication;
 
+import java.net.ContentHandler;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
@@ -14,6 +17,7 @@ public class ServerCommunication {
 
     private static HttpClient client = HttpClient.newBuilder().build();
     private static String token = "invalid";
+    private static final String cURL = "http://localhost:8000/";
 
 
     /**
@@ -43,7 +47,7 @@ public class ServerCommunication {
      * @throws Exception if communication with the server fails.
      */
     public static String getBuilding() {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/building")).build();
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(cURL + "building")).build();
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -63,7 +67,7 @@ public class ServerCommunication {
      * @return A String with in it a JSONArray or Object of all rooms
      */
     public static String getRooms() {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8000/room")).build();
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(cURL + "room")).build();
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -93,7 +97,7 @@ public class ServerCommunication {
      */
     public static String confirmRegistration(String firstName, String lastName, String username, String password, String role) {
 
-        String url = "http://localhost:8000/registration?";
+        String url = cURL + "registration?";
         url = url + "firstName=" + firstName + "&";
         url = url + "lastName=" + lastName + "&";
         url = url + "username=" + username + "&";
@@ -128,7 +132,7 @@ public class ServerCommunication {
      * @throws ParseException - if something goes wrong with the JSON Parser
      */
     public static String loginToken(String username, String password) throws ParseException {
-        String url = "http://localhost:8000/token?";
+        String url = cURL + "token?";
         url = url + "username=" + username + "&";
         url = url + "password=" + password + "&";
         HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString("")).uri(URI.create(url)).build();
@@ -159,7 +163,7 @@ public class ServerCommunication {
      * @return a String with a JSONArray in which all rooms from that building are present
      */
     public static String getRoomsFromBuilding(String buildingID) {
-        String url = "http://localhost:8000/room/" + buildingID;
+        String url = cURL + "room/" + buildingID;
 
         HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
         HttpResponse<String> response = null;
@@ -176,5 +180,46 @@ public class ServerCommunication {
         return response.body();
     }
 
+    /**
+     * Sends the buildID for deleting it.
+     * @param buildID - the id of the building
+     * @returna String which can have 3 values:
+     *          - "Communication with server failed" if the communication with the server failed
+     *          - "OK" if the building could be deleted from the Buildings Database
+     */
+    public static String sendDeleteBuilding(String buildID) {
+        String url = cURL + "building/" + buildID;
+
+        HttpRequest request = HttpRequest.newBuilder().DELETE().uri(URI.create(url)).build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        return "OK";
+
+    }
+
+
+    /**
+     * Sends the building as a JSON Object for edit it.
+     * @param obj - JSON Object represents  the building
+     * @return - "Communication with server failed" if the communication with the server failed
+     *         - "OK" if the building could be deleted from the Buildings Database
+     */
+    public static String sendEditBuilding(JSONObject obj) {
+        String url = cURL + "building";
+        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        return "OK";
+    }
 }
 

@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.service;
 
+import java.util.UUID;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -12,8 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
@@ -33,7 +32,7 @@ public class SecurityServiceImpl implements SecurityService {
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         if (userDetails instanceof UserDetails) {
-            return ((UserDetails)userDetails).getUsername();
+            return ((UserDetails) userDetails).getUsername();
 
         }
         return null;
@@ -42,7 +41,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public User autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,password,userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         String token = UUID.randomUUID().toString();
         User user = userRepository.findByUsername(username);
 
@@ -57,8 +56,6 @@ public class SecurityServiceImpl implements SecurityService {
         return null;
 
     }
-
-
 
 
 }

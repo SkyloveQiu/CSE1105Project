@@ -12,6 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
+import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
 
 public class MainPageController {
 
@@ -57,17 +60,44 @@ public class MainPageController {
         stage.show();
     }
 
+    /**
+     * If you press the confirm button, you will be redirected to the login page if all fields are valid.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Login Scene fails
+     */
     @FXML
     @SuppressWarnings("unchecked")
     private void toLoginPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/loginScene.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Campus Management - Login Page");
-        stage.show();
+        LoginDisplay ld = new LoginDisplay();
+        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
+
+
+    /**
+     * If you press the delete building button, you will be redirected to the delete building scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Delete Building Scene fails
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void toDeleteBuilding(ActionEvent event) throws IOException {
+
+        DeleteBuildingDisplay rd = new DeleteBuildingDisplay();
+        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+    }
+
+    /**
+     * If you press the edit building button, you will be redirected to the edit building scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Edit Building Scene fails
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void toEditBuilding(ActionEvent event) throws IOException {
+
+        EditBuildingDisplay ed = new EditBuildingDisplay();
+        ed.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+    }
+
+
 }

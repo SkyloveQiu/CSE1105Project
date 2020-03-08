@@ -12,12 +12,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.classes.MainPageConfig;
+import nl.tudelft.oopp.group43.classes.BuildingsConfig;
 import nl.tudelft.oopp.group43.classes.MainPageContent;
+import nl.tudelft.oopp.group43.components.BackButton;
 
 public class MainPageDisplay extends Application {
 
@@ -35,6 +37,13 @@ public class MainPageDisplay extends Application {
         Scene scene = new Scene(root);
         ScrollPane sp = (ScrollPane) scene.lookup("#buildings");
         GridPane gp = (GridPane) scene.lookup("#buildings_grid");
+        /*
+        Add the back button to the scene
+         */
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        BackButton btn = new BackButton();
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("main");
 
         ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
             @Override
@@ -47,7 +56,7 @@ public class MainPageDisplay extends Application {
                     ColumnConstraints cc = new ColumnConstraints();
                     cc.setPercentWidth(33.33);
                     gp.getColumnConstraints().add(cc);
-                    MainPageConfig.setColumnCount(3);
+                    BuildingsConfig.setColumnCount(3);
 
                     updateGrid(gp);
                 }
@@ -57,13 +66,13 @@ public class MainPageDisplay extends Application {
                     for (ColumnConstraints cc : gp.getColumnConstraints()) {
                         cc.setPercentWidth(50.0);
                     }
-                    MainPageConfig.setColumnCount(2);
+                    BuildingsConfig.setColumnCount(2);
 
                     updateGrid(gp);
                 }
 
                 for (RowConstraints rc : gp.getRowConstraints()) {
-                    double newSize = ((double) newValue - 60.0) / MainPageConfig.getColumnCount();
+                    double newSize = ((double) newValue - 60.0) / BuildingsConfig.getColumnCount();
                     rc.setPrefHeight(newSize);
                     rc.setMinHeight(newSize);
                     rc.setMaxHeight(newSize);
@@ -119,10 +128,10 @@ public class MainPageDisplay extends Application {
      * @param gp the GridPane that gets updates
      */
     private void updateGrid(GridPane gp) {
-        gp.getChildren().removeAll(MainPageConfig.getLabel());
+        gp.getChildren().removeAll(BuildingsConfig.getLabel());
 
-        int rows = MainPageConfig.getLabel().length / MainPageConfig.getColumnCount();
-        if (MainPageConfig.getLabel().length % MainPageConfig.getColumnCount() != 0) {
+        int rows = BuildingsConfig.getLabel().length / BuildingsConfig.getColumnCount();
+        if (BuildingsConfig.getLabel().length % BuildingsConfig.getColumnCount() != 0) {
             rows++;
         }
         if (rows < gp.getRowCount()) {
@@ -132,7 +141,7 @@ public class MainPageDisplay extends Application {
         }
         while (rows > gp.getRowCount()) {
             RowConstraints rc = new RowConstraints();
-            double newSize = (gp.getWidth() - 60.0) / MainPageConfig.getColumnCount();
+            double newSize = (gp.getWidth() - 60.0) / BuildingsConfig.getColumnCount();
             rc.setPrefHeight(newSize);
             rc.setMinHeight(newSize);
             rc.setMaxHeight(newSize);
@@ -140,11 +149,11 @@ public class MainPageDisplay extends Application {
         }
 
         int row = 0;
-        for (int i = 0; i < MainPageConfig.getLabel().length; i++) {
-            if (i % MainPageConfig.getColumnCount() == 0 && i != 0) {
+        for (int i = 0; i < BuildingsConfig.getLabel().length; i++) {
+            if (i % BuildingsConfig.getColumnCount() == 0 && i != 0) {
                 row++;
             }
-            gp.add(MainPageConfig.getLabel()[i], i % MainPageConfig.getColumnCount(), row);
+            gp.add(BuildingsConfig.getLabel()[i], i % BuildingsConfig.getColumnCount(), row);
         }
     }
 

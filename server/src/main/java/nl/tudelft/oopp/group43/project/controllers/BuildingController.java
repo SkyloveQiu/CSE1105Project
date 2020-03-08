@@ -1,9 +1,13 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.sun.xml.bind.v2.TODO;
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
+import org.hibernate.HibernateException;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -29,9 +33,8 @@ public class BuildingController {
         return repository.findAll();
     }
 
-    //TODO Make it secure.
-
-    @PutMapping("/building")
+// {"building_number":33,"building_name":"EWI","address":"32","opening_hours":"32"}
+    @PostMapping(value = "/building")
     @ResponseBody
     public String CreateBuilding(@RequestBody Building newBuilding){
         repository.save(newBuilding);
@@ -39,19 +42,10 @@ public class BuildingController {
     }
 
 
-
-    @GetMapping("/building2")
+    @DeleteMapping("building/{buildingId}")
     @ResponseBody
-    public List<Building> getBuildingJoin(){
-
-        return repository.getJoined();
-
-    }
-
-    @DeleteMapping("building/{buildingNumber}")
-    @ResponseBody
-    public void removeFoodReservation(@PathVariable int buildingNumber) {
-        repository.deleteById(buildingNumber);
+    public void removeBuilding(@PathVariable int buildingId) {
+        repository.deleteById(buildingId);
     }
 
 

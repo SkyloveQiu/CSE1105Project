@@ -9,7 +9,16 @@ public class JwtRespones {
     private String lastName;
     private int status;
 
-    public JwtRespones(String token,String username,String role,String firstName,String lastName,int status){
+    /**
+     * init the class.
+     * @param token token.
+     * @param username username.
+     * @param role the role.
+     * @param firstName the first name.
+     * @param lastName the last name.
+     * @param status the status.
+     */
+    public JwtRespones(String token, String username, String role, String firstName, String lastName, int status) {
         this.token = token;
         this.username = username;
         this.status = status;

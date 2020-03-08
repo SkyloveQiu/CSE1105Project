@@ -1,13 +1,19 @@
 package nl.tudelft.oopp.group43.classes;
 
-import javafx.scene.control.Label;
+import java.util.List;
 
-public class MainPageConfig {
+import javafx.scene.control.Label;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+
+public class BuildingsConfig {
 
     private static int buildingColumnCount = 2;
     private static Label[] label;
     private static boolean accordionExpanded = false;
     private static double accordionHeight;
+    private static List<JSONObject> listBuildings;
 
     /**
      * Gets the column amount of the building GridPane.
@@ -78,6 +84,15 @@ public class MainPageConfig {
      * @param accordionHeight a double with the height
      */
     public static void setAccordionHeight(double accordionHeight) {
-        MainPageConfig.accordionHeight = accordionHeight;
+        BuildingsConfig.accordionHeight = accordionHeight;
     }
+
+    public static JSONObject getBuilding(int i) {
+        return  listBuildings.get(i);
+    }
+
+    public static void setListBuildings(List<JSONObject> list) {
+        listBuildings = list;
+    }
+
 }
