@@ -16,13 +16,12 @@
           <children>
               <Button layoutX="289.0" layoutY="373.0" mnemonicParsing="false" onAction="#editConfirm" prefHeight="6.0" prefWidth="90.0" text="Edit Building" AnchorPane.bottomAnchor="1.3999999999999773" AnchorPane.rightAnchor="20.600000000000023" />
             <Label layoutX="10.0" layoutY="27.0" prefHeight="18.0" prefWidth="91.0" text="Building Number" />
-            <TextField fx:id="buildingNumber" layoutX="105.0" layoutY="26.0" onKeyReleased="#checkNumber" prefHeight="20.0" prefWidth="149.0" />
-            <TextField fx:id="buildingName" layoutX="105.0" layoutY="60.0" />
+            <TextField fx:id="buildingName" layoutX="105.0" layoutY="60.0" onKeyTyped="#checkName" />
             <Label layoutX="17.0" layoutY="64.0" text="Building Name" />
             <Label layoutX="6.0" layoutY="98.0" prefHeight="18.0" prefWidth="91.0" text="Building Address" />
-            <TextField fx:id="buildingAddress" layoutX="105.0" layoutY="95.0" />
+            <TextField fx:id="buildingAddress" layoutX="105.0" layoutY="95.0" onKeyTyped="#checkAddress" />
             <Label fx:id="editMsg" layoutX="17.0" layoutY="372.0" prefHeight="18.0" prefWidth="250.0" textFill="#d51414" />
-            <Label fx:id="numberCheck" layoutX="258.0" layoutY="29.0" prefHeight="18.0" prefWidth="118.0" textFill="#d51414" />
+            <Label fx:id="buildingNumber" layoutX="108.0" layoutY="27.0" prefHeight="18.0" prefWidth="118.0" textFill="#1542d4" />
             <ChoiceBox fx:id="mondayOpenH" layoutX="117.0" layoutY="132.0" prefHeight="26.0" prefWidth="50.0" />
             <Label layoutX="64.0" layoutY="137.0" text="Monday " />
             <Label layoutX="6.0" layoutY="123.0" text="Openning Hours:" />
@@ -87,6 +86,8 @@
             <Label fx:id="wednesdayMsg" layoutX="391.0" layoutY="203.0" textFill="#d51414" />
             <Label fx:id="tuesdayMsg" layoutX="391.0" layoutY="172.0" textFill="#d51414" />
             <Label fx:id="mondayMsg" layoutX="391.0" layoutY="137.0" textFill="#d51414" />
+            <Label fx:id="nameCheck" layoutX="274.0" layoutY="63.0" prefHeight="18.0" prefWidth="118.0" textFill="#d51414" />
+            <Label fx:id="addressCheck" layoutX="268.0" layoutY="98.0" prefHeight="18.0" prefWidth="118.0" textFill="#d51414" />
 
 
           </children>

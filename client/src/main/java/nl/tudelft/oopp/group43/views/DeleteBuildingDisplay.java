@@ -67,10 +67,5 @@ public class DeleteBuildingDisplay extends Application {
         Thread threadDeleteBuildingPage = new Thread(deletePage);
         threadDeleteBuildingPage.setDaemon(true);
         threadDeleteBuildingPage.start();
-       /* BuildingEditPageContent editPage = new BuildingEditPageContent(stage, lock);
-        Thread threadEditBuildingPage = new Thread(editPage);
-        threadEditBuildingPage.setDaemon(true);
-        threadEditBuildingPage.start();*/
-
     }
 }

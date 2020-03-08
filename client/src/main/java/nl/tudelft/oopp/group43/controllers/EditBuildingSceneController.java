@@ -5,11 +5,13 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import org.json.simple.JSONObject;
 
 
@@ -18,7 +20,7 @@ public class EditBuildingSceneController {
     @FXML
     Label editMsg;
     @FXML
-    TextField buildingNumber;
+    Label buildingNumber;
     @FXML
     Label numberCheck;
     @FXML
@@ -39,6 +41,10 @@ public class EditBuildingSceneController {
     Label saturdayMsg;
     @FXML
     Label sundayMsg;
+    @FXML
+    Label addressCheck;
+    @FXML
+    Label nameCheck;
 
     /**
      * If you press the delete building button, the method will check if you selected a building and do the delete operation.
@@ -50,65 +56,46 @@ public class EditBuildingSceneController {
     @SuppressWarnings("unchecked")
     private void editConfirm(ActionEvent event) throws IOException {
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-
-        if (mondayMsg.getText().isEmpty() && tuesdayMsg.getText().isEmpty() && wednesdayMsg.getText().isEmpty() && thursdayMsg.getText().isEmpty()
-                && fridayMsg.getText().isEmpty() && saturdayMsg.getText().isEmpty() && sundayMsg.getText().isEmpty()) {
-            System.out.println(buildingNumber.getText());
-            System.out.println(buildingName.getText());
-            System.out.println(buildingAddress.getText());
-            System.out.println(getHoursDay(stage, "monday"));
-            System.out.println(getHoursDay(stage, "tuesday"));
-            System.out.println(getHoursDay(stage, "wednesday"));
-            System.out.println(getHoursDay(stage, "thursday"));
-            System.out.println(getHoursDay(stage, "friday"));
-            System.out.println(getHoursDay(stage, "saturday"));
-            System.out.println(getHoursDay(stage, "sunday"));
-            //  System.out.println(getHoursDay(stage, "monday"));
-
-            JSONObject opening_hours = new JSONObject();
-            opening_hours.put("mo", getHoursDay(stage, "monday"));
-            opening_hours.put("tu", getHoursDay(stage, "tuesday"));
-            opening_hours.put("we", getHoursDay(stage, "wednesday"));
-            opening_hours.put("th", getHoursDay(stage, "thursday"));
-            opening_hours.put("fr", getHoursDay(stage, "friday"));
-            opening_hours.put("sa", getHoursDay(stage, "saturday"));
-            opening_hours.put("su", getHoursDay(stage, "sunday"));
-
-            JSONObject building = new JSONObject();
-            building.put("building_number", buildingNumber.getText());
-            building.put("building_name", buildingName.getText());
-            building.put("address", buildingAddress.getText());
-            building.put("opening_hours", opening_hours.toString());
-            String s =  ServerCommunication.sendEditBuilding(building);
-            System.out.println(building);
-            System.out.println(s);
-
-        }
-
-       /* if (editMsg.getText() == null) {
+        if (editMsg.getText() == null) {
             editMsg.setText("You have not selected a building!");
             return;
         }
-        if (numberCheck.getText() != null) {
-            editMsg.setText("Something goes wrong with your input!");
-            return;
-        }*/
 
 
-        //String a = ServerCommunication.sendDeleteBuilding(getBuildingID());
-        // editMsg.setText("");
-        //   Alert alert = new Alert(Alert.AlertType.INFORMATION);
-     /*   if (a.equals("OK")) {
-            alert.setContentText("The building was successfully deleted.");
-        } else {
-            alert.setContentText("NOT OK");
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        if (mondayMsg.getText().isEmpty() && tuesdayMsg.getText().isEmpty() && wednesdayMsg.getText().isEmpty() && thursdayMsg.getText().isEmpty()
+                && fridayMsg.getText().isEmpty() && saturdayMsg.getText().isEmpty() && sundayMsg.getText().isEmpty() && nameCheck.getText().isEmpty() && addressCheck.getText().isEmpty()) {
+
+            JSONObject openingHours = new JSONObject();
+            openingHours.put("mo", getHoursDay(stage, "monday"));
+            openingHours.put("tu", getHoursDay(stage, "tuesday"));
+            openingHours.put("we", getHoursDay(stage, "wednesday"));
+            openingHours.put("th", getHoursDay(stage, "thursday"));
+            openingHours.put("fr", getHoursDay(stage, "friday"));
+            openingHours.put("sa", getHoursDay(stage, "saturday"));
+            openingHours.put("su", getHoursDay(stage, "sunday"));
+
+            JSONObject building = new JSONObject();
+            building.put("building_number", Long.valueOf(buildingNumber.getText()));
+            building.put("building_name", buildingName.getText());
+            building.put("address", buildingAddress.getText());
+            building.put("opening_hours", openingHours.toString());
+            String a = ServerCommunication.sendEditBuilding(building);
+
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            if (a.equals("OK")) {
+                alert.setContentText("The building was successfully edited.");
+            } else {
+                alert.setContentText("NOT OK");
+            }
+            alert.showAndWait();
+
+            MainPageDisplay md = new MainPageDisplay();
+            md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+
         }
-        alert.showAndWait();*/
-
-        //   MainPageDisplay md = new MainPageDisplay();
-        //  md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
 
     }
 
@@ -135,6 +122,7 @@ public class EditBuildingSceneController {
      * @param day   - string with the day of the week
      * @return - the information regarding the opening hours of that day
      */
+    @SuppressWarnings("unchecked")
     private String getHoursDay(Stage stage, String day) {
         ChoiceBox<String> openH = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "OpenH");
         ChoiceBox<String> openM = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "OpenM");
@@ -144,10 +132,36 @@ public class EditBuildingSceneController {
         String hours = openH.getSelectionModel().getSelectedItem() + ":" + openM.getSelectionModel().getSelectedItem();
         hours = hours + "-" + closeH.getSelectionModel().getSelectedItem() + ":" + closeM.getSelectionModel().getSelectedItem();
 
-        if (hours.contains("--") == true){
+        if (hours.contains("--") == true) {
             hours = "closed";
         }
         return hours;
+    }
+
+    /**
+     * Checks if the Building Name field is not empty.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkName() {
+        if (buildingName.getText().isEmpty()) {
+            nameCheck.setText("You cannot have this field empty");
+        } else {
+            nameCheck.setText("");
+        }
+    }
+
+    /**
+     * Checks if the Address field is not empty.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkAddress() {
+        if (buildingAddress.getText().isEmpty()) {
+            addressCheck.setText("You cannot have this field empty");
+        } else {
+            addressCheck.setText("");
+        }
     }
 
 

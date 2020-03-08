@@ -58,7 +58,7 @@ public class BuildingEditPageContent extends BuildDataScene implements Runnable 
      */
     private void addBuildingList(Label[] labelArr) {
         final ScrollPane sp = (ScrollPane) this.getScene().lookup("#building_list");
-        TextField buildingNumber = (TextField) this.getStage().getScene().lookup("#buildingNumber");
+        Label buildingNumber = (Label) this.getStage().getScene().lookup("#buildingNumber");
         TextField buildingName = (TextField) this.getStage().getScene().lookup("#buildingName");
         TextField buildingAddress = (TextField) this.getStage().getScene().lookup("#buildingAddress");
         Label editMsg = (Label) this.getStage().getScene().lookup("#editMsg");
