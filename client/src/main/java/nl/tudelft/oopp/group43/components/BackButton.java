@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.views.LoginDisplay;
 import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import nl.tudelft.oopp.group43.views.RegisterDisplay;
+import nl.tudelft.oopp.group43.views.ReservationDisplay;
 import nl.tudelft.oopp.group43.views.RoomPageDisplay;
 
 public class BackButton {
@@ -81,7 +82,10 @@ public class BackButton {
                         RegisterDisplay rgd = new RegisterDisplay();
                         rgd.start(stage);
                         break;
-                        //case "reservation":
+                    case "reservation":
+                        ReservationDisplay rvd = new ReservationDisplay();
+                        rvd.start(stage);
+                        break;
                     default:
                         break;
                 }

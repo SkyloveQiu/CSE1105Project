@@ -30,15 +30,15 @@ public class Building implements java.io.Serializable {
     private String openingHours;
 
     @ElementCollection
-    @JoinColumn
+    @OneToMany(targetEntity = FoodOrder.class, mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FoodOrder> foodOrders = new HashSet(0);
 
     @ElementCollection
-    @OneToMany(targetEntity=Room.class, mappedBy="building", fetch=FetchType.LAZY,cascade = CascadeType.REMOVE,orphanRemoval = true)
+    @OneToMany(targetEntity = Room.class, mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Room> rooms = new HashSet(0);
 
     @ElementCollection
-    @JoinColumn
+    @OneToMany(targetEntity = BuildingFoodProduct.class, mappedBy = "building", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BuildingFoodProduct> buildingFoodProducts = new HashSet(0);
 
     public Building() {
@@ -46,13 +46,17 @@ public class Building implements java.io.Serializable {
 
     @JsonCreator
     public Building(@JsonProperty("building_number") int buildingNumber,
-                    @JsonProperty("building_name")String buildingName,
-                    @JsonProperty("address")String address,
-                    @JsonProperty("opening_hours")String openingHours) {
+                    @JsonProperty("building_name") String buildingName,
+                    @JsonProperty("address") String address,
+                    @JsonProperty("opening_hours") String openingHours) {
         this.buildingNumber = buildingNumber;
         this.buildingName = buildingName;
         this.address = address;
         this.openingHours = openingHours;
+    }
+
+    public Building(int buildingNumber) {
+        this.buildingNumber = buildingNumber;
     }
 
 
@@ -76,7 +80,6 @@ public class Building implements java.io.Serializable {
     }
 
 
-
     public String getBuildingName() {
         return this.buildingName;
     }
@@ -84,7 +87,6 @@ public class Building implements java.io.Serializable {
     public void setBuildingName(String buildingName) {
         this.buildingName = buildingName;
     }
-
 
 
     public String getAddress() {
@@ -96,7 +98,6 @@ public class Building implements java.io.Serializable {
     }
 
 
-
     public String getOpeningHours() {
         return this.openingHours;
     }
@@ -105,8 +106,7 @@ public class Building implements java.io.Serializable {
         this.openingHours = openingHours;
     }
 
-    @JsonBackReference(value= "foodOrder")
-    @OneToMany(targetEntity=FoodOrder.class, mappedBy="building", fetch=FetchType.LAZY, cascade = CascadeType.ALL , orphanRemoval = true )
+    @JsonBackReference(value = "foodOrder")
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }
@@ -116,7 +116,7 @@ public class Building implements java.io.Serializable {
         this.foodOrders = foodOrders;
     }
 
-    @JsonBackReference(value= "room")
+    @JsonBackReference(value = "room")
     public Set<Room> getRooms() {
         return this.rooms;
     }
@@ -127,9 +127,7 @@ public class Building implements java.io.Serializable {
     }
 
 
-
-    @JsonBackReference(value= "buildingFoodProducts")
-    @OneToMany(targetEntity=BuildingFoodProduct.class, mappedBy="building", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference(value = "buildingFoodProducts")
     public Set<BuildingFoodProduct> getBuildingFoodProducts() {
         return this.buildingFoodProducts;
     }
