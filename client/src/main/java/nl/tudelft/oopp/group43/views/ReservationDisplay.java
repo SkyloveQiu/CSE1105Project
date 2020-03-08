@@ -22,6 +22,7 @@ public class ReservationDisplay {
 
     /**
      * Starts the reservation page.
+     *
      * @param primaryStage the stage of which the scene needs to be changed
      * @throws IOException throws an exception when there is a problem loading the scene
      */

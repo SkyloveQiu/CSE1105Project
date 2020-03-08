@@ -15,74 +15,35 @@ import nl.tudelft.oopp.group43.communication.ServerCommunication;
 
 public class ReservationPageContent {
 
-    private Scene scene;
+    private static Scene scene;
+    private static String dateString;
+    private static String nextDay;
+    private static boolean allowedToRun = true;
+    private static String[] selectedLabels;
+    private static String[] availableHours;
     private DatePicker datePicker;
-    private String dateString;
-    private String nextDay;
-    private boolean allowedToRun = true;
-    private String[] selectedLabels;
-    private String[] availableHours;
 
     /**
      * Constructor that initializes the scene, datepicker, datestring and selectedLabels.
+     *
      * @param stage Stage to obtain the scene from
      */
     public ReservationPageContent(Stage stage) {
-        this.scene = stage.getScene();
+        scene = stage.getScene();
         datePicker = (DatePicker) scene.lookup("#datepicker");
         dateString = "";
         nextDay = "";
         selectedLabels = new String[24];
     }
 
-    /**
-     * This checks if the datepicker has a date in it and if it does it loads the timetable.
-     */
-    public void run() {
-        while (allowedToRun) {
-            if (datePicker.getValue() != null) {
-                LocalDate date = datePicker.getValue();
-
-                String month = Integer.toString(date.getMonthValue());
-                String day = Integer.toString(date.getDayOfMonth());
-                if (date.getMonthValue() < 10) { month = "0" + date.getMonthValue(); }
-                if (date.getDayOfMonth() < 10) { day = "0" + date.getDayOfMonth(); }
-
-                // reloads the page only if the date gets updated
-                if (!dateString.equals(date.getYear() + "-" + month + "-" + day)) {
-                    dateString = date.getYear() + "-" + month + "-" + day;
-                    date.plusDays(1);
-
-                    month = Integer.toString(date.getMonthValue());
-                    day = Integer.toString(date.getDayOfMonth());
-                    if (date.getMonthValue() < 10) { month = "0" + date.getMonthValue(); }
-                    if (date.getDayOfMonth() < 10) { day = "0" + date.getDayOfMonth(); }
-                    nextDay = date.getYear() + "-" + month + "-" + day;
-                    System.out.println(dateString);
-
-                    ReservationConfig.resetSelectedHours();
-
-                    availableHours = ServerCommunication.getAvailableRoomHours(ReservationConfig.getSelectedRoom(), dateString, nextDay);
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            addTimetable();
-                        }
-                    });
-                }
-            }
-        }
-    }
-
-    public void stop() {
+    public static void stop() {
         allowedToRun = false;
     }
 
     /**
      * Adds the timetable to the scene when a date gets selected.
      */
-    private void addTimetable() {
+    public static void addTimetable() {
         GridPane timetable = (GridPane) scene.lookup("#timetable");
         // empties the selected labels
         selectedLabels = new String[24];
@@ -127,9 +88,10 @@ public class ReservationPageContent {
 
     /**
      * Adds the eventhandler to the label that handles the selecting of the label.
+     *
      * @param label Label to which to add the event
      */
-    private void addEventHandler(Label label) {
+    private static void addEventHandler(Label label) {
         label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -147,6 +109,54 @@ public class ReservationPageContent {
                 }
             }
         });
+    }
+
+    /**
+     * This checks if the datepicker has a date in it and if it does it loads the timetable.
+     */
+    public void run() {
+        while (allowedToRun) {
+            if (datePicker.getValue() != null) {
+                LocalDate date = datePicker.getValue();
+
+                String month = Integer.toString(date.getMonthValue());
+                String day = Integer.toString(date.getDayOfMonth());
+                if (date.getMonthValue() < 10) {
+                    month = "0" + date.getMonthValue();
+                }
+                if (date.getDayOfMonth() < 10) {
+                    day = "0" + date.getDayOfMonth();
+                }
+
+                // reloads the page only if the date gets updated
+                if (!dateString.equals(date.getYear() + "-" + month + "-" + day)) {
+                    dateString = date.getYear() + "-" + month + "-" + day;
+                    LocalDate newDate = date.plusDays(1);
+
+                    month = Integer.toString(newDate.getMonthValue());
+                    day = Integer.toString(newDate.getDayOfMonth());
+                    if (newDate.getMonthValue() < 10) {
+                        month = "0" + newDate.getMonthValue();
+                    }
+                    if (newDate.getDayOfMonth() < 10) {
+                        day = "0" + newDate.getDayOfMonth();
+                    }
+                    nextDay = newDate.getYear() + "-" + month + "-" + day;
+
+                    ReservationConfig.resetSelectedHours();
+
+                    System.out.println(dateString + " " + nextDay);
+                    availableHours = ServerCommunication.getAvailableRoomHours(ReservationConfig.getSelectedRoom(), dateString, nextDay);
+
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            addTimetable();
+                        }
+                    });
+                }
+            }
+        }
     }
 
 }

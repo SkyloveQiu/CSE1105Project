@@ -24,6 +24,9 @@ public class BackButton {
 
     push(buildingID);
     push("room");
+
+    For the Reservation Page also the roomID with the buildingID like before, but in the format of:
+    buildingID;roomID
      */
     private static Stack<String> sceneStack = new Stack<String>();
     private Button backButton;
