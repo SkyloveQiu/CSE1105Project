@@ -1,9 +1,12 @@
 package nl.tudelft.oopp.group43.classes;
 
+import java.util.ArrayList;
+
 public class ReservationConfig {
 
     private static long selectedBuilding;
     private static long selectedRoom;
+    private static ArrayList selectedHours = new ArrayList();
 
     /**
      * Getter for the selected building id.
@@ -36,4 +39,47 @@ public class ReservationConfig {
     public static void setSelectedRoom(long room) {
         selectedRoom = room;
     }
+
+    /**
+     * Adds an hour to the selected hours in format of: yyyy-MM-dd-hh
+     * @param hour
+     */
+    public static void addHour(String hour) {
+        System.out.println("add " + hour);
+        selectedHours.add(hour);
+    }
+
+    /**
+     * Removes a specific hour from the selected hours
+     * @param hour hour to remove
+     * @return true if successful false if otherwise
+     */
+    public static boolean removeHour(String hour) {
+        System.out.println("remove " + hour);
+
+        for(int i = 0; i < selectedHours.size(); i++) {
+            if(selectedHours.get(i).equals(hour)) {
+                selectedHours.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Resets the selected hours
+     */
+    public static void resetSelectedHours() {
+        System.out.println("reset");
+        selectedHours = new ArrayList();
+    }
+
+    /**
+     * Returns the selected hours for reserving these hours
+     * @return
+     */
+    public static ArrayList getSelectedHours() {
+        return selectedHours;
+    }
+
 }

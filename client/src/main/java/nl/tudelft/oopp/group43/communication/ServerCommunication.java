@@ -1,10 +1,18 @@
 package nl.tudelft.oopp.group43.communication;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
+import nl.tudelft.oopp.group43.classes.ReservationConfig;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -14,6 +22,7 @@ public class ServerCommunication {
 
     private static HttpClient client = HttpClient.newBuilder().build();
     private static String token = "invalid";
+    private static String username = "";
     private static final String cURL = "http://localhost:8000/";
 
 
@@ -34,6 +43,14 @@ public class ServerCommunication {
      */
     public static void setToken(String newToken) {
         token = newToken;
+    }
+
+    /**
+     * Sets the username for the client.
+     * @param newUsername the username
+     */
+    public static void setUsername(String newUsername) {
+        username = newUsername;
     }
 
 
@@ -198,6 +215,114 @@ public class ServerCommunication {
         }
         return "OK";
 
+    }
+
+    /**
+     * Gets all available/non-booked hours from the database using the format /{roomID}/{startDate}/{endDate}
+     * @param roomID the ID of the room
+     * @param startDate the start date for the timeframe in between which we want to receive all booked hours
+     * @param endDate the end date for the timeframe in between which we want to receive all booked hours
+     * @return A string array with in it for each hour of the day a "booked" or "free"
+     */
+    public static String[] getAvailableRoomHours(long roomID, String startDate, String endDate) {
+        String url = cURL + "reservation/" + roomID + "/" + startDate + "/" + endDate;
+
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
+        HttpResponse<String> response = null;
+
+        String[] hours = new String[24];
+        for (int i = 0; i < hours.length; i++) {
+            hours[i] = "free";
+        }
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return hours;
+        }
+        if (response.statusCode() != 200) {
+            System.out.println("Status: " + response.statusCode());
+        }
+
+        if (response.body().length() > 2 && response.statusCode() == 200) {
+            try {
+                JSONParser json = new JSONParser();
+                if (response.body().charAt(0) == '[') {
+                    JSONArray arr = (JSONArray) json.parse(response.body());
+
+                    for (int i = 0; i < arr.size(); i++) {
+                        LocalDateTime hour = LocalDateTime.parse((String) ((JSONObject) arr.get(i)).get("starting_date"));
+                        hours[hour.getHour()] = "booked";
+                    }
+                } else {
+                    JSONObject obj = (JSONObject) json.parse(response.body());
+                    LocalDateTime hour = LocalDateTime.parse((String) obj.get("starting_date"));
+                    hours[hour.getHour()] = "booked";
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return hours;
+    }
+
+    /**
+     * Books a room for the specified hours in ISO8061 format.
+     * @param startHour the starting hour
+     * @param endHour the ending hour
+     * @return Status with success or failure
+     */
+    public static String reserveRoomForHour(String startHour, String endHour) {
+        // form parameters
+        Map<Object, Object> data = new HashMap<>();
+        data.put("user", "{\"username\":\"" + username + "\"}");
+        data.put("room_id", ReservationConfig.getSelectedRoom());
+        data.put("starting_date", startHour);
+        data.put("end_date", endHour);
+
+        String url = cURL + "reservation";
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(buildFormDataFromMap(data))
+                .uri(URI.create(url))
+                .setHeader("User-Agent", "Java 11 HttpClient Bot") // add request header
+                .header("Content-Type", "application/json")
+                .build();
+
+        HttpResponse<String> response = null;
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        System.out.println(response.body());
+        return "OK";
+    }
+
+    private static HttpRequest.BodyPublisher buildFormDataFromMap(Map<Object, Object> data) {
+        var builder = new StringBuilder();
+        builder.append("{");
+        for (Map.Entry<Object, Object> entry : data.entrySet()) {
+            if (builder.length() > 1) {
+                builder.append(",");
+            }
+            builder.append("\"" + entry.getKey().toString() + "\"");
+            builder.append(":");
+            if(entry.getKey().toString() == "room_id") {
+                builder.append(entry.getValue());
+            } else {
+                builder.append("\"" + entry.getValue().toString() + "\"");
+            }
+        }
+        builder.append("}");
+
+        System.out.println(builder.toString());
+        return HttpRequest.BodyPublishers.ofString(builder.toString());
     }
 
 }

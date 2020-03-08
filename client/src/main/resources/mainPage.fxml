@@ -58,9 +58,8 @@
                   <TitledPane animated="false" text="Buildings" />
                </panes>
             </Accordion>
-            <Button layoutX="6.0" layoutY="65.0" onAction="#toRoomPage" prefHeight="30.0" prefWidth="155.0" text="to Room Page" />
-            <Button layoutX="6.0" layoutY="100.0" onAction="#toLoginPage" prefHeight="30.0" prefWidth="155.0" text="to Login Page" />
-            <Button layoutX="6.0" layoutY="135.0" onAction="#toDeleteBuilding" prefHeight="30.0" prefWidth="155.0" text="Delete Building"/>
+            <Button layoutX="6.0" layoutY="65.0" onAction="#toLoginPage" prefHeight="30.0" prefWidth="155.0" text="to Login Page" />
+            <Button layoutX="6.0" layoutY="100.0" onAction="#toDeleteBuilding" prefHeight="30.0" prefWidth="155.0" text="Delete Building"/>
          </children>
       </Pane>
 
