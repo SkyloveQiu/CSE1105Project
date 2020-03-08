@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.classes.ReservationPageContent;
 import nl.tudelft.oopp.group43.components.BackButton;
 
@@ -37,7 +38,11 @@ public class ReservationDisplay {
         BackButton btn = new BackButton();
         AnchorPane ap = (AnchorPane) scene.lookup("#root");
         ap.getChildren().add(btn.getBackButton());
-        BackButton.pushScene("reservation");
+        /*
+        pushes the selected room and building to the scene stack for later use in the format:
+        buildingID;roomID
+         */
+        BackButton.pushScene(ReservationConfig.getSelectedBuilding() + ";" + ReservationConfig.getSelectedRoom());
 
         startTimetableThread(primaryStage);
 

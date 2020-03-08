@@ -130,6 +130,7 @@ public class MainPageContent implements Runnable {
             public void handle(MouseEvent e) {
                 RoomPageDisplay rd = new RoomPageDisplay();
                 try {
+                    ReservationConfig.setSelectedBuilding((Long) obj.get("building_number"));
                     rd.start(stage, Long.toString((Long) obj.get("building_number")));
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -164,6 +165,7 @@ public class MainPageContent implements Runnable {
                 public void handle(MouseEvent e) {
                     RoomPageDisplay rd = new RoomPageDisplay();
                     try {
+                        ReservationConfig.setSelectedBuilding(Long.parseLong(label.getId()));
                         rd.start(stage, label.getId());
                     } catch (IOException ex) {
                         ex.printStackTrace();
