@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJpaRepositories("nl.tudelft.oopp.group43.project.repositories")
+@EnableJpaRepositories
 @SpringBootApplication
 @ComponentScan(basePackages = {"nl.tudelft.oopp.group43"})
 public class Application extends SpringBootServletInitializer {
