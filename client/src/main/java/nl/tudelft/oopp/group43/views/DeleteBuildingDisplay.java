@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 
 import nl.tudelft.oopp.group43.classes.BuildDeletePageContent;
 import nl.tudelft.oopp.group43.classes.BuildingData;
+import nl.tudelft.oopp.group43.classes.BuildingEditPageContent;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.components.BackButton;
 
@@ -66,6 +67,5 @@ public class DeleteBuildingDisplay extends Application {
         Thread threadDeleteBuildingPage = new Thread(deletePage);
         threadDeleteBuildingPage.setDaemon(true);
         threadDeleteBuildingPage.start();
-
     }
 }

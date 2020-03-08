@@ -1,7 +1,10 @@
 package nl.tudelft.oopp.group43.communication;
 
+import java.net.ContentHandler;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
@@ -208,7 +211,6 @@ public class ServerCommunication {
 
         HttpRequest request = HttpRequest.newBuilder().DELETE().uri(URI.create(url)).build();
         HttpResponse<String> response = null;
-
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
@@ -217,6 +219,26 @@ public class ServerCommunication {
         }
         return "OK";
 
+    }
+    
+    /**
+     * Sends the building as a JSON Object for edit it.
+     * @param obj - JSON Object represents  the building
+     * @return - "Communication with server failed" if the communication with the server failed
+     *         - "OK" if the building could be deleted from the Buildings Database
+     */
+    public static String sendEditBuilding(JSONObject obj) {
+        String url = cURL + "building";
+        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
+        HttpResponse<String> response = null;
+        
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+            return "OK";
     }
 
     /**
@@ -297,6 +319,7 @@ public class ServerCommunication {
             e.printStackTrace();
             return "Communication with server failed";
         }
+
         System.out.println(response.body());
         return response.body();
     }
@@ -327,6 +350,6 @@ public class ServerCommunication {
         System.out.println(builder.toString());
         return HttpRequest.BodyPublishers.ofString(builder.toString());
     }
-
+    
 }
 

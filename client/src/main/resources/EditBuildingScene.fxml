@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.EditBuildingSceneController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="200.0">
+          <children>
+           <ScrollPane fx:id="building_list" layoutY="96.0" prefHeight="290.0" prefWidth="196.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="96.0" />
+           <Label layoutY="67.0" prefHeight="20.0" prefWidth="196.0" text="Choose a building to edit it" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="67.0"><font><Font size="14.0" /></font>></Label>
+          </children>
+       </AnchorPane>
+      <AnchorPane layoutX="211.0" prefHeight="400.0" prefWidth="502.0">
+          <children>
+              <Button layoutX="289.0" layoutY="373.0" mnemonicParsing="false" onAction="#editConfirm" prefHeight="6.0" prefWidth="90.0" text="Edit Building" AnchorPane.bottomAnchor="1.3999999999999773" AnchorPane.rightAnchor="20.600000000000023" />
+            <Label layoutX="10.0" layoutY="27.0" prefHeight="18.0" prefWidth="91.0" text="Building Number" />
+            <TextField fx:id="buildingName" layoutX="105.0" layoutY="60.0" onKeyTyped="#checkName" />
+            <Label layoutX="17.0" layoutY="64.0" text="Building Name" />
+            <Label layoutX="6.0" layoutY="98.0" prefHeight="18.0" prefWidth="91.0" text="Building Address" />
+            <TextField fx:id="buildingAddress" layoutX="105.0" layoutY="95.0" onKeyTyped="#checkAddress" />
+            <Label fx:id="editMsg" layoutX="17.0" layoutY="372.0" prefHeight="18.0" prefWidth="250.0" textFill="#d51414" />
+            <Label fx:id="buildingNumber" layoutX="108.0" layoutY="27.0" prefHeight="18.0" prefWidth="118.0" textFill="#1542d4" />
+            <ChoiceBox fx:id="mondayOpenH" layoutX="117.0" layoutY="132.0" prefHeight="26.0" prefWidth="50.0" />
+            <Label layoutX="64.0" layoutY="137.0" text="Monday " />
+            <Label layoutX="6.0" layoutY="123.0" text="Openning Hours:" />
+            <Label layoutX="62.0" layoutY="172.0" prefHeight="18.0" prefWidth="50.0" text="Tuesday" />
+            <Label layoutX="45.0" layoutY="204.0" text="Wednesday" />
+            <Label layoutX="52.0" layoutY="241.0" text="Thursday" />
+            <Label layoutX="72.0" layoutY="275.0" text="Friday" />
+            <Label layoutX="64.0" layoutY="312.0" text="Saturday" />
+            <Label layoutX="68.0" layoutY="347.0" text="Sunday" />
+            <ChoiceBox fx:id="tuesdayOpenH" layoutX="117.0" layoutY="168.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="wednesdayOpenH" layoutX="117.0" layoutY="200.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="sundayOpenH" layoutX="117.0" layoutY="343.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="saturdayOpenH" layoutX="117.0" layoutY="308.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="sundayOpenM" layoutX="189.0" layoutY="343.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="thursdayOpenH" layoutX="117.0" layoutY="237.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="fridayOpenH" layoutX="117.0" layoutY="271.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="sundayCloseH" layoutX="267.0" layoutY="343.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="sundayCloseM" layoutX="333.0" layoutY="343.0" prefHeight="26.0" prefWidth="50.0" />
+            <Label layoutX="177.0" layoutY="346.0" text=":" />
+            <Label layoutX="324.0" layoutY="347.0" text=":" />
+            <Label layoutX="251.0" layoutY="347.0" text="-" />
+            <Label fx:id="sundayMsg" layoutX="391.0" layoutY="347.0" textFill="#d51414" />
+            <ChoiceBox fx:id="saturdayOpenM" layoutX="189.0" layoutY="308.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="saturdayCloseH" layoutX="267.0" layoutY="308.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="saturdayCloseM" layoutX="333.0" layoutY="308.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="fridayOpenM" layoutX="189.0" layoutY="271.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="fridayCloseH" layoutX="267.0" layoutY="271.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="fridayCloseM" layoutX="333.0" layoutY="270.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="thursdayOpenM" layoutX="189.0" layoutY="237.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="thursdayCloseH" layoutX="267.0" layoutY="236.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="thursdayCloseM" layoutX="333.0" layoutY="236.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="wednesdayOpenM" layoutX="189.0" layoutY="200.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="wednesdayCloseH" layoutX="267.0" layoutY="199.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="wednesdayCloseM" layoutX="333.0" layoutY="199.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="tuesdayOpenM" layoutX="189.0" layoutY="168.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="mondayOpenM" layoutX="189.0" layoutY="132.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="mondayCloseH" layoutX="267.0" layoutY="132.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="tuesdayCloseH" layoutX="267.0" layoutY="168.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="tuesdayCloseM" layoutX="333.0" layoutY="168.0" prefHeight="26.0" prefWidth="50.0" />
+            <ChoiceBox fx:id="mondayCloseM" layoutX="333.0" layoutY="132.0" prefHeight="26.0" prefWidth="50.0" />
+            <Label layoutX="176.0" layoutY="240.0" text=":" />
+            <Label layoutX="176.0" layoutY="274.0" text=":" />
+            <Label layoutX="176.0" layoutY="312.0" text=":" />
+            <Label layoutX="176.0" layoutY="203.0" text=":" />
+            <Label layoutX="176.0" layoutY="172.0" text=":" />
+            <Label layoutX="176.0" layoutY="136.0" text=":" />
+            <Label layoutX="251.0" layoutY="312.0" text="-" />
+            <Label layoutX="251.0" layoutY="274.0" text="-" />
+            <Label layoutX="251.0" layoutY="241.0" text="-" />
+            <Label layoutX="251.0" layoutY="203.0" text="-" />
+            <Label layoutX="251.0" layoutY="172.0" text="-" />
+            <Label layoutX="251.0" layoutY="137.0" text="-" />
+            <Label layoutX="324.0" layoutY="312.0" text=":" />
+            <Label layoutX="324.0" layoutY="241.0" text=":" />
+            <Label layoutX="324.0" layoutY="204.0" text=":" />
+            <Label layoutX="324.0" layoutY="275.0" text=":" />
+            <Label layoutX="324.0" layoutY="172.0" text=":" />
+            <Label layoutX="324.0" layoutY="136.0" text=":" />
+            <Label fx:id="saturdayMsg" layoutX="391.0" layoutY="312.0" textFill="#d51414" />
+            <Label fx:id="fridayMsg" layoutX="391.0" layoutY="274.0" textFill="#d51414" />
+            <Label fx:id="thursdayMsg" layoutX="391.0" layoutY="240.0" textFill="#d51414" />
+            <Label fx:id="wednesdayMsg" layoutX="391.0" layoutY="203.0" textFill="#d51414" />
+            <Label fx:id="tuesdayMsg" layoutX="391.0" layoutY="172.0" textFill="#d51414" />
+            <Label fx:id="mondayMsg" layoutX="391.0" layoutY="137.0" textFill="#d51414" />
+            <Label fx:id="nameCheck" layoutX="274.0" layoutY="63.0" prefHeight="18.0" prefWidth="118.0" textFill="#d51414" />
+            <Label fx:id="addressCheck" layoutX="268.0" layoutY="98.0" prefHeight="18.0" prefWidth="118.0" textFill="#d51414" />
+
+
+          </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

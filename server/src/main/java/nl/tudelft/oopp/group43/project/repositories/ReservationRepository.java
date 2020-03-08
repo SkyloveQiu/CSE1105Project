@@ -1,12 +1,10 @@
 package nl.tudelft.oopp.group43.project.repositories;
 
-import nl.tudelft.oopp.group43.project.models.Building;
-import nl.tudelft.oopp.group43.project.models.Reservation;
-import org.springframework.data.jpa.repository.JpaRepository;
-import nl.tudelft.oopp.group43.project.models.User;
-
 import java.util.Date;
 import java.util.List;
+import nl.tudelft.oopp.group43.project.models.Reservation;
+import nl.tudelft.oopp.group43.project.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 
@@ -14,7 +12,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     boolean existsReservationByStartingDateAndAndEndDateAndRoomId(Date startingDate, Date endDate, int id);
 
-    
+
     List<Reservation> findByStartingDateGreaterThanEqualAndEndDateLessThanEqualAndRoomId(
             Date startingDate,
             Date endDate,

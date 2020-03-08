@@ -12,11 +12,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
-public class BuildDeletePageContent implements Runnable {
+public class BuildDeletePageContent extends BuildDataScene implements Runnable {
 
-    private Stage stage;
-    private Scene scene;
-    private ThreadLock lock;
 
     /**
      * Constructor for the BuildDeletePageContent.
@@ -25,24 +22,22 @@ public class BuildDeletePageContent implements Runnable {
      * @param lock  - to synchronize threads.
      */
     public BuildDeletePageContent(Stage stage, ThreadLock lock) {
-        this.stage = stage;
-        scene = stage.getScene();
-        this.lock = lock;
+        super(stage, lock);
     }
 
     /**
-     * Construct the accordion for the DeleteBuildingPage.
+     * Construct the list for the DeleteBuildingPage.
      */
     @Override
     public void run() {
 
-        synchronized (lock) {
+        synchronized (this.getLock()) {
             try {
-                while (lock.flag == 0) {
-                    lock.wait();
+                while (this.getLock().flag == 0) {
+                    getLock().wait();
                 }
 
-                Label msg = (Label) stage.getScene().lookup("#deleteMsg");
+                Label msg = (Label) this.getStage().getScene().lookup("#deleteMsg");
                 Label[] labelArr = BuildingsConfig.getLabel();
                 addBuildingList(labelArr, msg);
 
@@ -61,7 +56,7 @@ public class BuildDeletePageContent implements Runnable {
      * @param msg      The msg for the warning message.
      */
     private void addBuildingList(Label[] labelArr, Label msg) {
-        final ScrollPane sp = (ScrollPane) scene.lookup("#building_list");
+        final ScrollPane sp = (ScrollPane) this.getScene().lookup("#building_list");
         Pane pane = new Pane();
         double pos = 0.0;
         String text = "Are you sure that you want to delete ";
@@ -76,7 +71,7 @@ public class BuildDeletePageContent implements Runnable {
             EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent e) {
-                    msg.setText(text + label.getText() + "building?");
+                    msg.setText(text + label.getText() + " building?");
                     for (Node n : pane.getChildren()) {
                         n.setStyle("-fx-border-color: black; -fx-border-width: 3;");
                     }

@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
+import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
 import nl.tudelft.oopp.group43.views.LoginDisplay;
 import nl.tudelft.oopp.group43.views.ReservationDisplay;
 
@@ -67,5 +68,19 @@ public class MainPageController {
         DeleteBuildingDisplay rd = new DeleteBuildingDisplay();
         rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
+
+    /**
+     * If you press the edit building button, you will be redirected to the edit building scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Edit Building Scene fails
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void toEditBuilding(ActionEvent event) throws IOException {
+
+        EditBuildingDisplay ed = new EditBuildingDisplay();
+        ed.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+    }
+
 
 }

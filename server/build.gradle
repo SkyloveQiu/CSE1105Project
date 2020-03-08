@@ -4,8 +4,9 @@ plugins {
 	id 'org.asciidoctor.convert' version '1.5.8'
 	id 'java'
 	id 'application'
-}
 
+}
+apply plugin: 'checkstyle'
 
 mainClassName='nl.tudelft.oopp.group43.project.Application'
 group = 'nl.tudelft.oopp.group43'
@@ -26,35 +27,47 @@ ext {
 	set('snippetsDir', file("build/generated-snippets"))
 }
 
+checkstyle {
+	toolVersion "8.25"
+	configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+
+	ignoreFailures = false
+	maxErrors = 0
+	maxWarnings = 0
+}
+
 dependencies {
 	implementation "com.google.guava:guava:28.2-jre"
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '1.2.1.RELEASE'
 	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.2.2.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
+	compile (group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '1.2.1.RELEASE')
 	compile "com.google.guava:guava:16+"
 	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
-	//compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
-	//compile group : 'org.hibernate.javax.persistence', name : 'hibernate-jpa-2.1-api' , version : '1.0.0.Final'
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+	compile group: 'joda-time', name: 'joda-time', version: '2.3'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	compile 'mysql:mysql-connector-java'
 	compile 'org.springframework.boot:spring-boot-starter-tomcat'
 	compile("javax.servlet:jstl")
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compile("org.apache.tomcat.embed:tomcat-embed-jasper")
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.5.RELEASE'
-	compile group: 'joda-time', name: 'joda-time', version: '2.3'
-
+	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.5.RELEASE'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	compile group: 'joda-time', name: 'joda-time', version: '2.3'
 
+	compileOnly('org.projectlombok:lombok')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+	testCompile('org.mockito:mockito-junit-jupiter:2.23.0')
 
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	//testImplementation 'org.springframework.security:spring-security-test'
