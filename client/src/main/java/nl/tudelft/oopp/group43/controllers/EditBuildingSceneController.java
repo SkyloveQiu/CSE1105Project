@@ -81,8 +81,8 @@ public class EditBuildingSceneController {
             building.put("building_name", buildingName.getText());
             building.put("address", buildingAddress.getText());
             building.put("opening_hours", openingHours.toString());
-            String a = ServerCommunication.sendEditBuilding(building);
 
+            String a = ServerCommunication.sendEditBuilding(building);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             if (a.equals("OK")) {

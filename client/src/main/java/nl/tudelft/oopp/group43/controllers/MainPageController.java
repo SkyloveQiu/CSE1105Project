@@ -12,7 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.views.*;
+import nl.tudelft.oopp.group43.views.AddBuildingDisplay;
+import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
+import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
+import nl.tudelft.oopp.group43.views.ReservationDisplay;
+
 
 public class MainPageController {
 

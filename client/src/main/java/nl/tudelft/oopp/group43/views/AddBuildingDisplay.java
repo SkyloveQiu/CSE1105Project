@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.views;
 
+import java.io.IOException;
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,13 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.classes.BuildDataScene;
-import nl.tudelft.oopp.group43.classes.BuildingData;
-import nl.tudelft.oopp.group43.classes.BuildingEditPageContent;
-import nl.tudelft.oopp.group43.classes.ThreadLock;
 
-import java.io.IOException;
-import java.net.URL;
+
+
 
 public class AddBuildingDisplay extends Application {
 
