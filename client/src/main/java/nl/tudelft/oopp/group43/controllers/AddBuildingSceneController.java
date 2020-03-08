@@ -1,7 +1,5 @@
 package nl.tudelft.oopp.group43.controllers;
 
-import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,13 +12,12 @@ import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
 
-public class EditBuildingSceneController {
+public class AddBuildingSceneController {
 
     @FXML
-    Label editMsg;
-    @FXML
-    Label buildingNumber;
+    TextField buildingNumber;
     @FXML
     Label numberCheck;
     @FXML
@@ -46,26 +43,18 @@ public class EditBuildingSceneController {
     @FXML
     Label nameCheck;
 
-    /**
-     * If you press the edit building button, the method will check if you selected a building and do the delete operation.
-     *
-     * @param event - pressing the button
-     * @throws IOException -  if loading the Main Page Display fails
-     */
+
     @FXML
     @SuppressWarnings("unchecked")
-    private void editConfirm(ActionEvent event) throws IOException {
-
-        if (editMsg.getText().isEmpty()) {
-            editMsg.setText("You have not selected a building!");
-            return;
-        }
+    private void addConfirm(ActionEvent event) throws IOException {
 
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        if (mondayMsg.getText().isEmpty() && tuesdayMsg.getText().isEmpty() && wednesdayMsg.getText().isEmpty() && thursdayMsg.getText().isEmpty()
-                && fridayMsg.getText().isEmpty() && saturdayMsg.getText().isEmpty() && sundayMsg.getText().isEmpty() && nameCheck.getText().isEmpty() && addressCheck.getText().isEmpty()) {
+        boolean ok = checkNumber();
+         ok = checkAddress() && ok;
+         ok = checkName() && ok;
+        if (mondayMsg.getText().isEmpty() && tuesdayMsg.getText().isEmpty() && wednesdayMsg.getText().isEmpty() && thursdayMsg.getText().isEmpty()  && fridayMsg.getText().isEmpty()
+                && saturdayMsg.getText().isEmpty() && sundayMsg.getText().isEmpty() && ok) {
 
             JSONObject openingHours = new JSONObject();
             openingHours.put("mo", getHoursDay(stage, "monday"));
@@ -81,16 +70,16 @@ public class EditBuildingSceneController {
             building.put("building_name", buildingName.getText());
             building.put("address", buildingAddress.getText());
             building.put("opening_hours", openingHours.toString());
-            String a = ServerCommunication.sendEditBuilding(building);
+           // String a = ServerCommunication.sendEditBuilding(building);
 
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+           /* Alert alert = new Alert(Alert.AlertType.INFORMATION);
             if (a.equals("OK")) {
                 alert.setContentText("The building was successfully edited.");
             } else {
                 alert.setContentText("NOT OK");
             }
-            alert.showAndWait();
+            alert.showAndWait();*/
 
             MainPageDisplay md = new MainPageDisplay();
             md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
@@ -99,6 +88,28 @@ public class EditBuildingSceneController {
 
     }
 
+    /**
+     * Checks if the user put a number which is grater than 0 and smaller than long.MAX_VALUE and show a proper message to the user.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private boolean checkNumber() {
+        if(buildingNumber.getText().isEmpty())
+        {
+            numberCheck.setText("You cannot have this field empty");
+            return false;
+        }
+        try {
+            String nunmberString = buildingNumber.getText();
+            System.out.println(Long.MAX_VALUE);
+            long number = Long.valueOf(nunmberString);
+            numberCheck.setText("");
+            return true;
+        } catch (Exception e) {
+            numberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
+            return false;
+        }
+    }
 
     /**
      * Gets the information regarding the opening hours of a day for a building.
@@ -128,11 +139,13 @@ public class EditBuildingSceneController {
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void checkName() {
+    private boolean checkName() {
         if (buildingName.getText().isEmpty()) {
             nameCheck.setText("You cannot have this field empty");
+            return false;
         } else {
             nameCheck.setText("");
+            return true;
         }
     }
 
@@ -141,11 +154,13 @@ public class EditBuildingSceneController {
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void checkAddress() {
+    private boolean checkAddress() {
         if (buildingAddress.getText().isEmpty()) {
             addressCheck.setText("You cannot have this field empty");
+            return false;
         } else {
             addressCheck.setText("");
+            return true;
         }
     }
 

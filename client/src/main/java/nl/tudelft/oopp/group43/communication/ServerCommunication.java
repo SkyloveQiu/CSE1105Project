@@ -210,6 +210,25 @@ public class ServerCommunication {
      *         - "OK" if the building could be deleted from the Buildings Database
      */
     public static String sendEditBuilding(JSONObject obj) {
+        String url = cURL + "building/update";
+        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        return "OK";
+    }
+
+    /**
+     * Sends the building as a JSON Object for edit it.
+     * @param obj - JSON Object represents  the building
+     * @return - "Communication with server failed" if the communication with the server failed
+     *         - "OK" if the building could be deleted from the Buildings Database
+     */
+    public static String sendAddBuilding(JSONObject obj) {
         String url = cURL + "building";
         HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
         HttpResponse<String> response = null;
