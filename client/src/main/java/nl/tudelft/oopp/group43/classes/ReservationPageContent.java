@@ -159,4 +159,12 @@ public class ReservationPageContent {
         }
     }
 
+    /**
+     * Sets the datestring to a value (gets used to refresh the timetable after reservation).
+     * @param string the string to set the dateString to
+     */
+    public static void setDateString(String string) {
+        dateString = string;
+    }
+
 }
