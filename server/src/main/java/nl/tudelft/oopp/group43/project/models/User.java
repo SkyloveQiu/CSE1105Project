@@ -156,7 +156,7 @@ public class User implements java.io.Serializable {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", catalog = "CSE1105Project", joinColumns = {
+    @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "users_email", nullable = false, updatable = false)}, inverseJoinColumns = {
             @JoinColumn(name = "roles_id", nullable = false, updatable = false)})
     public Set<Role> getRoles() {
