@@ -38,6 +38,7 @@ public class BuildingController {
 
     /**
      * delete the specific building.
+     *
      * @param buildingId the building you want to delete.
      */
     @DeleteMapping("building/{buildingId}")

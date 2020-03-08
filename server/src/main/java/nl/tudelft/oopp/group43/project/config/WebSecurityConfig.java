@@ -29,6 +29,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
@@ -39,6 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     AuthenticationProvider provider;
 
+    @Bean
+    public BCryptPasswordEncoder bcryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     public void configure(final WebSecurity webSecurity) {
@@ -46,10 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         webSecurity.ignoring().antMatchers("/registration");
     }
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -77,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(bcryptPasswordEncoder());
     }
 
     @Bean
