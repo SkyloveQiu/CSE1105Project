@@ -1,6 +1,5 @@
 package nl.tudelft.oopp.group43.project.models;
 
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -45,6 +44,18 @@ public class User implements java.io.Serializable {
         this.username = email;
     }
 
+    /**
+     * init the user.
+     * @param email the email.
+     * @param firstName the first name.
+     * @param lastName the last name.
+     * @param password the password.
+     * @param role the role.
+     * @param token the token of the user.
+     * @param reservations the reservation connect to the user.
+     * @param foodOrders the foods he orders.
+     * @param roles the roles.
+     */
     public User(String email, String firstName, String lastName, String password, String role, String token, Set reservations, Set foodOrders, Set roles) {
         this.username = email;
         this.firstName = firstName;
@@ -57,6 +68,14 @@ public class User implements java.io.Serializable {
         this.roles = roles;
     }
 
+    /**
+     * creat the user when he register.
+     * @param password the password.
+     * @param firstName the first name.
+     * @param lastName the last name.
+     * @param username the email he submit.
+     * @param role the role.
+     */
     @JsonCreator
     public User(@JsonProperty("password") String password,
                 @JsonProperty("first_name") String firstName,

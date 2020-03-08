@@ -1,15 +1,19 @@
 package nl.tudelft.oopp.group43.project.models;
 
-
-import com.fasterxml.jackson.annotation.*;
-import net.minidev.json.annotate.JsonIgnore;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 
 
 @Entity
@@ -44,6 +48,13 @@ public class Building implements java.io.Serializable {
     public Building() {
     }
 
+    /**
+     * create the init of building .
+     * @param buildingNumber the number of building.
+     * @param buildingName the name of building.
+     * @param address the address of building.
+     * @param openingHours the opening hours of building.
+     */
     @JsonCreator
     public Building(@JsonProperty("building_number") int buildingNumber,
                     @JsonProperty("building_name") String buildingName,
@@ -59,7 +70,13 @@ public class Building implements java.io.Serializable {
         this.buildingNumber = buildingNumber;
     }
 
-
+    /**
+     * create the init of building .
+     * @param buildingNumber the number of building.
+     * @param buildingName the name of building.
+     * @param address the address of building.
+     * @param openingHours the opening hours of building.
+     */
     public Building(int buildingNumber, String buildingName, String address, String openingHours, Set foodOrders, Set rooms, Set buildingFoodProducts) {
         this.buildingNumber = buildingNumber;
         this.buildingName = buildingName;

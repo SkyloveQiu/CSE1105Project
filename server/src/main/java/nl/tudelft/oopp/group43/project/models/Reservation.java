@@ -1,16 +1,22 @@
 package nl.tudelft.oopp.group43.project.models;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -30,6 +36,13 @@ public class Reservation implements java.io.Serializable {
     public Reservation() {
     }
 
+    /**
+     * init the reservation.
+     * @param user the user you need to init.
+     * @param roomId the roomid he want to book.
+     * @param startingDate the starting date he wants to start.
+     * @param endDate the end date he wants to end.
+     */
     public Reservation(@JsonProperty("user") User user,
                        @JsonProperty("room_id") Integer roomId,
                        @JsonProperty("starting_date") Date startingDate,
@@ -41,6 +54,14 @@ public class Reservation implements java.io.Serializable {
 
     }
 
+    /**
+     * init reservation with food.
+     * @param user the user you want to add.
+     * @param roomId the room people want to reserve.
+     * @param startingDate the start date.
+     * @param endDate the end date.
+     * @param foodOrders the food user booked.
+     */
     public Reservation(User user, Integer roomId, Date startingDate, Date endDate, Set foodOrders) {
         this.user = user;
         this.roomId = roomId;

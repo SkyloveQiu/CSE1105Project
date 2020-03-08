@@ -1,9 +1,9 @@
 package nl.tudelft.oopp.group43.project.keys;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 
 @Embeddable
@@ -36,11 +36,15 @@ public class OrderDetailsKey implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrderDetailsKey)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof OrderDetailsKey)) {
+            return false;
+        }
         OrderDetailsKey that = (OrderDetailsKey) o;
-        return orderId == that.orderId &&
-                productId == that.productId;
+        return orderId == that.orderId
+                && productId == that.productId;
     }
 
     @Override

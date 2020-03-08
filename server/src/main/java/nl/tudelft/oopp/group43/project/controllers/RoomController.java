@@ -46,6 +46,7 @@ public class RoomController {
 
     /**
      * get the building.
+     *
      * @param buildingNumber the number of building you want to get.
      * @return the result.
      */

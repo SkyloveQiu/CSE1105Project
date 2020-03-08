@@ -60,6 +60,8 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	compile group: 'joda-time', name: 'joda-time', version: '2.3'
+
 	compile group: 'org.springframework', name: 'spring-jdbc', version: '3.1.0.RELEASE'
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
