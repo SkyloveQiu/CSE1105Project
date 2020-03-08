@@ -1,10 +1,14 @@
 package nl.tudelft.oopp.group43.communication;
 
+import java.net.ContentHandler;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -192,6 +196,41 @@ public class ServerCommunication {
 
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        return "OK";
+
+    }
+
+    /**
+     * Sends the buildID for deleting it.
+     * @param  - the id of the building
+     * @returna String which can have 3 values:
+     *          - "Communication with server failed" if the communication with the server failed
+     *          - "OK" if the building could be deleted from the Buildings Database
+     */
+    public static String sendEditBuilding(JSONObject obj)  {
+        String url = cURL + "building";
+        try{
+
+            var objectMapper = new ObjectMapper();
+            String requestBody = objectMapper.writeValueAsString(obj);
+         //   HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(requestBody)).uri(URI.create(url)).setHeader(HttpHeaders.of, "application/json").build();
+            HttpURLConnection
+            HttpResponse<String> response = null;
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+
+
+        try {
+
         } catch (Exception e) {
             e.printStackTrace();
             return "Communication with server failed";
