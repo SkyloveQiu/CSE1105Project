@@ -1,9 +1,8 @@
 package nl.tudelft.oopp.group43.project.models;
 
+import static javax.persistence.GenerationType.IDENTITY;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,9 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
-import static javax.persistence.GenerationType.IDENTITY;
-
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+
 
 
 @Entity
@@ -33,13 +31,18 @@ public class FoodOrder implements java.io.Serializable {
     private Reservation reservation;
     private User user;
     private Date time;
-
     private Set foodOrderDetails = new HashSet(0);
 
     public FoodOrder() {
     }
 
-
+    /**
+     * init the food order.
+     * @param building the building name.
+     * @param reservation the reservation of user.
+     * @param user the user.
+     * @param time the time order it .
+     */
     public FoodOrder(Building building, Reservation reservation, User user, Date time) {
         this.building = building;
         this.reservation = reservation;
@@ -47,6 +50,14 @@ public class FoodOrder implements java.io.Serializable {
         this.time = time;
     }
 
+    /**
+     * init the food order.
+     * @param building the building you order.
+     * @param reservation the reservation of the user.
+     * @param user the user.
+     * @param time the time you order the food.
+     * @param foodOrderDetails the details of this order.
+     */
     public FoodOrder(Building building, Reservation reservation, User user, Date time, Set foodOrderDetails) {
         this.building = building;
         this.reservation = reservation;

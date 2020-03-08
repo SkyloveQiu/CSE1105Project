@@ -1,6 +1,5 @@
 package nl.tudelft.oopp.group43.project.models;
 
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -25,6 +24,13 @@ public class FoodOrderDetails implements java.io.Serializable {
     public FoodOrderDetails() {
     }
 
+    /**
+     * init the food order details.
+     * @param id the id.
+     * @param foodProduct the product you ordered.
+     * @param foodOrder the food order.
+     * @param amount the amount price.
+     */
     public FoodOrderDetails(FoodOrderDetailsId id, FoodProduct foodProduct, FoodOrder foodOrder, int amount) {
         this.id = id;
         this.foodProduct = foodProduct;
