@@ -60,6 +60,7 @@ public class LoginSceneController {
 
         if (response.equals("OK")) {
             emailCheck.setText("");
+            ServerCommunication.setUsername(email.getText());
             MainPageDisplay md = new MainPageDisplay();
             md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
         } else {

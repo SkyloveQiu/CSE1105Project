@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.views.LoginDisplay;
 import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import nl.tudelft.oopp.group43.views.RegisterDisplay;
@@ -23,6 +24,9 @@ public class BackButton {
 
     push(buildingID);
     push("room");
+
+    For the Reservation Page also the roomID with the buildingID like before, but in the format of:
+    buildingID;roomID
      */
     private static Stack<String> sceneStack = new Stack<String>();
     private Button backButton;
@@ -72,7 +76,9 @@ public class BackButton {
                         break;
                     case "room":
                         RoomPageDisplay rd = new RoomPageDisplay();
-                        rd.start(stage, sceneStack.pop());
+                        String building = sceneStack.pop();
+                        ReservationConfig.setSelectedBuilding(Long.parseLong(building));
+                        rd.start(stage, building);
                         break;
                     case "login":
                         LoginDisplay ld = new LoginDisplay();
@@ -84,6 +90,9 @@ public class BackButton {
                         break;
                     case "reservation":
                         ReservationDisplay rvd = new ReservationDisplay();
+                        String[] selection = sceneStack.pop().split(";");
+                        ReservationConfig.setSelectedBuilding(Long.parseLong(selection[0]));
+                        ReservationConfig.setSelectedRoom(Long.parseLong(selection[1]));
                         rvd.start(stage);
                         break;
                     default:

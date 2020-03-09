@@ -46,17 +46,6 @@ public class MainPageController {
     }
 
     /**
-     * Goes to the room page when clicked on.
-     * @param event event passed by button when clicked on.
-     * @throws IOException throws the exception when loading the FXML file goes wrong.
-     */
-    @SuppressWarnings("unchecked")
-    public void toRoomPage(ActionEvent event) throws IOException {
-        ReservationDisplay rd = new ReservationDisplay();
-        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-    }
-
-    /**
      * If you press the confirm button, you will be redirected to the login page if all fields are valid.
      * @param event - pressing the button
      * @throws IOException - if loading the Login Scene fails
