@@ -235,7 +235,7 @@ public class ServerCommunication {
             e.printStackTrace();
             return "Communication with server failed";
         }
-            return "OK";
+        return "OK";
     }
 
     /**

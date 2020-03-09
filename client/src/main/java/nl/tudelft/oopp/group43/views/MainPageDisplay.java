@@ -1,8 +1,5 @@
 package nl.tudelft.oopp.group43.views;
 
-import java.io.IOException;
-import java.net.URL;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -23,6 +20,9 @@ import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.BuildingsConfig;
 import nl.tudelft.oopp.group43.classes.MainPageContent;
 import nl.tudelft.oopp.group43.components.BackButton;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class MainPageDisplay extends Application {
 
@@ -86,16 +86,16 @@ public class MainPageDisplay extends Application {
         sp.widthProperty().addListener(resizeListener);
 
         Accordion accordion = (Accordion) scene.lookup("#building_list");
-        VBox vBox = (VBox) scene.lookup("#vbox");
+        VBox v = (VBox) scene.lookup("#vbox");
         EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 if (!BuildingsConfig.isAccordionExpanded()) {
                     BuildingsConfig.setAccordionExpanded(true);
                 } else if (BuildingsConfig.isAccordionExpanded()) {
-                    ObservableList<Node> children = FXCollections.observableArrayList(vBox.getChildren());;
-                    vBox.getChildren().removeAll(children);
-                    vBox.getChildren().addAll(children);
+                    ObservableList<Node> children = FXCollections.observableArrayList(v.getChildren());
+                    v.getChildren().removeAll(children);
+                    v.getChildren().addAll(children);
                     BuildingsConfig.setAccordionExpanded(false);
                 }
             }
