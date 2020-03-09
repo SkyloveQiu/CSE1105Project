@@ -48,6 +48,9 @@ public class MainPageDisplay extends Application {
         ap.getChildren().add(btn.getBackButton());
         BackButton.pushScene("main");
 
+        // resets the gridpane column size
+        BuildingsConfig.setColumnCount(2);
+
         ChangeListener<Number> resizeListener = new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
