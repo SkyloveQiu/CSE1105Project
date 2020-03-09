@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.AddBuildingSceneController">
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.AddBuildingSceneController">
     <children>
         <Button layoutX="289.0" layoutY="373.0" mnemonicParsing="false" onAction="#addConfirm" prefHeight="6.0" prefWidth="90.0" text="Add Building" AnchorPane.bottomAnchor="1.3999999999999773" AnchorPane.rightAnchor="20.600000000000023" />
         <Label layoutX="10.0" layoutY="27.0" prefHeight="18.0" prefWidth="91.0" text="Building Number" />

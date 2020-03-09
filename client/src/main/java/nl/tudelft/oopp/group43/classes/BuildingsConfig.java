@@ -12,7 +12,7 @@ public class BuildingsConfig {
     private static int buildingColumnCount = 2;
     private static Label[] label;
     private static boolean accordionExpanded = false;
-    private static double accordionHeight;
+    private static double accordionHeight = 10.0;
     private static List<JSONObject> listBuildings;
 
     /**

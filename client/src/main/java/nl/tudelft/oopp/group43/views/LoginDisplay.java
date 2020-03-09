@@ -66,6 +66,10 @@ public class LoginDisplay extends Application {
         scene.widthProperty().addListener(widthResizeListener);
         scene.heightProperty().addListener(heightResizeListener);
 
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Campus Management - Login Page");
         primaryStage.show();

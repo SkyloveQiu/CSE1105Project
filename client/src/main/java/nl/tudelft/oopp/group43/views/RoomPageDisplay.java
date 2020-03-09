@@ -3,6 +3,8 @@ package nl.tudelft.oopp.group43.views;
 import java.io.IOException;
 import java.net.URL;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -56,6 +58,10 @@ public class RoomPageDisplay {
         ap.getChildren().add(btn.getBackButton());
         // A pre push of the buildingID of this roompage for later use
         BackButton.pushScene(buildingID);
+
+        if (stage.getScene() != null) {
+            ap.setPrefSize(stage.getWidth(), stage.getHeight() - 39);
+        }
 
         stage.setScene(scene);
         stage.setTitle("Campus Management - Room Page");
@@ -161,9 +167,10 @@ public class RoomPageDisplay {
                         + "\nSound-installation: " + info.get("soundInstallation")
                         + "\nWheelchair accessible: " + info.get("wheelChairAccessible");
                 Label roomInfo = new Label(information);
+                gp.heightProperty().addListener(resizeInformationFont(roomInfo));
                 roomInfo.setFont(new Font("Arial", 12));
                 AnchorPane.setLeftAnchor(roomInfo, 30.0);
-                AnchorPane.setBottomAnchor(roomInfo, 60.0);
+                AnchorPane.setBottomAnchor(roomInfo, 40.0);
                 AnchorPane.setTopAnchor(roomInfo, 80.0);
                 ap.getChildren().add(roomInfo);
 
@@ -179,6 +186,7 @@ public class RoomPageDisplay {
                 // Creates the title text
                 Label titleText = new Label(label.getText());
                 titleText.setFont(new Font("Arial", 20));
+                gp.heightProperty().addListener(resizeTitleFont(titleText));
                 AnchorPane.setTopAnchor(titleText, 10.0);
                 AnchorPane.setLeftAnchor(titleText, 30.0);
                 AnchorPane.setRightAnchor(titleText, 30.0);
@@ -203,6 +211,26 @@ public class RoomPageDisplay {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    }
+                };
+            }
+
+            private ChangeListener<Number> resizeInformationFont(Label label) {
+                return new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        double fontSize = (double)newValue * 0.0324;
+                        label.setFont(new Font("Arial", fontSize));
+                    }
+                };
+            }
+
+            private ChangeListener<Number> resizeTitleFont(Label label) {
+                return new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        double fontSize = (double)newValue * 0.0541;
+                        label.setFont(new Font("Arial", fontSize));
                     }
                 };
             }

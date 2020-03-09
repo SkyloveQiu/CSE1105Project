@@ -11,12 +11,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.BuildDataScene;
 import nl.tudelft.oopp.group43.classes.BuildingData;
 import nl.tudelft.oopp.group43.classes.BuildingEditPageContent;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
-
+import nl.tudelft.oopp.group43.components.BackButton;
 
 
 public class EditBuildingDisplay extends Application {
@@ -40,6 +41,17 @@ public class EditBuildingDisplay extends Application {
         makeHours(primaryStage, "saturday");
         makeHours(primaryStage, "sunday");
 
+        /*
+        Add the back button to the scene
+         */
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("edit");
+
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
 
         primaryStage.setTitle("Campus Management -  Edit Buildings");
         primaryStage.show();
