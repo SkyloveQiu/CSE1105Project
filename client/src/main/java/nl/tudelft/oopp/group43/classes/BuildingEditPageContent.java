@@ -64,7 +64,7 @@ public class BuildingEditPageContent extends BuildDataScene implements Runnable 
         Label editMsg = (Label) this.getStage().getScene().lookup("#editMsg");
         Pane pane = new Pane();
         double pos = 0.0;
-        String text = "Are you sure that you want to delete ";
+        String text = "Are you sure that you want to edit ";
 
 
         for (int i = 0; i < labelArr.length; i++) {

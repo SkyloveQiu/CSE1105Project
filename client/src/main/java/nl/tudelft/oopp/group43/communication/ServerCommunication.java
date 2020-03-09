@@ -1,10 +1,7 @@
 package nl.tudelft.oopp.group43.communication;
 
-import java.net.ContentHandler;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
@@ -18,7 +15,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 
 public class ServerCommunication {
 
@@ -108,9 +104,9 @@ public class ServerCommunication {
      * @param password  - the password of the user
      * @param role      -  the role of the user
      * @return a String which can have 3 values:
-     *          - "Communication with server failed" if the communication with the server failed
-     *          - "OK" if the user could be added to the Users Database
-     *          - "Exists" if the email already exists
+     *         - "Communication with server failed" if the communication with the server failed
+     *         - "OK" if the user could be added to the Users Database
+     *         - "Exists" if the email already exists
      */
     public static String confirmRegistration(String firstName, String lastName, String username, String password, String role) {
 
@@ -143,9 +139,9 @@ public class ServerCommunication {
      * @param username - the email of the user
      * @param password - the password of the user
      * @return a String which can have 3 values:
-     *          - "Communication with server failed" if the communication with the server failed
-     *          - "OK" if the user could be added to the Users Database
-     *          - "WRONG" if the email or password were wrong
+     *         - "Communication with server failed" if the communication with the server failed
+     *         - "OK" if the user could be added to the Users Database
+     *         - "WRONG" if the email or password were wrong
      * @throws ParseException - if something goes wrong with the JSON Parser
      */
     public static String loginToken(String username, String password) throws ParseException {
@@ -202,9 +198,9 @@ public class ServerCommunication {
      * Sends the buildID for deleting it.
      *
      * @param buildID - the id of the building
-     * @returna String which can have 3 values:
-     *          - "Communication with server failed" if the communication with the server failed
-     *          - "OK" if the building could be deleted from the Buildings Database
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed
+     *         - "OK" if the building could be deleted from the Buildings Database
      */
     public static String sendDeleteBuilding(String buildID) {
         String url = cURL + "building/" + buildID;
@@ -223,12 +219,13 @@ public class ServerCommunication {
     
     /**
      * Sends the building as a JSON Object for edit it.
+     *
      * @param obj - JSON Object represents  the building
      * @return - "Communication with server failed" if the communication with the server failed
-     *         - "OK" if the building could be deleted from the Buildings Database
+     *         - "OK" if the building could be edit from the Buildings Database
      */
     public static String sendEditBuilding(JSONObject obj) {
-        String url = cURL + "building";
+        String url = cURL + "building/update";
         HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
         HttpResponse<String> response = null;
         
@@ -350,6 +347,35 @@ public class ServerCommunication {
         System.out.println(builder.toString());
         return HttpRequest.BodyPublishers.ofString(builder.toString());
     }
-    
+
+    /**
+     * Sends the building as a JSON Object for add it.
+     *
+     * @param obj - JSON Object represents  the building
+     * @return - "Communication with server failed" if the communication with the server failed
+     *         - "OK" if the building could be added to the Buildings Database
+     *         - "NOT OK" if the building could not be added to the Buildings Database
+     */
+    public static String sendAddBuilding(JSONObject obj) {
+        String url = cURL + "building";
+        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            String s = response.body();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        //If the building already exists, then you will receive from the server the message ""BUILDING WITH NUMBER: " + newBuilding.getBuildingNumber() + " ALREADY EXISTS.";"
+        //else you will receive from the server "NEW BUILDING: " + newBuilding.getBuildingName();
+        if (response.body().substring(0, 1).equals("B")) {
+            return "NOT OK";
+
+        } else {
+            return "OK";
+        }
+
+    }
 }
 
