@@ -1,13 +1,13 @@
-## Agenda 02-03
+## Agenda 09-03
 
-This is the agenda for 2th of March. 
+This is the agenda for 9th of March. 
 
 ---
 
-Date:           02/03/2020\
-Main focus:     Discussing the current state 2.0 \
-Chair:          Cristian\
-Note taker:     Thom
+Date:           09/03/2020\
+Main focus:     Discussing the current state 3.0 \
+Chair:          Niels\
+Note taker:     Cristian
 
 
 # Opening
@@ -19,14 +19,8 @@ Is everything in the agenda?
 
 # Points of action
 
-* Present Demo
-* Making the API for login
-* Make the HTTP request login
-* Fix the checking methods in the login and register page
-* Fixing the scrolling for the Main Page and Login Page and Register Page
-* FIX THE API
-* Integrate APIs into front-end
-* Buildings and rooms in database with JSON
+Points of action last week.
+Gitlab issues.
 
 Are these things done?
 
@@ -39,10 +33,17 @@ To be determined.
 
 # Questions for the TA
 *Your TA will visit you in the second half of the lab session. Note down all questions that you have so that you can ask them then.*
-Discuss rubrics.
-Thom: testing
-Cristian: checkstyle for server?
-Ziang: Should we host our app online?
+Cristian: Code reviewing insufficient?
+
+What did you think of the CTA-meeting?
+
+Can you explain your feedback?
+
+Andrei: What do you think of the server-code?
+
+Ziang: Questions about repositories.
+
+Thom: Question about Test-error.
 
 # Question round
 Are there any questions?
