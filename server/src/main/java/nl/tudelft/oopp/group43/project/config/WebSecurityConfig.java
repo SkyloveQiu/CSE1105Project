@@ -24,10 +24,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
@@ -38,22 +40,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     AuthenticationProvider provider;
 
-    public WebSecurityConfig(final AuthenticationProvider authenticationProvider) {
-        super();
-        this.provider = authenticationProvider;
-    }
-
     @Bean
     public BCryptPasswordEncoder bcryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Override
     public void configure(final WebSecurity webSecurity) {
         webSecurity.ignoring().antMatchers("/home/**");
         webSecurity.ignoring().antMatchers("/registration");
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

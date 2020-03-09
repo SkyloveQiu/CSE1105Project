@@ -13,26 +13,33 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.classes.BuildDataScene;
-import nl.tudelft.oopp.group43.classes.BuildingData;
-import nl.tudelft.oopp.group43.classes.BuildingEditPageContent;
-import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.components.BackButton;
 
 
-public class EditBuildingDisplay extends Application {
+public class AddBuildingDisplay extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/EditBuildingScene.fxml");
+        URL xmlUrl = getClass().getResource("/AddBuildingScene.fxml");
         loader.setLocation(xmlUrl);
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
+        /*
+        Add the back button to the scene
+         */
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("add");
+
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
         primaryStage.setScene(scene);
 
-        addBuildings(primaryStage);
         makeHours(primaryStage, "monday");
         makeHours(primaryStage, "tuesday");
         makeHours(primaryStage, "wednesday");
@@ -41,46 +48,11 @@ public class EditBuildingDisplay extends Application {
         makeHours(primaryStage, "saturday");
         makeHours(primaryStage, "sunday");
 
-        /*
-        Add the back button to the scene
-         */
-        BackButton btn = new BackButton();
-        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-        ap.getChildren().add(btn.getBackButton());
-        BackButton.pushScene("edit");
 
-        if (primaryStage.getScene() != null) {
-            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
-        }
-
-        primaryStage.setTitle("Campus Management -  Edit Buildings");
+        primaryStage.setTitle("Campus Management -  Add Buildings");
         primaryStage.show();
-
-
     }
 
-    /**
-     * Adds all buildings as content using a new Thread.
-     * Doing this removes initial startup lag.
-     *
-     * @param stage Stage is passed as parameter to get all Nodes
-     */
-    private void addBuildings(Stage stage) {
-
-
-        ThreadLock lock = new ThreadLock();
-
-        BuildingData data = new BuildingData(lock);
-        Thread threadData = new Thread(data);
-        threadData.setDaemon(true);
-        threadData.start();
-
-        BuildDataScene editPage = new BuildingEditPageContent(stage, lock);
-        Thread threadEditBuildingPage = new Thread(editPage);
-        threadEditBuildingPage.setDaemon(true);
-        threadEditBuildingPage.start();
-
-    }
 
     /**
      * Checks if the input data is OK - this function will be used as a listener for each group of 4 ChoiceBoxes.
@@ -176,6 +148,8 @@ public class EditBuildingDisplay extends Application {
      * @param minutes - ChoiceBox for minutes
      */
     private void putFileds(ChoiceBox<String> hours, ChoiceBox<String> minutes) {
+        hours.setValue("--");
+        minutes.setValue("--");
         hours.getItems().add("--");
         minutes.getItems().add("--");
         for (int i = 0; i <= 59; i++) {
@@ -206,6 +180,5 @@ public class EditBuildingDisplay extends Application {
         ChoiceBox<String> dayCloseM = (ChoiceBox) stage.getScene().lookup("#" + day + "CloseM");
         Label dayMsg = (Label) stage.getScene().lookup("#" + day + "Msg");
         makeDay(dayOpenH, dayOpenM, dayCloseH, dayCloseM, dayMsg);
-
     }
 }
