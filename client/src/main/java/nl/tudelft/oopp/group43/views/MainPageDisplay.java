@@ -7,15 +7,18 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.BuildingsConfig;
 import nl.tudelft.oopp.group43.classes.MainPageContent;
@@ -55,6 +58,7 @@ public class MainPageDisplay extends Application {
                     }
                     ColumnConstraints cc = new ColumnConstraints();
                     cc.setPercentWidth(33.33);
+                    cc.setFillWidth(true);
                     gp.getColumnConstraints().add(cc);
                     BuildingsConfig.setColumnCount(3);
 
@@ -80,6 +84,23 @@ public class MainPageDisplay extends Application {
             }
         };
         sp.widthProperty().addListener(resizeListener);
+
+        Accordion accordion = (Accordion) scene.lookup("#building_list");
+        VBox vBox = (VBox) scene.lookup("#vbox");
+        EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (!BuildingsConfig.isAccordionExpanded()) {
+                    BuildingsConfig.setAccordionExpanded(true);
+                } else if (BuildingsConfig.isAccordionExpanded()) {
+                    ObservableList<Node> children = FXCollections.observableArrayList(vBox.getChildren());;
+                    vBox.getChildren().removeAll(children);
+                    vBox.getChildren().addAll(children);
+                    BuildingsConfig.setAccordionExpanded(false);
+                }
+            }
+        };
+        accordion.addEventFilter(MouseEvent.MOUSE_CLICKED, accordionClick);
 
         addBuildings(primaryStage);
 
@@ -142,6 +163,7 @@ public class MainPageDisplay extends Application {
         while (rows > gp.getRowCount()) {
             RowConstraints rc = new RowConstraints();
             double newSize = (gp.getWidth() - 60.0) / BuildingsConfig.getColumnCount();
+            rc.setFillHeight(true);
             rc.setPrefHeight(newSize);
             rc.setMinHeight(newSize);
             rc.setMaxHeight(newSize);

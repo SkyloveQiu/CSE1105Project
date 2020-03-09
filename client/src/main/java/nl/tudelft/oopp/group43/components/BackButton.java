@@ -40,6 +40,7 @@ public class BackButton {
         backButton.setPrefHeight(30.0);
         backButton.setText("Back");
         backButton.setTextAlignment(TextAlignment.CENTER);
+        backButton.setVisible(!sceneStack.isEmpty());
 
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             @Override

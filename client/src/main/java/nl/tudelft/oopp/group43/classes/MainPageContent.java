@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
@@ -22,7 +21,6 @@ import nl.tudelft.oopp.group43.views.RoomPageDisplay;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 
 
@@ -45,32 +43,9 @@ public class MainPageContent implements Runnable {
         JSONParser json = new JSONParser();
         GridPane gp = (GridPane) stage.getScene().lookup("#buildings_grid");
         Accordion accordion = (Accordion) stage.getScene().lookup("#building_list");
-        Pane menuPane = (Pane) stage.getScene().lookup("#menubar");
 
         try {
             JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getBuilding());
-
-            EventHandler<MouseEvent> accordionClick = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    if (!BuildingsConfig.isAccordionExpanded()) {
-                        for (Node node : menuPane.getChildren()) {
-                            if (!node.equals(accordion)) {
-                                node.relocate(node.getLayoutX(), node.getLayoutY() + BuildingsConfig.getAccordionHeight());
-                                BuildingsConfig.setAccordionExpanded(true);
-                            }
-                        }
-                    } else if (BuildingsConfig.isAccordionExpanded()) {
-                        for (Node node : menuPane.getChildren()) {
-                            if (!node.equals(accordion)) {
-                                node.relocate(node.getLayoutX(), node.getLayoutY() - BuildingsConfig.getAccordionHeight());
-                                BuildingsConfig.setAccordionExpanded(false);
-                            }
-                        }
-                    }
-                }
-            };
-            accordion.addEventFilter(MouseEvent.MOUSE_CLICKED, accordionClick);
 
             labelArr = new Label[jsonArray.size()];
 
@@ -101,8 +76,10 @@ public class MainPageContent implements Runnable {
             label.setText("Main Menu");
 
             BuildingsConfig.setLabel(labelArr);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            Label label = (Label) stage.getScene().lookup("#titlebar");
+            label.setText("Main Menu - Oops, something went wrong");
         }
     }
 
@@ -118,10 +95,8 @@ public class MainPageContent implements Runnable {
     private void addLabel(int i, int row, GridPane gp, JSONArray jsonArray, Stage stage) {
         JSONObject obj = (JSONObject) jsonArray.get(i);
         Label label = new Label();
-        label.setPrefWidth(Integer.MAX_VALUE);
-        label.setMaxWidth(Integer.MAX_VALUE);
-        label.setMinWidth(0);
-        label.setStyle("-fx-background-color: #daebeb");
+        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        label.getStyleClass().add("building_labels");
         label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
         label.setId(Long.toString((Long) obj.get("building_number")));
 
@@ -175,10 +150,8 @@ public class MainPageContent implements Runnable {
 
             label.setText(labelArr[i].getText().replaceAll("\\n", " "));
             label.addEventFilter(MouseEvent.MOUSE_CLICKED, event);
-            label.setPrefWidth(acc.getPrefWidth());
-            label.setMaxWidth(acc.getPrefWidth());
-            label.setMinWidth(0);
-            label.setStyle("-fx-background-color: #daebeb");
+            label.setPrefWidth(acc.getPrefWidth() - 20.0);
+            label.getStyleClass().add("building_labels");
             label.setLayoutY(pos);
 
             pane.getChildren().add(label);
@@ -186,15 +159,16 @@ public class MainPageContent implements Runnable {
             pos += 20.0;
         }
         pane.setMinHeight(pos);
+        pane.getStyleClass().add("menu");
         ScrollPane sp = new ScrollPane();
+        sp.getStyleClass().add("list");
         sp.setContent(pane);
-        sp.setPadding(new Insets(18.0, 0.0, 0.0, 0.0));
-        sp.setLayoutY(18.0);
+        sp.setPadding(new Insets(15.0, 0.0, 15.0, 0.0));
         sp.setMinSize(150.0, 250.0);
-        sp.setMaxSize(150.0, 250.0);
+        sp.setMaxSize(300.0, 400.0);
 
         tp.setMinHeight(250.0);
         tp.setContent(sp);
-        BuildingsConfig.setAccordionHeight(tp.getMinHeight());
+        BuildingsConfig.setAccordionHeight(tp.getMinHeight() - 25.0);
     }
 }
