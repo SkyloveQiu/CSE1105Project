@@ -11,9 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-
+import nl.tudelft.oopp.group43.components.BackButton;
 
 
 public class AddBuildingDisplay extends Application {
@@ -26,6 +26,18 @@ public class AddBuildingDisplay extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
+        /*
+        Add the back button to the scene
+         */
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("add");
+
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
         primaryStage.setScene(scene);
 
         makeHours(primaryStage, "monday");

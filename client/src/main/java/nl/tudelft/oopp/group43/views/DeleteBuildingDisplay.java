@@ -37,6 +37,10 @@ public class DeleteBuildingDisplay extends Application {
         ap.getChildren().add(btn.getBackButton());
         BackButton.pushScene("delete");
 
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
         primaryStage.setScene(scene);
 
         addBuildings(primaryStage);

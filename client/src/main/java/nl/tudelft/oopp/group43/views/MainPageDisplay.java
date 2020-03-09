@@ -107,6 +107,10 @@ public class MainPageDisplay extends Application {
 
         addBuildings(primaryStage);
 
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Campus Management - Main Menu");
         primaryStage.show();

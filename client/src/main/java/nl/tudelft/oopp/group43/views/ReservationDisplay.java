@@ -47,6 +47,10 @@ public class ReservationDisplay {
 
         startTimetableThread(primaryStage);
 
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
         primaryStage.setTitle("Campus Management - Reservation Menu");
         primaryStage.setScene(scene);
         primaryStage.show();

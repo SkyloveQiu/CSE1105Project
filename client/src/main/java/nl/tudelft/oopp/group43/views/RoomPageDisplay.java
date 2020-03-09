@@ -57,6 +57,10 @@ public class RoomPageDisplay {
         // A pre push of the buildingID of this roompage for later use
         BackButton.pushScene(buildingID);
 
+        if (stage.getScene() != null) {
+            ap.setPrefSize(stage.getWidth(), stage.getHeight());
+        }
+
         stage.setScene(scene);
         stage.setTitle("Campus Management - Room Page");
         stage.show();

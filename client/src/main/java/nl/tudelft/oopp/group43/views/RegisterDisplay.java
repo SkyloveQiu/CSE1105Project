@@ -40,6 +40,10 @@ public class RegisterDisplay extends Application {
         employeebtn.setToggleGroup(radioButtons);
         otherbtn.setToggleGroup(radioButtons);
 
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
