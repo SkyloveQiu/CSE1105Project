@@ -1,19 +1,23 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.io.IOException;
+import java.net.URL;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.views.AddBuildingDisplay;
+import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
+import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
+import nl.tudelft.oopp.group43.views.ReservationDisplay;
 
-import java.io.IOException;
-import java.net.URL;
 
 public class MainPageController {
 
@@ -24,6 +28,7 @@ public class MainPageController {
 
     @FXML
     private Pane menubar;
+
     /**
      * Handles clicking the button.
      */
@@ -31,73 +36,66 @@ public class MainPageController {
     public void buttonClicked(ActionEvent event) {
         this.clicked = !this.clicked;
 
-//        Scene scene = (Scene) ((Node) event.getSource()).getScene();
-
-        if(clicked) {
+        if (clicked) {
             menubar.relocate(0.0, 0.0);
             menubutton.setText("Close");
-        }
-        else {
+        } else {
             menubar.relocate(-180.0, 0.0);
             menubutton.setText("Menu");
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void toRoomPage(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/roomPageScene.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
+    /**
+     * If you press the confirm button, you will be redirected to the login page if all fields are valid.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Login Scene fails
+     */
     @FXML
     @SuppressWarnings("unchecked")
-    private void toLoginPage(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader();
-        URL xmlUrl = getClass().getResource("/loginScene.fxml");
-        loader.setLocation(xmlUrl);
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+    private void toLoginPage(ActionEvent event) throws IOException {
+        LoginDisplay ld = new LoginDisplay();
+        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
+
+    /**
+     * If you press the delete building button, you will be redirected to the delete building scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Delete Building Scene fails
+     */
+    @FXML
     @SuppressWarnings("unchecked")
-    public void showUsers(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("An user for you");
-        alert.setHeaderText(null);
+    private void toDeleteBuilding(ActionEvent event) throws IOException {
 
-        alert.setContentText(ServerCommunication.getUsers());
-
-        alert.showAndWait();
+        DeleteBuildingDisplay rd = new DeleteBuildingDisplay();
+        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
+    /**
+     * If you press the edit building button, you will be redirected to the edit building scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Edit Building Scene fails
+     */
+    @FXML
     @SuppressWarnings("unchecked")
-    public void showRooms(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("An user for you");
-        alert.setHeaderText(null);
+    private void toEditBuilding(ActionEvent event) throws IOException {
 
-        alert.setContentText(ServerCommunication.getRooms());
-
-        alert.showAndWait();
+        EditBuildingDisplay ed = new EditBuildingDisplay();
+        ed.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
+    /**
+     * If you press the edit building button, you will be redirected to the edit building scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Edit Building Scene fails
+     */
+    @FXML
     @SuppressWarnings("unchecked")
-    public void showBuildings(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("An user for you");
-        alert.setHeaderText(null);
+    private void toAddBuilding(ActionEvent event) throws IOException {
 
-        alert.setContentText(ServerCommunication.getBuilding());
-
-        alert.showAndWait();
+        AddBuildingDisplay ad = new AddBuildingDisplay();
+        ad.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
+
+
 }

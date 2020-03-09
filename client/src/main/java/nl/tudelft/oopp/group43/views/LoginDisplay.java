@@ -1,17 +1,18 @@
 package nl.tudelft.oopp.group43.views;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 
-import static javafx.application.Application.launch;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.components.BackButton;
 
 public class LoginDisplay extends Application {
 
@@ -20,14 +21,62 @@ public class LoginDisplay extends Application {
         FXMLLoader loader = new FXMLLoader();
         URL xmlUrl = getClass().getResource("/LoginScene.fxml");
         loader.setLocation(xmlUrl);
-        VBox root = (VBox) loader.load();
-        // registerButton = (Button) findViewById();
+        Parent root = loader.load();
 
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        /*
+        Add the back button to the scene
+         */
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+        BackButton.pushScene("login");
+
+        ChangeListener<Number> widthResizeListener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                ImageView image = (ImageView) scene.lookup("#image");
+                AnchorPane ap = (AnchorPane) scene.lookup("#anchor");
+
+                double apWidthOffset = image.getFitHeight() * 0.7076566;
+                double apWidth = scene.getWidth() - apWidthOffset;
+
+                ap.setPrefWidth(apWidth);
+                ap.setMinWidth(apWidth);
+                ap.setMaxWidth(apWidth);
+
+                image.setFitWidth((double) newValue);
+            }
+        };
+        ChangeListener<Number> heightResizeListener = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                final ImageView image = (ImageView) scene.lookup("#image");
+                AnchorPane ap = (AnchorPane) scene.lookup("#anchor");
+
+                double apWidthOffset = (double) newValue * 0.7077;
+                double apWidth = scene.getWidth() - apWidthOffset;
+
+                ap.setPrefWidth(apWidth);
+                ap.setMinWidth(apWidth);
+                ap.setMaxWidth(apWidth);
+                image.setFitHeight((double) newValue);
+            }
+        };
+        scene.widthProperty().addListener(widthResizeListener);
+        scene.heightProperty().addListener(heightResizeListener);
+
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Campus Management - Login Page");
         primaryStage.show();
     }
 
-    public static void main(String[] args) {launch(args);}
-
+    public static void main(String[] args) {
+        launch(args);
+    }
 
 }

@@ -1,91 +1,97 @@
 package nl.tudelft.oopp.group43.project.models;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Generated;
-
-
-import javax.persistence.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
-@DynamicUpdate
 @Table(name = "room")
-public class Room {
+public class Room implements java.io.Serializable {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    private Integer id;
 
-    @Column(name = "room_name")
+    private Building building;
+
     private String roomName;
 
-
-    @Column(name = "building_number")
-    private int buildingNumber;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "attributes")
     private String attributes;
 
     public Room() {
     }
 
-    public Room(@JsonProperty("id") int id,
+    /**
+     * init the building.
+     * @param building the building number.
+     * @param roomName the room number.
+     * @param attributes the content of the room.
+     */
+    public Room(@JsonProperty("building") Building building,
                 @JsonProperty("room_name") String roomName,
-                @JsonProperty("building_number") int buildingNumber,
-                @JsonProperty("description") String description,
-                @JsonProperty("attributes") String attributes){
-
-        this.id=id;
-        this.roomName=roomName;
-        this.buildingNumber=buildingNumber;
-        this.description=description;
-        this.attributes=attributes;
-
-
+                @JsonProperty("attributes") String attributes) {
+        this.building = building;
+        this.roomName = roomName;
+        this.attributes = attributes;
     }
 
-    public int getId() {
-        return id;
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    public Integer getId() {
+        return this.id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
+    @JsonManagedReference(value = "room")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "building_number", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    public Building getBuilding() {
+        return this.building;
+    }
+
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+
+    @Column(name = "room_name", nullable = false)
     public String getRoomName() {
-        return roomName;
+        return this.roomName;
     }
 
-    public int getBuildingNumber() {
-        return buildingNumber;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
-    public String getDescription() {
-        return description;
-    }
 
+    @Column(name = "attributes", nullable = false)
     public String getAttributes() {
-        return attributes;
+        return this.attributes;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Room)) return false;
-        Room room = (Room) o;
-        return getId() == room.getId() &&
-                getBuildingNumber() == room.getBuildingNumber() &&
-                getRoomName().equals(room.getRoomName()) &&
-                getDescription().equals(room.getDescription()) &&
-                getAttributes().equals(room.getAttributes());
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
     }
+
 
 }
+
+

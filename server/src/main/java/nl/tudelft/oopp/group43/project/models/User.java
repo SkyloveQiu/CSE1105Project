@@ -1,134 +1,192 @@
 package nl.tudelft.oopp.group43.project.models;
 
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.hash.Hashing;
-import nl.tudelft.oopp.group43.utilities.GenerateRandomSalt;
-import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 
 @Entity
-@DynamicUpdate
 @Table(name = "user")
-public class User {
+public class User implements java.io.Serializable {
 
 
-
-    @Column(name = "hash")
-    private String hash;
-
-    @Column(name = "salt")
-    private String salt;
-
-    @Column(name = "first_name")
+    private String username;
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
-
-
-    @Id
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "role")
+    private String password;
     private String role;
+    private String token;
 
 
-    //empty constructor
+    private Set<Reservation> reservations = new HashSet(0);
+
+    private Set<FoodOrder> foodOrders = new HashSet(0);
+
+    private Set<Role> roles = new HashSet(0);
+
     public User() {
     }
 
-    @JsonCreator
-    public User(@JsonProperty("hash") String hash,
-                @JsonProperty("first_name") String firstName,
-                @JsonProperty("last_name") String lastName,
-                @JsonProperty("email") String email,
-                @JsonProperty("role") String role
-                 ) {
 
+    public User(String email) {
+        this.username = email;
+    }
 
-        this.salt = GenerateRandomSalt.generateSafeToken();
-        this.hash = hash;
+    /**
+     * init the user.
+     * @param email the email.
+     * @param firstName the first name.
+     * @param lastName the last name.
+     * @param password the password.
+     * @param role the role.
+     * @param token the token of the user.
+     * @param reservations the reservation connect to the user.
+     * @param foodOrders the foods he orders.
+     * @param roles the roles.
+     */
+    public User(String email, String firstName, String lastName, String password, String role, String token, Set reservations, Set foodOrders, Set roles) {
+        this.username = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.password = password;
         this.role = role;
-
-
+        this.token = token;
+        this.reservations = reservations;
+        this.foodOrders = foodOrders;
+        this.roles = roles;
     }
 
-    public boolean hashed_pass(String password) {
-        String copy = new String(salt);
-        copy += this.salt;
-        return password.equals(Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString());
+    /**
+     * creat the user when he register.
+     * @param password the password.
+     * @param firstName the first name.
+     * @param lastName the last name.
+     * @param username the email he submit.
+     * @param role the role.
+     */
+    @JsonCreator
+    public User(@JsonProperty("password") String password,
+                @JsonProperty("first_name") String firstName,
+                @JsonProperty("last_name") String lastName,
+                @JsonProperty("username") String username,
+                @JsonProperty("role") String role
+    ) {
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.role = role;
     }
 
-    public String hashed_pass_return_string() {
-        String copy = new String(hash);
-        copy += this.salt;
-        return Hashing.sha256().hashString(hash + salt, StandardCharsets.UTF_8).toString();
+
+    @Id
+    @Column(name = "email", unique = true, nullable = false)
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String email) {
+        this.username = email;
     }
 
 
-
-    public String getEmail() {
-        return this.email;
-    }
-    
-    public String getPassword() {
-        return this.hash;
-    }
-
-    @JsonIgnore
-    public String getHash() {
-        return hash;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
+    @Column(name = "first_name")
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+    @Column(name = "last_name")
     public String getLastName() {
-        return lastName;
-    }
-
-
-    public void setHash(String salt) {
-        this.hash = Hashing.sha256().hashString(this.hash + salt, StandardCharsets.UTF_8).toString();
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public String getRole() {
-        return role;
+    @JsonIgnore
+    @Column(name = "password")
+    public String getPassword() {
+        return this.password;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return  getHash().equals(user.getHash()) &&
-                getSalt().equals(user.getSalt()) &&
-                getFirstName().equals(user.getFirstName()) &&
-                getLastName().equals(user.getLastName()) &&
-                getEmail().equals(user.getEmail()) &&
-                getRole().equals(user.getRole());
+    public void setPassword(String password) {
+        this.password = password;
     }
+
+
+    @JsonIgnore
+    @Column(name = "role")
+    public String getRole() {
+        return this.role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @JsonIgnore
+    @Column(name = "token")
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    public Set<Reservation> getReservations() {
+        return this.reservations;
+    }
+
+    public void setReservations(Set reservations) {
+        this.reservations = reservations;
+    }
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    public Set<FoodOrder> getFoodOrders() {
+        return this.foodOrders;
+    }
+
+    public void setFoodOrders(Set foodOrders) {
+        this.foodOrders = foodOrders;
+    }
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = {
+            @JoinColumn(name = "users_email", nullable = false, updatable = false)}, inverseJoinColumns = {
+            @JoinColumn(name = "roles_id", nullable = false, updatable = false)})
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+
+    public void setRoles(Set roles) {
+        this.roles = roles;
+    }
+
+
 }
+
+
