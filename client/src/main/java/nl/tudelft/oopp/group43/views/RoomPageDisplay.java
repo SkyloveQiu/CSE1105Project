@@ -58,7 +58,7 @@ public class RoomPageDisplay {
         BackButton.pushScene(buildingID);
 
         if (stage.getScene() != null) {
-            ap.setPrefSize(stage.getWidth(), stage.getHeight());
+            ap.setPrefSize(stage.getWidth(), stage.getHeight()-39);
         }
 
         stage.setScene(scene);
