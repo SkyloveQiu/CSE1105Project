@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.views;
 
+import java.io.IOException;
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -15,14 +18,15 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.BuildingsConfig;
 import nl.tudelft.oopp.group43.classes.MainPageContent;
 import nl.tudelft.oopp.group43.components.BackButton;
-
-import java.io.IOException;
-import java.net.URL;
 
 public class MainPageDisplay extends Application {
 
@@ -38,8 +42,7 @@ public class MainPageDisplay extends Application {
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
-        ScrollPane sp = (ScrollPane) scene.lookup("#buildings");
-        GridPane gp = (GridPane) scene.lookup("#buildings_grid");
+        final ScrollPane sp = (ScrollPane) scene.lookup("#buildings");
         /*
         Add the back button to the scene
          */

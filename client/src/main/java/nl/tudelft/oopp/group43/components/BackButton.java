@@ -10,7 +10,14 @@ import javafx.scene.control.Button;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
-import nl.tudelft.oopp.group43.views.*;
+import nl.tudelft.oopp.group43.views.AddBuildingDisplay;
+import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
+import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
+import nl.tudelft.oopp.group43.views.LoginDisplay;
+import nl.tudelft.oopp.group43.views.MainPageDisplay;
+import nl.tudelft.oopp.group43.views.RegisterDisplay;
+import nl.tudelft.oopp.group43.views.ReservationDisplay;
+import nl.tudelft.oopp.group43.views.RoomPageDisplay;
 
 public class BackButton {
 
@@ -99,6 +106,10 @@ public class BackButton {
                     case "add":
                         AddBuildingDisplay abd = new AddBuildingDisplay();
                         abd.start(stage);
+                        break;
+                    case "delete":
+                        DeleteBuildingDisplay dbd = new DeleteBuildingDisplay();
+                        dbd.start(stage);
                         break;
                     default:
                         break;
