@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="root" fx:controller="nl.tudelft.oopp.group43.controllers.MainPageController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.MainPageController">
    <children>
+      <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" prefWidth="967.0" promptText="Search for rooms" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="180.0">
+         <font>
+            <Font name="Arial" size="35.0" />
+         </font>
+      </TextField>
+
+      <Pane prefHeight="65" prefWidth="65" AnchorPane.rightAnchor="105" AnchorPane.topAnchor="180" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 1 0 0;" />
+      <ImageView fx:id="search" fitHeight="65.0" fitWidth="65.0" layoutX="1114.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="181.0" >
+         <image>
+            <Image url="@/icons/search-icon.png" />
+         </image>
+      </ImageView>
+
+      <Pane prefHeight="65" prefWidth="65" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="180" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 0 0 1;" />
+      <ImageView fx:id="filter" fitHeight="55.0" fitWidth="55.0" layoutX="1175.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="186.0" >
+         <image>
+            <Image url="@/icons/filter-icon.png" />
+         </image>
+      </ImageView>
+      <ScrollPane fitToWidth="true" layoutX="88.0" layoutY="362.0" prefHeight="492.0" prefWidth="1192.0" style="-fx-background-color: transparent; -fx-border-width: 0 0 0 0;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="268.0">
+         <content>
+            <GridPane prefHeight="100.0" prefWidth="1112.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+         </content>
+         <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+         </padding>
+      </ScrollPane>
       <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
       <Pane fx:id="slideable_side_bar" layoutX="-228.0" prefHeight="800.0" prefWidth="316.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -69,7 +108,7 @@
                   <Image url="@/icons/calendar-icon.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" AnchorPane.bottomAnchor="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0">
                <image>
                   <Image url="@/icons/user-icon.png" />
                </image>
