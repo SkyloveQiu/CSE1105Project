@@ -74,6 +74,7 @@
                   <Image url="@/icons/user-icon.png" />
                </image>
             </ImageView>
+
          </children>
       </Pane>
    </children>

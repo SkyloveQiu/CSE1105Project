@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheets/roomPage.css" style="-fx-background-color: #fefefe;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RoomPageSceneController">
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesheets/roomPage.css" style="-fx-background-color: #fefefe;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RoomPageSceneController">
     <children>
         <GridPane fx:id="parent" layoutY="30.0" prefHeight="370.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
             <columnConstraints>

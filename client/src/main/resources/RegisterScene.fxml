@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RegisterSceneController">
+<VBox xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RegisterSceneController">
 <AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: deepskyblue;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="28.0" layoutY="63.0" prefHeight="17.0" prefWidth="63.0" text="First Name" textFill="#06540d" AnchorPane.bottomAnchor="320.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="509.0" AnchorPane.topAnchor="63.0" />
