@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -13,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.MainPageController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RoomPageController">
    <children>
       <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" prefWidth="967.0" promptText="Search for rooms" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="180.0">
          <font>
@@ -21,15 +23,15 @@
          </font>
       </TextField>
 
-      <Pane prefHeight="65" prefWidth="65" AnchorPane.rightAnchor="105" AnchorPane.topAnchor="180" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 1 0 0;" />
-      <ImageView fx:id="search" fitHeight="65.0" fitWidth="65.0" layoutX="1114.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="181.0" >
+      <Pane prefHeight="65" prefWidth="65" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 1 0 0;" AnchorPane.rightAnchor="105" AnchorPane.topAnchor="180" />
+      <ImageView fx:id="search" fitHeight="65.0" fitWidth="65.0" layoutX="1114.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="181.0">
          <image>
             <Image url="@/icons/search-icon.png" />
          </image>
       </ImageView>
 
-      <Pane prefHeight="65" prefWidth="65" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="180" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 0 0 1;" />
-      <ImageView fx:id="filter" fitHeight="55.0" fitWidth="55.0" layoutX="1175.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="186.0" >
+      <Pane prefHeight="65" prefWidth="65" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 0 0 1;" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="180" />
+      <ImageView fx:id="filter" fitHeight="55.0" fitWidth="55.0" layoutX="1175.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="186.0">
          <image>
             <Image url="@/icons/filter-icon.png" />
          </image>
@@ -49,6 +51,30 @@
             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
          </padding>
       </ScrollPane>
+
+      <AnchorPane fx:id="timeDateSelect" style="-fx-background-color: rgba(255,255,255,0.6)" visible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="141">
+         <Label alignment="CENTER" text="Please select a time and date:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="100.0">
+            <font>
+               <Font name="Arial" size="50" />
+            </font>
+         </Label>
+
+         <DatePicker fx:id="date" prefWidth="214.0" AnchorPane.leftAnchor="489" AnchorPane.rightAnchor="489" AnchorPane.topAnchor="237.0" />
+         <Label alignment="CENTER" text="From:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="290.0">
+            <font>
+               <Font name="Arial" size="20" />
+            </font>
+         </Label>
+         <ChoiceBox fx:id="fromTime" layoutX="521.0" onMouseClicked="#fromHourSelected" prefWidth="150.0" AnchorPane.topAnchor="317.0" />
+
+         <Label alignment="CENTER" text="Until:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="350.0">
+            <font>
+               <Font name="Arial" size="20" />
+            </font>
+         </Label>
+         <ChoiceBox fx:id="untilTime" layoutX="521.0" onMouseClicked="#untilHourSelected" prefWidth="150.0" AnchorPane.topAnchor="380.0" />
+      </AnchorPane>
+
       <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
       <Pane fx:id="slideable_side_bar" layoutX="-228.0" prefHeight="800.0" prefWidth="316.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">

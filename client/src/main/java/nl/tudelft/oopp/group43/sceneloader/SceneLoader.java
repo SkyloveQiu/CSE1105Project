@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.content.RoomPageContent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,10 @@ public class SceneLoader extends Application {
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 primaryStage.setScene(scene);
+
+                RoomPageContent rpc = new RoomPageContent(scene);
+                rpc.addContent();
+
                 break;
             case "bike":
                 URL bikeURL = getClass().getResource("/bikePage.fxml");
