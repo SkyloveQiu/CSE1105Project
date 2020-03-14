@@ -4,10 +4,22 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,6 +32,7 @@ public class RoomPageContent {
     private static String hoursTil;
 
     private AnchorPane ap;
+    private GridPane list;
     private DatePicker datepicker;
     private ChoiceBox<String> fromTime;
     private ChoiceBox<String> untilTime;
@@ -34,6 +47,7 @@ public class RoomPageContent {
         datepicker = (DatePicker) scene.lookup("#date");
         fromTime = (ChoiceBox<String>) scene.lookup("#fromTime");
         untilTime = (ChoiceBox<String>) scene.lookup("#untilTime");
+        list = (GridPane) scene.lookup("#roomList");
     }
 
     public void addContent() {
@@ -65,6 +79,11 @@ public class RoomPageContent {
 
                 if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
                     ap.setVisible(false);
+                    try {
+                        addRooms();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -75,6 +94,11 @@ public class RoomPageContent {
 
                 if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
                     ap.setVisible(false);
+                    try {
+                        addRooms();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -86,8 +110,110 @@ public class RoomPageContent {
 
             if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
                 ap.setVisible(false);
+                try {
+                    addRooms();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    private void addRooms() throws ParseException {
+        JSONParser json = new JSONParser();
+        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+
+        while(list.getRowConstraints().size() < rooms.size()) {
+            RowConstraints rc = new RowConstraints();
+            rc.setMinHeight(100);
+            rc.setVgrow(Priority.SOMETIMES);
+            list.getRowConstraints().add(rc);
+        }
+        for (int i = 0; i < rooms.size(); i++) {
+            JSONObject obj = (JSONObject) rooms.get(i);
+            addRoom(obj, i);
+        }
+    }
+
+    private void addRoom(JSONObject obj, int i) {
+        Pane root = new  Pane();
+        String id = Long.toString((long) obj.get("id"));
+        root.setId(id);
+        addRoomClickEvent(root, Integer.parseInt(id));
+
+        Label name = new Label((String) obj.get("room_name"));
+        name.setLayoutX(30);
+        name.setLayoutY(30);
+        name.setFont(new Font("Arial", 20));
+
+        Button reserveButton = new Button("Reserve");
+        reserveButton.setStyle("-fx-background-color: mediumseagreen;");
+        reserveButton.setLayoutX(1000);
+        reserveButton.setLayoutY(30);
+        addReservationButtonEvent(reserveButton);
+
+        Label info = new Label("test");
+        info.setPrefHeight(100);
+        info.setLayoutX(20.0);
+        info.setLayoutY(100.0);
+        info.setVisible(false);
+
+        Label expanded = new Label("false");
+        expanded.setVisible(false);
+
+        root.getChildren().add(name);
+        root.getChildren().add(reserveButton);
+        root.getChildren().add(expanded);
+        root.getChildren().add(info);
+        root.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
+        root.setPrefHeight(200);
+        root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        list.add(root, 0, i);
+    }
+
+    private void addRoomClickEvent(Pane root, int id) {
+        root.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(((Label) root.getChildren().get(1)).getText().equals("false")) {
+                    for (RowConstraints rc : list.getRowConstraints()) {
+                        rc.setMinHeight(100);
+                    }
+                    RowConstraints rc = list.getRowConstraints().get(id - 1);
+                    rc.setMinHeight(200);
+                    for (Node n : list.getChildren()) {
+                        Pane node = (Pane) n;
+                        for (int i = 2; i < node.getChildren().size(); i++) {
+                            node.getChildren().get(i).setVisible(false);
+                        }
+                    }
+
+                    for (int i = 2; i < root.getChildren().size(); i++) {
+                        root.getChildren().get(i).setVisible(true);
+                    }
+
+                    ((Label) root.getChildren().get(1)).setText("true");
+
+                } else {
+                    for (RowConstraints rc : list.getRowConstraints()) {
+                        rc.setMinHeight(100);
+                    }
+                    for (Node n : list.getChildren()) {
+                        Pane node = (Pane) n;
+                        for (int i = 2; i < node.getChildren().size(); i++) {
+                            node.getChildren().get(i).setVisible(false);
+                        }
+                    }
+
+                    ((Label) root.getChildren().get(1)).setText("false");
+                }
+            }
+        });
+    }
+
+    private void addReservationButtonEvent(Button btn) {
+        
     }
 
     public static void setDate(LocalDate date) {
