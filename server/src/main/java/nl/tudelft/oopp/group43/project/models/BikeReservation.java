@@ -27,6 +27,8 @@ public class BikeReservation implements java.io.Serializable {
     private Building buildingByBuildingStart;
     private Date datetimeStart;
     private Date datetimeEnd;
+    private User user;
+    private Bike bike;
 
     public BikeReservation() {
     }
@@ -36,9 +38,11 @@ public class BikeReservation implements java.io.Serializable {
      * @param buildingByBuildingStart the building by opening hours
      * @param datetimeStart the time of the opening hours
      */
-    public BikeReservation(Building buildingByBuildingStart, Date datetimeStart) {
+    public BikeReservation(Building buildingByBuildingStart, Date datetimeStart, User user,Bike bike) {
         this.buildingByBuildingStart = buildingByBuildingStart;
         this.datetimeStart = datetimeStart;
+        this.user = user;
+        this.bike = bike;
     }
 
     /**
@@ -89,8 +93,28 @@ public class BikeReservation implements java.io.Serializable {
         this.buildingByBuildingStart = buildingByBuildingStart;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user",nullable = false)
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bike",nullable = false)
+    public Bike getBike() {
+        return this.bike;
+    }
+
+    public void setBike(Bike bike) {
+        this.bike = bike;
+    }
+
     @Temporal(TemporalType.DATE)
-    @Column(name = "datetime_start", nullable = false, length = 10)
+    @Column(name = "date_start", nullable = false, length = 10)
     public Date getDatetimeStart() {
         return this.datetimeStart;
     }
@@ -100,7 +124,7 @@ public class BikeReservation implements java.io.Serializable {
     }
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "datetime_end", length = 10)
+    @Column(name = "date_end", length = 10)
     public Date getDatetimeEnd() {
         return this.datetimeEnd;
     }

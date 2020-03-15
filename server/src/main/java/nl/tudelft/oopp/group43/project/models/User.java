@@ -36,6 +36,8 @@ public class User implements java.io.Serializable {
 
     private Set<Role> roles = new HashSet(0);
 
+    private Set<BikeReservation> bikeReservations = new HashSet(0);
+
     public User() {
     }
 
@@ -56,7 +58,7 @@ public class User implements java.io.Serializable {
      * @param foodOrders the foods he orders.
      * @param roles the roles.
      */
-    public User(String email, String firstName, String lastName, String password, String role, String token, Set reservations, Set foodOrders, Set roles) {
+    public User(String email, String firstName, String lastName, String password, String role, String token, Set reservations, Set foodOrders, Set roles, Set bikeReservations) {
         this.username = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -66,6 +68,7 @@ public class User implements java.io.Serializable {
         this.reservations = reservations;
         this.foodOrders = foodOrders;
         this.roles = roles;
+        this.bikeReservations = bikeReservations;
     }
 
     /**
@@ -185,6 +188,17 @@ public class User implements java.io.Serializable {
     public void setRoles(Set roles) {
         this.roles = roles;
     }
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    public Set<BikeReservation> getBikeReservations(){
+        return this.bikeReservations;
+    }
+
+    public void setBikeReservations(Set bikeReservations) {
+        this.bikeReservations = bikeReservations;
+    }
+
 
 
 }
