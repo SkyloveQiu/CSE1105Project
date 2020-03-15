@@ -57,6 +57,7 @@
                   <Button layoutX="6.0" layoutY="91.0" styleClass="menu_button" onAction="#toAddBuilding" prefHeight="30.0" prefWidth="169.0" text="Add Building" />
                   <Button layoutX="6.0" layoutY="122.0" styleClass="menu_button" onAction="#toDeleteBuilding" prefHeight="30.0" prefWidth="169.0" text="Delete Building" />
                   <Button layoutX="6.0" layoutY="153.0" styleClass="menu_button" onAction="#toEditBuilding" prefHeight="30.0" prefWidth="169.0" text="Edit Building" />
+                  <Button layoutX="6.0" layoutY="174.0" styleClass="menu_button" onAction="#toFilterPage" prefHeight="30.0" prefWidth="169.0" text="Filter Room" />
                </children>
             </VBox>
          </children>
