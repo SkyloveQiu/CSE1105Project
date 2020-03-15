@@ -50,22 +50,27 @@
 
       <Pane fx:id="slideable_side_bar" layoutX="-228.0" prefHeight="800.0" prefWidth="316.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="120.0" layoutY="91.0" prefHeight="63.0" prefWidth="135.0" text="Rooms">
+            <Label layoutX="120.0" layoutY="91.0" prefHeight="63.0" prefWidth="135.0" text="Buildings">
                <font>
                   <Font name="Arial" size="30.0" />
                </font>
             </Label>
-            <Label layoutX="120.0" layoutY="168.0" prefHeight="63.0" prefWidth="135.0" text="Bikes">
+            <Label layoutX="120.0" layoutY="168.0" prefHeight="63.0" prefWidth="135.0" text="Rooms">
                <font>
                   <Font name="Arial" size="30.0" />
                </font>
             </Label>
-            <Label layoutX="120.0" layoutY="245.0" prefHeight="63.0" prefWidth="135.0" text="Food">
+            <Label layoutX="120.0" layoutY="245.0" prefHeight="63.0" prefWidth="135.0" text="Bikes">
                <font>
                   <Font name="Arial" size="30.0" />
                </font>
             </Label>
-            <Label layoutX="120.0" layoutY="322.0" prefHeight="63.0" prefWidth="135.0" text="Calendar">
+            <Label layoutX="120.0" layoutY="322.0" prefHeight="63.0" prefWidth="135.0" text="Food">
+               <font>
+                  <Font name="Arial" size="30.0" />
+               </font>
+            </Label>
+            <Label layoutX="120.0" layoutY="399.0" prefHeight="63.0" prefWidth="135.0" text="Calendar">
                <font>
                   <Font name="Arial" size="30.0" />
                </font>
@@ -80,32 +85,37 @@
 
       <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="backArrowIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/icons/back-arrow-icon.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="roomIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="91.0" onMouseClicked="#navigateToRooms" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/building-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/icons/room.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="bikeIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/icons/bike-icon.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="foodIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/icons/food-icon.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="calendarIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/icons/calendar-icon.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="profileIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0">
+            <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" AnchorPane.bottomAnchor="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/icons/user-icon.png" />
                </image>
