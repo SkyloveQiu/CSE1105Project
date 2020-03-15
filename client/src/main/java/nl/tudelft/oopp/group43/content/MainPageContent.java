@@ -21,6 +21,7 @@ public class MainPageContent {
 
         if (!ServerCommunication.getToken().equals("invalid")) {
             log.setText(ServerCommunication.getUsername());
+            log.setStyle("-fx-text-fill: #e7f2fe;");
         } else {
             log.setText("Sign-In");
             log.setStyle("-fx-background-color: seagreen; -fx-background-radius: 15 15 15 15; -fx-border-width: 1 1 1 1; -fx-border-color: black; -fx-border-radius: 15 15 15 15;");

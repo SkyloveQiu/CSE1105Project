@@ -79,7 +79,7 @@ public class SideBarMenu {
         AnchorPane.setTopAnchor(calendar, 399.0);
         addLabelEvent(calendar, "calendar");
 
-        profile = new Label();
+        profile = new Label("Profile");
         profile.setFont(font);
         profile.setLayoutX(120);
         profile.setPrefSize(135, 63);
