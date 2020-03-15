@@ -3,21 +3,14 @@ package nl.tudelft.oopp.group43.components;
 import java.io.IOException;
 import java.util.Stack;
 
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.classes.ReservationConfig;
-import nl.tudelft.oopp.group43.views.AddBuildingDisplay;
-import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
-import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
-import nl.tudelft.oopp.group43.views.LoginDisplay;
-import nl.tudelft.oopp.group43.views.MainPageDisplay;
-import nl.tudelft.oopp.group43.views.RegisterDisplay;
-import nl.tudelft.oopp.group43.views.ReservationDisplay;
-import nl.tudelft.oopp.group43.views.RoomPageDisplay;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 public class BackButton {
 
@@ -32,30 +25,42 @@ public class BackButton {
     buildingID;roomID
      */
     private static Stack<String> sceneStack = new Stack<String>();
-    private Button backButton;
+    private ImageView backButton;
 
     /**
      * Constructor for the back button, creates an instance of the back button that can be added to scenes.
      */
-    public BackButton() {
-        backButton = new Button();
-        backButton.setLayoutX(51.0);
-        backButton.setPrefHeight(30.0);
-        backButton.setText("Back");
-        backButton.setTextAlignment(TextAlignment.CENTER);
+    public BackButton(ImageView backButton) {
+        this.backButton = backButton;
         backButton.setVisible(!sceneStack.isEmpty());
-
-        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (sceneStack.size() > 1) {
+            backButton.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    try {
+                        backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        };
-        backButton.setOnAction(event);
+            });
+
+            backButton.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    ((Node) event.getSource()).getScene().setCursor(Cursor.HAND);
+                }
+            });
+
+            backButton.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    ((Node) event.getSource()).getScene().setCursor(Cursor.DEFAULT);
+                }
+            });
+        } else {
+            backButton.setImage(null);
+        }
     }
 
     /**
@@ -67,53 +72,11 @@ public class BackButton {
     private static void backPressed(Stage stage) throws IOException {
         if (!sceneStack.isEmpty()) {
             sceneStack.pop();
-
-            // When a new scene gets loaded first thing done is the scene name gets pushed, but when a back button is pressed
-            // the current scene name is still there so that needs to be deleted.
-            // And then there needs to be a new isEmpty check because it can happen that there is no previous scene.
             if (!sceneStack.isEmpty()) {
                 String scene = sceneStack.pop();
-                switch (scene) {
-                    case "main":
-                        MainPageDisplay md = new MainPageDisplay();
-                        md.start(stage);
-                        break;
-                    case "room":
-                        RoomPageDisplay rd = new RoomPageDisplay();
-                        String building = sceneStack.pop();
-                        ReservationConfig.setSelectedBuilding(Long.parseLong(building));
-                        rd.start(stage, building);
-                        break;
-                    case "login":
-                        LoginDisplay ld = new LoginDisplay();
-                        ld.start(stage);
-                        break;
-                    case "register":
-                        RegisterDisplay rgd = new RegisterDisplay();
-                        rgd.start(stage);
-                        break;
-                    case "reservation":
-                        ReservationDisplay rvd = new ReservationDisplay();
-                        String[] selection = sceneStack.pop().split(";");
-                        ReservationConfig.setSelectedBuilding(Long.parseLong(selection[0]));
-                        ReservationConfig.setSelectedRoom(Long.parseLong(selection[1]));
-                        rvd.start(stage);
-                        break;
-                    case "edit":
-                        EditBuildingDisplay ebd = new EditBuildingDisplay();
-                        ebd.start(stage);
-                        break;
-                    case "add":
-                        AddBuildingDisplay abd = new AddBuildingDisplay();
-                        abd.start(stage);
-                        break;
-                    case "delete":
-                        DeleteBuildingDisplay dbd = new DeleteBuildingDisplay();
-                        dbd.start(stage);
-                        break;
-                    default:
-                        break;
-                }
+                SceneLoader.setScene("scene");
+                SceneLoader sl = new SceneLoader();
+                sl.start(stage);
             }
         }
     }
@@ -141,7 +104,7 @@ public class BackButton {
      *
      * @return The back button
      */
-    public Button getBackButton() {
+    public ImageView getBackButton() {
         return backButton;
     }
 
@@ -150,7 +113,7 @@ public class BackButton {
      *
      * @param button the button to set
      */
-    public void setBackButton(Button button) {
+    public void setBackButton(ImageView button) {
         backButton = button;
     }
 

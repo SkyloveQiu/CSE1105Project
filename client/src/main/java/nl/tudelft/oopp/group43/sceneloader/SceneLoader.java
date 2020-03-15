@@ -4,8 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.MainPageContent;
 import nl.tudelft.oopp.group43.content.RegisterPageContent;
@@ -38,6 +40,9 @@ public class SceneLoader extends Application {
                 AnchorPane parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
 
+                BackButton.pushScene(this.scene);
+                BackButton btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
+
                 primaryStage.setScene(scene);
                 break;
             case "room":
@@ -50,6 +55,9 @@ public class SceneLoader extends Application {
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 RoomPageContent rpc = new RoomPageContent(scene);
                 rpc.addContent();
@@ -65,6 +73,9 @@ public class SceneLoader extends Application {
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
 
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
+
                 primaryStage.setScene(scene);
                 break;
             case "food":
@@ -76,6 +87,9 @@ public class SceneLoader extends Application {
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
                 break;
@@ -89,6 +103,9 @@ public class SceneLoader extends Application {
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
 
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
+
                 primaryStage.setScene(scene);
                 break;
             case "login":
@@ -101,6 +118,9 @@ public class SceneLoader extends Application {
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
 
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
+
                 primaryStage.setScene(scene);
                 break;
             case "register":
@@ -112,6 +132,9 @@ public class SceneLoader extends Application {
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 RegisterPageContent.addContent(scene);
 
@@ -127,6 +150,9 @@ public class SceneLoader extends Application {
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
 
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
+
                 primaryStage.setScene(scene);
                 break;
             default:
@@ -140,6 +166,9 @@ public class SceneLoader extends Application {
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
+                BackButton.pushScene(this.scene);
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
                 break;

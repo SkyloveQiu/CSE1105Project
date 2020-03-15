@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 import java.io.IOException;
@@ -78,12 +79,17 @@ public class SideBarMenu {
         AnchorPane.setTopAnchor(calendar, 399.0);
         addLabelEvent(calendar, "calendar");
 
-        profile = new Label("Profile");
+        profile = new Label();
         profile.setFont(font);
         profile.setLayoutX(120);
         profile.setPrefSize(135, 63);
         AnchorPane.setBottomAnchor(profile, 14.0);
-        addLabelEvent(profile, "profile");
+        if (ServerCommunication.getToken().equals("invalid")) {
+            profile.setText("Sign-In");
+            addLabelEvent(profile, "login");
+        } else {
+            addLabelEvent(profile, "profile");
+        }
 
         root.getChildren().addAll(building, rooms, bikes, food, calendar, profile);
 
@@ -145,14 +151,14 @@ public class SideBarMenu {
         label.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                label.setTextFill(Color.POWDERBLUE);
+                label.setStyle("-fx-text-fill: powderblue");
             }
         });
 
         label.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                label.setTextFill(Color.BLACK);
+                label.setStyle("-fx-text-fill: #323232");
             }
         });
     }

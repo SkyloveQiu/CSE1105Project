@@ -25,10 +25,10 @@ public class RegisterDisplay extends Application {
         /*
         Add the back button to the scene
          */
-        BackButton btn = new BackButton();
-        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-        ap.getChildren().add(btn.getBackButton());
-        BackButton.pushScene("register");
+//        BackButton btn = new BackButton();
+//        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+//        ap.getChildren().add(btn.getBackButton());
+//        BackButton.pushScene("register");
 
         ToggleGroup radioButtons = new ToggleGroup();
         RadioButton studentbtn = (RadioButton) scene.lookup("#student");
@@ -38,9 +38,9 @@ public class RegisterDisplay extends Application {
         employeebtn.setToggleGroup(radioButtons);
         otherbtn.setToggleGroup(radioButtons);
 
-        if (primaryStage.getScene() != null) {
-            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
-        }
+//        if (primaryStage.getScene() != null) {
+//            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+//        }
 
         primaryStage.setScene(scene);
         primaryStage.show();

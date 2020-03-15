@@ -44,14 +44,14 @@ public class EditBuildingDisplay extends Application {
         /*
         Add the back button to the scene
          */
-        BackButton btn = new BackButton();
-        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-        ap.getChildren().add(btn.getBackButton());
-        BackButton.pushScene("edit");
-
-        if (primaryStage.getScene() != null) {
-            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
-        }
+//        BackButton btn = new BackButton();
+//        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+//        ap.getChildren().add(btn.getBackButton());
+//        BackButton.pushScene("edit");
+//
+//        if (primaryStage.getScene() != null) {
+//            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+//        }
 
         primaryStage.setTitle("Campus Management -  Edit Buildings");
         primaryStage.show();

@@ -53,15 +53,15 @@ public class RoomPageDisplay {
         /*
         Add the back button to the scene
          */
-        BackButton btn = new BackButton();
-        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-        ap.getChildren().add(btn.getBackButton());
-        // A pre push of the buildingID of this roompage for later use
-        BackButton.pushScene(buildingID);
-
-        if (stage.getScene() != null) {
-            ap.setPrefSize(stage.getWidth(), stage.getHeight() - 39);
-        }
+//        BackButton btn = new BackButton();
+//        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+//        ap.getChildren().add(btn.getBackButton());
+//        // A pre push of the buildingID of this roompage for later use
+//        BackButton.pushScene(buildingID);
+//
+//        if (stage.getScene() != null) {
+//            ap.setPrefSize(stage.getWidth(), stage.getHeight() - 39);
+//        }
 
         stage.setScene(scene);
         stage.setTitle("Campus Management - Room Page");

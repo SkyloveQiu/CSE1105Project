@@ -46,10 +46,10 @@ public class MainPageDisplay extends Application {
         /*
         Add the back button to the scene
          */
-        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-        BackButton btn = new BackButton();
-        ap.getChildren().add(btn.getBackButton());
-        BackButton.pushScene("main");
+//        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+//        BackButton btn = new BackButton();
+//        ap.getChildren().add(btn.getBackButton());
+//        BackButton.pushScene("main");
 
         // resets the gridpane column size
         BuildingsConfig.setColumnCount(2);
@@ -110,9 +110,9 @@ public class MainPageDisplay extends Application {
 
         addBuildings(primaryStage);
 
-        if (primaryStage.getScene() != null) {
-            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
-        }
+//        if (primaryStage.getScene() != null) {
+//            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+//        }
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Campus Management - Main Menu");
