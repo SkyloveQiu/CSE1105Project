@@ -4,8 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import nl.tudelft.oopp.group43.classes.StringChecker;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 
@@ -15,6 +20,8 @@ public class RoomPageController {
     private ChoiceBox<String> fromTime;
     @FXML
     private ChoiceBox<String> untilTime;
+    @FXML
+    private TextField searchBar;
 
     @FXML
     private void fromHourSelected(MouseEvent event) {
@@ -75,6 +82,30 @@ public class RoomPageController {
             untilTime.setItems(list);
 
             RoomPageContent.setHoursTil("");
+        }
+    }
+
+    @FXML
+    private void searchRooms(MouseEvent event) {
+        String searchQuery = searchBar.getText();
+        if (searchQuery != null) {
+            System.out.println("Searching in rooms for: " + searchQuery);
+
+            JSONArray rooms = RoomPageContent.getDatabaseRooms();
+            ArrayList<JSONObject> newRooms = new ArrayList<>();
+            for (int i = 0; i < rooms.size(); i++) {
+                if ( StringChecker.containsIgnoreCase(searchQuery, ((String) ((JSONObject) rooms.get(i)).get("room_name"))) || StringChecker.containsIgnoreCase(searchQuery, ((String) ((JSONObject) ((JSONObject) rooms.get(i)).get("building")).get("building_name")))) {
+                    System.out.println("room: " + (String) ((JSONObject) rooms.get(i)).get("room_name") + " building: " + (String) ((JSONObject) ((JSONObject) rooms.get(i)).get("building")).get("building_name") + " is correct");
+                    newRooms.add((JSONObject) rooms.get(i));
+                }
+            }
+
+            RoomPageContent.setSelectedRooms(newRooms);
+            try {
+                RoomPageContent.addRooms();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 

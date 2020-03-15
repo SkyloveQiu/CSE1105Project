@@ -13,6 +13,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -32,10 +33,13 @@ public class RoomPageContent {
     private static String hoursTil;
 
     private AnchorPane ap;
-    private GridPane list;
+    private static GridPane list;
     private DatePicker datepicker;
     private ChoiceBox<String> fromTime;
     private ChoiceBox<String> untilTime;
+
+    private static JSONArray databaseRooms;
+    private static ArrayList<JSONObject> selectedRooms;
 
     public RoomPageContent(Scene currentScene) {
         scene = currentScene;
@@ -48,6 +52,8 @@ public class RoomPageContent {
         fromTime = (ChoiceBox<String>) scene.lookup("#fromTime");
         untilTime = (ChoiceBox<String>) scene.lookup("#untilTime");
         list = (GridPane) scene.lookup("#roomList");
+
+        selectedRooms = new ArrayList<>();
     }
 
     public void addContent() {
@@ -81,6 +87,12 @@ public class RoomPageContent {
                     ap.setVisible(false);
                     try {
                         addRooms();
+                        JSONParser json = new JSONParser();
+                        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+                        databaseRooms = rooms;
+                        for(int i = 0; i < rooms.size(); i++) {
+                            selectedRooms.add((JSONObject) rooms.get(i));
+                        }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -95,6 +107,12 @@ public class RoomPageContent {
                 if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
                     ap.setVisible(false);
                     try {
+                        JSONParser json = new JSONParser();
+                        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+                        databaseRooms = rooms;
+                        for(int i = 0; i < rooms.size(); i++) {
+                            selectedRooms.add((JSONObject) rooms.get(i));
+                        }
                         addRooms();
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -111,6 +129,12 @@ public class RoomPageContent {
             if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
                 ap.setVisible(false);
                 try {
+                    JSONParser json = new JSONParser();
+                    JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+                    databaseRooms = rooms;
+                    for(int i = 0; i < rooms.size(); i++) {
+                        selectedRooms.add((JSONObject) rooms.get(i));
+                    }
                     addRooms();
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -119,23 +143,30 @@ public class RoomPageContent {
         });
     }
 
-    private void addRooms() throws ParseException {
+    public static void addRooms() throws ParseException {
         JSONParser json = new JSONParser();
-        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
 
-        while(list.getRowConstraints().size() < rooms.size()) {
+        while(list.getRowConstraints().size() > 0) {
+            list.getRowConstraints().remove(0);
+            //System.out.println("remove row " + list.getRowConstraints().remove(0));
+            if(list.getChildren().size() > 0) {
+                list.getChildren().remove(0);
+                //System.out.println("remove child " + list.getChildren().remove(0));
+            }
+        }
+
+        for (int i = 0; i < selectedRooms.size(); i++) {
             RowConstraints rc = new RowConstraints();
             rc.setMinHeight(100);
             rc.setVgrow(Priority.SOMETIMES);
             list.getRowConstraints().add(rc);
-        }
-        for (int i = 0; i < rooms.size(); i++) {
-            JSONObject obj = (JSONObject) rooms.get(i);
+
+            JSONObject obj = selectedRooms.get(i);
             addRoom(obj, i);
         }
     }
 
-    private void addRoom(JSONObject obj, int i) {
+    private static void addRoom(JSONObject obj, int i) {
         Pane root = new  Pane();
         String id = Long.toString((long) obj.get("id"));
         root.setId(id);
@@ -148,9 +179,16 @@ public class RoomPageContent {
 
         Button reserveButton = new Button("Reserve");
         reserveButton.setStyle("-fx-background-color: mediumseagreen;");
-        reserveButton.setLayoutX(1000);
-        reserveButton.setLayoutY(30);
+        reserveButton.setPrefSize(100, 30);
+        reserveButton.setLayoutX(930);
+        reserveButton.setLayoutY(33);
         addReservationButtonEvent(reserveButton);
+
+        Label building = new Label((String) ((JSONObject) obj.get("building")).get("building_name"));
+        building.setLayoutX(35);
+        building.setLayoutY(55);
+        building.setFont(new Font("Arial", 12));
+        building.setTextFill(Color.FORESTGREEN);
 
         Label info = new Label("test");
         info.setPrefHeight(100);
@@ -164,6 +202,7 @@ public class RoomPageContent {
         root.getChildren().add(name);
         root.getChildren().add(reserveButton);
         root.getChildren().add(expanded);
+        root.getChildren().add(building);
         root.getChildren().add(info);
         root.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
         root.setPrefHeight(200);
@@ -172,28 +211,28 @@ public class RoomPageContent {
         list.add(root, 0, i);
     }
 
-    private void addRoomClickEvent(Pane root, int id) {
+    private static void addRoomClickEvent(Pane root, int id) {
         root.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(((Label) root.getChildren().get(1)).getText().equals("false")) {
+                if(((Label) root.getChildren().get(2)).getText().equals("false")) {
                     for (RowConstraints rc : list.getRowConstraints()) {
                         rc.setMinHeight(100);
                     }
-                    RowConstraints rc = list.getRowConstraints().get(id - 1);
+                    RowConstraints rc = list.getRowConstraints().get(id);
                     rc.setMinHeight(200);
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
-                        for (int i = 2; i < node.getChildren().size(); i++) {
+                        for (int i = 4; i < node.getChildren().size(); i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
                     }
 
-                    for (int i = 2; i < root.getChildren().size(); i++) {
+                    for (int i = 4; i < root.getChildren().size(); i++) {
                         root.getChildren().get(i).setVisible(true);
                     }
 
-                    ((Label) root.getChildren().get(1)).setText("true");
+                    ((Label) root.getChildren().get(2)).setText("true");
 
                 } else {
                     for (RowConstraints rc : list.getRowConstraints()) {
@@ -201,7 +240,7 @@ public class RoomPageContent {
                     }
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
-                        for (int i = 2; i < node.getChildren().size(); i++) {
+                        for (int i = 4; i < node.getChildren().size(); i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
                     }
@@ -212,8 +251,16 @@ public class RoomPageContent {
         });
     }
 
-    private void addReservationButtonEvent(Button btn) {
+    private static void addReservationButtonEvent(Button btn) {
         
+    }
+
+    public static void setSelectedRooms(ArrayList<JSONObject> rooms) {
+        selectedRooms = rooms;
+    }
+
+    public static JSONArray getDatabaseRooms() {
+        return databaseRooms;
     }
 
     public static void setDate(LocalDate date) {

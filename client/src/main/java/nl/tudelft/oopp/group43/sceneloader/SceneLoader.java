@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 
 import java.io.IOException;
@@ -32,6 +33,10 @@ public class SceneLoader extends Application {
                 Scene scene = new Scene(root);
                 primaryStage.setScene(scene);
 
+                SideBarMenu menu = new SideBarMenu(scene);
+                AnchorPane parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 RoomPageContent rpc = new RoomPageContent(scene);
                 rpc.addContent();
 
@@ -41,6 +46,11 @@ public class SceneLoader extends Application {
                 loader.setLocation(bikeURL);
                 root = loader.load();
                 scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 primaryStage.setScene(scene);
                 break;
             case "food":
@@ -48,6 +58,11 @@ public class SceneLoader extends Application {
                 loader.setLocation(foodURL);
                 root = loader.load();
                 scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 primaryStage.setScene(scene);
                 break;
             case "calendar":
@@ -55,6 +70,11 @@ public class SceneLoader extends Application {
                 loader.setLocation(calendarURL);
                 root = loader.load();
                 scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 primaryStage.setScene(scene);
                 break;
             case "login":
@@ -62,6 +82,11 @@ public class SceneLoader extends Application {
                 loader.setLocation(loginURL);
                 root = loader.load();
                 scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 primaryStage.setScene(scene);
                 break;
             case "register":
@@ -69,6 +94,11 @@ public class SceneLoader extends Application {
                 loader.setLocation(registerURL);
                 root = loader.load();
                 scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 primaryStage.setScene(scene);
                 break;
             case "profile":
@@ -76,6 +106,11 @@ public class SceneLoader extends Application {
                 loader.setLocation(profileURL);
                 root = loader.load();
                 scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 primaryStage.setScene(scene);
                 break;
             default:
@@ -83,6 +118,11 @@ public class SceneLoader extends Application {
                 loader.setLocation(xmlUrl);
                 root = loader.load();
                 scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
                 primaryStage.setScene(scene);
                 break;
         }
