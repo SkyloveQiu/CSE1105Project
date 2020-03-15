@@ -111,7 +111,7 @@ public class SideBarMenu {
         root.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (expanded && event.getSceneX() > 300) {
+                if (expanded && event.getSceneX() > 88) {
                     expanded = false;
 
                     TranslateTransition trans = new TranslateTransition(Duration.seconds(1), root);
