@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
-import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import nl.tudelft.oopp.group43.views.RegisterDisplay;
 
@@ -62,9 +61,8 @@ public class LoginSceneController {
         if (response.equals("OK")) {
             emailCheck.setText("");
             ServerCommunication.setUsername(email.getText());
-            SceneLoader.setScene("");
-            SceneLoader sl = new SceneLoader();
-            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+            MainPageDisplay md = new MainPageDisplay();
+            md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
         } else {
             emailCheck.setText("Wrong passsword or email");
         }
@@ -121,9 +119,8 @@ public class LoginSceneController {
     @SuppressWarnings("unchecked")
     @FXML
     private void registerClicked(ActionEvent event) throws IOException {
-        SceneLoader.setScene("register");
-        SceneLoader sl = new SceneLoader();
-        sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        RegisterDisplay rd = new RegisterDisplay();
+        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
 }
