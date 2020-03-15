@@ -39,7 +39,7 @@ public class SideBarMenu {
         AnchorPane.setTopAnchor(root, 0.0);
         root.setLayoutX(layoutXContracted);
         root.setPrefSize(316.0, 800.0);
-        root.setStyle("-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);");
+        root.setStyle("-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);");
 
         Font font = new Font("Arial", 30);
 
@@ -102,7 +102,7 @@ public class SideBarMenu {
 
                     trans.play();
 
-                    menu.setStyle("-fx-background-color: deepskyblue;");
+                    menu.setStyle("-fx-background-color: #0d7fa5;");
                     root.setLayoutX(layoutXExpanded);
                 }
             }
@@ -122,7 +122,7 @@ public class SideBarMenu {
                     trans.setOnFinished(e -> root.setLayoutX(layoutXContracted));
                     trans.play();
 
-                    menu.setStyle("-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);");
+                    menu.setStyle("-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);");
                 }
             }
         });

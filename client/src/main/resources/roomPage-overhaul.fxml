@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RoomPageController">
+<AnchorPane fx:id="root" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RoomPageController">
    <children>
       <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" prefWidth="967.0" promptText="Search for rooms" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="180.0">
          <font>
@@ -36,9 +36,9 @@
             <Image url="@/icons/filter-icon.png" />
          </image>
       </ImageView>
-      <ScrollPane fitToWidth="true" layoutX="88.0" layoutY="362.0" prefHeight="492.0" prefWidth="1192.0" style="-fx-background-color: transparent; -fx-border-width: 0 0 0 0;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="268.0">
+      <ScrollPane fitToWidth="true" layoutX="88.0" layoutY="362.0" prefHeight="492.0" prefWidth="1192.0" style="-fx-background-color: #29293d; -fx-border-width: 0 0 0 0;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="268.0">
          <content>
-            <GridPane fx:id="roomList" vgap="40" prefHeight="100.0" prefWidth="1112.0">
+            <GridPane fx:id="roomList" style="-fx-background-color: #29293d;" vgap="40" prefHeight="100.0" prefWidth="1112.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
               </columnConstraints>
@@ -75,9 +75,9 @@
          <ChoiceBox fx:id="untilTime" layoutX="521.0" onMouseClicked="#untilHourSelected" prefWidth="150.0" AnchorPane.topAnchor="380.0" />
       </AnchorPane>
 
-      <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
-      <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: deepskyblue; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>

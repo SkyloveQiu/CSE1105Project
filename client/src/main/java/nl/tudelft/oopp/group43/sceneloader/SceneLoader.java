@@ -91,7 +91,7 @@ public class SceneLoader extends Application {
                 primaryStage.setScene(scene);
                 break;
             case "login":
-                URL loginURL = getClass().getResource("/LoginScene.fxml");
+                URL loginURL = getClass().getResource("/loginPage-overhaul.fxml");
                 loader.setLocation(loginURL);
                 root = loader.load();
                 scene = new Scene(root);
