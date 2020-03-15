@@ -103,7 +103,7 @@ public class SceneLoader extends Application {
                 primaryStage.setScene(scene);
                 break;
             case "register":
-                URL registerURL = getClass().getResource("/RegisterScene.fxml");
+                URL registerURL = getClass().getResource("/RegisterScene-overhaul.fxml");
                 loader.setLocation(registerURL);
                 root = loader.load();
                 scene = new Scene(root);

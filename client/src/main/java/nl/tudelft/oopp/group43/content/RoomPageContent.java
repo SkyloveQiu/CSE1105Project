@@ -220,7 +220,7 @@ public class RoomPageContent {
                     for (RowConstraints rc : list.getRowConstraints()) {
                         rc.setMinHeight(100);
                     }
-                    RowConstraints rc = list.getRowConstraints().get(id);
+                    RowConstraints rc = list.getRowConstraints().get(id-1);
                     rc.setMinHeight(200);
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
@@ -246,7 +246,7 @@ public class RoomPageContent {
                         }
                     }
 
-                    ((Label) root.getChildren().get(1)).setText("false");
+                    ((Label) root.getChildren().get(2)).setText("false");
                 }
             }
         });
