@@ -2,13 +2,20 @@ package nl.tudelft.oopp.group43.project.controllers;
 
 import java.util.Date;
 import java.util.List;
+
 import nl.tudelft.oopp.group43.project.models.Reservation;
+import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.models.User;
+import nl.tudelft.oopp.group43.project.payload.BikeReservationResponse;
+import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
+import nl.tudelft.oopp.group43.project.payload.ReservationResponse;
 import nl.tudelft.oopp.group43.project.repositories.ReservationRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,34 +71,44 @@ public class ReservationController {
      */
     @PostMapping("/reservation")
     @ResponseBody
-    public String createBuildingReservation(@RequestBody Reservation newReservation) throws Exception {
-        if (repository.existsReservationByStartingDateAndAndEndDateAndRoomId(newReservation.getStartingDate(), newReservation.getEndDate(), newReservation.getRoomId())) {
-            return "ALREADY BOOKED";
+    public ResponseEntity createBuildingReservation(@RequestBody Reservation newReservation) throws Exception {
+        if (repository.existsReservationByStartingDateAndAndEndDateAndRoomId(newReservation.getStartingDate(),
+                newReservation.getEndDate(),
+                newReservation.getRoomId())) {
+            ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This room is already booked for this time slot.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         } else {
             if (newReservation.getStartingDate().compareTo(newReservation.getEndDate()) > 0) {
-                return "Starting date is after end date";
+                ErrorResponse errorResponse = new ErrorResponse("Invalid time slot", "Starting date is after end date", HttpStatus.FORBIDDEN.value());
+                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
 
             double diffInMinutes = Math.abs((double) ((newReservation.getStartingDate().getTime() - newReservation.getEndDate().getTime())
                     / (1000 * 60)));
 
             if (diffInMinutes > 60) {
-                return "SLOT IS NOT ONE HOUR";
+
+                ErrorResponse errorResponse = new ErrorResponse("Invalid time slot", "SLOT IS NOT ONE HOUR", HttpStatus.FORBIDDEN.value());
+                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
             if (newReservation.getStartingDate().getMinutes() != 00 || newReservation.getStartingDate().getSeconds() != 00) {
-                return "INVALID TIME SLOT";
+                ErrorResponse errorResponse = new ErrorResponse("Invalid time slot", "SLOT DOES NOT START AT FIXED HOUR", HttpStatus.FORBIDDEN.value());
+                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
 
             if (!roomRepository.existsRoomById(newReservation.getRoomId())) {
-                return "INVALID ROOM NUMBER";
+                ErrorResponse errorResponse = new ErrorResponse("Booking Error", "INVALID ROOM NUMBER", HttpStatus.FORBIDDEN.value());
+                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
 
             if (!userRepository.existsUserByUsername(newReservation.getUser().getUsername())) {
-                return "INVALID USERNAME";
+                ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist.", HttpStatus.FORBIDDEN.value());
+                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
 
             repository.save(newReservation);
-            return "NEW RESERVATION: " + newReservation.getReservationId();
+            ReservationResponse roomReservation = new ReservationResponse("Room RESERVED", HttpStatus.OK.value());
+            return new ResponseEntity<>(roomReservation, HttpStatus.OK);
         }
     }
 

@@ -1,21 +1,17 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
+import nl.tudelft.oopp.group43.project.payload.RoomAttributesUpdater;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -41,6 +37,14 @@ public class RoomController {
     @ResponseBody
     public String createRoom(@RequestBody Room newRoom) {
         roomRepository.save(newRoom);
+
+        Thread update_data = new Thread(new RoomAttributesUpdater());
+
+        if (!RoomAttributesUpdater.isRunning()) {
+            update_data.start();
+        }
+
+
         return "NEW ROOM: " + newRoom.getRoomName();
     }
 
@@ -66,10 +70,80 @@ public class RoomController {
         return roomList;
     }
 
+    /**
+     * @param blinds            if there is a blind
+     * @param desktop           if there is a desktop
+     * @param projector         if there is an projector
+     * @param chalkBoard        if there is a chalkBoard
+     * @param microphone        if there is a microphone
+     * @param smartBoard        if there is a smartBoard
+     * @param whiteBoard        if there is a whiteBoard
+     * @param powerSupply       if there is a powerSupply
+     * @param soundInstallation if there is a soundInstallation
+     * @param wheelChair        if there is a wheelChair
+     * @param minSpace          the min space
+     * @return return the result based on the attributes
+     * @throws ParseException
+     */
+    @GetMapping("/filter")
+    @ResponseBody
+    public List<Room> getRoomByBuildingNumber(@RequestParam(value = "blinds", defaultValue = "false") boolean blinds,
+                                              @RequestParam(value = "desktop", defaultValue = "false") boolean desktop,
+                                              @RequestParam(value = "projector", defaultValue = "false") boolean projector,
+                                              @RequestParam(value = "chalkBoard", defaultValue = "false") boolean chalkBoard,
+                                              @RequestParam(value = "microphone", defaultValue = "false") boolean microphone,
+                                              @RequestParam(value = "smartBoard", defaultValue = "false") boolean smartBoard,
+                                              @RequestParam(value = "whiteBoard", defaultValue = "false") boolean whiteBoard,
+                                              @RequestParam(value = "powerSupply", defaultValue = "false") boolean powerSupply,
+                                              @RequestParam(value = "soundInstallation", defaultValue = "false") boolean soundInstallation,
+                                              @RequestParam(value = "wheelChair", defaultValue = "false") boolean wheelChair,
+                                              @RequestParam(value = "minSpace", defaultValue = "0") int minSpace) throws ParseException {
+
+        List<Room> result = new ArrayList<>();
+
+        List<Integer> validRooms = RoomAttributesUpdater.list_higher_than(minSpace);
+
+        Hashtable<Integer, Room> allRooms = RoomAttributesUpdater.getRooms();
+
+        JSONParser parser = new JSONParser();
+
+
+        for (Integer i : validRooms) {
+            Room room = allRooms.get(i);
+
+
+            JSONObject object = (JSONObject) parser.parse(room.getAttributes());
+
+
+            if (Boolean.parseBoolean(object.get("blinds").toString()) == blinds &&
+                Boolean.parseBoolean(object.get("desktopPc").toString()) == desktop &&
+                Boolean.parseBoolean(object.get("projector").toString()) == projector &&
+                Boolean.parseBoolean(object.get("chalkBoard").toString()) == chalkBoard &&
+                Boolean.parseBoolean(object.get("microphone").toString()) == microphone &&
+                Boolean.parseBoolean(object.get("smartBoard").toString()) == smartBoard &&
+                Boolean.parseBoolean(object.get("whiteBoard").toString()) == (whiteBoard) &&
+                Boolean.parseBoolean(object.get("powerSupply").toString()) == (powerSupply) &&
+                Boolean.parseBoolean(object.get("soundInstallation").toString()) == soundInstallation &&
+                Boolean.parseBoolean(object.get("wheelChairAccessible").toString()) == wheelChair) {
+                result.add(roomRepository.getRoomById(room.getId()));
+            }
+        }
+
+        return result;
+
+
+    }
+
     @DeleteMapping("room/{roomId}")
     @ResponseBody
     public void removeRoom(@PathVariable int roomId) {
         roomRepository.deleteById(roomId);
+
+        Thread update_data = new Thread(new RoomAttributesUpdater());
+        if (!RoomAttributesUpdater.isRunning()) {
+            update_data.start();
+        }
     }
+
 
 }

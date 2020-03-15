@@ -110,6 +110,11 @@ public class Building implements java.io.Serializable {
         this.buildingFoodProducts = buildingFoodProducts;
     }
 
+    public Building(String buildingName) {
+        this.buildingName=buildingName;
+
+    }
+
 
     public int getBuildingNumber() {
         return this.buildingNumber;
