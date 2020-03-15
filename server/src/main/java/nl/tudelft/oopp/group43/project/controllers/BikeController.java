@@ -68,6 +68,12 @@ public class BikeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * create a reservation base on user and token and bike.
+     * @param bikeId the bike he wants to rent.
+     * @param token the token he wants to use.
+     * @return the result.
+     */
     @PostMapping(value = "/bikeReservation/create")
     @ResponseBody
     public ResponseEntity createReservation(@RequestParam("BikeId") int bikeId, @RequestParam("token") String token) {
@@ -80,20 +86,37 @@ public class BikeController {
 
         foundBike.setBikesAvailable(false);
         bikeRepository.save(foundBike);
-        User user = userRepository.findByToken(token);
+        User user = userRepository.findUserByToken(token);
         BikeReservation bikeReservation = new BikeReservation(foundBike.getBuilding(), new Date(), user, foundBike);
-        BikeReservationResponse bikeReservationResponse = new BikeReservationResponse(foundBike, bikeReservation, "rent bike success", HttpStatus.OK.value());
+        BikeReservationResponse bikeReservationResponse = new BikeReservationResponse(bikeReservation, "rent bike success", HttpStatus.OK.value());
         reservationRepository.save(bikeReservation);
         return new ResponseEntity<>(bikeReservationResponse, HttpStatus.OK);
     }
 
+    /**
+     * get all of the user's bike reservation history.
+     * @param token the token to find user.
+     * @return the result of history.
+     */
     @PostMapping(value = "/bikeReservation/user")
     @ResponseBody
     public List<BikeReservation> findUserReservations(@RequestParam("token") String token) {
-        User user = userRepository.findByToken(token);
-        return reservationRepository.findByUser(user);
+        System.out.print(token);
+        User user = userRepository.findUserByToken(token);
+        System.out.println(user.getFirstName());
+        System.out.print("hellos");
+        List<BikeReservation> bikeReservations = reservationRepository.findByUser(user);
+        System.out.println(bikeReservations.get(0).getBike());
+        return bikeReservations;
     }
 
+    /**
+     * return the bike.
+     * @param reservationId the reservation user want to return.
+     * @param token the token of the user has.
+     * @param buildingNumber the number of return building.
+     * @return the result of return.
+     */
     @PostMapping(value = "/bikeReservation/return")
     @ResponseBody
     public ResponseEntity closeReservation(@RequestParam("reservationId") int reservationId, @RequestParam("token") String token, @RequestParam("building") int buildingNumber) {
@@ -118,7 +141,7 @@ public class BikeController {
         bikeReservation.setBuildingByBuildingEnd(building);
         bikeReservation.setDatetimeEnd(new Date());
         reservationRepository.save(bikeReservation);
-        BikeReservationResponse bikeReservationResponse = new BikeReservationResponse(bike, bikeReservation, "return bike success", HttpStatus.OK.value());
+        BikeReservationResponse bikeReservationResponse = new BikeReservationResponse(bikeReservation, "return bike success", HttpStatus.OK.value());
         return new ResponseEntity<>(bikeReservationResponse, HttpStatus.OK);
     }
 }

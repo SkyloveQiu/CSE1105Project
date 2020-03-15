@@ -2,14 +2,11 @@ package nl.tudelft.oopp.group43.project.models;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,10 +32,11 @@ public class BikeReservation implements java.io.Serializable {
 
     /**
      * init a new bikeReservation.
+     *
      * @param buildingByBuildingStart the building by opening hours
-     * @param datetimeStart the time of the opening hours
+     * @param datetimeStart           the time of the opening hours
      */
-    public BikeReservation(Building buildingByBuildingStart, Date datetimeStart, User user,Bike bike) {
+    public BikeReservation(Building buildingByBuildingStart, Date datetimeStart, User user, Bike bike) {
         this.buildingByBuildingStart = buildingByBuildingStart;
         this.datetimeStart = datetimeStart;
         this.user = user;
@@ -47,10 +45,11 @@ public class BikeReservation implements java.io.Serializable {
 
     /**
      * init a new bikeReservation.
-     * @param buildingByBuildingEnd the building by closing hours
+     *
+     * @param buildingByBuildingEnd   the building by closing hours
      * @param buildingByBuildingStart the building by opening hours
-     * @param datetimeStart the date and time when program starts
-     * @param datetimeEnd the date and time when program ends
+     * @param datetimeStart           the date and time when program starts
+     * @param datetimeEnd             the date and time when program ends
      */
     public BikeReservation(Building buildingByBuildingEnd, Building buildingByBuildingStart, Date datetimeStart,
                            Date datetimeEnd) {
@@ -71,9 +70,8 @@ public class BikeReservation implements java.io.Serializable {
         this.bikeReservationId = bikeReservationId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "building_end")
-    @JsonManagedReference(value = "buildingByBuildingEnd")
     public Building getBuildingByBuildingEnd() {
         return this.buildingByBuildingEnd;
     }
@@ -82,9 +80,8 @@ public class BikeReservation implements java.io.Serializable {
         this.buildingByBuildingEnd = buildingByBuildingEnd;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "building_start", nullable = false)
-    @JsonManagedReference(value = "buildingByBuildingStart")
     public Building getBuildingByBuildingStart() {
         return this.buildingByBuildingStart;
     }
@@ -93,8 +90,8 @@ public class BikeReservation implements java.io.Serializable {
         this.buildingByBuildingStart = buildingByBuildingStart;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user",nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user", nullable = false)
     public User getUser() {
         return this.user;
     }
@@ -103,8 +100,8 @@ public class BikeReservation implements java.io.Serializable {
         this.user = user;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bike",nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bike", nullable = false)
     public Bike getBike() {
         return this.bike;
     }
