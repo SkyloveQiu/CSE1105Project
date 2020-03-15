@@ -26,15 +26,27 @@ public class SceneLoader extends Application {
         URL xmlURL;
 
         switch (scene) {
-            case "room":
-                URL roomURL = getClass().getResource("/roomPage-overhaul.fxml");
-                loader.setLocation(roomURL);
+            case "building":
+                URL buildingURL = getClass().getResource("/buildingPage.fxml");
+                loader.setLocation(buildingURL);
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
-                primaryStage.setScene(scene);
 
                 SideBarMenu menu = new SideBarMenu(scene);
                 AnchorPane parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
+                primaryStage.setScene(scene);
+                break;
+            case "room":
+                URL roomURL = getClass().getResource("/roomPage-overhaul.fxml");
+                loader.setLocation(roomURL);
+                root = loader.load();
+                scene = new Scene(root);
+                primaryStage.setScene(scene);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
 
                 RoomPageContent rpc = new RoomPageContent(scene);
