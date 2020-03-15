@@ -48,15 +48,16 @@ public class User implements java.io.Serializable {
 
     /**
      * init the user.
-     * @param email the email.
-     * @param firstName the first name.
-     * @param lastName the last name.
-     * @param password the password.
-     * @param role the role.
-     * @param token the token of the user.
+     *
+     * @param email        the email.
+     * @param firstName    the first name.
+     * @param lastName     the last name.
+     * @param password     the password.
+     * @param role         the role.
+     * @param token        the token of the user.
      * @param reservations the reservation connect to the user.
-     * @param foodOrders the foods he orders.
-     * @param roles the roles.
+     * @param foodOrders   the foods he orders.
+     * @param roles        the roles.
      */
     public User(String email, String firstName, String lastName, String password, String role, String token, Set reservations, Set foodOrders, Set roles, Set bikeReservations) {
         this.username = email;
@@ -73,11 +74,12 @@ public class User implements java.io.Serializable {
 
     /**
      * creat the user when he register.
-     * @param password the password.
+     *
+     * @param password  the password.
      * @param firstName the first name.
-     * @param lastName the last name.
-     * @param username the email he submit.
-     * @param role the role.
+     * @param lastName  the last name.
+     * @param username  the email he submit.
+     * @param role      the role.
      */
     @JsonCreator
     public User(@JsonProperty("password") String password,
@@ -191,14 +193,13 @@ public class User implements java.io.Serializable {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    public Set<BikeReservation> getBikeReservations(){
+    public Set<BikeReservation> getBikeReservations() {
         return this.bikeReservations;
     }
 
     public void setBikeReservations(Set bikeReservations) {
         this.bikeReservations = bikeReservations;
     }
-
 
 
 }

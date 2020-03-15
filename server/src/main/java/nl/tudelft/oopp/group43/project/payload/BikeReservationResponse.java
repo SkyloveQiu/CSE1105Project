@@ -1,16 +1,19 @@
 package nl.tudelft.oopp.group43.project.payload;
 
-import nl.tudelft.oopp.group43.project.models.Bike;
 import nl.tudelft.oopp.group43.project.models.BikeReservation;
 
 public class BikeReservationResponse {
-    Bike bike;
     BikeReservation bikeReservation;
     String message;
     int status;
 
-    public BikeReservationResponse(Bike bike, BikeReservation bikeReservation, String message, int status) {
-        this.bike = bike;
+    /**
+     * init the bike reservation.
+     * @param bikeReservation the bike reservation.
+     * @param message the message.
+     * @param status the status of reservation.
+     */
+    public BikeReservationResponse(BikeReservation bikeReservation, String message, int status) {
         this.bikeReservation = bikeReservation;
         this.message = message;
         this.status = status;
@@ -24,13 +27,6 @@ public class BikeReservationResponse {
         this.message = message;
     }
 
-    public Bike getBike() {
-        return bike;
-    }
-
-    public void setBike(Bike bike) {
-        this.bike = bike;
-    }
 
     public BikeReservation getBikeReservation() {
         return bikeReservation;

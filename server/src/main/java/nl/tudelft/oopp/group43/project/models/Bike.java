@@ -70,7 +70,7 @@ public class Bike implements java.io.Serializable {
     }
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "bike")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bike")
     public Set<BikeReservation> getReservations() {
         return this.reservations;
     }
