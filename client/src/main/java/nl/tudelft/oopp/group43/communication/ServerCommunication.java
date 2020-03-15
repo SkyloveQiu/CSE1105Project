@@ -21,7 +21,7 @@ public class ServerCommunication {
     private static final String cURL = "http://localhost:8000/";
     private static HttpClient client = HttpClient.newBuilder().build();
     private static String token = "invalid";
-    private static String username = "thom@tudelft.nl";
+    private static String username = "";
 
     /**
      * Gets the value of token.
@@ -49,6 +49,14 @@ public class ServerCommunication {
      */
     public static void setUsername(String newUsername) {
         username = newUsername;
+    }
+
+    /**
+     * Returns the username.
+     * @return a String with in it the username
+     */
+    public static String getUsername() {
+        return username;
     }
 
 

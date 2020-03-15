@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
+import nl.tudelft.oopp.group43.content.MainPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 
 import java.io.IOException;
@@ -130,6 +131,8 @@ public class SceneLoader extends Application {
                 loader.setLocation(xmlUrl);
                 root = loader.load();
                 scene = new Scene(root);
+
+                MainPageContent.addContent(scene);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -138,6 +139,20 @@ public class SideBarMenu {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            }
+        });
+
+        label.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                label.setTextFill(Color.POWDERBLUE);
+            }
+        });
+
+        label.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                label.setTextFill(Color.BLACK);
             }
         });
     }
