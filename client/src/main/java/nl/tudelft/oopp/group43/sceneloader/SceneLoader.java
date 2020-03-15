@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.MainPageContent;
+import nl.tudelft.oopp.group43.content.RegisterPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 
 import java.io.IOException;
@@ -103,7 +104,7 @@ public class SceneLoader extends Application {
                 primaryStage.setScene(scene);
                 break;
             case "register":
-                URL registerURL = getClass().getResource("/RegisterScene-overhaul.fxml");
+                URL registerURL = getClass().getResource("/registerPage-overhaul.fxml");
                 loader.setLocation(registerURL);
                 root = loader.load();
                 scene = new Scene(root);
@@ -111,6 +112,8 @@ public class SceneLoader extends Application {
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+
+                RegisterPageContent.addContent(scene);
 
                 primaryStage.setScene(scene);
                 break;

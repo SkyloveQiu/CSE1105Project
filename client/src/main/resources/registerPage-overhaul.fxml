@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -10,56 +11,55 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.LoginPageController">
+<?import javafx.scene.control.CheckBox?>
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RegisterPageController">
    <children>
       <AnchorPane layoutX="428.0" layoutY="89.0" prefHeight="650.0" prefWidth="484.0" style="-fx-background-color: aliceblue; -fx-background-radius: 5 5 5 5;" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="438.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="79.0">
          <children>
             <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-radius: 5 5 5 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <AnchorPane prefHeight="900.0" prefWidth="484.0" style="-fx-background-color: aliceblue; -fx-background-radius: 5 5 5 5;">
+                  <AnchorPane prefHeight="1200.0" prefWidth="484.0" style="-fx-background-color: aliceblue; -fx-background-radius: 5 5 5 5;">
                      <children>
-                        <Label alignment="CENTER" layoutX="202.0" layoutY="71.0" text="Login" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
+                        <Label alignment="CENTER" layoutX="202.0" layoutY="71.0" text="Register" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
                            <font>
                               <Font name="Arial" size="56.0" />
                            </font>
                         </Label>
-                        <Label layoutX="100.0" layoutY="160.0" text="Username" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
-                           <font>
-                              <Font name="Arial" size="18.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="email" layoutX="100.0" layoutY="186.0" prefHeight="25.0" prefWidth="149.0" promptText="Username/E-mail" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="186.0">
-                           <font>
-                              <Font name="Arial" size="20.0" />
-                           </font>
-                        </TextField>
-                        <Label fx:id="emailCheck" layoutX="100.0" layoutY="223.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" text="Label" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="223.0" />
-                        <Label layoutX="100.0" layoutY="264.0" text="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <PasswordField fx:id="password" layoutX="100.0" layoutY="291.0" promptText="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="291.0">
-                           <font>
-                              <Font name="Arial" size="20.0" />
-                           </font>
-                        </PasswordField>
-                        <Label fx:id="passwordCheck" layoutX="100.0" layoutY="328.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" text="Label" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="328.0" />
-                        <Button alignment="CENTER" layoutX="100.0" layoutY="374.0" mnemonicParsing="false" onAction="#loginClicked" style="-fx-background-color: darkslateblue; -fx-background-radius: 50 50 50 50; -fx-border-radius: 50 50 50 50; -fx-text-fill: silver;" text="Button" textAlignment="CENTER" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="374.0">
-                           <font>
-                              <Font name="Arial" size="26.0" />
-                           </font>
-                        </Button>
-                        <Label alignment="CENTER" layoutX="232.0" layoutY="545.0" text="Or Sign-Up using:" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
-                           <font>
-                              <Font name="Arial" size="20.0" />
-                           </font>
-                        </Label>
-                        <Button fx:id="registerButton" alignment="CENTER" layoutX="196.0" layoutY="579.0" mnemonicParsing="false" onAction="#registerClicked" style="-fx-background-color: mediumslateblue;" text="Sign-Up" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="195.0" AnchorPane.rightAnchor="195.0">
-                           <font>
-                              <Font name="Arial" size="20.0" />
-                           </font>
-                        </Button>
+
+                        <Label layoutX="100.0" layoutY="160.0" text="First name:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="160.0"><font><Font name="Arial" size="18.0" /></font></Label>
+                        <TextField fx:id="firstName" layoutX="100.0" layoutY="186.0" prefHeight="25.0" prefWidth="149.0" promptText="First name" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="186.0"><font><Font name="Arial" size="20.0" /></font></TextField>
+                        <Label fx:id="firstNameCheck" layoutX="100.0" layoutY="223.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="223.0" />
+
+                        <Label layoutX="100.0" layoutY="264.0" text="Last name:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="265.0"><font><Font size="18.0" /></font></Label>
+                        <TextField fx:id="lastName" layoutX="164.0" layoutY="324.0" promptText="Last name" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="291.0"><font><Font name="Arial" size="20.0" /></font></TextField>
+                        <Label fx:id="lastNameCheck" layoutX="100.0" layoutY="328.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="328.0"><font><Font name="Arial" size="12.0" /></font></Label>
+
+                        <Label layoutX="110.0" layoutY="274.0" text="Email:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="370.0"><font><Font size="18.0" /></font></Label>
+                        <TextField fx:id="email" layoutX="174.0" layoutY="334.0" promptText="Email" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="396.0"><font><Font name="Arial" size="20.0" /></font></TextField>
+                        <Label fx:id="emailCheck" layoutX="110.0" layoutY="338.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="433.0"><font><Font name="Arial" size="12.0" /></font></Label>
+
+                        <Label layoutX="120.0" layoutY="284.0" text="Email:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="475.0"><font><Font size="18.0" /></font></Label>
+                        <TextField layoutX="184.0" layoutY="344.0" promptText="Email" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="501.0"><font><Font name="Arial" size="20.0" /></font></TextField>
+                        <Label layoutX="120.0" layoutY="348.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="538.0"><font><Font name="Arial" size="12.0" /></font></Label>
+
+                        <Label layoutX="130.0" layoutY="294.0" text="Password:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="580.0"><font><Font size="18.0" /></font></Label>
+                        <PasswordField fx:id="password" promptText="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="606.0"><font><Font name="Arial" size="20.0" /></font></PasswordField>
+                        <Label fx:id="passwordCheck" layoutX="130.0" layoutY="358.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="643.0"><font><Font name="Arial" size="12.0" /></font></Label>
+
+                        <Label layoutX="140.0" layoutY="304.0" text="Confirm password:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="685.0"><font><Font size="18.0" /></font></Label>
+                        <PasswordField fx:id="cpassword" layoutX="10.0" layoutY="10.0" promptText="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="711.0"><font><Font name="Arial" size="20.0" /></font></PasswordField>
+                        <Label fx:id="cpasswordCheck" layoutX="140.0" layoutY="368.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="747.0"><font><Font name="Arial" size="12.0" /></font></Label>
+
+                        <Label layoutX="150.0" layoutY="314.0" text="Select role:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="790.0"><font><Font size="18.0" /></font></Label>
+                        <RadioButton fx:id="student" mnemonicParsing="false" onAction="#roleCheck" text="Student" AnchorPane.leftAnchor="100" AnchorPane.topAnchor="826.0"><font><Font size="18.0" /></font></RadioButton>
+                        <RadioButton fx:id="employee" mnemonicParsing="false" onAction="#roleCheck" text="Employee" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="856.0"><font><Font size="18.0" /></font></RadioButton>
+                        <RadioButton fx:id="other" mnemonicParsing="false" onAction="#roleCheck" text="Other" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="886.0"><font><Font size="18.0" /></font></RadioButton>
+                        <Label fx:id="roleCheck" layoutX="140.0" layoutY="368.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="853.0"><font><Font name="Arial" size="12.0" /></font></Label>
+
+                        <CheckBox fx:id="check" mnemonicParsing="false" onAction="#checkBoxCheck" text="I agree to the terms and conditions" textFill="#06540d" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100" ><font><Font size="18.0" /></font></CheckBox>
+                        <Label fx:id="termsCheck" layoutX="140.0" layoutY="368.0" prefHeight="17.0" prefWidth="392.0" text="" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="180.0"><font><Font name="Arial" size="12.0" /></font></Label>
+
+                        <Button alignment="CENTER" layoutX="100.0" layoutY="779.0" mnemonicParsing="false" onAction="#confirmClicked" style="-fx-background-color: darkslateblue; -fx-background-radius: 50 50 50 50; -fx-border-radius: 50 50 50 50; -fx-text-fill: silver;" text="Confirm registration" textAlignment="CENTER" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0"><font><Font name="Arial" size="26.0" /></font></Button>
                      </children>
                   </AnchorPane>
                </content></ScrollPane>

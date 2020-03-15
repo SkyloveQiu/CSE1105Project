@@ -119,10 +119,14 @@ public class LoginPageController {
      */
     @SuppressWarnings("unchecked")
     @FXML
-    private void registerClicked(ActionEvent event) throws IOException {
+    private void registerClicked(ActionEvent event) {
         SceneLoader.setScene("register");
         SceneLoader sl = new SceneLoader();
-        sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        try {
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

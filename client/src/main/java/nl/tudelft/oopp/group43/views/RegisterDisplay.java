@@ -31,11 +31,9 @@ public class RegisterDisplay extends Application {
         BackButton.pushScene("register");
 
         ToggleGroup radioButtons = new ToggleGroup();
-
         RadioButton studentbtn = (RadioButton) scene.lookup("#student");
         RadioButton employeebtn = (RadioButton) scene.lookup("#employee");
         RadioButton otherbtn = (RadioButton) scene.lookup("#other");
-
         studentbtn.setToggleGroup(radioButtons);
         employeebtn.setToggleGroup(radioButtons);
         otherbtn.setToggleGroup(radioButtons);
