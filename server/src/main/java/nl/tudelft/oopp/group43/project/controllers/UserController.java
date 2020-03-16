@@ -40,9 +40,10 @@ public class UserController {
 
     /**
      * post message to set up a new account.
-     * @param userForm the user form.
+     *
+     * @param userForm      the user form.
      * @param bindingResult the result of the verification system.
-     * @param model the model of the user.
+     * @param model         the model of the user.
      * @return the result of registration.
      */
     @PostMapping("/registration")
@@ -63,14 +64,15 @@ public class UserController {
         }
 
         userService.save(userForm);
-        tokenService.save(userForm);
         User user = securityService.autoLogin(userForm.getUsername(), password);
+        tokenService.save(userForm);
         JwtRespones jwtRespones = new JwtRespones(user.getToken(), user.getUsername(), user.getRole(), user.getFirstName(), user.getLastName(), HttpStatus.OK.value());
         return new ResponseEntity<>(jwtRespones, HttpStatus.OK);
     }
 
     /**
      * login method, use http request to get token.
+     *
      * @param username the username user want to use to login.
      * @param password the password user want to login.
      * @return the result of the login system.

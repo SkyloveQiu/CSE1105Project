@@ -34,6 +34,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User findByToken(String token) {
-        return userRepository.findByToken(token);
+        return userRepository.findUserByToken(token);
     }
 }

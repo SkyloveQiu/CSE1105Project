@@ -9,7 +9,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
-import nl.tudelft.oopp.group43.views.MainPageDisplay;
 
 
 public class DeleteBuildingSceneController {
@@ -43,8 +42,10 @@ public class DeleteBuildingSceneController {
         }
         alert.showAndWait();
 
+        /*
         MainPageDisplay md = new MainPageDisplay();
         md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+         */
 
     }
 

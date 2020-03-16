@@ -19,7 +19,6 @@ import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
 import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
-import nl.tudelft.oopp.group43.views.LoginDisplay;
 
 public class ReservationPageController {
 
@@ -58,9 +57,11 @@ public class ReservationPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private void toLoginPage(ActionEvent event) throws IOException {
+        /*
         LoginDisplay ld = new LoginDisplay();
         ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
         BackButton.pushScene("reservation");
+         */
     }
 
 

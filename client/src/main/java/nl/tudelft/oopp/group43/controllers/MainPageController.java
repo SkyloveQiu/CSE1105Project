@@ -1,101 +1,28 @@
 package nl.tudelft.oopp.group43.controllers;
 
 import java.io.IOException;
-import java.net.URL;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.views.AddBuildingDisplay;
-import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
-import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
-import nl.tudelft.oopp.group43.views.LoginDisplay;
-import nl.tudelft.oopp.group43.views.ReservationDisplay;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 
 public class MainPageController {
 
-    private boolean clicked = false;
-
-    @FXML
-    private Button menubutton;
-
-    @FXML
-    private Pane menubar;
-
     /**
-     * Handles clicking the button.
+     * Navigates to the rooms when a certain label gets clicked.
+     * @param e Event passed by the box when clicked on
      */
-    @SuppressWarnings("unchecked")
-    public void buttonClicked(ActionEvent event) {
-        this.clicked = !this.clicked;
-
-        if (clicked) {
-            menubar.relocate(0.0, 0.0);
-            menubutton.setText("Close");
-        } else {
-            menubar.relocate(-180.0, 0.0);
-            menubutton.setText("Menu");
+    @FXML
+    private void navigateToRooms(MouseEvent e) {
+        SceneLoader.setScene("room");
+        SceneLoader sl = new SceneLoader();
+        try {
+            sl.start((Stage) ((Node) e.getSource()).getScene().getWindow());
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
-
-    /**
-     * If you press the confirm button, you will be redirected to the login page if all fields are valid.
-     * @param event - pressing the button
-     * @throws IOException - if loading the Login Scene fails
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private void toLoginPage(ActionEvent event) throws IOException {
-        LoginDisplay ld = new LoginDisplay();
-        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-    }
-
-
-    /**
-     * If you press the delete building button, you will be redirected to the delete building scene.
-     * @param event - pressing the button
-     * @throws IOException - if loading the Delete Building Scene fails
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private void toDeleteBuilding(ActionEvent event) throws IOException {
-
-        DeleteBuildingDisplay rd = new DeleteBuildingDisplay();
-        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-    }
-
-    /**
-     * If you press the edit building button, you will be redirected to the edit building scene.
-     * @param event - pressing the button
-     * @throws IOException - if loading the Edit Building Scene fails
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private void toEditBuilding(ActionEvent event) throws IOException {
-
-        EditBuildingDisplay ed = new EditBuildingDisplay();
-        ed.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-    }
-
-    /**
-     * If you press the edit building button, you will be redirected to the edit building scene.
-     * @param event - pressing the button
-     * @throws IOException - if loading the Edit Building Scene fails
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private void toAddBuilding(ActionEvent event) throws IOException {
-
-        AddBuildingDisplay ad = new AddBuildingDisplay();
-        ad.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-    }
-
-
 }

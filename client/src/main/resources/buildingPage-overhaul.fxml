@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.TextField?>
+<AnchorPane fx:id="root" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BuildingPageController" stylesheets="stylesheets/buildingPage.css">
+   <children>
+      <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" prefWidth="967.0" promptText="Search for buildings" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="180.0">
+         <font>
+            <Font name="Arial" size="35.0" />
+         </font>
+      </TextField>
+
+      <Pane prefHeight="65" prefWidth="65" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 1 0 0;" AnchorPane.rightAnchor="105" AnchorPane.topAnchor="180" />
+      <ImageView fx:id="search" fitHeight="65.0" fitWidth="65.0" layoutX="1114.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#searchBuildings" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="181.0">
+         <image>
+            <Image url="@/icons/search-icon.png" />
+         </image>
+      </ImageView>
+
+      <Pane prefHeight="65" prefWidth="65" style="-fx-background-color: cornflowerblue; -fx-border-color: darkgray; -fx-border-width: 0 0 0 1;" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="180" />
+      <ImageView fx:id="filter" fitHeight="55.0" fitWidth="55.0" layoutX="1175.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="186.0">
+         <image>
+            <Image url="@/icons/filter-icon.png" />
+         </image>
+      </ImageView>
+
+      <ScrollPane fx:id="buildings" style="-fx-background-color: #29293d;" fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="268" AnchorPane.bottomAnchor="40.0" >
+         <content>
+            <GridPane fx:id="buildings_grid" style="-fx-background-color: #29293d;" minHeight="700" hgap="20.0" vgap="20.0" >
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints vgrow="SOMETIMES" minHeight="360" prefHeight="360" />
+               </rowConstraints>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </GridPane>
+         </content>
+      </ScrollPane>
+
+      <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+      <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="back_arrow" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/back-arrow-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="buildingIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/building-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="roomIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/room.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="bikeIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/bike-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="foodIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/food-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="calendarIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/calendar-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="userIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0">
+               <image>
+                  <Image url="@/icons/user-icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
