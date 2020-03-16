@@ -11,6 +11,13 @@ public class ReservationResponse {
     String message;
     int status;
 
+    /**
+     * Creates a new ReservationResponse.
+     * @param room represents the Room.
+     * @param reservation represents the Reservation.
+     * @param message represents the message.
+     * @param status represents the status.
+     */
     public ReservationResponse(Room room, Reservation reservation, String message, int status) {
         this.room = room;
         this.reservation = reservation;

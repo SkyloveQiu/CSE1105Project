@@ -1,5 +1,9 @@
 package nl.tudelft.oopp.group43.project.payload;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
@@ -11,7 +15,6 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
 
 @Component
 public class RoomAttributesUpdater implements Runnable {
@@ -19,7 +22,7 @@ public class RoomAttributesUpdater implements Runnable {
     private static List<Room> rooms = new ArrayList<>();
     private static boolean run = false;
     private static List<Integer> roomSeats = new ArrayList<>();
-    private static  BucketsList roomList;
+    private static BucketsList roomList;
 
     @Autowired
     private RoomRepository roomRepository;
@@ -34,15 +37,19 @@ public class RoomAttributesUpdater implements Runnable {
         try {
             update();
         } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     *  updates the data from the server regarding the rooms.
+     * @throws ParseException throws an error if the object is invalid
+     */
     public void update() throws ParseException {
         run = true;
 
 
-
-       rooms = roomRepository.findAll();
+        rooms = roomRepository.findAll();
 
         for (Room room : rooms) {
             JSONParser parser = new JSONParser();
@@ -55,38 +62,40 @@ public class RoomAttributesUpdater implements Runnable {
 
         }
 
-        roomList =  new BucketsList();
+        roomList = new BucketsList();
 
         for (Room room : rooms) {
             JSONParser parser = new JSONParser();
             JSONObject object = (JSONObject) parser.parse(room.getAttributes());
             Integer value = Integer.valueOf(object.get("seatCapacity").toString());
 
-            roomList.add(value,room);
-
-
+            roomList.add(value, room);
 
 
         }
 
 
-
-        run=false;
+        run = false;
 
     }
 
+    /**
+     * Returns the valid seats.
+     * @param number the number of seats
+     * @return a list with the "valid seats"
+     */
     public static List<Integer> list_higher_than(int number) {
 
         List<Integer> list = new ArrayList<>();
 
-        for (Integer i : roomSeats)
+        for (Integer i : roomSeats) {
             if (i >= number) {
                 list.add(i);
             }
+        }
 
         return list;
     }
-
 
 
     public static List<Room> getRooms() {
@@ -109,7 +118,7 @@ public class RoomAttributesUpdater implements Runnable {
         return roomList;
     }
 
-    public static class BucketsList{
+    public static class BucketsList {
 
         private LinkedList<Room>[] buckets;
 
@@ -117,12 +126,13 @@ public class RoomAttributesUpdater implements Runnable {
          * Constructs a new BucketList for rooms.
          */
         public BucketsList() {
-            this.buckets = new LinkedList[Collections.max(roomSeats)+1];
-            for(int i=0; i<buckets.length;i++)
+            this.buckets = new LinkedList[Collections.max(roomSeats) + 1];
+            for (int i = 0; i < buckets.length; i++) {
                 buckets[i] = new LinkedList<>();
+            }
         }
 
-        public void add(int index,Room room){
+        public void add(int index, Room room) {
             buckets[index].add(room);
         }
 

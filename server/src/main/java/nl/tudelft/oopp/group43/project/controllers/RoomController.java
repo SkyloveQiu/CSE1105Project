@@ -1,9 +1,13 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
+
 import nl.tudelft.oopp.group43.project.payload.RoomAttributesUpdater;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
@@ -11,7 +15,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -33,15 +44,21 @@ public class RoomController {
     // {"building":{"building_number":32,"building_name":"EWI","address":"MEK","opening_hours":"34"},
     // "room_name":"32","attributes":"32","id":3}
     //or {"building":{"building_number":33},"room_name":"32","attributes":"32","id":3}
+
+    /**
+     * Get new rooms.
+     * @param newRoom the new room that comes
+     * @return a response
+     */
     @PostMapping("/room")
     @ResponseBody
     public String createRoom(@RequestBody Room newRoom) {
         roomRepository.save(newRoom);
 
-        Thread update_data = new Thread(new RoomAttributesUpdater());
+        Thread updateData = new Thread(new RoomAttributesUpdater());
 
         if (!RoomAttributesUpdater.isRunning()) {
-            update_data.start();
+            updateData.start();
         }
 
 
@@ -71,6 +88,8 @@ public class RoomController {
     }
 
     /**
+     * Gets a filtered rooms.
+     *
      * @param blinds            if there is a blind
      * @param desktop           if there is a desktop
      * @param projector         if there is an projector
@@ -83,7 +102,7 @@ public class RoomController {
      * @param wheelChair        if there is a wheelChair
      * @param minSpace          the min space
      * @return return the result based on the attributes
-     * @throws ParseException
+     * @throws ParseException throws an error when the object is not valid
      */
     @GetMapping("/filter")
     @ResponseBody
@@ -105,7 +124,7 @@ public class RoomController {
 
             List<Integer> validRooms = RoomAttributesUpdater.list_higher_than(minSpace);
 
-            List<Room>[] RoomList = RoomAttributesUpdater.getRoomList().getBuckets();
+            List<Room>[] roomListData = RoomAttributesUpdater.getRoomList().getBuckets();
 
             JSONParser parser = new JSONParser();
             JSONObject object;
@@ -114,20 +133,20 @@ public class RoomController {
             for (Integer i : validRooms) {
 
 
-                for (Room room : RoomList[i]) {
+                for (Room room : roomListData[i]) {
                     object = (JSONObject) parser.parse(room.getAttributes());
 
 
-                    if (Boolean.parseBoolean(object.get("blinds").toString()) == blinds &&
-                        Boolean.parseBoolean(object.get("desktopPc").toString()) == desktop &&
-                        Boolean.parseBoolean(object.get("projector").toString()) == projector &&
-                        Boolean.parseBoolean(object.get("chalkBoard").toString()) == chalkBoard &&
-                        Boolean.parseBoolean(object.get("microphone").toString()) == microphone &&
-                        Boolean.parseBoolean(object.get("smartBoard").toString()) == smartBoard &&
-                        Boolean.parseBoolean(object.get("whiteBoard").toString()) == (whiteBoard) &&
-                        Boolean.parseBoolean(object.get("powerSupply").toString()) == (powerSupply) &&
-                        Boolean.parseBoolean(object.get("soundInstallation").toString()) == soundInstallation &&
-                        Boolean.parseBoolean(object.get("wheelChairAccessible").toString()) == wheelChair) {
+                    if (Boolean.parseBoolean(object.get("blinds").toString()) == blinds
+                        && Boolean.parseBoolean(object.get("desktopPc").toString()) == desktop
+                        && Boolean.parseBoolean(object.get("projector").toString()) == projector
+                        && Boolean.parseBoolean(object.get("chalkBoard").toString()) == chalkBoard
+                        && Boolean.parseBoolean(object.get("microphone").toString()) == microphone
+                        && Boolean.parseBoolean(object.get("smartBoard").toString()) == smartBoard
+                        && Boolean.parseBoolean(object.get("whiteBoard").toString()) == (whiteBoard)
+                        && Boolean.parseBoolean(object.get("powerSupply").toString()) == (powerSupply)
+                        && Boolean.parseBoolean(object.get("soundInstallation").toString()) == soundInstallation
+                        && Boolean.parseBoolean(object.get("wheelChairAccessible").toString()) == wheelChair) {
                         result.add(roomRepository.getRoomById(room.getId()));
                     }
                 }
@@ -140,14 +159,18 @@ public class RoomController {
 
     }
 
+    /**
+     * Deletes a room based on roomId.
+     * @param roomId the roomId that needs to be deleted.
+     */
     @DeleteMapping("room/{roomId}")
     @ResponseBody
     public void removeRoom(@PathVariable int roomId) {
         roomRepository.deleteById(roomId);
 
-        Thread update_data = new Thread(new RoomAttributesUpdater());
+        Thread updateData = new Thread(new RoomAttributesUpdater());
         if (!RoomAttributesUpdater.isRunning()) {
-            update_data.start();
+            updateData.start();
         }
     }
 
