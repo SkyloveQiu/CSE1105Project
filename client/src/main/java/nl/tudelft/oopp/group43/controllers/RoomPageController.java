@@ -243,6 +243,7 @@ public class RoomPageController {
                 }
                 RoomPageContent.setSelectedRooms(filterSelection);
                 load.setText("");
+                RoomPageController.addRooms();
             } else {
                 load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
             }
