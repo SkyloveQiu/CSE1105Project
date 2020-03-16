@@ -19,7 +19,7 @@ import java.net.URL;
 
 public class SceneLoader extends Application {
 
-    private static String scene = "main";
+    private static String sceneString = "main";
 
     public static void main(String[] args) {
         launch(args);
@@ -30,7 +30,7 @@ public class SceneLoader extends Application {
         FXMLLoader loader = new FXMLLoader();
         URL xmlURL;
 
-        switch (scene) {
+        switch (sceneString) {
             case "building":
                 URL buildingURL = getClass().getResource("/buildingPage-overhaul.fxml");
                 loader.setLocation(buildingURL);
@@ -61,8 +61,7 @@ public class SceneLoader extends Application {
                 BackButton.pushScene("room");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
-                RoomPageContent rpc = new RoomPageContent(scene);
-                rpc.addContent();
+                RoomPageContent.addContent(scene);
 
                 primaryStage.setScene(scene);
                 break;
@@ -185,10 +184,10 @@ public class SceneLoader extends Application {
 
         primaryStage.show();
 
-        System.out.println("moved to: " + this.scene);
+        System.out.println("moved to: " + this.sceneString);
     }
 
     public static void setScene(String newScene) {
-        scene = newScene;
+        sceneString = newScene;
     }
 }

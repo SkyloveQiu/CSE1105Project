@@ -2,15 +2,16 @@ package nl.tudelft.oopp.group43.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import nl.tudelft.oopp.group43.classes.StringChecker;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,8 @@ public class RoomPageController {
     private ChoiceBox<String> untilTime;
     @FXML
     private TextField searchBar;
+    @FXML
+    private AnchorPane dateTimeSelect;
 
     @FXML
     private void fromHourSelected(MouseEvent event) {
@@ -101,11 +104,15 @@ public class RoomPageController {
             }
 
             RoomPageContent.setSelectedRooms(newRooms);
-            try {
-                RoomPageContent.addRooms();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            RoomPageContent.addRooms();
+        }
+    }
+
+    @FXML
+    private void confirmDateTime(ActionEvent event) {
+        if (!RoomPageContent.getHoursFrom().equals("") && !RoomPageContent.getHoursTil().equals("") && RoomPageContent.getDate() != null) {
+            dateTimeSelect.setVisible(false);
+            RoomPageContent.addRooms();
         }
     }
 

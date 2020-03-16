@@ -3,6 +3,7 @@ package nl.tudelft.oopp.group43.content;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -36,18 +37,8 @@ public class BuildingPageContent {
         ScrollPane scp = (ScrollPane) scene.lookup("#buildings");
         sp = scp;
 
-        //Adds the building content in a separate Thread
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                createGrid();
-                add();
-            }
-        });
-        // Prevents JVM shutdown
-        thread.setDaemon(true);
-        thread.start();
+        createGrid();
+        add();
     }
 
     /**
@@ -81,19 +72,9 @@ public class BuildingPageContent {
         gp.setStyle("-fx-background-color: #29293d;");
         gp.setHgap(20.0);
         gp.setVgap(20.0);
+        gp.setPadding(new Insets(40));
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                sp.setContent(gp);
-            }
-        });
-
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sp.setContent(gp);
     }
 
     /**
@@ -134,24 +115,12 @@ public class BuildingPageContent {
 
     public static void addBuildings() {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                while (gp.getChildren().size() > 0) {
-                    gp.getChildren().remove(0);
-                    if (gp.getRowConstraints().size() > 0) {
-                        gp.getRowConstraints().remove(0);
-                    }
-                }
+        while (gp.getChildren().size() > 0) {
+            gp.getChildren().remove(0);
+            if (gp.getRowConstraints().size() > 0) {
+                gp.getRowConstraints().remove(0);
             }
-        });
-
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-
 
         int size = labelArr.length;
         double rowHeight = 360.0;
@@ -166,18 +135,7 @@ public class BuildingPageContent {
             size -= 3;
         }
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                gp.getRowConstraints().addAll(rcs);
-            }
-        });
-
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        gp.getRowConstraints().addAll(rcs);
 
         int row = 0;
         for (int i = 0; i < labelArr.length; i++) {
@@ -185,50 +143,9 @@ public class BuildingPageContent {
                 row++;
             }
 
-            int finalI = i;
-            int finalRow = row;
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    gp.add(labelArr[finalI], finalI % 3, finalRow);
-                }
-            });
+            gp.add(labelArr[i], i % 3, row);
         }
     }
-
-//    /**
-//     * Adds a label to the building GridPane.
-//     *
-//     * @param i         the current index in the label-array
-//     * @param row       the row to which the building will be added
-//     * @param gp        the GridPane to which the labels get added
-//     * @param jsonArray the JSONArray containing all the buildings to add
-//     */
-//    private static void addLabel(int i, int row, GridPane gp, JSONArray jsonArray) {
-//        JSONObject obj = (JSONObject) jsonArray.get(i);
-//        Label label = new Label();
-//        label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-//        label.getStyleClass().add("building_labels");
-//        label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
-//        label.setId(Long.toString((Long) obj.get("building_number")));
-//
-//        Platform.runLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                gp.add(label, i % 3, row);
-//            }
-//        });
-//
-//        try {
-//            Thread.sleep(5);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (!contentIsAlreadyLoaded) {
-//            labelArr[i] = label;
-//        }
-//    }
 
     /**
      * Getter for the Label array.

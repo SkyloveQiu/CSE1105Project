@@ -8,15 +8,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -33,16 +29,16 @@ public class RoomPageContent {
     private static String hoursFrom;
     private static String hoursTil;
 
-    private AnchorPane ap;
+    private static AnchorPane ap;
     private static GridPane list;
-    private DatePicker datepicker;
-    private ChoiceBox<String> fromTime;
-    private ChoiceBox<String> untilTime;
+    private static DatePicker datepicker;
+    private static ChoiceBox<String> fromTime;
+    private static ChoiceBox<String> untilTime;
 
     private static JSONArray databaseRooms;
     private static ArrayList<JSONObject> selectedRooms;
 
-    public RoomPageContent(Scene currentScene) {
+    public static void addContent(Scene currentScene) {
         scene = currentScene;
         date = null;
         hoursFrom = "";
@@ -55,14 +51,14 @@ public class RoomPageContent {
         list = (GridPane) scene.lookup("#roomList");
 
         selectedRooms = new ArrayList<>();
-    }
 
-    public void addContent() {
         addChoiceboxContent();
         addDatepickerListener();
+
+        //addRooms();
     }
 
-    private void addChoiceboxContent() {
+    private static void addChoiceboxContent() {
         ArrayList<String> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             if (i < 10) {
@@ -78,20 +74,18 @@ public class RoomPageContent {
         addChoiceboxListener();
     }
 
-    private void addChoiceboxListener() {
+    private static void addChoiceboxListener() {
         fromTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 setHoursFrom(fromTime.getItems().get((Integer) number2));
 
                 if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                    ap.setVisible(false);
                     try {
-                        addRooms();
                         JSONParser json = new JSONParser();
                         JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
                         databaseRooms = rooms;
-                        for(int i = 0; i < rooms.size(); i++) {
+                        for (int i = 0; i < rooms.size(); i++) {
                             selectedRooms.add((JSONObject) rooms.get(i));
                         }
                     } catch (ParseException e) {
@@ -106,15 +100,13 @@ public class RoomPageContent {
                 setHoursTil(untilTime.getItems().get((Integer) number2));
 
                 if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                    ap.setVisible(false);
                     try {
                         JSONParser json = new JSONParser();
                         JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
                         databaseRooms = rooms;
-                        for(int i = 0; i < rooms.size(); i++) {
+                        for (int i = 0; i < rooms.size(); i++) {
                             selectedRooms.add((JSONObject) rooms.get(i));
                         }
-                        addRooms();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -123,20 +115,18 @@ public class RoomPageContent {
         });
     }
 
-    private void addDatepickerListener() {
+    private static void addDatepickerListener() {
         datepicker.valueProperty().addListener((ov, oldValue, newValue) -> {
             setDate(newValue);
 
             if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                ap.setVisible(false);
                 try {
                     JSONParser json = new JSONParser();
                     JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
                     databaseRooms = rooms;
-                    for(int i = 0; i < rooms.size(); i++) {
+                    for (int i = 0; i < rooms.size(); i++) {
                         selectedRooms.add((JSONObject) rooms.get(i));
                     }
-                    addRooms();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -144,15 +134,26 @@ public class RoomPageContent {
         });
     }
 
-    public static void addRooms() throws ParseException {
-        JSONParser json = new JSONParser();
+    public static void addRooms() {
+        list = new GridPane();
+        ColumnConstraints cc = new ColumnConstraints();
+        cc.setPercentWidth(100);
+        list.getColumnConstraints().add(cc);
+        RowConstraints rC = new RowConstraints();
+        rC.setMinHeight(100);
+        list.getRowConstraints().add(rC);
+        list.setPadding(new Insets(40));
+        list.setStyle("-fx-background-color: #29293d;");
+        list.setPrefSize(1112, 100);
+        list.setVgap(40);
+        ScrollPane sp = (ScrollPane) scene.lookup("#scrollpane");
+        list = (GridPane) scene.lookup("#roomList");
+        sp.setContent(list);
 
-        while(list.getRowConstraints().size() > 0) {
+        while (list.getRowConstraints().size() > 0) {
             list.getRowConstraints().remove(0);
-            //System.out.println("remove row " + list.getRowConstraints().remove(0));
-            if(list.getChildren().size() > 0) {
+            if (list.getChildren().size() > 0) {
                 list.getChildren().remove(0);
-                //System.out.println("remove child " + list.getChildren().remove(0));
             }
         }
 
@@ -168,7 +169,7 @@ public class RoomPageContent {
     }
 
     private static void addRoom(JSONObject obj, int i) {
-        Pane root = new  Pane();
+        Pane root = new Pane();
         String id = Long.toString((long) obj.get("id"));
         root.setId(id);
         addRoomClickEvent(root, Integer.parseInt(id));
@@ -209,6 +210,7 @@ public class RoomPageContent {
         root.setPrefHeight(200);
         root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
+        System.out.println("add room: " + name.getText());
         list.add(root, 0, i);
     }
 
@@ -216,11 +218,11 @@ public class RoomPageContent {
         root.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(((Label) root.getChildren().get(2)).getText().equals("false")) {
+                if (((Label) root.getChildren().get(2)).getText().equals("false")) {
                     for (RowConstraints rc : list.getRowConstraints()) {
                         rc.setMinHeight(100);
                     }
-                    RowConstraints rc = list.getRowConstraints().get(id-1);
+                    RowConstraints rc = list.getRowConstraints().get(id - 1);
                     rc.setMinHeight(200);
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
@@ -253,7 +255,7 @@ public class RoomPageContent {
     }
 
     private static void addReservationButtonEvent(Button btn) {
-        
+
     }
 
     public static void setSelectedRooms(ArrayList<JSONObject> rooms) {
@@ -274,5 +276,17 @@ public class RoomPageContent {
 
     public static void setHoursTil(String hoursTil) {
         RoomPageContent.hoursTil = hoursTil;
+    }
+
+    public static String getHoursFrom() {
+        return hoursFrom;
+    }
+
+    public static String getHoursTil() {
+        return hoursTil;
+    }
+
+    public static LocalDate getDate() {
+        return date;
     }
 }
