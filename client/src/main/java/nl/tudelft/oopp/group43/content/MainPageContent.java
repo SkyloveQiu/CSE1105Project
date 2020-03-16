@@ -14,6 +14,10 @@ public class MainPageContent {
 
     private static Scene scene;
 
+    /**
+     * Adds the content to the main page, namely setting the welcome text to your username when logged in and showing a log in button if otherwise.
+     * @param currentScene the current Scene.
+     */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
 

@@ -3,6 +3,7 @@ package nl.tudelft.oopp.group43.controllers;
 import static nl.tudelft.oopp.group43.controllers.RegisterPageController.emailValid;
 
 import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -30,6 +31,7 @@ public class LoginPageController {
 
     /**
      * Checks if all fields are complete and valid.
+     *
      * @return true if all fields are complete and valid, false otherwise
      */
     boolean checkEmpty() {
@@ -42,6 +44,7 @@ public class LoginPageController {
     /**
      * If you press the login button, either you can be redirected to the main page if all fields are valid,
      * or you have to change something in your fields.
+     *
      * @param event - login button is pressed
      * @throws IOException    - if loading the Register Page fails
      * @throws ParseException - if something goes wrong with the JSON Parser from the loginToken method.
@@ -70,6 +73,7 @@ public class LoginPageController {
 
     /**
      * Checks if the email field is empty and show special messages to the user.
+     *
      * @return true if the email field is not empty and valid, false otherwise
      */
     @FXML
@@ -94,6 +98,7 @@ public class LoginPageController {
 
     /**
      * Checks if the password field is empty and show special messages to the user.
+     *
      * @return true if the password field is not empty and valid, false otherwise
      */
     @FXML
@@ -112,6 +117,7 @@ public class LoginPageController {
 
     /**
      * If you press the register button, you will be redirected to the Register Page.
+     *
      * @param event - register button is pressed
      * @throws IOException - if loading the Register Page fails
      */

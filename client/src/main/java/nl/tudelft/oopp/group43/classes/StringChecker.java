@@ -2,6 +2,12 @@ package nl.tudelft.oopp.group43.classes;
 
 public class StringChecker {
 
+    /**
+     * Checks if a string contains the provided query, this check ignores upper and lowercase.
+     * @param query the search query
+     * @param target the target string
+     * @return returns true if the query is in the target, false if otherwise.
+     */
     public static boolean containsIgnoreCase(String query, String target) {
         if (query == null || target == null || query.length() > target.length()) {
             return false;

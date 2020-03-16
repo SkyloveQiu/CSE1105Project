@@ -44,9 +44,14 @@ public class SceneLoader extends Application {
                 BackButton.pushScene("building");
                 BackButton btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
-                BuildingPageContent.addContent(scene);
-
                 primaryStage.setScene(scene);
+                AnchorPane ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
+
+                BuildingPageContent.addContent(scene);
                 break;
             case "room":
                 URL roomURL = getClass().getResource("/roomPage-overhaul.fxml");
@@ -61,9 +66,14 @@ public class SceneLoader extends Application {
                 BackButton.pushScene("room");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
-                RoomPageContent.addContent(scene);
-
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
+
+                RoomPageContent.addContent(scene);
                 break;
             case "bike":
                 URL bikeURL = getClass().getResource("/bikePage.fxml");
@@ -79,6 +89,11 @@ public class SceneLoader extends Application {
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
                 break;
             case "food":
                 URL foodURL = getClass().getResource("/foodPage.fxml");
@@ -94,6 +109,11 @@ public class SceneLoader extends Application {
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
                 break;
             case "calendar":
                 URL calendarURL = getClass().getResource("/calendarPage.fxml");
@@ -109,6 +129,11 @@ public class SceneLoader extends Application {
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
                 break;
             case "login":
                 URL loginURL = getClass().getResource("/loginPage-overhaul.fxml");
@@ -124,6 +149,11 @@ public class SceneLoader extends Application {
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
                 break;
             case "register":
                 URL registerURL = getClass().getResource("/registerPage-overhaul.fxml");
@@ -138,9 +168,14 @@ public class SceneLoader extends Application {
                 BackButton.pushScene("register");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
-                RegisterPageContent.addContent(scene);
-
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
+
+                RegisterPageContent.addContent(scene);
                 break;
             case "profile":
                 URL profileURL = getClass().getResource("/profilePage.fxml");
@@ -156,14 +191,17 @@ public class SceneLoader extends Application {
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
                 break;
             default:
                 URL xmlUrl = getClass().getResource("/mainPage-overhaul.fxml");
                 loader.setLocation(xmlUrl);
                 root = loader.load();
                 scene = new Scene(root);
-
-                MainPageContent.addContent(scene);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
@@ -173,16 +211,23 @@ public class SceneLoader extends Application {
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
 
                 primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
+
+                MainPageContent.addContent(scene);
                 break;
         }
 
         Scene scene = primaryStage.getScene();
 
-        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-        primaryStage.setMinHeight(ap.getPrefHeight());
-        primaryStage.setMinWidth(ap.getPrefWidth());
-
-        primaryStage.show();
+//        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+//        primaryStage.setMinHeight(ap.getPrefHeight());
+//        primaryStage.setMinWidth(ap.getPrefWidth());
+//
+//        primaryStage.show();
 
         System.out.println("moved to: " + this.sceneString);
     }

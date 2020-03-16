@@ -38,6 +38,7 @@ public class RoomPageController {
     private TextField searchBar;
     @FXML
     private AnchorPane root;
+    private AnchorPane selectTime;
 
     @FXML
     CheckBox blinds;
@@ -69,6 +70,10 @@ public class RoomPageController {
     @FXML
     private ScrollPane filterPanel;
 
+    /**
+     * Sets the hours in the choicebox to only the hours before until time choicebox.
+     * @param event Event passed by the box when clicked on
+     */
     @FXML
     private void fromHourSelected(MouseEvent event) {
         String untilHour = untilTime.getValue();
@@ -100,6 +105,10 @@ public class RoomPageController {
         }
     }
 
+    /**
+     * Sets the hours in the choicebox to only the hours after the from time choicebox.
+     * @param event Event passed by the box when clicked on
+     */
     @FXML
     private void untilHourSelected(MouseEvent event) {
         String fromHour = fromTime.getValue();
@@ -131,6 +140,10 @@ public class RoomPageController {
         }
     }
 
+    /**
+     * Searches for the rooms with the given query.
+     * @param event Event passed by the searchbutton when clicked on
+     */
     @FXML
     private void searchRooms(MouseEvent event) {
         String searchQuery = searchBar.getText();
@@ -151,6 +164,10 @@ public class RoomPageController {
         }
     }
 
+    /**
+     * Drops down or retracts the filters when clicked on the filter button.
+     * @param event
+     */
     @FXML
     private void dropFilter(MouseEvent event) {
         filterClicked = !filterClicked;
@@ -243,7 +260,7 @@ public class RoomPageController {
                 }
                 RoomPageContent.setSelectedRooms(filterSelection);
                 load.setText("");
-                RoomPageController.addRooms();
+                RoomPageContent.addRooms();
             } else {
                 load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
             }
@@ -280,6 +297,10 @@ public class RoomPageController {
         }
     }
 
+    /**
+     * When the confirm button for the time gets pressed the hours and date get parsed into the correct format.
+     * @param event Event passed by the box when clicked on
+     */
     @FXML
     private void confirmDateTime(ActionEvent event) {
         if (!RoomPageContent.getHoursFrom().equals("") && !RoomPageContent.getHoursTil().equals("") && RoomPageContent.getDate() != null) {
@@ -321,23 +342,23 @@ public class RoomPageController {
              */
 
 
-            ArrayList selectedHours = ReservationConfig.getSelectedHours();
-
-            String response = "";
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
-            formatter.withZone(ZoneId.of("UTC"));
-            for (int i = 0; i < selectedHours.size(); i++) {
-                LocalDateTime startDate = LocalDateTime.parse((String) selectedHours.get(i), formatter);
-                LocalDateTime endDate = startDate.plusHours(1);
-
-                String startTime = startDate.toString() + ":00.000+0000";
-                String endTime = endDate.toString() + ":00.000+0000";
-                System.out.println(startTime);
-                response = ServerCommunication.reserveRoomForHour(startTime, endTime);
-
-                System.out.println(response);
-            }
+            //ArrayList selectedHours = ReservationConfig.getSelectedHours();
+            //
+            //String response = "";
+            //
+            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
+            //formatter.withZone(ZoneId.of("UTC"));
+            //for (int i = 0; i < selectedHours.size(); i++) {
+            //    LocalDateTime startDate = LocalDateTime.parse((String) selectedHours.get(i), formatter);
+            //    LocalDateTime endDate = startDate.plusHours(1);
+            //
+            //    String startTime = startDate.toString() + ":00.000+0000";
+            //    String endTime = endDate.toString() + ":00.000+0000";
+            //    System.out.println(startTime);
+            //    response = ServerCommunication.reserveRoomForHour(startTime, endTime);
+            //
+            //    System.out.println(response);
+            //}
 
 
             /*
@@ -345,7 +366,7 @@ public class RoomPageController {
              */
 
 
-            root.getChildren().remove(8);
+            selectTime = (AnchorPane) root.getChildren().remove(8);
             RoomPageContent.addRooms();
             //dateTimeSelect.setVisible(false);
         }

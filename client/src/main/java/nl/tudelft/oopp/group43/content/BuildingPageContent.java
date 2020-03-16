@@ -113,6 +113,12 @@ public class BuildingPageContent {
         }
     }
 
+    /**
+     * Adds the buildings to the list.
+     * First all children and row constraints get removed
+     * Then the necessary row constraints get added back
+     * And after that the building labels get added to the list/grid
+     */
     public static void addBuildings() {
 
         while (gp.getChildren().size() > 0) {

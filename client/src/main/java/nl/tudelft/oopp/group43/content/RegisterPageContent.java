@@ -6,6 +6,11 @@ import javafx.scene.control.ToggleGroup;
 
 public class RegisterPageContent {
 
+    /**
+     * Adds the RadioButtons to a ToggleGroup so they get deselected when another one is selected.
+     *
+     * @param scene The current scene
+     */
     public static void addContent(Scene scene) {
         ToggleGroup radioButtons = new ToggleGroup();
         RadioButton studentbtn = (RadioButton) scene.lookup("#student");

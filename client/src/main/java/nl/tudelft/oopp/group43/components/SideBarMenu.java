@@ -1,10 +1,14 @@
 package nl.tudelft.oopp.group43.components;
 
 import javafx.animation.TranslateTransition;
+import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.effect.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -31,6 +35,11 @@ public class SideBarMenu {
     private boolean expanded;
     private boolean allowedToContract;
 
+    /**
+     * Constructor of the slidable sidebar
+     *
+     * @param scene scene to which the sidebar will be added.
+     */
     public SideBarMenu(Scene scene) {
         expanded = false;
         allowedToContract = false;
@@ -44,12 +53,18 @@ public class SideBarMenu {
 
         Font font = new Font("Arial", 30);
 
+        ImageView backIcon = (ImageView) scene.lookup("#back_arrow");
+        addImageEvent(backIcon);
+
         building = new Label("Buildings");
         building.setFont(font);
         building.setLayoutX(120);
         building.setPrefSize(135, 63);
         AnchorPane.setTopAnchor(building, 91.0);
         addLabelEvent(building, "building");
+        ImageView buildingIcon = (ImageView) scene.lookup("#buildingIcon");
+        addImageEvent(buildingIcon);
+        addSceneSwitchEvent(buildingIcon, "building");
 
         rooms = new Label("Rooms");
         rooms.setFont(font);
@@ -57,6 +72,9 @@ public class SideBarMenu {
         rooms.setPrefSize(135, 63);
         AnchorPane.setTopAnchor(rooms, 168.0);
         addLabelEvent(rooms, "room");
+        ImageView roomIcon = (ImageView) scene.lookup("#roomIcon");
+        addImageEvent(roomIcon);
+        addSceneSwitchEvent(roomIcon, "room");
 
         bikes = new Label("Bikes");
         bikes.setFont(font);
@@ -64,6 +82,9 @@ public class SideBarMenu {
         bikes.setPrefSize(135, 63);
         AnchorPane.setTopAnchor(bikes, 245.0);
         addLabelEvent(bikes, "bike");
+        ImageView bikeIcon = (ImageView) scene.lookup("#bikeIcon");
+        addImageEvent(bikeIcon);
+        addSceneSwitchEvent(bikeIcon, "bike");
 
         food = new Label("Food");
         food.setFont(font);
@@ -71,6 +92,9 @@ public class SideBarMenu {
         food.setPrefSize(135, 63);
         AnchorPane.setTopAnchor(food, 322.0);
         addLabelEvent(food, "food");
+        ImageView foodIcon = (ImageView) scene.lookup("#foodIcon");
+        addImageEvent(foodIcon);
+        addSceneSwitchEvent(foodIcon, "food");
 
         calendar = new Label("Calendar");
         calendar.setFont(font);
@@ -78,17 +102,24 @@ public class SideBarMenu {
         calendar.setPrefSize(135, 63);
         AnchorPane.setTopAnchor(calendar, 399.0);
         addLabelEvent(calendar, "calendar");
+        ImageView calendarIcon = (ImageView) scene.lookup("#calendarIcon");
+        addImageEvent(calendarIcon);
+        addSceneSwitchEvent(calendarIcon, "calendar");
 
         profile = new Label("Profile");
         profile.setFont(font);
         profile.setLayoutX(120);
         profile.setPrefSize(135, 63);
         AnchorPane.setBottomAnchor(profile, 14.0);
+        ImageView userIcon = (ImageView) scene.lookup("#userIcon");
+        addImageEvent(userIcon);
         if (ServerCommunication.getToken().equals("invalid")) {
             profile.setText("Sign-In");
             addLabelEvent(profile, "login");
+            addSceneSwitchEvent(userIcon, "login");
         } else {
             addLabelEvent(profile, "profile");
+            addSceneSwitchEvent(userIcon, "profile");
         }
 
         root.getChildren().addAll(building, rooms, bikes, food, calendar, profile);
@@ -134,8 +165,29 @@ public class SideBarMenu {
         });
     }
 
-    private void addLabelEvent(Label label, String event) {
-        label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+    /**
+     * Adds a hover effect to the image.
+     *
+     * @param image image to which to add the effect
+     */
+    private void addImageEvent(ImageView image) {
+        ColorAdjust adjust = new ColorAdjust();
+        Blend hover = new Blend(BlendMode.SRC_ATOP, adjust, new ColorInput(0, 0, 63, 63, Color.color(0.196, 0.196, 0.196)));
+        Blend exit = new Blend(BlendMode.SRC_ATOP, adjust, new ColorInput(0, 0, 63, 63, Color.POWDERBLUE));
+
+        image.effectProperty().bind(Bindings.when(image.hoverProperty()).then((Effect) hover).otherwise(exit));
+        image.setCache(true);
+        image.setCacheHint(CacheHint.SPEED);
+    }
+
+    /**
+     * Adds a scene switch to the node when clicked on.
+     *
+     * @param node  node to which to add the event
+     * @param event event type AKA string with the name of the scene
+     */
+    private void addSceneSwitchEvent(Node node, String event) {
+        node.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 SceneLoader.setScene(event);
@@ -147,6 +199,16 @@ public class SideBarMenu {
                 }
             }
         });
+    }
+
+    /**
+     * Adds a hover event to the label + adds a click event.
+     *
+     * @param label label to which to add the events
+     * @param event event type AKA string with the name of the scene
+     */
+    private void addLabelEvent(Label label, String event) {
+        addSceneSwitchEvent(label, event);
 
         label.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override
@@ -163,6 +225,11 @@ public class SideBarMenu {
         });
     }
 
+    /**
+     * Getter for the Sidebar, this will be added to the scene.
+     *
+     * @return AnchorPane with the sidebar content.
+     */
     public AnchorPane getRoot() {
         return root;
     }

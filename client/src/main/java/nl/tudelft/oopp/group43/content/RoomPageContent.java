@@ -38,6 +38,10 @@ public class RoomPageContent {
     private static JSONArray databaseRooms;
     private static ArrayList<JSONObject> selectedRooms;
 
+    /**
+     * Adds the content to the room page.
+     * @param currentScene the current scene.
+     */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
         date = null;
@@ -54,10 +58,11 @@ public class RoomPageContent {
 
         addChoiceboxContent();
         addDatepickerListener();
-
-        //addRooms();
     }
 
+    /**
+     * Adds the content to the hour choiceboxes.
+     */
     private static void addChoiceboxContent() {
         ArrayList<String> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
@@ -74,6 +79,9 @@ public class RoomPageContent {
         addChoiceboxListener();
     }
 
+    /**
+     * Adds listeners to the choiceboxes that set the hours when one is selected + gets the available rooms when all fields are inputted.
+     */
     private static void addChoiceboxListener() {
         fromTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -115,6 +123,9 @@ public class RoomPageContent {
         });
     }
 
+    /**
+     * Adds a listener to the datepicker that sets the date when one is selected + gets the available rooms when all fields are inputted.
+     */
     private static void addDatepickerListener() {
         datepicker.valueProperty().addListener((ov, oldValue, newValue) -> {
             setDate(newValue);
@@ -134,6 +145,9 @@ public class RoomPageContent {
         });
     }
 
+    /**
+     * Adds the rooms to the list.
+     */
     public static void addRooms() {
         list = new GridPane();
         ColumnConstraints cc = new ColumnConstraints();
@@ -168,6 +182,11 @@ public class RoomPageContent {
         }
     }
 
+    /**
+     * Adds a single room instance to the list.
+     * @param obj the JSONObject containing the room.
+     * @param i the index in the list.
+     */
     private static void addRoom(JSONObject obj, int i) {
         Pane root = new Pane();
         String id = Long.toString((long) obj.get("id"));
@@ -214,6 +233,11 @@ public class RoomPageContent {
         list.add(root, 0, i);
     }
 
+    /**
+     * Adds a click event to the room that when clicked on it expands or contracts.
+     * @param root the pane of the room.
+     * @param id the id in the list.
+     */
     private static void addRoomClickEvent(Pane root, int id) {
         root.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
@@ -254,38 +278,74 @@ public class RoomPageContent {
         });
     }
 
+    /**
+     * Adds an event to the reservation button.
+     * @param btn the button to which the event will be added.
+     */
     private static void addReservationButtonEvent(Button btn) {
-
+        System.out.println("reserve!");
     }
 
+    /**
+     * Setter for the selected rooms arraylist.
+     * @param rooms the new arraylist.
+     */
     public static void setSelectedRooms(ArrayList<JSONObject> rooms) {
         selectedRooms = rooms;
     }
 
+    /**
+     * Getter for the rooms in the database.
+     * @return JSONArray with the database rooms.
+     */
     public static JSONArray getDatabaseRooms() {
         return databaseRooms;
     }
 
+    /**
+     * Setter for the localDate.
+     * @param date the new LocalDate.
+     */
     public static void setDate(LocalDate date) {
         RoomPageContent.date = date;
     }
 
+    /**
+     * Setter for the hoursFrom field.
+     * @param hoursFrom String with the new hoursFrom.
+     */
     public static void setHoursFrom(String hoursFrom) {
         RoomPageContent.hoursFrom = hoursFrom;
     }
 
+    /**
+     * Setter for the hoursTil field.
+     * @param hoursTil String with the new hoursTil.
+     */
     public static void setHoursTil(String hoursTil) {
         RoomPageContent.hoursTil = hoursTil;
     }
 
+    /**
+     * Getter for the hoursFrom.
+     * @return the String with the hoursFrom
+     */
     public static String getHoursFrom() {
         return hoursFrom;
     }
 
+    /**
+     * Getter for the hoursTil.
+     * @return the String with the hoursTil
+     */
     public static String getHoursTil() {
         return hoursTil;
     }
 
+    /**
+     * Getter for the localDate.
+     * @return LocalDate
+     */
     public static LocalDate getDate() {
         return date;
     }

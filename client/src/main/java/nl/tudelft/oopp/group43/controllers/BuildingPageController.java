@@ -14,6 +14,11 @@ public class BuildingPageController {
     @FXML
     private TextField searchBar;
 
+    /**
+     * Searches for the building that contains the provided search query.
+     *
+     * @param event Event passed by the box when clicked on
+     */
     @FXML
     private void searchBuildings(MouseEvent event) {
         String searchQuery = searchBar.getText();
@@ -23,7 +28,7 @@ public class BuildingPageController {
             ArrayList<Label> newBuildings = new ArrayList<>();
 
             for (int i = 0; i < buildings.length; i++) {
-                if ( StringChecker.containsIgnoreCase(searchQuery, buildings[i].getText())) {
+                if (StringChecker.containsIgnoreCase(searchQuery, buildings[i].getText())) {
                     newBuildings.add(buildings[i]);
                 }
             }
