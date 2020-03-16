@@ -1,6 +1,6 @@
 package nl.tudelft.oopp.group43.controllers;
 
-import static nl.tudelft.oopp.group43.controllers.RegisterSceneController.emailValid;
+import static nl.tudelft.oopp.group43.controllers.RegisterPageController.emailValid;
 
 import java.io.IOException;
 import javafx.event.ActionEvent;
