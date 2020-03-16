@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.sceneloader;
 
+import java.io.IOException;
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,9 +17,6 @@ import nl.tudelft.oopp.group43.content.MainPageContent;
 import nl.tudelft.oopp.group43.content.RegisterPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 
-import java.io.IOException;
-import java.net.URL;
-
 public class SceneLoader extends Application {
 
     private static String sceneString = "main";
@@ -28,18 +28,17 @@ public class SceneLoader extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        URL xmlURL;
 
         switch (sceneString) {
             case "building":
-                URL buildingURL = getClass().getResource("/buildingPage-overhaul.fxml");
-                loader.setLocation(buildingURL);
+                URL buildingUrl = getClass().getResource("/buildingPage-overhaul.fxml");
+                loader.setLocation(buildingUrl);
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
 
                 SideBarMenu menu = new SideBarMenu(scene);
                 AnchorPane parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("building");
                 BackButton btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -54,14 +53,14 @@ public class SceneLoader extends Application {
                 BuildingPageContent.addContent(scene);
                 break;
             case "room":
-                URL roomURL = getClass().getResource("/roomPage-overhaul.fxml");
-                loader.setLocation(roomURL);
+                URL roomUrl = getClass().getResource("/roomPage-overhaul.fxml");
+                loader.setLocation(roomUrl);
                 root = loader.load();
                 scene = new Scene(root);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("room");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -76,14 +75,14 @@ public class SceneLoader extends Application {
                 RoomPageContent.addContent(scene);
                 break;
             case "bike":
-                URL bikeURL = getClass().getResource("/bikePage.fxml");
-                loader.setLocation(bikeURL);
+                URL bikeUrl = getClass().getResource("/bikePage.fxml");
+                loader.setLocation(bikeUrl);
                 root = loader.load();
                 scene = new Scene(root);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("bike");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -96,14 +95,14 @@ public class SceneLoader extends Application {
                 primaryStage.show();
                 break;
             case "food":
-                URL foodURL = getClass().getResource("/foodPage.fxml");
-                loader.setLocation(foodURL);
+                URL foodUrl = getClass().getResource("/foodPage.fxml");
+                loader.setLocation(foodUrl);
                 root = loader.load();
                 scene = new Scene(root);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("food");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -116,14 +115,14 @@ public class SceneLoader extends Application {
                 primaryStage.show();
                 break;
             case "calendar":
-                URL calendarURL = getClass().getResource("/calendarPage.fxml");
-                loader.setLocation(calendarURL);
+                URL calendarUrl = getClass().getResource("/calendarPage.fxml");
+                loader.setLocation(calendarUrl);
                 root = loader.load();
                 scene = new Scene(root);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("calendar");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -136,14 +135,14 @@ public class SceneLoader extends Application {
                 primaryStage.show();
                 break;
             case "login":
-                URL loginURL = getClass().getResource("/loginPage-overhaul.fxml");
-                loader.setLocation(loginURL);
+                URL loginUrl = getClass().getResource("/loginPage-overhaul.fxml");
+                loader.setLocation(loginUrl);
                 root = loader.load();
                 scene = new Scene(root);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("login");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -156,14 +155,14 @@ public class SceneLoader extends Application {
                 primaryStage.show();
                 break;
             case "register":
-                URL registerURL = getClass().getResource("/registerPage-overhaul.fxml");
-                loader.setLocation(registerURL);
+                URL registerUrl = getClass().getResource("/registerPage-overhaul.fxml");
+                loader.setLocation(registerUrl);
                 root = loader.load();
                 scene = new Scene(root);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("register");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -178,14 +177,14 @@ public class SceneLoader extends Application {
                 RegisterPageContent.addContent(scene);
                 break;
             case "profile":
-                URL profileURL = getClass().getResource("/profilePage.fxml");
-                loader.setLocation(profileURL);
+                URL profileUrl = getClass().getResource("/profilePage.fxml");
+                loader.setLocation(profileUrl);
                 root = loader.load();
                 scene = new Scene(root);
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("profile");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -205,7 +204,7 @@ public class SceneLoader extends Application {
 
                 menu = new SideBarMenu(scene);
                 parent = (AnchorPane) scene.lookup("#root");
-                parent.getChildren().add(parent.getChildren().size()-1, menu.getRoot());
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("main");
                 btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
@@ -221,13 +220,13 @@ public class SceneLoader extends Application {
                 break;
         }
 
-        Scene scene = primaryStage.getScene();
-
-//        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-//        primaryStage.setMinHeight(ap.getPrefHeight());
-//        primaryStage.setMinWidth(ap.getPrefWidth());
-//
-//        primaryStage.show();
+        //Scene scene = primaryStage.getScene();
+        //
+        //AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        //primaryStage.setMinHeight(ap.getPrefHeight());
+        //primaryStage.setMinWidth(ap.getPrefWidth());
+        //
+        //primaryStage.show();
 
         System.out.println("moved to: " + this.sceneString);
     }

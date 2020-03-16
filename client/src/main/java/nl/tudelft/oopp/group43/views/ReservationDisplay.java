@@ -32,13 +32,17 @@ public class ReservationDisplay {
         loader.setLocation(xmlUrl);
         Parent root = loader.load();
 
-        Scene scene = new Scene(root);
+        final Scene scene = new Scene(root);
         /*
         Add the back button to the scene
          */
-//        BackButton btn = new BackButton();
-//        AnchorPane ap = (AnchorPane) scene.lookup("#root");
-//        ap.getChildren().add(btn.getBackButton());
+        /*
+
+        BackButton btn = new BackButton();
+        AnchorPane ap = (AnchorPane) scene.lookup("#root");
+        ap.getChildren().add(btn.getBackButton());
+
+         */
         /*
         pushes the selected room and building to the scene stack for later use in the format:
         buildingID;roomID
@@ -47,9 +51,12 @@ public class ReservationDisplay {
 
         startTimetableThread(primaryStage);
 
-//        if (primaryStage.getScene() != null) {
-//            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
-//        }
+        /*
+        if (primaryStage.getScene() != null) {
+            ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
+        }
+
+         */
 
         primaryStage.setTitle("Campus Management - Reservation Menu");
         primaryStage.setScene(scene);

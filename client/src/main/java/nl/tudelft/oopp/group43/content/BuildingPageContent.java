@@ -1,6 +1,7 @@
 package nl.tudelft.oopp.group43.content;
 
-import javafx.application.Platform;
+import java.util.ArrayList;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -15,8 +16,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.util.ArrayList;
 
 public class BuildingPageContent {
 
@@ -89,17 +88,18 @@ public class BuildingPageContent {
             labelArr = new Label[jsonArray.size()];
 
             for (int i = 0; i < labelArr.length; i++) {
-                JSONObject obj = (JSONObject) jsonArray.get(i);
                 Label label = new Label();
                 label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 label.setMinSize(360, 360);
                 label.getStyleClass().add("building_labels");
-                label.setStyle("-fx-background-color: lightskyblue;" +
-                        "    -fx-background-radius: 15 15 15 15;" +
-                        "    -fx-border-width: 1 1 1 1;" +
-                        "    -fx-border-color: black;" +
-                        "    -fx-border-radius: 15 15 15 15;" +
-                        "    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 4, 0, 3, 5);");
+                label.setStyle("-fx-background-color: lightskyblue;"
+                        + "    -fx-background-radius: 15 15 15 15;"
+                        + "    -fx-border-width: 1 1 1 1;"
+                        + "    -fx-border-color: black;"
+                        + "    -fx-border-radius: 15 15 15 15;"
+                        + "    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 4, 0, 3, 5);");
+
+                JSONObject obj = (JSONObject) jsonArray.get(i);
                 label.setText("Building " + obj.get("building_number") + ":\n" + obj.get("building_name"));
                 label.setId(Long.toString((Long) obj.get("building_number")));
 

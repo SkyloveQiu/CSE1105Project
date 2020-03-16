@@ -1,10 +1,21 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -16,12 +27,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 public class RoomPageController {
 
@@ -81,7 +86,7 @@ public class RoomPageController {
         if (untilHour != null) {
             int i = 0;
             String time = "00:00";
-            while(!untilHour.equals(time)) {
+            while (!untilHour.equals(time)) {
                 i++;
                 if (i < 10) {
                     time = "0" + i + ":00";
@@ -116,12 +121,12 @@ public class RoomPageController {
         if (fromHour != null) {
             int i = 0;
             String time = "00:00";
-            while(!fromHour.equals(time)) {
+            while (!fromHour.equals(time)) {
                 i++;
                 if (i < 10) {
                     time = "0" + i + ":00";
                 } else {
-                   time = i + ":00";
+                    time = i + ":00";
                 }
             }
 
@@ -153,7 +158,7 @@ public class RoomPageController {
             JSONArray rooms = RoomPageContent.getDatabaseRooms();
             ArrayList<JSONObject> newRooms = new ArrayList<>();
             for (int i = 0; i < rooms.size(); i++) {
-                if ( StringChecker.containsIgnoreCase(searchQuery, ((String) ((JSONObject) rooms.get(i)).get("room_name"))) || StringChecker.containsIgnoreCase(searchQuery, ((String) ((JSONObject) ((JSONObject) rooms.get(i)).get("building")).get("building_name")))) {
+                if (StringChecker.containsIgnoreCase(searchQuery, ((String) ((JSONObject) rooms.get(i)).get("room_name"))) || StringChecker.containsIgnoreCase(searchQuery, ((String) ((JSONObject) ((JSONObject) rooms.get(i)).get("building")).get("building_name")))) {
                     System.out.println("room: " + (String) ((JSONObject) rooms.get(i)).get("room_name") + " building: " + (String) ((JSONObject) ((JSONObject) rooms.get(i)).get("building")).get("building_name") + " is correct");
                     newRooms.add((JSONObject) rooms.get(i));
                 }
@@ -166,7 +171,7 @@ public class RoomPageController {
 
     /**
      * Drops down or retracts the filters when clicked on the filter button.
-     * @param event
+     * @param event event passed when clicked on the button.
      */
     @FXML
     private void dropFilter(MouseEvent event) {
@@ -318,13 +323,13 @@ public class RoomPageController {
             }
             String dateString = localDate.getYear() + "-" + month + "-" + day;
 
-            String bHour = dateString + "-" + fromTime.getValue().substring(0, 2);
-            String eHour = dateString + "-" + untilTime.getValue().substring(0, 2);
-            //System.out.println(bHour + " - " + eHour);
+            String beginHour = dateString + "-" + fromTime.getValue().substring(0, 2);
+            String endHour = dateString + "-" + untilTime.getValue().substring(0, 2);
+            //System.out.println(beginHour + " - " + endHour);
             int hoursBetween = Integer.parseInt(untilTime.getValue().substring(0, 2)) - Integer.parseInt(fromTime.getValue().substring(0, 2));
             //System.out.println(hoursBetween);
 
-            for(int i = 0; i <= hoursBetween; i++) {
+            for (int i = 0; i <= hoursBetween; i++) {
                 int offset = i + Integer.parseInt(fromTime.getValue().substring(0, 2));
                 String hourOffset = "";
                 if (offset < 10) {

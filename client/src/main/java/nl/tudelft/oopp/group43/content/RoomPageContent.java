@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -8,9 +11,18 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -18,9 +30,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class RoomPageContent {
 
@@ -149,20 +158,7 @@ public class RoomPageContent {
      * Adds the rooms to the list.
      */
     public static void addRooms() {
-        list = new GridPane();
-        ColumnConstraints cc = new ColumnConstraints();
-        cc.setPercentWidth(100);
-        list.getColumnConstraints().add(cc);
-        RowConstraints rC = new RowConstraints();
-        rC.setMinHeight(100);
-        list.getRowConstraints().add(rC);
-        list.setPadding(new Insets(40));
-        list.setStyle("-fx-background-color: #29293d;");
-        list.setPrefSize(1112, 100);
-        list.setVgap(40);
-        ScrollPane sp = (ScrollPane) scene.lookup("#scrollpane");
         list = (GridPane) scene.lookup("#roomList");
-        sp.setContent(list);
 
         while (list.getRowConstraints().size() > 0) {
             list.getRowConstraints().remove(0);

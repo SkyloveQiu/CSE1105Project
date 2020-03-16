@@ -57,9 +57,11 @@ public class ReservationPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private void toLoginPage(ActionEvent event) throws IOException {
-//        LoginDisplay ld = new LoginDisplay();
-//        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-//        BackButton.pushScene("reservation");
+        /*
+        LoginDisplay ld = new LoginDisplay();
+        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        BackButton.pushScene("reservation");
+         */
     }
 
 

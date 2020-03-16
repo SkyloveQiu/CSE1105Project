@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.io.IOException;
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -7,8 +9,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
-
-import java.io.IOException;
 
 public class MainPageContent {
 

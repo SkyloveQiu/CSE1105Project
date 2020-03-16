@@ -1,12 +1,12 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
-
-import java.io.IOException;
 
 public class MainPageController {
 

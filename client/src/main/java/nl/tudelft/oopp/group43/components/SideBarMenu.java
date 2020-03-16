@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.components;
 
+import java.io.IOException;
+
 import javafx.animation.TranslateTransition;
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
@@ -7,7 +9,11 @@ import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.effect.*;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -17,8 +23,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
-
-import java.io.IOException;
 
 public class SideBarMenu {
 
@@ -36,7 +40,7 @@ public class SideBarMenu {
     private boolean allowedToContract;
 
     /**
-     * Constructor of the slidable sidebar
+     * Constructor of the slidable sidebar.
      *
      * @param scene scene to which the sidebar will be added.
      */

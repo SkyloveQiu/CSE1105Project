@@ -42,8 +42,10 @@ public class DeleteBuildingSceneController {
         }
         alert.showAndWait();
 
-//        MainPageDisplay md = new MainPageDisplay();
-//        md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        /*
+        MainPageDisplay md = new MainPageDisplay();
+        md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+         */
 
     }
 

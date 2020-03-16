@@ -86,8 +86,10 @@ public class AddBuildingSceneController {
             alert.showAndWait();
 
             if (alertOK) {
-//                MainPageDisplay md = new MainPageDisplay();
-//                md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+                /*
+                MainPageDisplay md = new MainPageDisplay();
+                md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+                 */
             }
 
 

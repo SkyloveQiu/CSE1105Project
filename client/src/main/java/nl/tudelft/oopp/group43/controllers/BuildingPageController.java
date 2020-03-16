@@ -1,13 +1,13 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.util.ArrayList;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import nl.tudelft.oopp.group43.classes.StringChecker;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
-
-import java.util.ArrayList;
 
 public class BuildingPageController {
 
