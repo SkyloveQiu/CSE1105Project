@@ -1,0 +1,12 @@
+.buttons {
+    -fx-background-color: lightskyblue;
+    -fx-background-radius: 10 10 10 10;
+    -fx-border-width: 0 0 0 0;
+    -fx-border-color: aliceblue;
+    -fx-border-radius: 10 10 10 10;
+}
+
+.buttons:hover {
+    -fx-background-color: dodgerblue;
+    -fx-border-width: 5 5 5 5;
+}
