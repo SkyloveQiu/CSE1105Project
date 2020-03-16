@@ -24,7 +24,7 @@ public class RoomPageController {
     @FXML
     private TextField searchBar;
     @FXML
-    private AnchorPane dateTimeSelect;
+    private AnchorPane root;
 
     @FXML
     private void fromHourSelected(MouseEvent event) {
@@ -111,8 +111,9 @@ public class RoomPageController {
     @FXML
     private void confirmDateTime(ActionEvent event) {
         if (!RoomPageContent.getHoursFrom().equals("") && !RoomPageContent.getHoursTil().equals("") && RoomPageContent.getDate() != null) {
-            dateTimeSelect.setVisible(false);
+            root.getChildren().remove(6);
             RoomPageContent.addRooms();
+            //dateTimeSelect.setVisible(false);
         }
     }
 

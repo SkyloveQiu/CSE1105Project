@@ -15,20 +15,21 @@ public class StringChecker {
         String queryUpper = query.toUpperCase();
 
         int i = 0;
-        while (i < target.length()) {
+        while (i < target.length() && i + query.length() < target.length()) {
             if (queryLower.charAt(0) == target.charAt(i) || queryUpper.charAt(0) == target.charAt(i)) {
                 i++;
                 int j = 1;
                 while (j < query.length() && i < target.length()) {
                     if (queryLower.charAt(j) == target.charAt(i) || queryUpper.charAt(j) == target.charAt(i)) {
+                        System.out.print("" + queryLower.charAt(j) + target.charAt(i));
                         i++;
                         j++;
                         continue;
                     }
-                    System.out.println(target + " is false");
+                    System.out.println("\n" + target + " is false");
                     return false;
                 }
-                System.out.println(target + " is correct");
+                System.out.println("\n" + target + " is correct");
                 return true;
             }
             i++;
