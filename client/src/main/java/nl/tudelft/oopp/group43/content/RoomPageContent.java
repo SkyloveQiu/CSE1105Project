@@ -162,9 +162,9 @@ public class RoomPageContent {
 
         while (list.getRowConstraints().size() > 0) {
             list.getRowConstraints().remove(0);
-            if (list.getChildren().size() > 0) {
-                list.getChildren().remove(0);
-            }
+        }
+        while (list.getChildren().size() > 0) {
+            list.getChildren().remove(0);
         }
 
         for (int i = 0; i < selectedRooms.size(); i++) {

@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
+
 public class MainPageController {
 
     /**
@@ -24,5 +25,4 @@ public class MainPageController {
             ex.printStackTrace();
         }
     }
-
 }

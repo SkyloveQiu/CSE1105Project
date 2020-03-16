@@ -206,7 +206,7 @@ public class ServerCommunication {
      * Sends the buildID for deleting it.
      *
      * @param buildID - the id of the building
-     * @return a String which can have 3 values:
+     * @return a String which can have 2 values:
      *         - "Communication with server failed" if the communication with the server failed
      *         - "OK" if the building could be deleted from the Buildings Database
      */
@@ -383,7 +383,53 @@ public class ServerCommunication {
         } else {
             return "OK";
         }
-
     }
+
+
+    /**
+     * Retrieves all rooms from the serve with the specified attributes.
+     * @param blinds - String which represents if the room has blinds or not.
+     * @param desktop - String which represents if the room has desktop or not.
+     * @param projector - String which represents if the room has projector or not.
+     * @param chalkBoard - String which represents if the room has chalk board or not.
+     * @param microphone - String which represents if the room has microphone or not.
+     * @param smartBoard - String which represents if the room has smart board or not.
+     * @param whiteBoard - String which represents if the room has white board or not.
+     * @param powerSupply - String which represents if the room has power supply or not.
+     * @param soundInstallation - String which represents if the room has soundInstallation or not.
+     * @param wheelChair - String which represents if the room has the facilities for people with wheel chair or not.
+     * @param space - String which represents the minimum space capacity of the room (nr. of people).
+     * @return a String which can have 2 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - the rooms selected by the filters.
+     */
+    public static String getRoomFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
+        String url = cURL + "filter?";
+        url = url + "blinds=" + blinds;
+        url = url + "&desktop=" + desktop;
+        url = url + "&projector=" + projector;
+        url = url + "&chalkBoard=" + chalkBoard;
+        url = url + "&microphone=" + microphone;
+        url = url + "&smartBoard=" + smartBoard;
+        url = url + "&whiteBoard=" + whiteBoard;
+        url = url + "&powerSupply=" + powerSupply;
+        url = url + "&soundInstallation=" + soundInstallation;
+        url = url + "&wheelChair=" + wheelChair;
+        url = url + "&minSpace=" + space;
+        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Communication with server failed";
+        }
+        if (response.statusCode() != 200) {
+            System.out.println("Status: " + response.statusCode());
+        }
+        System.out.println(response.body());
+        return response.body();
+    }
+
 }
 

@@ -46,31 +46,31 @@ public class RoomPageController {
     private AnchorPane selectTime;
 
     @FXML
-    CheckBox blinds;
+    private CheckBox blinds;
     @FXML
-    CheckBox desktop;
+    private CheckBox desktop;
     @FXML
-    CheckBox projector;
+    private CheckBox projector;
     @FXML
-    CheckBox chalkBoard;
+    private CheckBox chalkBoard;
     @FXML
-    CheckBox microphone;
+    private CheckBox microphone;
     @FXML
-    CheckBox smartBoard;
+    private CheckBox smartBoard;
     @FXML
-    CheckBox whiteBoard;
+    private CheckBox whiteBoard;
     @FXML
-    CheckBox powerSupply;
+    private CheckBox powerSupply;
     @FXML
-    CheckBox soundInstallation;
+    private CheckBox soundInstallation;
     @FXML
-    CheckBox wheelChair;
+    private CheckBox wheelChair;
     @FXML
-    TextField space;
+    private TextField space;
     @FXML
-    Label checkSpace;
+    private Label checkSpace;
     @FXML
-    GridPane list;
+    private GridPane roomList;
 
     @FXML
     private ScrollPane filterPanel;
@@ -245,11 +245,10 @@ public class RoomPageController {
         JSONParser json = new JSONParser();
 
         try {
-            String response = "";
-            //String response = ServerCommunication.getBuildingFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
+            String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
 
             Label load = new Label("Loading Rooms");
-            list.getChildren().add(0, load);
+            roomList.getChildren().add(0, load);
 
             /*
             Checks if the rooms are in JSONArray format or in JSONObject format.

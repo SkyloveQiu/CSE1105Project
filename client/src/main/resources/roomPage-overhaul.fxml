@@ -76,6 +76,8 @@
                   <Label text="Minimum number of seats:" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="380" ><font><Font name="Arial" size="15.0" /></font></Label>
                   <TextField fx:id="space" AnchorPane.leftAnchor="230" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="380" ><font><Font name="Arial" size="15.0" /></font></TextField>
 
+                  <Label fx:id="checkSpace" AnchorPane.topAnchor="400" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="0.0"  textFill="#d51414" onKeyTyped="#checkNumber" />
+
                   <Button fx:id="confirmFilter" style="-fx-background-color: cornflowerblue; -fx-background-radius: 50 50 50 50; fx-border-radius: 50 50 50 50;" mnemonicParsing="false" onAction="#confirmFilters" text="Confirm Filters" AnchorPane.leftAnchor="150" AnchorPane.rightAnchor="50" AnchorPane.bottomAnchor="35" ><font><Font name="Arial" size="20.0" /></font></Button>
                </children>
             </AnchorPane>
