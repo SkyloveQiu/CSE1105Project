@@ -99,39 +99,43 @@ public class RoomController {
                                               @RequestParam(value = "wheelChair", defaultValue = "false") boolean wheelChair,
                                               @RequestParam(value = "minSpace", defaultValue = "0") int minSpace) throws ParseException {
 
-        List<Room> result = new ArrayList<>();
+        if (!RoomAttributesUpdater.isRunning()) {
 
-        List<Integer> validRooms = RoomAttributesUpdater.list_higher_than(minSpace);
+            List<Room> result = new ArrayList<>();
 
-       List<Room>[] RoomList = RoomAttributesUpdater.getRoomList().getBuckets();
+            List<Integer> validRooms = RoomAttributesUpdater.list_higher_than(minSpace);
 
-        JSONParser parser = new JSONParser();
-        JSONObject object;
+            List<Room>[] RoomList = RoomAttributesUpdater.getRoomList().getBuckets();
 
-
-        for (Integer i : validRooms) {
-
+            JSONParser parser = new JSONParser();
+            JSONObject object;
 
 
-            for(Room room: RoomList[i]){
-            object = (JSONObject) parser.parse(room.getAttributes());
+            for (Integer i : validRooms) {
 
 
-            if (Boolean.parseBoolean(object.get("blinds").toString()) == blinds &&
-                Boolean.parseBoolean(object.get("desktopPc").toString()) == desktop &&
-                Boolean.parseBoolean(object.get("projector").toString()) == projector &&
-                Boolean.parseBoolean(object.get("chalkBoard").toString()) == chalkBoard &&
-                Boolean.parseBoolean(object.get("microphone").toString()) == microphone &&
-                Boolean.parseBoolean(object.get("smartBoard").toString()) == smartBoard &&
-                Boolean.parseBoolean(object.get("whiteBoard").toString()) == (whiteBoard) &&
-                Boolean.parseBoolean(object.get("powerSupply").toString()) == (powerSupply) &&
-                Boolean.parseBoolean(object.get("soundInstallation").toString()) == soundInstallation &&
-                Boolean.parseBoolean(object.get("wheelChairAccessible").toString()) == wheelChair) {
-                result.add(roomRepository.getRoomById(room.getId()));}
+                for (Room room : RoomList[i]) {
+                    object = (JSONObject) parser.parse(room.getAttributes());
+
+
+                    if (Boolean.parseBoolean(object.get("blinds").toString()) == blinds &&
+                        Boolean.parseBoolean(object.get("desktopPc").toString()) == desktop &&
+                        Boolean.parseBoolean(object.get("projector").toString()) == projector &&
+                        Boolean.parseBoolean(object.get("chalkBoard").toString()) == chalkBoard &&
+                        Boolean.parseBoolean(object.get("microphone").toString()) == microphone &&
+                        Boolean.parseBoolean(object.get("smartBoard").toString()) == smartBoard &&
+                        Boolean.parseBoolean(object.get("whiteBoard").toString()) == (whiteBoard) &&
+                        Boolean.parseBoolean(object.get("powerSupply").toString()) == (powerSupply) &&
+                        Boolean.parseBoolean(object.get("soundInstallation").toString()) == soundInstallation &&
+                        Boolean.parseBoolean(object.get("wheelChairAccessible").toString()) == wheelChair) {
+                        result.add(roomRepository.getRoomById(room.getId()));
+                    }
+                }
             }
+            return result;
+        } else {
+            return new ArrayList<>();
         }
-
-        return result;
 
 
     }
