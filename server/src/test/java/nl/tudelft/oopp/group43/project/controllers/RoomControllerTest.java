@@ -26,10 +26,4 @@ class RoomControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void testGetRoomByBuildingNumber() throws Exception {
-        mockMvc.perform(get("/room/0")
-                .contentType("application/json"))
-                .andExpect(status().isOk());
-    }
 }

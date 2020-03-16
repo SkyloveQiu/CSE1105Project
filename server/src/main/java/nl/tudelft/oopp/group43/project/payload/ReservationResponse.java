@@ -1,7 +1,5 @@
 package nl.tudelft.oopp.group43.project.payload;
 
-import nl.tudelft.oopp.group43.project.models.Bike;
-import nl.tudelft.oopp.group43.project.models.BikeReservation;
 import nl.tudelft.oopp.group43.project.models.Reservation;
 import nl.tudelft.oopp.group43.project.models.Room;
 
@@ -11,6 +9,13 @@ public class ReservationResponse {
     String message;
     int status;
 
+    /**
+     * init the reservation response.
+     * @param room the room you want to reserve.
+     * @param reservation the reservation you made.
+     * @param message the message you write.
+     * @param status the status of reservation.
+     */
     public ReservationResponse(Room room, Reservation reservation, String message, int status) {
         this.room = room;
         this.reservation = reservation;

@@ -84,6 +84,7 @@ public class Building implements java.io.Serializable {
 
     /**
      * create the init of building with additions.
+     *
      * @param buildingNumber                   the number of building.
      * @param buildingName                     the name of building.
      * @param address                          the address of building.
@@ -111,7 +112,7 @@ public class Building implements java.io.Serializable {
     }
 
     public Building(String buildingName) {
-        this.buildingName=buildingName;
+        this.buildingName = buildingName;
 
     }
 

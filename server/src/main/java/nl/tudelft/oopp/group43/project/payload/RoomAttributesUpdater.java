@@ -1,6 +1,8 @@
 package nl.tudelft.oopp.group43.project.payload;
 
-
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import org.json.simple.JSONObject;
@@ -10,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import java.util.*;
 
 @Component
 public class RoomAttributesUpdater implements Runnable {
@@ -33,15 +33,20 @@ public class RoomAttributesUpdater implements Runnable {
         try {
             update();
         } catch (ParseException e) {
+            System.out.println(e.toString());
         }
     }
 
+    /**
+     * update the Parse.
+     * @throws ParseException the exception of the function.
+     */
     public void update() throws ParseException {
         run = true;
 
-        List<Room> room_list = roomRepository.findAll();
+        List<Room> roomList = roomRepository.findAll();
 
-        for (Room room : room_list) {
+        for (Room room : roomList) {
             JSONParser parser = new JSONParser();
             JSONObject object = (JSONObject) parser.parse(room.getAttributes());
 
@@ -58,14 +63,20 @@ public class RoomAttributesUpdater implements Runnable {
 
     }
 
+    /**
+     * determine the number.
+     * @param number the input number.
+     * @return the result.
+     */
     public static List<Integer> list_higher_than(int number) {
 
         List<Integer> list = new ArrayList<>();
 
-        for (Integer i : room_seats)
+        for (Integer i : room_seats) {
             if (i >= number) {
                 list.add(i);
             }
+        }
 
         return list;
     }

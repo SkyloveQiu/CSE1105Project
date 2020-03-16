@@ -1,10 +1,10 @@
 package nl.tudelft.oopp.group43.project.config;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -28,6 +28,10 @@ public class MainConfig {
         return props;
     }
 
+    /**
+     * create the data source.
+     * @return the data source of the db.
+     */
     @Bean
     public DataSource dataSource() {
 
@@ -44,6 +48,11 @@ public class MainConfig {
         return new HikariDataSource(config);
     }
 
+    /**
+     * get  the transaction manager.
+     * @param emf the entity manager.
+     * @return the transaction manager.
+     */
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager jpaTxManager = new JpaTransactionManager();
@@ -51,6 +60,10 @@ public class MainConfig {
         return jpaTxManager;
     }
 
+    /**
+     * init the emf for the local container emf.
+     * @return the emf created.
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
@@ -67,6 +80,10 @@ public class MainConfig {
         return emf;
     }
 
+    /**
+     * init the java mail sender for email service.
+     * @return the java mail sender.
+     */
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
