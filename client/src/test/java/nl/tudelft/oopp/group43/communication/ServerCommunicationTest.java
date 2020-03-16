@@ -13,4 +13,6 @@ public class ServerCommunicationTest {
         assertNotNull(ServerCommunication.getBuilding());
     }
 
+
+
 }

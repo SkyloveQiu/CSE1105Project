@@ -12,11 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
 import nl.tudelft.oopp.group43.views.AddBuildingDisplay;
 import nl.tudelft.oopp.group43.views.DeleteBuildingDisplay;
 import nl.tudelft.oopp.group43.views.EditBuildingDisplay;
+import nl.tudelft.oopp.group43.views.FilterDisplay;
 import nl.tudelft.oopp.group43.views.LoginDisplay;
-import nl.tudelft.oopp.group43.views.ReservationDisplay;
 
 
 public class MainPageController {
@@ -95,6 +96,19 @@ public class MainPageController {
 
         AddBuildingDisplay ad = new AddBuildingDisplay();
         ad.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+    }
+
+    /**
+     * If you press the edit building button, you will be redirected to the filter scene.
+     * @param event - pressing the button
+     * @throws IOException - if loading the Filter Page fails
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void toFilterPage(ActionEvent event) throws IOException {
+
+        FilterDisplay fd = new FilterDisplay();
+        fd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
 
