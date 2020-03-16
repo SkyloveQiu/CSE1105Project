@@ -5,14 +5,21 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.classes.StringChecker;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class RoomPageController {
@@ -21,6 +28,8 @@ public class RoomPageController {
     private ChoiceBox<String> fromTime;
     @FXML
     private ChoiceBox<String> untilTime;
+    @FXML
+    private DatePicker date;
     @FXML
     private TextField searchBar;
     @FXML
@@ -111,6 +120,68 @@ public class RoomPageController {
     @FXML
     private void confirmDateTime(ActionEvent event) {
         if (!RoomPageContent.getHoursFrom().equals("") && !RoomPageContent.getHoursTil().equals("") && RoomPageContent.getDate() != null) {
+            ReservationConfig.resetSelectedHours();
+
+            LocalDate localDate = date.getValue();
+
+            String month = Integer.toString(localDate.getMonthValue());
+            String day = Integer.toString(localDate.getDayOfMonth());
+            if (localDate.getMonthValue() < 10) {
+                month = "0" + localDate.getMonthValue();
+            }
+            if (localDate.getDayOfMonth() < 10) {
+                day = "0" + localDate.getDayOfMonth();
+            }
+            String dateString = localDate.getYear() + "-" + month + "-" + day;
+
+            String bHour = dateString + "-" + fromTime.getValue().substring(0, 2);
+            String eHour = dateString + "-" + untilTime.getValue().substring(0, 2);
+            //System.out.println(bHour + " - " + eHour);
+            int hoursBetween = Integer.parseInt(untilTime.getValue().substring(0, 2)) - Integer.parseInt(fromTime.getValue().substring(0, 2));
+            //System.out.println(hoursBetween);
+
+            for(int i = 0; i <= hoursBetween; i++) {
+                int offset = i + Integer.parseInt(fromTime.getValue().substring(0, 2));
+                String hourOffset = "";
+                if (offset < 10) {
+                    hourOffset = "-0" + offset;
+                } else {
+                    hourOffset = "-" + offset;
+                }
+                String hour = dateString + hourOffset;
+                ReservationConfig.addHour(hour);
+            }
+
+
+            /*
+            ===========================================
+             */
+
+
+            ArrayList selectedHours = ReservationConfig.getSelectedHours();
+
+            String response = "";
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
+            formatter.withZone(ZoneId.of("UTC"));
+            for (int i = 0; i < selectedHours.size(); i++) {
+                LocalDateTime startDate = LocalDateTime.parse((String) selectedHours.get(i), formatter);
+                LocalDateTime endDate = startDate.plusHours(1);
+
+                String startTime = startDate.toString() + ":00.000+0000";
+                String endTime = endDate.toString() + ":00.000+0000";
+                System.out.println(startTime);
+                response = ServerCommunication.reserveRoomForHour(startTime, endTime);
+
+                System.out.println(response);
+            }
+
+
+            /*
+            ===========================================
+             */
+
+
             root.getChildren().remove(6);
             RoomPageContent.addRooms();
             //dateTimeSelect.setVisible(false);
