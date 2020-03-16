@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.components.BackButton;
@@ -30,7 +31,7 @@ public class FilterDisplay extends Application {
         /*
         Add the back button to the scene
          */
-        BackButton btn = new BackButton();
+        BackButton btn = new BackButton(new ImageView());
         AnchorPane ap = (AnchorPane) scene.lookup("#root");
         ap.getChildren().add(btn.getBackButton());
         BackButton.pushScene("filterS");

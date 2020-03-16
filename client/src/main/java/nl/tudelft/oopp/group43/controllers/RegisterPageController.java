@@ -15,9 +15,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.components.BackButton;
-import nl.tudelft.oopp.group43.views.LoginDisplay;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
-public class RegisterSceneController {
+public class RegisterPageController {
 
     private static final String emailRegex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")"
             + "@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
@@ -116,29 +116,13 @@ public class RegisterSceneController {
         if (response.equals("OK")) {
             emailCheck.setText("");
 
-            LoginDisplay ld = new LoginDisplay();
-            ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-
-            // Removes the register scene from the scene stack to prevent weird issues.
-            BackButton.popScene();
+            SceneLoader.setScene("login");
+            SceneLoader sl = new SceneLoader();
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
         } else {
             emailCheck.setText("The email already exists!");
         }
 
-    }
-
-
-    /**
-     * If you press the back button, you will be redirected to the Login Page.
-     *
-     * @param event - pressing the button
-     * @throws IOException - if loading the Login Page fails
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private void backClicked(ActionEvent event) throws IOException {
-        LoginDisplay ld = new LoginDisplay();
-        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
     /**

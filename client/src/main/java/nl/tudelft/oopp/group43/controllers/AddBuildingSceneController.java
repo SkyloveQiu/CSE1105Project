@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
-import nl.tudelft.oopp.group43.views.MainPageDisplay;
 import org.json.simple.JSONObject;
 
 public class AddBuildingSceneController {
@@ -87,8 +86,10 @@ public class AddBuildingSceneController {
             alert.showAndWait();
 
             if (alertOK) {
+                /*
                 MainPageDisplay md = new MainPageDisplay();
                 md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+                 */
             }
 
 

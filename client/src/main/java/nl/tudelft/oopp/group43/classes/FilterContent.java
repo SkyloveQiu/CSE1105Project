@@ -30,15 +30,13 @@ public class FilterContent {
     /**
      * Takes the rooms from the server with the chosen attributes.
      */
-    public void getRoomsFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply,
-                               String soundInstallation, String wheelChair, String space) {
+    public void getRoomsFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
 
         JSONParser json = new JSONParser();
 
         try {
 
-            String response = ServerCommunication.getBuildingFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply,
-                    soundInstallation, wheelChair, space);
+            String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
             GridPane roomList = (GridPane) scene.lookup("#room_list");
             while (!roomList.getChildren().isEmpty()) {
                 roomList.getChildren().remove(0);

@@ -29,6 +29,7 @@ public class AddBuildingDisplay extends Application {
         /*
         Add the back button to the scene
          */
+        /*
         BackButton btn = new BackButton();
         AnchorPane ap = (AnchorPane) scene.lookup("#root");
         ap.getChildren().add(btn.getBackButton());
@@ -37,6 +38,8 @@ public class AddBuildingDisplay extends Application {
         if (primaryStage.getScene() != null) {
             ap.setPrefSize(primaryStage.getWidth(), primaryStage.getHeight());
         }
+
+         */
 
         primaryStage.setScene(scene);
 

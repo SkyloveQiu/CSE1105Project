@@ -1,8 +1,9 @@
 package nl.tudelft.oopp.group43.controllers;
 
-import static nl.tudelft.oopp.group43.controllers.RegisterSceneController.emailValid;
+import static nl.tudelft.oopp.group43.controllers.RegisterPageController.emailValid;
 
 import java.io.IOException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,12 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
-import nl.tudelft.oopp.group43.views.MainPageDisplay;
-import nl.tudelft.oopp.group43.views.RegisterDisplay;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 import org.json.simple.parser.ParseException;
 
-public class LoginSceneController {
+public class LoginPageController {
 
     @FXML
     private TextField email;
@@ -31,10 +31,10 @@ public class LoginSceneController {
 
     /**
      * Checks if all fields are complete and valid.
+     *
      * @return true if all fields are complete and valid, false otherwise
      */
     boolean checkEmpty() {
-
         boolean okEmpty = emptyEmail();
         okEmpty = (emptyPassword() && okEmpty);
         return okEmpty;
@@ -44,6 +44,7 @@ public class LoginSceneController {
     /**
      * If you press the login button, either you can be redirected to the main page if all fields are valid,
      * or you have to change something in your fields.
+     *
      * @param event - login button is pressed
      * @throws IOException    - if loading the Register Page fails
      * @throws ParseException - if something goes wrong with the JSON Parser from the loginToken method.
@@ -61,8 +62,9 @@ public class LoginSceneController {
         if (response.equals("OK")) {
             emailCheck.setText("");
             ServerCommunication.setUsername(email.getText());
-            MainPageDisplay md = new MainPageDisplay();
-            md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+            SceneLoader.setScene("");
+            SceneLoader sl = new SceneLoader();
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
         } else {
             emailCheck.setText("Wrong passsword or email");
         }
@@ -71,6 +73,7 @@ public class LoginSceneController {
 
     /**
      * Checks if the email field is empty and show special messages to the user.
+     *
      * @return true if the email field is not empty and valid, false otherwise
      */
     @FXML
@@ -95,6 +98,7 @@ public class LoginSceneController {
 
     /**
      * Checks if the password field is empty and show special messages to the user.
+     *
      * @return true if the password field is not empty and valid, false otherwise
      */
     @FXML
@@ -113,14 +117,20 @@ public class LoginSceneController {
 
     /**
      * If you press the register button, you will be redirected to the Register Page.
+     *
      * @param event - register button is pressed
      * @throws IOException - if loading the Register Page fails
      */
     @SuppressWarnings("unchecked")
     @FXML
-    private void registerClicked(ActionEvent event) throws IOException {
-        RegisterDisplay rd = new RegisterDisplay();
-        rd.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+    private void registerClicked(ActionEvent event) {
+        SceneLoader.setScene("register");
+        SceneLoader sl = new SceneLoader();
+        try {
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

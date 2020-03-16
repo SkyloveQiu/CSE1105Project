@@ -21,7 +21,7 @@ public class ServerCommunication {
     private static final String cURL = "http://localhost:8000/";
     private static HttpClient client = HttpClient.newBuilder().build();
     private static String token = "invalid";
-    private static String username = "thom@tudelft.nl";
+    private static String username = "";
 
     /**
      * Gets the value of token.
@@ -49,6 +49,14 @@ public class ServerCommunication {
      */
     public static void setUsername(String newUsername) {
         username = newUsername;
+    }
+
+    /**
+     * Returns the username.
+     * @return a String with in it the username
+     */
+    public static String getUsername() {
+        return username;
     }
 
 
@@ -395,7 +403,7 @@ public class ServerCommunication {
      *         - "Communication with server failed" if the communication with the server failed.
      *         - the rooms selected by the filters.
      */
-    public static String getBuildingFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
+    public static String getRoomFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
         String url = cURL + "filter?";
         url = url + "blinds=" + blinds;
         url = url + "&desktop=" + desktop;
