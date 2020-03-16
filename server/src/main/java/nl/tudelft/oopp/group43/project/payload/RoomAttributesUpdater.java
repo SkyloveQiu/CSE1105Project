@@ -16,9 +16,10 @@ import java.util.*;
 @Component
 public class RoomAttributesUpdater implements Runnable {
 
-    private static Hashtable<Integer, Room> rooms = new Hashtable<>();
+    private static List<Room> rooms = new ArrayList<>();
     private static boolean run = false;
-    private static List<Integer> room_seats = new ArrayList<>();
+    private static List<Integer> roomSeats = new ArrayList<>();
+    private static  BucketsList roomList;
 
     @Autowired
     private RoomRepository roomRepository;
@@ -39,22 +40,38 @@ public class RoomAttributesUpdater implements Runnable {
     public void update() throws ParseException {
         run = true;
 
-        List<Room> room_list = roomRepository.findAll();
 
-        for (Room room : room_list) {
+
+       rooms = roomRepository.findAll();
+
+        for (Room room : rooms) {
             JSONParser parser = new JSONParser();
             JSONObject object = (JSONObject) parser.parse(room.getAttributes());
-
             Integer value = Integer.valueOf(object.get("seatCapacity").toString());
-
-            rooms.put(value, room);
-
-            if (!room_seats.contains(value)) {
-                room_seats.add(value);
+            if (!roomSeats.contains(value)) {
+                roomSeats.add(value);
             }
 
 
         }
+
+        roomList =  new BucketsList();
+
+        for (Room room : rooms) {
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(room.getAttributes());
+            Integer value = Integer.valueOf(object.get("seatCapacity").toString());
+
+            roomList.add(value,room);
+
+
+
+
+        }
+
+
+
+        run=false;
 
     }
 
@@ -62,7 +79,7 @@ public class RoomAttributesUpdater implements Runnable {
 
         List<Integer> list = new ArrayList<>();
 
-        for (Integer i : room_seats)
+        for (Integer i : roomSeats)
             if (i >= number) {
                 list.add(i);
             }
@@ -70,7 +87,9 @@ public class RoomAttributesUpdater implements Runnable {
         return list;
     }
 
-    public static Hashtable<Integer, Room> getRooms() {
+
+
+    public static List<Room> getRooms() {
         return rooms;
     }
 
@@ -78,11 +97,37 @@ public class RoomAttributesUpdater implements Runnable {
         return run;
     }
 
-    public static List<Integer> getRoom_seats() {
-        return room_seats;
+    public static List<Integer> getRoomSeats() {
+        return roomSeats;
     }
 
     public RoomRepository getRoomRepository() {
         return roomRepository;
+    }
+
+    public static BucketsList getRoomList() {
+        return roomList;
+    }
+
+    public static class BucketsList{
+
+        private LinkedList<Room>[] buckets;
+
+        /**
+         * Constructs a new BucketList for rooms.
+         */
+        public BucketsList() {
+            this.buckets = new LinkedList[Collections.max(roomSeats)+1];
+            for(int i=0; i<buckets.length;i++)
+                buckets[i] = new LinkedList<>();
+        }
+
+        public void add(int index,Room room){
+            buckets[index].add(room);
+        }
+
+        public List[] getBuckets() {
+            return buckets;
+        }
     }
 }

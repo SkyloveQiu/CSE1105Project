@@ -103,16 +103,18 @@ public class RoomController {
 
         List<Integer> validRooms = RoomAttributesUpdater.list_higher_than(minSpace);
 
-        Hashtable<Integer, Room> allRooms = RoomAttributesUpdater.getRooms();
+       List<Room>[] RoomList = RoomAttributesUpdater.getRoomList().getBuckets();
 
         JSONParser parser = new JSONParser();
+        JSONObject object;
 
 
         for (Integer i : validRooms) {
-            Room room = allRooms.get(i);
 
 
-            JSONObject object = (JSONObject) parser.parse(room.getAttributes());
+
+            for(Room room: RoomList[i]){
+            object = (JSONObject) parser.parse(room.getAttributes());
 
 
             if (Boolean.parseBoolean(object.get("blinds").toString()) == blinds &&
@@ -125,7 +127,7 @@ public class RoomController {
                 Boolean.parseBoolean(object.get("powerSupply").toString()) == (powerSupply) &&
                 Boolean.parseBoolean(object.get("soundInstallation").toString()) == soundInstallation &&
                 Boolean.parseBoolean(object.get("wheelChairAccessible").toString()) == wheelChair) {
-                result.add(roomRepository.getRoomById(room.getId()));
+                result.add(roomRepository.getRoomById(room.getId()));}
             }
         }
 
