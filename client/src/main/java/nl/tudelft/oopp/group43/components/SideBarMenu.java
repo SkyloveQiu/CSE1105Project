@@ -136,7 +136,7 @@ public class SideBarMenu {
                 if (!expanded && root.getLayoutX() == layoutXContracted) {
                     expanded = true;
 
-                    TranslateTransition trans = new TranslateTransition(Duration.seconds(1), root);
+                    TranslateTransition trans = new TranslateTransition(Duration.millis(200), root);
                     trans.setFromX(layoutXContracted);
                     trans.setToX(layoutXExpanded);
                     trans.setCycleCount(1);
@@ -155,8 +155,8 @@ public class SideBarMenu {
                 if (expanded && event.getSceneX() > 88) {
                     expanded = false;
 
-                    TranslateTransition trans = new TranslateTransition(Duration.seconds(1), root);
-                    trans.setFromX(layoutXExpanded);
+                    TranslateTransition trans = new TranslateTransition(Duration.millis(200), root);
+                    trans.setFromX(event.getSceneX() - 316);
                     trans.setToX(layoutXContracted);
                     trans.setCycleCount(1);
 
