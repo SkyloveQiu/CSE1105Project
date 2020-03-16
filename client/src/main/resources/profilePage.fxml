@@ -8,8 +8,45 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane fx:id="root" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Button?>
+<AnchorPane fx:id="root" style="-fx-background-color: #29293d;" fx:controller="nl.tudelft.oopp.group43.controllers.ProfilePageController" stylesheets="stylesheets/profilePage.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" text="My Account" style="-fx-text-fill: #e7f2fe;" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0">
+         <font>
+            <Font name="Arial" size="87.0" />
+         </font>
+      </Label>
+      <GridPane vgap="40" AnchorPane.topAnchor="400" AnchorPane.bottomAnchor="60" AnchorPane.leftAnchor="360" AnchorPane.rightAnchor="200" >
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="33" />
+            <RowConstraints percentHeight="33" />
+            <RowConstraints percentHeight="34" />
+         </rowConstraints>
+         <children>
+            <Button fx:id="myreservations" text="My Reservations"  onAction="#showMyReservationsMenu" alignment="CENTER" styleClass="buttons"  maxHeight="400" maxWidth="700" >
+               <font>
+                  <Font name="Arial" size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="change" text="Change password" onAction="#changePassword" alignment="CENTER" styleClass="buttons" maxHeight="400"  maxWidth="700" GridPane.rowIndex="1" >
+               <font>
+                  <Font name="Arial" size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="logout" text="Log-out" onAction="#logOut" alignment="CENTER" styleClass="buttons" maxHeight="400"  maxWidth="700" GridPane.rowIndex="2" >
+               <font>
+                  <Font name="Arial" size="45.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+
       <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
       <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
