@@ -13,8 +13,6 @@ import javafx.stage.Stage;
 
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
-import nl.tudelft.oopp.group43.views.MainPageDisplay;
-import nl.tudelft.oopp.group43.views.RegisterDisplay;
 
 import org.json.simple.parser.ParseException;
 

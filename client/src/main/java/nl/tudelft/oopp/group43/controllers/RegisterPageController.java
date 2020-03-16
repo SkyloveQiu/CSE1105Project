@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.components.BackButton;
-import nl.tudelft.oopp.group43.views.LoginDisplay;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 public class RegisterPageController {
 
@@ -116,29 +116,13 @@ public class RegisterPageController {
         if (response.equals("OK")) {
             emailCheck.setText("");
 
-            LoginDisplay ld = new LoginDisplay();
-            ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-
-            // Removes the register scene from the scene stack to prevent weird issues.
-            BackButton.popScene();
+            SceneLoader.setScene("login");
+            SceneLoader sl = new SceneLoader();
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
         } else {
             emailCheck.setText("The email already exists!");
         }
 
-    }
-
-
-    /**
-     * If you press the back button, you will be redirected to the Login Page.
-     *
-     * @param event - pressing the button
-     * @throws IOException - if loading the Login Page fails
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private void backClicked(ActionEvent event) throws IOException {
-        LoginDisplay ld = new LoginDisplay();
-        ld.start((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
     /**
