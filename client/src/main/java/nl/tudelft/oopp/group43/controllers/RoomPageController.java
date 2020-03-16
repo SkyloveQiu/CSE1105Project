@@ -4,17 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.classes.StringChecker;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,16 +25,49 @@ import java.util.ArrayList;
 
 public class RoomPageController {
 
+    private boolean filterClicked = false;
+
     @FXML
     private ChoiceBox<String> fromTime;
     @FXML
     private ChoiceBox<String> untilTime;
     @FXML
     private DatePicker date;
+
     @FXML
     private TextField searchBar;
     @FXML
     private AnchorPane root;
+
+    @FXML
+    CheckBox blinds;
+    @FXML
+    CheckBox desktop;
+    @FXML
+    CheckBox projector;
+    @FXML
+    CheckBox chalkBoard;
+    @FXML
+    CheckBox microphone;
+    @FXML
+    CheckBox smartBoard;
+    @FXML
+    CheckBox whiteBoard;
+    @FXML
+    CheckBox powerSupply;
+    @FXML
+    CheckBox soundInstallation;
+    @FXML
+    CheckBox wheelChair;
+    @FXML
+    TextField space;
+    @FXML
+    Label checkSpace;
+    @FXML
+    GridPane list;
+
+    @FXML
+    private ScrollPane filterPanel;
 
     @FXML
     private void fromHourSelected(MouseEvent event) {
@@ -118,6 +152,134 @@ public class RoomPageController {
     }
 
     @FXML
+    private void dropFilter(MouseEvent event) {
+        filterClicked = !filterClicked;
+        filterPanel.setVisible(filterClicked);
+    }
+
+    /**
+     * If you press the confirm filtering button, the method will give the chosen attributes to the server and it will show the list of rooms.
+     *
+     * @param event - pressing the button
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void confirmFilters(ActionEvent event) {
+        String blindsString = "false";
+        String desktopString = "false";
+        String projectorString = "false";
+        String chalkBoardString = "false";
+        String microphoneString = "false";
+        String smartBoardString = "false";
+        String whiteBoardString = "false";
+        String powerSupplyString = "false";
+        String soundInstallationString = "false";
+        String wheelChairString = "false";
+
+        if (blinds.isSelected()) {
+            blindsString = "true";
+        }
+        if (desktop.isSelected()) {
+            desktopString = "true";
+        }
+        if (projector.isSelected()) {
+            projectorString = "true";
+        }
+        if (chalkBoard.isSelected()) {
+            chalkBoardString = "true";
+        }
+        if (microphone.isSelected()) {
+            microphoneString = "true";
+        }
+        if (smartBoard.isSelected()) {
+            smartBoardString = "true";
+        }
+        if (whiteBoard.isSelected()) {
+            whiteBoardString = "true";
+        }
+        if (powerSupply.isSelected()) {
+            powerSupplyString = "true";
+        }
+        if (soundInstallation.isSelected()) {
+            soundInstallationString = "true";
+        }
+        if (wheelChair.isSelected()) {
+            wheelChairString = "true";
+        }
+
+
+        if (checkNumber() == true) {
+            getRoomsFilter(blindsString, desktopString, projectorString, chalkBoardString, microphoneString, smartBoardString, whiteBoardString, powerSupplyString,
+                    soundInstallationString, wheelChairString, space.getText());
+        }
+
+
+    }
+
+    /**
+     * Takes the rooms from the server with the chosen attributes.
+     */
+    public void getRoomsFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
+        JSONParser json = new JSONParser();
+
+        try {
+            String response = "";
+            //String response = ServerCommunication.getBuildingFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
+
+            Label load = new Label("Loading Rooms");
+            list.getChildren().add(0, load);
+
+            /*
+            Checks if the rooms are in JSONArray format or in JSONObject format.
+            If it is something other than this it means there was an error with the server communication.
+            If that happens it shows an 'useful' error :).
+             */
+            if (response.charAt(0) == '[') {
+                JSONArray rooms = (JSONArray) json.parse(response);
+                ArrayList<JSONObject> filterSelection = new ArrayList<>();
+
+                for (int i = 0; i < rooms.size(); i++) {
+                    filterSelection.add((JSONObject) rooms.get(i));
+                }
+                RoomPageContent.setSelectedRooms(filterSelection);
+                load.setText("");
+            } else {
+                load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Checks if the user put a number which is grater than 0 and smaller than long.MAX_VALUE and show a proper message to the user.
+     * @return true if the field contains a number which is strictly greater than -1, otherwise false.
+     */
+    @FXML
+    private boolean checkNumber() {
+        if (space.getText().isEmpty()) {
+            space.setText("0");
+            return true;
+        }
+        String text = "You must put a number which " + "\n" + "is greater than -1";
+        try {
+            String nunmberString = space.getText();
+            System.out.println(Long.MAX_VALUE);
+            long number = Long.valueOf(nunmberString);
+            if (number < 0) {
+                checkSpace.setText(text);
+                return false;
+            } else {
+                checkSpace.setText("");
+                return true;
+            }
+        } catch (Exception e) {
+            checkSpace.setText(text);
+            return false;
+        }
+    }
+
+    @FXML
     private void confirmDateTime(ActionEvent event) {
         if (!RoomPageContent.getHoursFrom().equals("") && !RoomPageContent.getHoursTil().equals("") && RoomPageContent.getDate() != null) {
             ReservationConfig.resetSelectedHours();
@@ -182,7 +344,7 @@ public class RoomPageController {
              */
 
 
-            root.getChildren().remove(6);
+            root.getChildren().remove(8);
             RoomPageContent.addRooms();
             //dateTimeSelect.setVisible(false);
         }
