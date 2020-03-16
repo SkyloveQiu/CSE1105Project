@@ -1,8 +1,5 @@
 ## Agenda for 16th of March
 
-This is a template agenda. It gives an overview of what could be in your weekly agenda.
-In the 'Points of action' part you will also find some topics to cover in/after your first meeting. 
-
 ---
 
 Date:           16 March\
@@ -38,6 +35,8 @@ In italics you will find some additional explanations of the agenda points. You 
 
 # Question round
 *If there are any questions, now is the time to ask them.*
+
+- What are your doubts on the questions marks provided in the feedback?
 
 # Time for TA
 *If the TA has things he wants to say or discuss he can ask them now. If he needs more time for this the Question Round can be shortened.*
