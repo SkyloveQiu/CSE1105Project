@@ -34,7 +34,7 @@
                   <Font name="Arial" size="45.0" />
                </font>
             </Button>
-            <Button fx:id="change" text="Change password" onAction="#changePassword" alignment="CENTER" styleClass="buttons" maxHeight="400"  maxWidth="700" GridPane.rowIndex="1" >
+            <Button fx:id="changePwd" text="Change password" onAction="#showChangePasswordMenu" alignment="CENTER" styleClass="buttons" maxHeight="400"  maxWidth="700" GridPane.rowIndex="1" >
                <font>
                   <Font name="Arial" size="45.0" />
                </font>
@@ -46,6 +46,16 @@
             </Button>
          </children>
       </GridPane>
+
+      <AnchorPane fx:id="changePasswordMenu" style="-fx-background-color: rgba(41, 41, 61, 0.0);" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0" >
+         <Pane style="-fx-background-color: rgba(57, 72, 102, 0.95);" AnchorPane.rightAnchor="100" AnchorPane.leftAnchor="100" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="40" />
+
+         <GridPane></GridPane>
+
+
+
+         <Button text="X" onAction="#closeChangePasswordMenu" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" alignment="CENTER" prefHeight="18" prefWidth="18" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="40" ><font><Font name="Arial" size="15" /></font></Button>
+      </AnchorPane>
 
       <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
