@@ -49,40 +49,40 @@
          </children>
       </GridPane>
 
-      <AnchorPane fx:id="changePasswordMenu" style="-fx-background-color: rgba(41, 41, 61, 0.0);" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0" >
-         <Pane style="-fx-background-color: rgba(57, 72, 102, 0.95);" AnchorPane.rightAnchor="100" AnchorPane.leftAnchor="100" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="40" />
+      <AnchorPane fx:id="changePasswordMenu" style="-fx-background-color: rgba(41, 41, 61, 0.0);" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="50" >
+         <Pane style="-fx-background-color: rgba(57, 72, 102, 0.95);" AnchorPane.rightAnchor="300" AnchorPane.leftAnchor="300" AnchorPane.bottomAnchor="80" AnchorPane.topAnchor="200" />
          <children>
-         <Label alignment="CENTER" layoutX="202.0" layoutY="71.0" text="Change password" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
+         <Label alignment="CENTER"  text="Change password" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
             <font>
                <Font name="Arial" size="56.0" />
             </font>
          </Label>
-         <Label layoutX="100.0" layoutY="160.0" text="Old password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+         <Label text="Old password"  AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
             <font>
                <Font name="Arial" size="18.0" />
             </font>
          </Label>
-         <PasswordField fx:id="oldPassword" layoutX="100.0" layoutY="186.0" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="186.0">
+         <PasswordField fx:id="oldPassword" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="186.0">
             <font>
                <Font name="Arial" size="20.0" />
             </font>
          </PasswordField>
-         <Label layoutX="100.0" layoutY="246.0" text="New password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+         <Label text="New password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <PasswordField fx:id="newPassword" layoutX="100.0" layoutY="272.0" promptText="nPassword" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="275.0" >
+         <PasswordField fx:id="newPassword" promptText="Password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="275.0" >
             <font>
                <Font name="Arial" size="20.0" />
             </font>
          </PasswordField>
-            <Label layoutX="100.0" layoutY="332.0" text="New password (repeated)" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+            <Label text="Confirm password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="repeatedPassword" layoutX="100.0" layoutY="358.0" promptText="rPassword" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="364.0">
+            <PasswordField fx:id="confirmPassword" layoutX="100.0" layoutY="358.0" promptText="Confirm password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="364.0">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
@@ -96,7 +96,7 @@
          </children>
 
 
-         <Button text="X" onAction="#closeChangePasswordMenu" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" alignment="CENTER" prefHeight="18" prefWidth="18" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="40" ><font><Font name="Arial" size="15" /></font></Button>
+         <Button text="X" onAction="#closeChangePasswordMenu" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" alignment="CENTER" prefHeight="18" prefWidth="18" AnchorPane.rightAnchor="300" AnchorPane.topAnchor="200" ><font><Font name="Arial" size="15" /></font></Button>
       </AnchorPane>
 
       <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />

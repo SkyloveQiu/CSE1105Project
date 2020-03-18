@@ -13,7 +13,7 @@ public class ProfilePageContent {
 
     public static void addContent(Scene scene) {
         Button changePasswordButton = (Button) scene.lookup("#changePwd");
-        GridPane.setHalignment(changePasswordButton, HPos.RIGHT);
+        GridPane.setHalignment(changePasswordButton, HPos.CENTER);
 
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override

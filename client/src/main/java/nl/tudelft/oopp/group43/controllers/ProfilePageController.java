@@ -5,6 +5,7 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
 
@@ -19,9 +20,11 @@ public class ProfilePageController {
 
     @FXML
     private void showChangePasswordMenu(ActionEvent event){
-        TranslateTransition st = new TranslateTransition(Duration.seconds(1), changePasswordMenu);
-        st.setFromY(ProfilePageContent.getWindowHeight() + 40.0);
-        st.setToY(141.0);
+        ScaleTransition st = new ScaleTransition(Duration.seconds(1), changePasswordMenu);
+        st.setFromX(0);
+        st.setToX(1);
+        st.setFromY(0);
+        st.setToY(1);
         st.setCycleCount(1);
 
         st.play();
@@ -33,12 +36,14 @@ public class ProfilePageController {
     }
     @FXML
     private void closeChangePasswordMenu(ActionEvent actionEvent) {
-        TranslateTransition trans = new TranslateTransition(Duration.millis(1000), changePasswordMenu);
-        trans.setFromY(141.0);
-        trans.setToY(ProfilePageContent.getWindowHeight() + 40);
-        trans.setCycleCount(1);
+        ScaleTransition st = new ScaleTransition(Duration.seconds(1), changePasswordMenu);
+        st.setFromX(1);
+        st.setToX(0);
+        st.setFromY(1);
+        st.setToY(0);
+        st.setCycleCount(1);
 
-        trans.setOnFinished(e -> changePasswordMenu.setVisible(false));
-        trans.play();
+        st.setOnFinished(e -> changePasswordMenu.setVisible(false));
+        st.play();
     }
 }
