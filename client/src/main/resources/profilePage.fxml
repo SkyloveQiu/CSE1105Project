@@ -12,6 +12,8 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <AnchorPane fx:id="root" style="-fx-background-color: #29293d;" fx:controller="nl.tudelft.oopp.group43.controllers.ProfilePageController" stylesheets="stylesheets/profilePage.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" text="My Account" style="-fx-text-fill: #e7f2fe;" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0">
@@ -49,9 +51,49 @@
 
       <AnchorPane fx:id="changePasswordMenu" style="-fx-background-color: rgba(41, 41, 61, 0.0);" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0" >
          <Pane style="-fx-background-color: rgba(57, 72, 102, 0.95);" AnchorPane.rightAnchor="100" AnchorPane.leftAnchor="100" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="40" />
+         <children>
+         <Label alignment="CENTER" layoutX="202.0" layoutY="71.0" text="Change password" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
+            <font>
+               <Font name="Arial" size="56.0" />
+            </font>
+         </Label>
+         <Label layoutX="100.0" layoutY="160.0" text="Old password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+            <font>
+               <Font name="Arial" size="18.0" />
+            </font>
+         </Label>
+         <PasswordField fx:id="oldPassword" layoutX="100.0" layoutY="186.0" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="186.0">
+            <font>
+               <Font name="Arial" size="20.0" />
+            </font>
+         </PasswordField>
+         <Label layoutX="100.0" layoutY="246.0" text="New password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+         <PasswordField fx:id="newPassword" layoutX="100.0" layoutY="272.0" promptText="nPassword" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="275.0" >
+            <font>
+               <Font name="Arial" size="20.0" />
+            </font>
+         </PasswordField>
+            <Label layoutX="100.0" layoutY="332.0" text="New password (repeated)" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="repeatedPassword" layoutX="100.0" layoutY="358.0" promptText="rPassword" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="364.0">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </PasswordField>
 
-         <GridPane></GridPane>
-
+         <Button fx:id="changePasswordButton"  alignment="CENTER" layoutX="196.0" layoutY="400.0" mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Change password" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="500.0">
+            <font>
+               <Font name="Arial" size="20.0" />
+            </font>
+         </Button>
+         </children>
 
 
          <Button text="X" onAction="#closeChangePasswordMenu" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" alignment="CENTER" prefHeight="18" prefWidth="18" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="40" ><font><Font name="Arial" size="15" /></font></Button>
