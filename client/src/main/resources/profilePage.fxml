@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<AnchorPane fx:id="root" style="-fx-background-color: #29293d;" fx:controller="nl.tudelft.oopp.group43.controllers.ProfilePageController" stylesheets="stylesheets/profilePage.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="userAccountName" alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" text="My Account" style="-fx-text-fill: #e7f2fe;" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0">
+         <font>
+            <Font name="Arial" size="87.0" />
+         </font>
+      </Label>
+      <GridPane vgap="40" AnchorPane.topAnchor="400" AnchorPane.bottomAnchor="60" AnchorPane.leftAnchor="360" AnchorPane.rightAnchor="200" >
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="33" />
+            <RowConstraints percentHeight="33" />
+            <RowConstraints percentHeight="34" />
+         </rowConstraints>
+         <children>
+            <Button fx:id="myreservations" text="My Reservations"  onAction="#showMyReservationsMenu" alignment="CENTER" styleClass="buttons"  maxHeight="400" maxWidth="700" >
+               <font>
+                  <Font name="Arial" size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="changePwd" text="Change password" onAction="#showChangePasswordMenu" alignment="CENTER" styleClass="buttons" maxHeight="400"  maxWidth="700" GridPane.rowIndex="1" >
+               <font>
+                  <Font name="Arial" size="45.0" />
+               </font>
+            </Button>
+            <Button fx:id="logout" text="Log-out" onAction="#logOut" alignment="CENTER" styleClass="buttons" maxHeight="400"  maxWidth="700" GridPane.rowIndex="2" >
+               <font>
+                  <Font name="Arial" size="45.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+
+      <AnchorPane fx:id="changePasswordMenu" style="-fx-background-color: rgba(41, 41, 61, 0.0);" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="50" >
+         <Pane style="-fx-background-color: rgba(57, 72, 102, 0.95);" AnchorPane.rightAnchor="300" AnchorPane.leftAnchor="300" AnchorPane.bottomAnchor="80" AnchorPane.topAnchor="200" />
+         <children>
+         <Label alignment="CENTER"  text="Change password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="220.0">
+            <font>
+               <Font name="Arial" size="42.0" />
+            </font>
+         </Label>
+         <Label text="Old password" style="-fx-text-fill: aliceblue;"  AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="300">
+            <font>
+               <Font name="Arial" size="18.0" />
+            </font>
+         </Label>
+         <PasswordField fx:id="oldPassword" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="325.0">
+            <font>
+               <Font name="Arial" size="20.0" />
+            </font>
+         </PasswordField>
+         <Label text="New password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="395.0">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+         <PasswordField fx:id="newPassword" promptText="Password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="420.0" >
+            <font>
+               <Font name="Arial" size="20.0" />
+            </font>
+         </PasswordField>
+            <Label text="Confirm password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="490.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="confirmPassword" promptText="Confirm password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="515.0">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </PasswordField>
+
+         <Button fx:id="changePasswordButton"  alignment="CENTER"  mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Change password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="580.0">
+            <font>
+               <Font name="Arial" size="20.0" />
+            </font>
+         </Button>
+         </children>
+
+
+         <Button text="X" onAction="#closeChangePasswordMenu" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" alignment="CENTER" prefHeight="18" prefWidth="18" AnchorPane.rightAnchor="300" AnchorPane.topAnchor="200" ><font><Font name="Arial" size="15" /></font></Button>
+      </AnchorPane>
+
+      <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+      <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="back_arrow" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/back-arrow-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="buildingIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/building-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="roomIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/room.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="bikeIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/bike-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="foodIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/food-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="calendarIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/calendar-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="userIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0">
+               <image>
+                  <Image url="@/icons/user-icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
