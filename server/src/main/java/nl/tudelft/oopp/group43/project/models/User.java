@@ -90,14 +90,19 @@ public class User implements java.io.Serializable {
                 @JsonProperty("username") String username,
                 @JsonProperty("role") String role
     ) {
-        this.password = Utf8DecodeValue(password);
-        this.firstName = Utf8DecodeValue(firstName);
-        this.lastName = Utf8DecodeValue(lastName);
-        this.username = Utf8DecodeValue(username);
-        this.role = Utf8DecodeValue(role);
+        this.password = utf8DecodeValue(password);
+        this.firstName = utf8DecodeValue(firstName);
+        this.lastName = utf8DecodeValue(lastName);
+        this.username = utf8DecodeValue(username);
+        this.role = utf8DecodeValue(role);
     }
 
-    private String Utf8DecodeValue(String value) {
+    /**
+     * Decodes a utf8 encoded value.
+     * @param value utf8-encoded string value
+     * @return decoded string value
+     */
+    private String utf8DecodeValue(String value) {
         return URLDecoder.decode(value, StandardCharsets.UTF_8);
     }
 

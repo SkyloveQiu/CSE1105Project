@@ -81,10 +81,10 @@ public class UserController {
      */
     @PostMapping("/token")
     public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
-        String _username = utf8DecodeValue(username);
-        String _password = utf8DecodeValue(password);
+        String usernameDecoded = utf8DecodeValue(username);
+        String passwordDecoded = utf8DecodeValue(password);
 
-        User user = securityService.autoLogin(_username, _password);
+        User user = securityService.autoLogin(usernameDecoded, passwordDecoded);
 
         if (user == null) {
             ErrorResponse errorResponse = new ErrorResponse("auth fail", "username or password wrong", HttpStatus.FORBIDDEN.value());
@@ -104,7 +104,7 @@ public class UserController {
 
 
     /**
-     * Decodes a utf8 encoded value
+     * Decodes a utf8 encoded value.
      * @param value utf8-encoded string value
      * @return decoded string value
      */
