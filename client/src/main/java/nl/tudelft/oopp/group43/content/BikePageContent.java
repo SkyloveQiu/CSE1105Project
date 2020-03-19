@@ -1,9 +1,10 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.util.ArrayList;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,12 +18,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.ArrayList;
-
 public class BikePageContent {
 
     private static double windowHeight = 800;
 
+    /**
+     * Adds the dynamic content to the bike Page.
+     *
+     * @param scene the scene of the bike page
+     */
     public static void addContent(Scene scene) {
         Button rentButton = (Button) scene.lookup("#rent");
         Button reserveButton = (Button) scene.lookup("#reserve");
