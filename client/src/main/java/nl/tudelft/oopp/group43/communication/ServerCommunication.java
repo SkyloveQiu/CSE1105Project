@@ -59,6 +59,95 @@ public class ServerCommunication {
         return username;
     }
 
+    /**
+     * Sends a HTTP GET request to the server.
+     *
+     * @param url the url for the GET request.
+     * @return the HttpResponse object that was returned from the server.
+     */
+    private static HttpResponse<String> get(String url) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create(url))
+                .build();
+
+        HttpResponse<String> response = sendRequest(request);
+
+        return response;
+    }
+
+    /**
+     * Sends a HTTP POST request to the server.
+     *
+     * @param url the url for the POST request.
+     * @return the HttpResponse object that was returned from the server.
+     */
+    private static HttpResponse<String> post(String url) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(""))
+                .uri(URI.create(url))
+                .build();
+
+        HttpResponse<String> response = sendRequest(request);
+
+        return response;
+    }
+
+    /**
+     * Sends a HTTP POST request to the server.
+     *
+     * @param url     the url for the POST request.
+     * @param body    the body of the post request.
+     * @param headers the headers of the POST request.
+     *                this collection must alternate as header names and header values
+     * @return the HttpResponse object that was returned from the server.
+     */
+    private static HttpResponse<String> post(String url, String body, String... headers) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .uri(URI.create(url))
+                .headers(headers)
+                .build();
+
+        HttpResponse<String> response = sendRequest(request);
+
+        return response;
+    }
+
+    /**
+     * Sends a HTTP DELETE request to the server.
+     *
+     * @param url the url for the DELETE request.
+     * @return the HttpResponse object that was returned from the server.
+     */
+    private static HttpResponse<String> delete(String url) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .DELETE()
+                .uri(URI.create(url))
+                .build();
+
+        HttpResponse<String> response = sendRequest(request);
+
+        return response;
+    }
+
+    /**
+     * Sends a HTTP Request to the server.
+     *
+     * @param request the HTTP request.
+     * @return the HttpResponse object that was returned from the server.
+     */
+    private static HttpResponse<String> sendRequest(HttpRequest request) {
+        HttpResponse<String> response = null;
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
 
     /**
      * Retrieves all buildings from the server.
@@ -67,18 +156,14 @@ public class ServerCommunication {
      * @throws Exception if communication with the server fails.
      */
     public static String getBuilding() {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(cURL + "building")).build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        String url = cURL + "building";
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
             return "Communication with server failed";
         }
-        if (response.statusCode() != 200) {
-            System.out.println("Status: " + response.statusCode());
-        }
-        System.out.println(response.body());
+
         return response.body();
     }
 
@@ -88,18 +173,14 @@ public class ServerCommunication {
      * @return A String with in it a JSONArray or Object of all rooms
      */
     public static String getRooms() {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(cURL + "room")).build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        String url = cURL + "room";
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
             return "Communication with server failed";
         }
-        if (response.statusCode() != 200) {
-            System.out.println("Status: " + response.statusCode());
-        }
-        System.out.println(response.body());
+
         return response.body();
     }
 
@@ -124,21 +205,19 @@ public class ServerCommunication {
         url = url + "username=" + username + "&";
         url = url + "password=" + password + "&";
         url = url + "role=" + role;
-        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString("")).uri(URI.create(url)).build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        HttpResponse<String> response = post(url);
+
+        if (response == null) {
             return "Communication with server failed";
         }
+
         if (response.statusCode() != 200) {
             return "Exists";
         } else {
             return "OK";
         }
     }
-
 
     /**
      * Tries to login the user and receives some messages to know if the operation was successful or not.
@@ -156,13 +235,10 @@ public class ServerCommunication {
         String url = cURL + "token?";
         url = url + "username=" + username + "&";
         url = url + "password=" + password + "&";
-        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString("")).uri(URI.create(url)).build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        HttpResponse<String> response = post(url);
+
+        if (response == null) {
             return "Communication with server failed";
         }
 
@@ -187,18 +263,12 @@ public class ServerCommunication {
     public static String getRoomsFromBuilding(String buildingID) {
         String url = cURL + "room/" + buildingID;
 
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
             return "Communication with server failed";
         }
-        if (response.statusCode() != 200) {
-            System.out.println("Status: " + response.statusCode());
-        }
-        System.out.println(response.body());
+
         return response.body();
     }
 
@@ -213,18 +283,16 @@ public class ServerCommunication {
     public static String sendDeleteBuilding(String buildID) {
         String url = cURL + "building/" + buildID;
 
-        HttpRequest request = HttpRequest.newBuilder().DELETE().uri(URI.create(url)).build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        HttpResponse<String> response = delete(url);
+
+        if (response == null) {
             return "Communication with server failed";
         }
+
         return "OK";
 
     }
-    
+
     /**
      * Sends the building as a JSON Object for edit it.
      *
@@ -234,18 +302,16 @@ public class ServerCommunication {
      */
     public static String sendEditBuilding(JSONObject obj) {
         String url = cURL + "building/update";
-        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
-        HttpResponse<String> response = null;
-        
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
+
+        if (response == null) {
             return "Communication with server failed";
         }
+
         return "OK";
     }
-
+    
     /**
      * Gets all available/non-booked hours from the database using the format /{roomID}/{startDate}/{endDate}.
      *
@@ -256,26 +322,14 @@ public class ServerCommunication {
      */
     public static String[] getAvailableRoomHours(long roomID, String startDate, String endDate) {
         String url = cURL + "reservation/" + roomID + "/" + startDate + "/" + endDate;
-
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
-        HttpResponse<String> response = null;
+        HttpResponse<String> response = get(url);
 
         String[] hours = new String[24];
         for (int i = 0; i < hours.length; i++) {
             hours[i] = "free";
         }
 
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return hours;
-        }
-        if (response.statusCode() != 200) {
-            System.out.println("Status: " + response.statusCode());
-        }
-
-        if (response.body().length() > 2 && response.statusCode() == 200) {
+        if (response != null && response.body().length() > 2 && response.statusCode() == 200) {
             try {
                 JSONParser json = new JSONParser();
                 JSONArray arr = (JSONArray) json.parse(response.body());
@@ -288,7 +342,7 @@ public class ServerCommunication {
                 e.printStackTrace();
             }
         }
-        System.out.println(response.body());
+
         return hours;
     }
 
@@ -309,23 +363,14 @@ public class ServerCommunication {
 
         String url = cURL + "reservation";
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(buildFormDataFromMap(data))
-                .uri(URI.create(url))
-                .setHeader("User-Agent", "Java 11 HttpClient Bot") // add request header
-                .header("Content-Type", "application/json")
-                .build();
+        HttpResponse<String> response = post(url, buildFormDataFromMap(data),
+                "User-Agent", "Java 11 HttpClient Bot",
+                "Content-Type", "application/json");
 
-        HttpResponse<String> response = null;
-
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (response == null) {
             return "Communication with server failed";
         }
 
-        System.out.println(response.body());
         return response.body();
     }
 
@@ -333,9 +378,9 @@ public class ServerCommunication {
      * Takes a map as input and translates the pairs to a json.
      *
      * @param data the map containing the json pairs/values
-     * @return Returns a BodyPublisher containing the http POST content
+     * @return a string with the json content
      */
-    private static HttpRequest.BodyPublisher buildFormDataFromMap(Map<Object, Object> data) {
+    private static String buildFormDataFromMap(Map<Object, Object> data) {
         var builder = new StringBuilder();
         builder.append("{");
         for (Map.Entry<Object, Object> entry : data.entrySet()) {
@@ -353,7 +398,7 @@ public class ServerCommunication {
         builder.append("}");
 
         System.out.println(builder.toString());
-        return HttpRequest.BodyPublishers.ofString(builder.toString());
+        return builder.toString();
     }
 
     /**
@@ -366,15 +411,14 @@ public class ServerCommunication {
      */
     public static String sendAddBuilding(JSONObject obj) {
         String url = cURL + "building";
-        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(obj.toJSONString())).uri(URI.create(url)).setHeader("Content-Type", "application/json;charset=UTF-8").build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            String s = response.body();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        HttpResponse<String> response = post(url, obj.toJSONString(),
+                "Content-Type", "application/json;charset=UTF-8");
+
+        if (response == null) {
             return "Communication with server failed";
         }
+
         //If the building already exists, then you will receive from the server the message ""BUILDING WITH NUMBER: " + newBuilding.getBuildingNumber() + " ALREADY EXISTS.";"
         //else you will receive from the server "NEW BUILDING: " + newBuilding.getBuildingName();
         if (response.body().substring(0, 1).equals("B")) {
@@ -384,7 +428,6 @@ public class ServerCommunication {
             return "OK";
         }
     }
-
 
     /**
      * Retrieves all rooms from the serve with the specified attributes.
@@ -416,19 +459,17 @@ public class ServerCommunication {
         url = url + "&soundInstallation=" + soundInstallation;
         url = url + "&wheelChair=" + wheelChair;
         url = url + "&minSpace=" + space;
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
             return "Communication with server failed";
         }
-        if (response.statusCode() != 200) {
-            System.out.println("Status: " + response.statusCode());
-        }
-        System.out.println(response.body());
+
         return response.body();
+    }
+
+    private class Header {
+
     }
 
 }
