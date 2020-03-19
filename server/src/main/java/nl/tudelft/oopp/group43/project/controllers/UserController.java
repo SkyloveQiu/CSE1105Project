@@ -81,8 +81,8 @@ public class UserController {
      */
     @PostMapping("/token")
     public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
-        String _username = Utf8DecodeValue(username);
-        String _password = Utf8DecodeValue(password);
+        String _username = utf8DecodeValue(username);
+        String _password = utf8DecodeValue(password);
 
         User user = securityService.autoLogin(_username, _password);
 
@@ -108,7 +108,7 @@ public class UserController {
      * @param value utf8-encoded string value
      * @return decoded string value
      */
-    private String Utf8DecodeValue(String value) {
+    private String utf8DecodeValue(String value) {
         return URLDecoder.decode(value, StandardCharsets.UTF_8);
     }
 }

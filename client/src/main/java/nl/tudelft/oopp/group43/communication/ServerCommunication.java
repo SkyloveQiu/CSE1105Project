@@ -121,11 +121,11 @@ public class ServerCommunication {
     public static String confirmRegistration(String firstName, String lastName, String username, String password, String role) {
 
         String url = cURL + "registration?";
-        url = url + "firstName=" + Utf8EncodeValue(firstName)+ "&";
-        url = url + "lastName=" + Utf8EncodeValue(lastName)+ "&";
-        url = url + "username=" + Utf8EncodeValue(username) + "&";
-        url = url + "password=" + Utf8EncodeValue(password) + "&";
-        url = url + "role=" + Utf8EncodeValue(role);
+        url = url + "firstName=" + utf8EncodeValue(firstName) + "&";
+        url = url + "lastName=" + utf8EncodeValue(lastName) + "&";
+        url = url + "username=" + utf8EncodeValue(username) + "&";
+        url = url + "password=" + utf8EncodeValue(password) + "&";
+        url = url + "role=" + utf8EncodeValue(role);
         HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString("")).uri(URI.create(url)).build();
         HttpResponse<String> response = null;
         try {
@@ -156,8 +156,8 @@ public class ServerCommunication {
      */
     public static String loginToken(String username, String password) throws ParseException {
         String url = cURL + "token?";
-        url = url + "username=" + Utf8EncodeValue(username) + "&";
-        url = url + "password=" + Utf8EncodeValue(password) + "&";
+        url = url + "username=" + utf8EncodeValue(username) + "&";
+        url = url + "password=" + utf8EncodeValue(password) + "&";
         HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString("")).uri(URI.create(url)).build();
         HttpResponse<String> response = null;
         try {
@@ -434,11 +434,11 @@ public class ServerCommunication {
     }
 
     /**
-     * Encodes a value to standard utf8 format
+     * Encodes a value to standard utf8 format.
      * @param value - String value that needs to be encoded
      * @return the utf8-encoded String
      */
-    private static String Utf8EncodeValue(String value) {
+    private static String utf8EncodeValue(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 }
