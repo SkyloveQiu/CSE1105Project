@@ -4,10 +4,16 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Scale;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
+
+import java.io.IOException;
 
 public class ProfilePageController {
 
@@ -32,7 +38,14 @@ public class ProfilePageController {
     }
     @FXML
     private void logOut(ActionEvent event) {
-
+        ServerCommunication.setToken("invalid");
+        SceneLoader.setScene("main");
+        SceneLoader sl = new SceneLoader();
+        try {
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @FXML
     private void closeChangePasswordMenu(ActionEvent actionEvent) {
