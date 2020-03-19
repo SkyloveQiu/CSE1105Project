@@ -16,7 +16,7 @@
 <?import javafx.scene.control.TextField?>
 <AnchorPane fx:id="root" style="-fx-background-color: #29293d;" fx:controller="nl.tudelft.oopp.group43.controllers.ProfilePageController" stylesheets="stylesheets/profilePage.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" text="My Account" style="-fx-text-fill: #e7f2fe;" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0">
+      <Label fx:id="userAccountName" alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" text="My Account" style="-fx-text-fill: #e7f2fe;" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0">
          <font>
             <Font name="Arial" size="87.0" />
          </font>

@@ -5,15 +5,28 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 
 public class ProfilePageContent {
 
     private static double windowHeight = 800;
 
     public static void addContent(Scene scene) {
+        Label log = (Label) scene.lookup("#userAccountName");
+        log.setText(ServerCommunication.getUsername() + "'s account");
+        log.setStyle("-fx-text-fill: aliceblue;");
+
+
         Button changePasswordButton = (Button) scene.lookup("#changePwd");
         GridPane.setHalignment(changePasswordButton, HPos.CENTER);
+
+        Button myReservationsButton = (Button) scene.lookup("#myreservations");
+        GridPane.setHalignment(myReservationsButton, HPos.CENTER);
+
+        Button logOutButton = (Button) scene.lookup("#logout");
+        GridPane.setHalignment(logOutButton, HPos.CENTER);
 
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
