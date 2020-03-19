@@ -1,23 +1,11 @@
-.menu {
-    -fx-background-color: deepskyblue;
+.scroll-bar:vertical .thumb {
+    -fx-background-color: skyblue;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
 }
 
-.menubar {
-    -fx-background-color: deepskyblue;
-}
-
-.rooms {
-    -fx-background-color: lightskyblue;
-    -fx-background-radius: 15 15 15 15;
-    -fx-border-radius: 15 15 15 15;
-    -fx-border-width: 1 1 1 1;
-    -fx-border-color: black;
-}
-
-.rooms:hover {
-    -fx-background-color: #dff9fb;
-}
-
-.reservation_button {
-    -fx-background-color: mediumseagreen;
+.scroll-bar:vertical .track {
+    -fx-background-color: #2d3a61;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
 }

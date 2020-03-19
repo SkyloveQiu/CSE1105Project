@@ -10,3 +10,15 @@
 .building_labels:hover {
     -fx-background-color: #dff9fb;
 }
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: skyblue;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: #2d3a61;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+}
