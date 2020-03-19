@@ -13,6 +13,10 @@ public class ProfilePageContent {
 
     private static double windowHeight = 800;
 
+    /** Adds name to Profile Page and makes the buttons scalable.
+     *
+     * @param scene - the scene currently in use, which gets manipulated.
+     */
     public static void addContent(Scene scene) {
         Label log = (Label) scene.lookup("#userAccountName");
         log.setText(ServerCommunication.getUsername() + "'s account");

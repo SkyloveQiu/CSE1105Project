@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.io.IOException;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -13,7 +14,6 @@ import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
-import java.io.IOException;
 
 public class ProfilePageController {
 
@@ -25,7 +25,7 @@ public class ProfilePageController {
     }
 
     @FXML
-    private void showChangePasswordMenu(ActionEvent event){
+    private void showChangePasswordMenu(ActionEvent event) {
         ScaleTransition st = new ScaleTransition(Duration.seconds(1), changePasswordMenu);
         st.setFromX(0);
         st.setToX(1);
@@ -36,6 +36,7 @@ public class ProfilePageController {
         st.play();
         changePasswordMenu.setVisible(true);
     }
+
     @FXML
     private void logOut(ActionEvent event) {
         ServerCommunication.setToken("invalid");
@@ -47,6 +48,7 @@ public class ProfilePageController {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void closeChangePasswordMenu(ActionEvent actionEvent) {
         ScaleTransition st = new ScaleTransition(Duration.seconds(1), changePasswordMenu);
