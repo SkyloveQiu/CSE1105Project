@@ -10,20 +10,11 @@ import nl.tudelft.oopp.group43.content.BikePageContent;
 public class BikePageController {
 
     @FXML
-    private AnchorPane reserveMenu;
+    private AnchorPane rentMenu;
     @FXML
     private AnchorPane returnMenu;
-
     @FXML
-    private void showReserveBikeMenu(ActionEvent event) {
-        TranslateTransition trans = new TranslateTransition(Duration.millis(1000), reserveMenu);
-        trans.setFromY(BikePageContent.getWindowHeight() + 40.0);
-        trans.setToY(141.0);
-        trans.setCycleCount(1);
-
-        trans.play();
-        reserveMenu.setVisible(true);
-    }
+    private AnchorPane reserveMenu;
 
     @FXML
     private void showReturnBikeMenu(ActionEvent event) {
@@ -37,13 +28,35 @@ public class BikePageController {
     }
 
     @FXML
-    private void closeReserveMenu(ActionEvent event) {
+    private void showRentBikeMenu(ActionEvent event) {
+        TranslateTransition trans = new TranslateTransition(Duration.millis(1000), rentMenu);
+        trans.setFromY(BikePageContent.getWindowHeight() + 40.0);
+        trans.setToY(141.0);
+        trans.setCycleCount(1);
+
+        trans.play();
+        rentMenu.setVisible(true);
+    }
+
+    @FXML
+    private void showReserveBikeMenu(ActionEvent event) {
         TranslateTransition trans = new TranslateTransition(Duration.millis(1000), reserveMenu);
+        trans.setFromY(BikePageContent.getWindowHeight() + 40.0);
+        trans.setToY(141.0);
+        trans.setCycleCount(1);
+
+        trans.play();
+        reserveMenu.setVisible(true);
+    }
+
+    @FXML
+    private void closeRentMenu(ActionEvent event) {
+        TranslateTransition trans = new TranslateTransition(Duration.millis(1000), rentMenu);
         trans.setFromY(141.0);
         trans.setToY(BikePageContent.getWindowHeight() + 40);
         trans.setCycleCount(1);
 
-        trans.setOnFinished(e -> reserveMenu.setVisible(false));
+        trans.setOnFinished(e -> rentMenu.setVisible(false));
         trans.play();
     }
 
@@ -55,6 +68,17 @@ public class BikePageController {
         trans.setCycleCount(1);
 
         trans.setOnFinished(e -> returnMenu.setVisible(false));
+        trans.play();
+    }
+
+    @FXML
+    private void closeReserveMenu(ActionEvent event) {
+        TranslateTransition trans = new TranslateTransition(Duration.millis(1000), reserveMenu);
+        trans.setFromY(141.0);
+        trans.setToY(BikePageContent.getWindowHeight() + 40);
+        trans.setCycleCount(1);
+
+        trans.setOnFinished(e -> reserveMenu.setVisible(false));
         trans.play();
     }
 
