@@ -47,6 +47,7 @@ public class RoomController {
 
     /**
      * Get new rooms.
+     *
      * @param newRoom the new room that comes
      * @return a response
      */
@@ -106,17 +107,29 @@ public class RoomController {
      */
     @GetMapping("/filter")
     @ResponseBody
-    public List<Room> getRoomByBuildingNumber(@RequestParam(value = "blinds", defaultValue = "false") boolean blinds,
-                                              @RequestParam(value = "desktop", defaultValue = "false") boolean desktop,
-                                              @RequestParam(value = "projector", defaultValue = "false") boolean projector,
-                                              @RequestParam(value = "chalkBoard", defaultValue = "false") boolean chalkBoard,
-                                              @RequestParam(value = "microphone", defaultValue = "false") boolean microphone,
-                                              @RequestParam(value = "smartBoard", defaultValue = "false") boolean smartBoard,
-                                              @RequestParam(value = "whiteBoard", defaultValue = "false") boolean whiteBoard,
-                                              @RequestParam(value = "powerSupply", defaultValue = "false") boolean powerSupply,
-                                              @RequestParam(value = "soundInstallation", defaultValue = "false") boolean soundInstallation,
-                                              @RequestParam(value = "wheelChair", defaultValue = "false") boolean wheelChair,
-                                              @RequestParam(value = "minSpace", defaultValue = "0") int minSpace) throws ParseException {
+    public List<Room> getFilteredRooms(@RequestParam(value = "blinds", defaultValue = "false") boolean blinds,
+                                       @RequestParam(value = "desktop", defaultValue = "false") boolean desktop,
+                                       @RequestParam(value = "projector", defaultValue = "false") boolean projector,
+                                       @RequestParam(value = "chalkBoard", defaultValue = "false") boolean chalkBoard,
+                                       @RequestParam(value = "microphone", defaultValue = "false") boolean microphone,
+                                       @RequestParam(value = "smartBoard", defaultValue = "false") boolean smartBoard,
+                                       @RequestParam(value = "whiteBoard", defaultValue = "false") boolean whiteBoard,
+                                       @RequestParam(value = "powerSupply", defaultValue = "false") boolean powerSupply,
+                                       @RequestParam(value = "soundInstallation", defaultValue = "false") boolean soundInstallation,
+                                       @RequestParam(value = "wheelChair", defaultValue = "false") boolean wheelChair,
+                                       @RequestParam(value = "minSpace", defaultValue = "0") int minSpace) throws ParseException {
+
+        final String[] filteredAttributes = {"blinds",
+            "desktopPc",
+            "projector",
+            "chalkBoard",
+            "microphone",
+            "smartBoard",
+            "whiteBoard",
+            "powerSupply",
+            "soundInstallation",
+            "wheelChairAccessible"};
+
 
         if (!RoomAttributesUpdater.isRunning()) {
 
@@ -134,23 +147,82 @@ public class RoomController {
 
 
                 for (Room room : roomListData[i]) {
-                    object = (JSONObject) parser.parse(room.getAttributes());
+                    //
+                    result.add(roomRepository.getRoomById(room.getId()));
 
-
-                    if (Boolean.parseBoolean(object.get("blinds").toString()) == blinds
-                        && Boolean.parseBoolean(object.get("desktopPc").toString()) == desktop
-                        && Boolean.parseBoolean(object.get("projector").toString()) == projector
-                        && Boolean.parseBoolean(object.get("chalkBoard").toString()) == chalkBoard
-                        && Boolean.parseBoolean(object.get("microphone").toString()) == microphone
-                        && Boolean.parseBoolean(object.get("smartBoard").toString()) == smartBoard
-                        && Boolean.parseBoolean(object.get("whiteBoard").toString()) == (whiteBoard)
-                        && Boolean.parseBoolean(object.get("powerSupply").toString()) == (powerSupply)
-                        && Boolean.parseBoolean(object.get("soundInstallation").toString()) == soundInstallation
-                        && Boolean.parseBoolean(object.get("wheelChairAccessible").toString()) == wheelChair) {
-                        result.add(roomRepository.getRoomById(room.getId()));
-                    }
                 }
             }
+
+            for (int ite = 0; ite <= filteredAttributes.length; ite++) {
+
+                for (int a = 0; a < result.size(); a++) {
+                    object = (JSONObject) parser.parse(result.get(a).getAttributes());
+
+                    if (ite == 0 && blinds == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != blinds) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 1 && desktop == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != desktop) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 2 && projector == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != projector) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 3 && chalkBoard == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != chalkBoard) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 4 && microphone == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != microphone) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 5 && smartBoard == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != smartBoard) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 6 && whiteBoard == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != whiteBoard) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 7 && powerSupply == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != powerSupply) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 8 && soundInstallation == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != soundInstallation) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+                    if (ite == 9 && wheelChair == true) {
+                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != wheelChair) {
+                            result.remove(result.get(a));
+                        }
+                    }
+
+
+                }
+
+            }
+
             return result;
         } else {
             return new ArrayList<>();
@@ -161,6 +233,7 @@ public class RoomController {
 
     /**
      * Deletes a room based on roomId.
+     *
      * @param roomId the roomId that needs to be deleted.
      */
     @DeleteMapping("room/{roomId}")
