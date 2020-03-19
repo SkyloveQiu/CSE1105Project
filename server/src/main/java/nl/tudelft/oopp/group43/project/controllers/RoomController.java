@@ -153,10 +153,10 @@ public class RoomController {
 
                 }
             }
-//{\"blinds\": true, \"display\": false, \"desktopPc\": true,
-// \"projector\": true, \"spaceType\": \"Instruction hall\", \"chalkBoard\": true,
-// \"microphone\": false, \"smartBoard\": false, \"whiteBoard\": false, \"powerSupply\": true,
-// \"surfaceArea\": 141, \"seatCapacity\": 84, \"soundInstallation\": true, \"wheelChairAccessible\": true}
+            //{\"blinds\": true, \"display\": false, \"desktopPc\": true,
+            // \"projector\": true, \"spaceType\": \"Instruction hall\", \"chalkBoard\": true,
+            // \"microphone\": false, \"smartBoard\": false, \"whiteBoard\": false, \"powerSupply\": true,
+            // \"surfaceArea\": 141, \"seatCapacity\": 84, \"soundInstallation\": true, \"wheelChairAccessible\": true}
             for (int ite = 0; ite < filteredAttributes.length; ite++) {
 
                 for (int r = 0; r < result.size(); r++) {
