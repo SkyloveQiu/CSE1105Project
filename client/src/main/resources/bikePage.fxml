@@ -133,14 +133,14 @@
                <ColumnConstraints percentWidth="30" />
             </columnConstraints>
             <rowConstraints>
-               <RowConstraints prefHeight="40" vgrow="NEVER" />
-               <RowConstraints percentHeight="90" />
+               <RowConstraints prefHeight="35" vgrow="NEVER" />
+               <RowConstraints percentHeight="93" />
             </rowConstraints>
             <children>
                <AnchorPane maxHeight="Infinity" maxWidth="Infinity" GridPane.columnSpan="2">
-                  <DatePicker fx:id="reservationStartingDate" AnchorPane.rightAnchor="20" />
-                  <Label alignment="CENTER" style="-fx-text-fill: #e7f2fe;" text="Select starting date, end date and building:" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"><font><Font name="Arial" size="15" /></font></Label>
-                  <DatePicker fx:id="reservationEndingDate" AnchorPane.leftAnchor="20" />
+                  <DatePicker fx:id="reservationStartingDate" AnchorPane.leftAnchor="20" />
+                  <Label alignment="CENTER" style="-fx-text-fill: #e7f2fe;" text="Select starting date, end date and building:" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"><font><Font name="Arial" size="15" /></font></Label>
+                  <DatePicker fx:id="reservationEndingDate" AnchorPane.rightAnchor="20" />
                </AnchorPane>
 
                <ScrollPane fitToWidth="true" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" GridPane.rowIndex="1">

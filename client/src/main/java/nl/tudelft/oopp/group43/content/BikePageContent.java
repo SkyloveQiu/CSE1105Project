@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javafx.beans.value.ChangeListener;
@@ -7,9 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.HPos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -21,13 +20,16 @@ import org.json.simple.parser.ParseException;
 public class BikePageContent {
 
     private static double windowHeight = 800;
+    private static Scene scene;
 
     /**
      * Adds the dynamic content to the bike Page.
      *
-     * @param scene the scene of the bike page
+     * @param currentScene the scene of the bike page
      */
-    public static void addContent(Scene scene) {
+    public static void addContent(Scene currentScene) {
+        scene = currentScene;
+
         Button rentButton = (Button) scene.lookup("#rent");
         Button reserveButton = (Button) scene.lookup("#reserve");
         GridPane.setHalignment(rentButton, HPos.RIGHT);
@@ -40,6 +42,14 @@ public class BikePageContent {
             }
         });
 
+        addBuildings();
+        disableDatePickerDates();
+    }
+
+    /**
+     * Adds the buildings to all gridpanes and choiceboxes of the bike page.
+     */
+    private static void addBuildings() {
         ChoiceBox<String> returnBuildingList = (ChoiceBox<String>) scene.lookup("#returnBuildingList");
         GridPane reserveBikeBuildingList = (GridPane) scene.lookup("#reserveBikeBuildingList");
         GridPane rentBikeBuildingList = (GridPane) scene.lookup("#rentBikeBuildingList");
@@ -75,6 +85,31 @@ public class BikePageContent {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Disables all dates in the date picker that are in the past.
+     */
+    private static void disableDatePickerDates() {
+        DatePicker startingDatePicker = (DatePicker) scene.lookup("#reservationStartingDate");
+        startingDatePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0 );
+            }
+        });
+
+        DatePicker endingDatePicker = (DatePicker) scene.lookup("#reservationEndingDate");
+        endingDatePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0 );
+            }
+        });
     }
 
     public static void setWindowHeight(double height) {
