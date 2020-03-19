@@ -52,43 +52,43 @@
       <AnchorPane fx:id="changePasswordMenu" style="-fx-background-color: rgba(41, 41, 61, 0.0);" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="50" >
          <Pane style="-fx-background-color: rgba(57, 72, 102, 0.95);" AnchorPane.rightAnchor="300" AnchorPane.leftAnchor="300" AnchorPane.bottomAnchor="80" AnchorPane.topAnchor="200" />
          <children>
-         <Label alignment="CENTER"  text="Change password" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
+         <Label alignment="CENTER"  text="Change password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="220.0">
             <font>
-               <Font name="Arial" size="56.0" />
+               <Font name="Arial" size="42.0" />
             </font>
          </Label>
-         <Label text="Old password"  AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+         <Label text="Old password" style="-fx-text-fill: aliceblue;"  AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="300">
             <font>
                <Font name="Arial" size="18.0" />
             </font>
          </Label>
-         <PasswordField fx:id="oldPassword" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="186.0">
+         <PasswordField fx:id="oldPassword" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="325.0">
             <font>
                <Font name="Arial" size="20.0" />
             </font>
          </PasswordField>
-         <Label text="New password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+         <Label text="New password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="395.0">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <PasswordField fx:id="newPassword" promptText="Password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="275.0" >
+         <PasswordField fx:id="newPassword" promptText="Password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="420.0" >
             <font>
                <Font name="Arial" size="20.0" />
             </font>
          </PasswordField>
-            <Label text="Confirm password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0">
+            <Label text="Confirm password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="490.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="confirmPassword" layoutX="100.0" layoutY="358.0" promptText="Confirm password" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="364.0">
+            <PasswordField fx:id="confirmPassword" promptText="Confirm password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="515.0">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
             </PasswordField>
 
-         <Button fx:id="changePasswordButton"  alignment="CENTER" layoutX="196.0" layoutY="400.0" mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Change password" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="500.0">
+         <Button fx:id="changePasswordButton"  alignment="CENTER"  mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Change password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="580.0">
             <font>
                <Font name="Arial" size="20.0" />
             </font>
