@@ -139,6 +139,8 @@ public class RoomController {
 
             List<Room>[] roomListData = RoomAttributesUpdater.getRoomList().getBuckets();
 
+            List<Room> rooms = RoomAttributesUpdater.getRooms();
+
             JSONParser parser = new JSONParser();
             JSONObject object;
 
@@ -147,74 +149,78 @@ public class RoomController {
 
 
                 for (Room room : roomListData[i]) {
-                    //
-                    result.add(roomRepository.getRoomById(room.getId()));
+                    result.add(rooms.get(room.getId() - 1));
 
                 }
             }
+//{\"blinds\": true, \"display\": false, \"desktopPc\": true,
+// \"projector\": true, \"spaceType\": \"Instruction hall\", \"chalkBoard\": true,
+// \"microphone\": false, \"smartBoard\": false, \"whiteBoard\": false, \"powerSupply\": true,
+// \"surfaceArea\": 141, \"seatCapacity\": 84, \"soundInstallation\": true, \"wheelChairAccessible\": true}
+            for (int ite = 0; ite < filteredAttributes.length; ite++) {
 
-            for (int ite = 0; ite <= filteredAttributes.length; ite++) {
+                for (int r = 0; r < result.size(); r++) {
+                    if (!result.get(r).getRoomName().equals("deleted")) {
+                        object = (JSONObject) parser.parse(result.get(r).getAttributes());
 
-                for (int a = 0; a < result.size(); a++) {
-                    object = (JSONObject) parser.parse(result.get(a).getAttributes());
-
-                    if (ite == 0 && blinds == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != blinds) {
-                            result.remove(result.get(a));
+                        if (ite == 0 && blinds == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 1 && desktop == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != desktop) {
-                            result.remove(result.get(a));
+                        if (ite == 1 && desktop == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 2 && projector == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != projector) {
-                            result.remove(result.get(a));
+                        if (ite == 2 && projector == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 3 && chalkBoard == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != chalkBoard) {
-                            result.remove(result.get(a));
+                        if (ite == 3 && chalkBoard == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 4 && microphone == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != microphone) {
-                            result.remove(result.get(a));
+                        if (ite == 4 && microphone == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 5 && smartBoard == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != smartBoard) {
-                            result.remove(result.get(a));
+                        if (ite == 5 && smartBoard == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 6 && whiteBoard == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != whiteBoard) {
-                            result.remove(result.get(a));
+                        if (ite == 6 && whiteBoard == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 7 && powerSupply == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != powerSupply) {
-                            result.remove(result.get(a));
+                        if (ite == 7 && powerSupply == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 8 && soundInstallation == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != soundInstallation) {
-                            result.remove(result.get(a));
+                        if (ite == 8 && soundInstallation == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
-                    }
 
-                    if (ite == 9 && wheelChair == true) {
-                        if (Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString()) != wheelChair) {
-                            result.remove(result.get(a));
+                        if (ite == 9 && wheelChair == true) {
+                            if (!Boolean.parseBoolean(object.get(filteredAttributes[ite]).toString())) {
+                                result.set(r, new Room("deleted"));
+                            }
                         }
                     }
 
@@ -223,7 +229,16 @@ public class RoomController {
 
             }
 
-            return result;
+            List<Room> resultFinal = new ArrayList<>();
+
+            for (Room roomFinal : result) {
+                if (!roomFinal.getRoomName().equals("deleted")) {
+                    resultFinal.add(roomFinal);
+                }
+            }
+
+
+            return resultFinal;
         } else {
             return new ArrayList<>();
         }
