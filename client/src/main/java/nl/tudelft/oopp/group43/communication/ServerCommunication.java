@@ -1,9 +1,11 @@
 package nl.tudelft.oopp.group43.communication;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -198,13 +200,12 @@ public class ServerCommunication {
      *         - "Exists" if the email already exists
      */
     public static String confirmRegistration(String firstName, String lastName, String username, String password, String role) {
-
         String url = cURL + "registration?";
-        url = url + "firstName=" + firstName + "&";
-        url = url + "lastName=" + lastName + "&";
-        url = url + "username=" + username + "&";
-        url = url + "password=" + password + "&";
-        url = url + "role=" + role;
+        url = url + "firstName=" + utf8EncodeValue(firstName) + "&";
+        url = url + "lastName=" + utf8EncodeValue(lastName) + "&";
+        url = url + "username=" + utf8EncodeValue(username) + "&";
+        url = url + "password=" + utf8EncodeValue(password) + "&";
+        url = url + "role=" + utf8EncodeValue(role);
 
         HttpResponse<String> response = post(url);
 
@@ -233,8 +234,8 @@ public class ServerCommunication {
      */
     public static String loginToken(String username, String password) throws ParseException {
         String url = cURL + "token?";
-        url = url + "username=" + username + "&";
-        url = url + "password=" + password + "&";
+        url = url + "username=" + utf8EncodeValue(username) + "&";
+        url = url + "password=" + utf8EncodeValue(password) + "&";
 
         HttpResponse<String> response = post(url);
 
@@ -468,9 +469,13 @@ public class ServerCommunication {
         return response.body();
     }
 
-    private class Header {
-
+    /**
+     * Encodes a value to standard utf8 format.
+     * @param value - String value that needs to be encoded
+     * @return the utf8-encoded String
+     */
+    private static String utf8EncodeValue(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
-
 }
 

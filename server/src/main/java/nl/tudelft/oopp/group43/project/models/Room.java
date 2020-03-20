@@ -49,6 +49,15 @@ public class Room implements java.io.Serializable {
         this.attributes = attributes;
     }
 
+    /**
+     *  Creates a new room with just a roomName.
+     * @param roomName just the room name
+     */
+    public Room(String roomName) {
+        this.roomName = roomName;
+
+    }
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", unique = true, nullable = false)

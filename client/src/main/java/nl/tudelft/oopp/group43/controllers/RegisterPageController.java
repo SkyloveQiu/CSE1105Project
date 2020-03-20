@@ -65,7 +65,7 @@ public class RegisterPageController {
         if (email == null) {
             return false;
         }
-        Matcher matcher = emailPattern.matcher(email);
+        Matcher matcher = emailPattern.matcher(email.toLowerCase());
         return matcher.matches();
     }
 
