@@ -96,6 +96,12 @@ public class UserController {
 
     }
 
+    @PostMapping("/name")
+    public User getName(@RequestParam("token") final String token) {
+        User user = userService.findByToken(token);
+        return user;
+    }
+
 
     @PostMapping("/api/hello")
     public String get() {
