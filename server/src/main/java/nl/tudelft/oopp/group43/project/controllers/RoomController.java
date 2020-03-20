@@ -1,6 +1,7 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -139,17 +140,15 @@ public class RoomController {
 
             List<Room>[] roomListData = RoomAttributesUpdater.getRoomList().getBuckets();
 
-            List<Room> rooms = RoomAttributesUpdater.getRooms();
+            Hashtable tableRooms = RoomAttributesUpdater.getTableRooms();
 
             JSONParser parser = new JSONParser();
             JSONObject object;
 
 
             for (Integer i : validRooms) {
-
-
                 for (Room room : roomListData[i]) {
-                    result.add(rooms.get(room.getId() - 1));
+                    result.add((Room) tableRooms.get(room.getId()));
 
                 }
             }
