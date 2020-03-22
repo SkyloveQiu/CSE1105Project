@@ -21,6 +21,7 @@ import org.json.simple.parser.ParseException;
 public class BuildingPageContent {
 
     private static Scene scene;
+    private static Label[] databaseArr;
     private static Label[] labelArr;
     private static GridPane gp;
     private static ScrollPane sp;
@@ -96,6 +97,7 @@ public class BuildingPageContent {
             jsonArray = (JSONArray) json.parse(ServerCommunication.getBuilding());
 
             labelArr = new Label[jsonArray.size()];
+            databaseArr = new Label[jsonArray.size()];
 
             for (int i = 0; i < labelArr.length; i++) {
                 Label label = new Label();
@@ -114,6 +116,7 @@ public class BuildingPageContent {
                 label.setId(Long.toString((Long) obj.get("building_number")));
 
                 labelArr[i] = label;
+                databaseArr[i] = label;
             }
 
             addBuildings();
@@ -169,7 +172,7 @@ public class BuildingPageContent {
      * @return An array with all building labels
      */
     public static Label[] getLabelArr() {
-        return labelArr;
+        return databaseArr;
     }
 
     /**

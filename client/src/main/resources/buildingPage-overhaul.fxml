@@ -18,7 +18,7 @@
 <?import javafx.scene.control.Button?>
 <AnchorPane fx:id="root" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BuildingPageController" stylesheets="stylesheets/buildingPage.css">
    <children>
-      <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" promptText="Search for buildings" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="109.0" AnchorPane.topAnchor="180.0">
+      <TextField fx:id="searchBar" prefHeight="65.0" onAction="#searchBuildings" promptText="Search for buildings" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="109.0" AnchorPane.topAnchor="180.0">
          <font>
             <Font name="Arial" size="35.0" />
          </font>

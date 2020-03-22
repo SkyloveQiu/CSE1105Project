@@ -95,11 +95,9 @@ public class BuildingPageController {
 
     /**
      * Searches for the building that contains the provided search query.
-     *
-     * @param event Event passed by the box when clicked on
      */
     @FXML
-    private void searchBuildings(MouseEvent event) {
+    private void searchBuildings() {
         String searchQuery = searchBar.getText();
         if (searchQuery != null) {
 
@@ -116,7 +114,6 @@ public class BuildingPageController {
             System.out.println("search");
             BuildingPageContent.addBuildings();
         } else {
-            System.out.println("search");
             BuildingPageContent.add();
         }
     }
