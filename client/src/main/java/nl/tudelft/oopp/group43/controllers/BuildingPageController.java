@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -77,6 +78,11 @@ public class BuildingPageController {
     private Label editAddressCheck;
     @FXML
     private Label editNameCheck;
+
+    @FXML
+    private Label deleteMsg;
+    @FXML
+    private ScrollPane deleteBuildingList;
 
     @FXML
     private Pane grayBackground;
@@ -362,6 +368,45 @@ public class BuildingPageController {
     @FXML
     private void showDeleteMenu(MouseEvent event) {
         grayBackground.setVisible(true);
+        deleteBuildingList.setContent(null);
         deleteMenu.setVisible(true);
+    }
+
+    /**
+     * If you press the delete building button, the method will check if you selected a building and do the delete operation.
+     * @param event - pressing the button
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void deleteConfirm(ActionEvent event) {
+
+        if (deleteMsg.getText() == null) {
+            deleteMsg.setText("You have not selected a building!");
+            return;
+        }
+
+
+        String a = ServerCommunication.sendDeleteBuilding(getBuildingID());
+        deleteMsg.setText("");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (a.equals("OK")) {
+            alert.setContentText("The building was successfully deleted.");
+        } else {
+            alert.setContentText("NOT OK");
+        }
+        alert.showAndWait();
+    }
+
+    /**
+     * Analyse the delete message, it extracts the id of the building.
+     * @return - the id of the building which is selected.
+     */
+    private String getBuildingID() {
+        String sentence = deleteMsg.getText();
+        String[] words = sentence.split("\\s+");
+        String buildingId = words[9];
+        buildingId = buildingId.substring(0, buildingId.length() - 1);
+
+        return buildingId;
     }
 }

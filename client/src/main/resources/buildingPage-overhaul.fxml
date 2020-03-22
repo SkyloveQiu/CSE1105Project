@@ -240,7 +240,10 @@
          </rowConstraints>
          <children>
             <AnchorPane maxHeight="400.0" maxWidth="600.0" GridPane.valignment="CENTER" GridPane.halignment="CENTER" style="-fx-background-color: rgb(57, 72, 102);" >
-
+               <Label text="Choose a building to delete it" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="35.0"><font><Font size="14.0" /></font></Label>
+               <ScrollPane fx:id="deleteBuildingList" prefWidth="300.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="65.0" />
+               <Label fx:id="deleteMsg" prefHeight="18.0" textFill="#d51414" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+               <Button mnemonicParsing="false" onAction="#deleteConfirm" text="Delete Building" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="40.0" />
             </AnchorPane>
          </children>
       </GridPane>
