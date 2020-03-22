@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -32,6 +33,15 @@ public class BuildingPageContent {
      */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
+
+        if (!ServerCommunication.getToken().equals("invalid") && ServerCommunication.getUsername().contains("admin")) {
+            ImageView add = (ImageView) scene.lookup("#add");
+            ImageView edit = (ImageView) scene.lookup("#edit");
+            ImageView delete = (ImageView) scene.lookup("#delete");
+            add.setVisible(true);
+            edit.setVisible(true);
+            delete.setVisible(true);
+        }
 
         ScrollPane scp = (ScrollPane) scene.lookup("#buildings");
         sp = scp;
