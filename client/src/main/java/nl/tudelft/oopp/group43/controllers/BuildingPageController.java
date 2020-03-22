@@ -26,31 +26,31 @@ public class BuildingPageController {
     private TextField searchBar;
 
     @FXML
-    private TextField buildingNumber;
+    private TextField addBuildingNumber;
     @FXML
-    private Label numberCheck;
+    private Label addNumberCheck;
     @FXML
-    private TextField buildingName;
+    private TextField addBuildingName;
     @FXML
-    private TextField buildingAddress;
+    private TextField addBuildingAddress;
     @FXML
-    private Label mondayMsg;
+    private Label addMondayMsg;
     @FXML
-    private Label tuesdayMsg;
+    private Label addTuesdayMsg;
     @FXML
-    private Label wednesdayMsg;
+    private Label addWednesdayMsg;
     @FXML
-    private Label thursdayMsg;
+    private Label addThursdayMsg;
     @FXML
-    private Label fridayMsg;
+    private Label addFridayMsg;
     @FXML
-    private Label saturdayMsg;
+    private Label addSaturdayMsg;
     @FXML
-    private Label sundayMsg;
+    private Label addSundayMsg;
     @FXML
-    private Label addressCheck;
+    private Label addAddressCheck;
     @FXML
-    private Label nameCheck;
+    private Label addNameCheck;
 
     @FXML
     private Label editMsg;
@@ -142,8 +142,8 @@ public class BuildingPageController {
         boolean ok = addCheckNumber();
         ok = addCheckAddress() && ok;
         ok = addCheckName() && ok;
-        if (mondayMsg.getText().isEmpty() && tuesdayMsg.getText().isEmpty() && wednesdayMsg.getText().isEmpty() && thursdayMsg.getText().isEmpty() && fridayMsg.getText().isEmpty()
-                && saturdayMsg.getText().isEmpty() && sundayMsg.getText().isEmpty() && ok) {
+        if (addMondayMsg.getText().isEmpty() && addTuesdayMsg.getText().isEmpty() && addWednesdayMsg.getText().isEmpty() && addThursdayMsg.getText().isEmpty() && addFridayMsg.getText().isEmpty()
+                && addSaturdayMsg.getText().isEmpty() && addSundayMsg.getText().isEmpty() && ok) {
 
             JSONObject openingHours = new JSONObject();
             openingHours.put("mo", getAddHoursDay(stage, "monday"));
@@ -155,17 +155,15 @@ public class BuildingPageController {
             openingHours.put("su", getAddHoursDay(stage, "sunday"));
 
             JSONObject building = new JSONObject();
-            building.put("building_number", Long.valueOf(buildingNumber.getText()));
-            building.put("building_name", buildingName.getText());
-            building.put("address", buildingAddress.getText());
+            building.put("building_number", Long.valueOf(addBuildingNumber.getText()));
+            building.put("building_name", addBuildingName.getText());
+            building.put("address", addBuildingAddress.getText());
             building.put("opening_hours", openingHours.toString());
             String a = ServerCommunication.sendAddBuilding(building);
 
-            boolean alertOK = false;
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             if (a.equals("OK")) {
                 alert.setContentText("The building was successfully added.");
-                alertOK = true;
             } else {
                 alert.setContentText("A building with this number already exists!!! \nPlease change the building number!");
             }
@@ -179,18 +177,18 @@ public class BuildingPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private boolean addCheckNumber() {
-        if (buildingNumber.getText().isEmpty()) {
-            numberCheck.setText("You cannot have this field empty");
+        if (addBuildingNumber.getText().isEmpty()) {
+            addNumberCheck.setText("You cannot have this field empty");
             return false;
         }
         try {
-            String nunmberString = buildingNumber.getText();
+            String nunmberString = addBuildingNumber.getText();
             System.out.println(Long.MAX_VALUE);
             long number = Long.valueOf(nunmberString);
-            numberCheck.setText("");
+            addNumberCheck.setText("");
             return true;
         } catch (Exception e) {
-            numberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
+            addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
             return false;
         }
     }
@@ -224,11 +222,11 @@ public class BuildingPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private boolean addCheckName() {
-        if (buildingName.getText().isEmpty()) {
-            nameCheck.setText("You cannot have this field empty");
+        if (addBuildingName.getText().isEmpty()) {
+            addNameCheck.setText("You cannot have this field empty");
             return false;
         } else {
-            nameCheck.setText("");
+            addNameCheck.setText("");
             return true;
         }
     }
@@ -239,11 +237,11 @@ public class BuildingPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private boolean addCheckAddress() {
-        if (buildingAddress.getText().isEmpty()) {
-            addressCheck.setText("You cannot have this field empty");
+        if (addBuildingAddress.getText().isEmpty()) {
+            addAddressCheck.setText("You cannot have this field empty");
             return false;
         } else {
-            addressCheck.setText("");
+            addAddressCheck.setText("");
             return true;
         }
     }
