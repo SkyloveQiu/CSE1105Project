@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -80,7 +81,7 @@ public class UserController {
      * @return the result of the login system.
      */
     @PostMapping("/token")
-    public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
+    public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) throws UnsupportedEncodingException {
         String usernameDecoded = utf8DecodeValue(username);
         String passwordDecoded = utf8DecodeValue(password);
 
@@ -114,7 +115,7 @@ public class UserController {
      * @param value utf8-encoded string value
      * @return decoded string value
      */
-    private String utf8DecodeValue(String value) {
-        return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    private String utf8DecodeValue(String value) throws UnsupportedEncodingException {
+        return URLDecoder.decode(value, StandardCharsets.UTF_8.name());
     }
 }

@@ -1,0 +1,2 @@
+[MASTER] 00:12:53.876 [pool-2-thread-1] WARN  TimeController - Phase INITIALIZATION lasted too long, 9 seconds more than allowed.
+[MASTER] 00:13:02.655 [pool-2-thread-1] WARN  TestChromosome - Functional mock problem: org.evosuite.ga.ConstructionFailedException: No generators of type java.util.Set<nl.tudelft.oopp.group43.project.models.Role>

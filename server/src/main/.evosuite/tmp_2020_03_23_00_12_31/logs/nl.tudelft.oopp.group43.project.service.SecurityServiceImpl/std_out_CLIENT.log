@@ -1,0 +1,14 @@
+[MASTER] 00:12:53.680 [pool-2-thread-1] WARN  TimeController - Phase INITIALIZATION lasted too long, 9 seconds more than allowed.
+[MASTER] 00:13:03.437 [pool-2-thread-1] WARN  TestChromosome - Functional mock problem: org.evosuite.ga.ConstructionFailedException: No generators of type java.util.Collection<org.springframework.security.core.GrantedAuthority>
+[MASTER] 00:14:07.408 [pool-2-thread-1] WARN  JUnitAnalyzer - Found unstable test named test0 -> class java.lang.NullPointerException: null
+[MASTER] 00:14:07.411 [pool-2-thread-1] WARN  JUnitAnalyzer - Failing test:
+ SecurityServiceImpl securityServiceImpl0 = new SecurityServiceImpl();
+AuthenticationManager authenticationManager0 = mock(AuthenticationManager.class, new ViolatedAssumptionAnswer());
+Injector.inject(securityServiceImpl0, (Class<?>) SecurityServiceImpl.class, "authenticationManager", (Object) authenticationManager0);
+UserDetailsService userDetailsService0 = mock(UserDetailsService.class, new ViolatedAssumptionAnswer());
+Injector.inject(securityServiceImpl0, (Class<?>) SecurityServiceImpl.class, "userDetailsService", (Object) userDetailsService0);
+UserRepository userRepository0 = mock(UserRepository.class, new ViolatedAssumptionAnswer());
+Injector.inject(securityServiceImpl0, (Class<?>) SecurityServiceImpl.class, "userRepository", (Object) userRepository0);
+Injector.validateBean(securityServiceImpl0, (Class<?>) SecurityServiceImpl.class);
+securityServiceImpl0.findLoggedInUsername();
+
