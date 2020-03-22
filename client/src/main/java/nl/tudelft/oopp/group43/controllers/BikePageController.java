@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.io.IOException;
+
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +18,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
+
 
 
 public class BikePageController {
