@@ -477,5 +477,40 @@ public class ServerCommunication {
     private static String utf8EncodeValue(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
+
+    /**
+     * Gives the id of the chosen buildings and receives the list of bikes available for that building.
+     * @param buildingID - String which represents the id of the chosen building
+     * @return a String which can have 2 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - a list of bikes for that building.
+     */
+    public static  String getBikeRenting(String buildingID) {
+        String url = cURL + "bike/" + buildingID;
+        HttpResponse<String> response = get(url);
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
+     * Gives the id of the chosen bike for renting it.
+     * @param bikeId - String which represents the id of the chosen bike.
+     * @return a String which can have 2 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server receives the information.
+     */
+    public static String sendBikeRenting(String bikeId) {
+        String url = cURL + "bikeReservation/create?BikeId=" + bikeId + "&token=" + getToken();
+        HttpResponse<String> response = post(url);
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return "OK";
+
+    }
 }
 

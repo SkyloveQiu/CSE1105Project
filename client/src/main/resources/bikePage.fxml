@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" stylesheets="stylesheets/bikePage.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BikePageController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" stylesheets="stylesheets/bikePage.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BikePageController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" style="-fx-text-fill: #e7f2fe;" text="Bike Menu" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="230.0">
          <font>
@@ -78,7 +69,7 @@
                   </content>
                </ScrollPane>
 
-               <Button fx:id="rentBike" maxHeight="Infinity" maxWidth="Infinity" styleClass="menuButtons" text="Rent" GridPane.columnIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
+               <Button fx:id="rentBike" maxHeight="Infinity" maxWidth="Infinity" onAction="#confirmRent" styleClass="menuButtons" text="Rent" GridPane.columnIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
             </children>
          </GridPane>
 
@@ -139,7 +130,7 @@
             <children>
                <AnchorPane maxHeight="Infinity" maxWidth="Infinity" GridPane.columnSpan="2">
                   <DatePicker fx:id="reservationStartingDate" AnchorPane.leftAnchor="20" />
-                  <Label alignment="CENTER" style="-fx-text-fill: #e7f2fe;" text="Select starting date, end date and building:" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"><font><Font name="Arial" size="15" /></font></Label>
+                  <Label alignment="CENTER" style="-fx-text-fill: #e7f2fe;" text="Select starting date, end date and building:" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Label>
                   <DatePicker fx:id="reservationEndingDate" AnchorPane.rightAnchor="20" />
                </AnchorPane>
 

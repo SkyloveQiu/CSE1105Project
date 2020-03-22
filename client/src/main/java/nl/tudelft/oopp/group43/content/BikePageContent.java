@@ -25,10 +25,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
+
 public class BikePageContent {
 
     private static double windowHeight = 800;
     private static Scene scene;
+    private static ArrayList<String> buildingsID;
+    private static String selectedBuilding;
 
     /**
      * Adds the dynamic content to the bike Page.
@@ -55,6 +59,15 @@ public class BikePageContent {
     }
 
     /**
+     * Gets the number of chosen building.
+     *
+     * @return String which represents the number of the chosen building
+     */
+    public static String getSelectedBuilding() {
+        return selectedBuilding;
+    }
+
+    /**
      * Adds the buildings to all gridpanes and choiceboxes of the bike page.
      */
     private static void addBuildings() {
@@ -63,6 +76,8 @@ public class BikePageContent {
         GridPane rentBikeBuildingList = (GridPane) scene.lookup("#rentBikeBuildingList");
         reserveBikeBuildingList.setVgap(20);
         rentBikeBuildingList.setVgap(20);
+        selectedBuilding = null;
+        buildingsID = new ArrayList<>();
         JSONParser json = new JSONParser();
         try {
             JSONArray array = (JSONArray) json.parse(ServerCommunication.getBuilding());
@@ -70,6 +85,8 @@ public class BikePageContent {
             for (Object obj : array) {
                 JSONObject jsonObject = (JSONObject) obj;
                 buildings.add((String) jsonObject.get("building_name"));
+                long x = (Long) jsonObject.get("building_number");
+                buildingsID.add(Long.toString(x));
             }
 
             returnBuildingList.setItems(FXCollections.observableArrayList(buildings));
@@ -81,6 +98,7 @@ public class BikePageContent {
                 rentBikeBuildingList.getRowConstraints().add(rc);
 
                 Label labelRent = new Label(buildings.get(i));
+                labelRent.setId(buildingsID.get(i));
                 labelRent.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 labelRent.getStyleClass().add("buildingLabels");
                 rentBikeBuildingList.add(labelRent, 0, i);
@@ -126,7 +144,7 @@ public class BikePageContent {
      * Adds an event to the label when it gets clicked.
      *
      * @param label the label to add the event to
-     * @param list the list of the label
+     * @param list  the list of the label
      */
     private static void addSelectEvent(Label label, GridPane list) {
         label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -144,17 +162,18 @@ public class BikePageContent {
                 }
                 if (!selected) {
                     label.getStyleClass().add("selected_building");
+                    selectedBuilding = label.getId();
                 }
             }
         });
         label.setCursor(Cursor.HAND);
     }
 
-    public static void setWindowHeight(double height) {
-        windowHeight = height;
-    }
-
     public static double getWindowHeight() {
         return windowHeight;
+    }
+
+    public static void setWindowHeight(double height) {
+        windowHeight = height;
     }
 }
