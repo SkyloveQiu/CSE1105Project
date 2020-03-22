@@ -1,7 +1,5 @@
 package nl.tudelft.oopp.group43.controllers;
 
-import java.io.IOException;
-
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +16,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
+import java.io.IOException;
 
 
 public class BikePageController {
@@ -127,27 +125,38 @@ public class BikePageController {
             String bikes = ServerCommunication.getBikeRenting(selectedBuilding);
             JSONParser parser = new JSONParser();
             JSONArray jsonArray = (JSONArray) parser.parse(bikes);
-            if (jsonArray.size() == 0) {
+            String bikeID = null;
+            int i = 0;
+            while (i < jsonArray.size()) {
+                JSONObject obj = (JSONObject) jsonArray.get(i);
+                boolean available = ((Boolean) obj.get("bikes_available"));
+                if (available) {
+                    bikeID = Long.toString((Long) obj.get("bikeId"));
+                    break;
+                }
+                i++;
+            }
+            if (bikeID == null) {
                 alertInformation = "This building doesn't have any available bikes!";
             } else {
-                JSONObject obj = (JSONObject) jsonArray.get(0);
-
-                String bikeID = Long.toString((Long) obj.get("bikeId"));
                 String message = ServerCommunication.sendBikeRenting(bikeID);
+
                 if (!message.equals("OK")) {
                     alertInformation = "Check your connection with the server! Something goes wrong with it";
                 } else {
-                    alertInformation = "Your reservation was successful proceed!" + "\n" + "You reserved the bike with ID  " + obj.get("bikeId");
+                    alertInformation = "Your reservation was successful proceed!" + "\n" + "You reserved the bike with ID  " + bikeID;
                     ok = true;
                 }
             }
-
         }
         alert.setContentText(alertInformation);
         alert.showAndWait();
         if (ok) {
             closeRentMenu(event);
         }
+
     }
 
 }
+
+

@@ -508,6 +508,7 @@ public class ServerCommunication {
         if (response == null) {
             return "Communication with server failed";
         }
+
         return "OK";
 
     }
