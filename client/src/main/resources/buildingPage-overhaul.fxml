@@ -14,6 +14,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Button?>
 <AnchorPane fx:id="root" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BuildingPageController" stylesheets="stylesheets/buildingPage.css">
    <children>
       <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" promptText="Search for buildings" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="109.0" AnchorPane.topAnchor="180.0">
@@ -47,7 +49,122 @@
          </content>
       </ScrollPane>
 
-      <Pane fx:id="grayBackground" style="-fx-background-color: rgba(43, 43, 43, 0.5);" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="141" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" />
+      <Pane fx:id="grayBackground" style="-fx-background-color: rgba(43, 43, 43, 0.65);" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="141" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" />
+
+      <GridPane fx:id="editMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="141" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" >
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="400.0" maxWidth="600.0" GridPane.valignment="CENTER" GridPane.halignment="CENTER" style="-fx-background-color: rgba(57, 72, 102, 0.95);" >
+
+            </AnchorPane>
+         </children>
+      </GridPane>
+
+      <GridPane fx:id="addMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="141" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" >
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="400.0" maxWidth="600.0" GridPane.valignment="CENTER" GridPane.halignment="CENTER" style="-fx-background-color: rgb(57, 72, 102);" >
+               <Label prefHeight="18.0" prefWidth="91.0" text="Building Number" styleClass="text_labels" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="27.0" />
+               <Label fx:id="numberCheck" prefHeight="18.0" prefWidth="303.0" textFill="#d51414" AnchorPane.leftAnchor="274.0" AnchorPane.topAnchor="27.0" />
+               <TextField fx:id="buildingNumber" onKeyTyped="#checkNumber" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="24.0" />
+               <Label text="Building Name"  styleClass="text_labels" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="64.0" />
+               <TextField fx:id="buildingName" onKeyTyped="#checkName" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="60.0" />
+               <Label fx:id="nameCheck" prefHeight="18.0" prefWidth="292.0" textFill="#d51414" />
+               <Label prefHeight="18.0" prefWidth="91.0" text="Building Address" styleClass="text_labels" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="98.0" />
+               <TextField fx:id="buildingAddress" onKeyTyped="#checkAddress" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="95.0" />
+               <Label fx:id="addressCheck" prefHeight="18.0" prefWidth="315.0" textFill="#d51414" />
+               <Label text="Openning Hours:" styleClass="text_labels" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="123.0" />
+               <Label text="Monday " styleClass="text_labels" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="137.0" />
+               <ChoiceBox fx:id="mondayOpenH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="117.0" AnchorPane.topAnchor="132.0" />
+               <Label layoutX="176.0" layoutY="136.0" text=":" styleClass="text_labels" AnchorPane.leftAnchor="176.0" AnchorPane.topAnchor="136.0" />
+               <ChoiceBox fx:id="mondayOpenM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="132.0" />
+               <Label text="-" styleClass="text_labels" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="137.0" />
+               <ChoiceBox fx:id="mondayCloseH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="132.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="136.0" />
+               <ChoiceBox fx:id="mondayCloseM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="333.0" AnchorPane.topAnchor="132.0" />
+               <Label fx:id="mondayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="137.0" />
+               <Label prefHeight="18.0" prefWidth="50.0" text="Tuesday" styleClass="text_labels" AnchorPane.leftAnchor="62.0" AnchorPane.topAnchor="172.0" />
+               <ChoiceBox fx:id="tuesdayOpenH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="117.0" AnchorPane.topAnchor="168.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="176.0" AnchorPane.topAnchor="172.0" />
+               <ChoiceBox fx:id="tuesdayOpenM" layoutX="189.0" layoutY="168.0" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="168.0" />
+               <Label text="-" styleClass="text_labels" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="172.0" />
+               <ChoiceBox fx:id="tuesdayCloseH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="168.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="172.0" />
+               <ChoiceBox fx:id="tuesdayCloseM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="333.0" AnchorPane.topAnchor="168.0" />
+               <Label fx:id="tuesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="172.0" />
+               <Label text="Wednesday" styleClass="text_labels" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="204.0" />
+               <ChoiceBox fx:id="wednesdayOpenH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="117.0" AnchorPane.topAnchor="200.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="176.0" AnchorPane.topAnchor="203.0" />
+               <ChoiceBox fx:id="wednesdayOpenM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="200.0" />
+               <Label text="-" styleClass="text_labels" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="203.0" />
+               <ChoiceBox fx:id="wednesdayCloseH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="199.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="204.0" />
+               <ChoiceBox fx:id="wednesdayCloseM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="333.0" AnchorPane.topAnchor="199.0" />
+               <Label fx:id="wednesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="203.0" />
+               <Label text="Thursday" styleClass="text_labels" AnchorPane.leftAnchor="52.0" AnchorPane.topAnchor="241.0" />
+               <ChoiceBox fx:id="thursdayOpenH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="117.0" AnchorPane.topAnchor="237.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="176.0" AnchorPane.topAnchor="240.0" />
+               <ChoiceBox fx:id="thursdayOpenM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="237.0" />
+               <Label text="-" styleClass="text_labels" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="241.0" />
+               <ChoiceBox fx:id="thursdayCloseH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="236.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="241.0" />
+               <ChoiceBox fx:id="thursdayCloseM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="333.0" AnchorPane.topAnchor="236.0" />
+               <Label fx:id="thursdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="240.0" />
+               <Label text="Friday" styleClass="text_labels" AnchorPane.leftAnchor="72.0" AnchorPane.topAnchor="275.0" />
+               <ChoiceBox fx:id="fridayOpenH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="117.0" AnchorPane.topAnchor="271.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="176.0" AnchorPane.topAnchor="274.0" />
+               <ChoiceBox fx:id="fridayOpenM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="271.0" />
+               <Label text="-" styleClass="text_labels" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="274.0" />
+               <ChoiceBox fx:id="fridayCloseH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="271.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="275.0" />
+               <ChoiceBox fx:id="fridayCloseM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="333.0" AnchorPane.topAnchor="270.0" />
+               <Label fx:id="fridayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="274.0" />
+               <Label text="Saturday" styleClass="text_labels" AnchorPane.leftAnchor="64.0" AnchorPane.topAnchor="312.0" />
+               <ChoiceBox fx:id="saturdayOpenH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="117.0" AnchorPane.topAnchor="308.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="176.0" AnchorPane.topAnchor="312.0" />
+               <ChoiceBox fx:id="saturdayOpenM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="308.0" />
+               <Label text="-" styleClass="text_labels" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="312.0" />
+               <ChoiceBox fx:id="saturdayCloseH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="308.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="312.0" />
+               <ChoiceBox fx:id="saturdayCloseM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="333.0" AnchorPane.topAnchor="308.0" />
+               <Label fx:id="saturdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="312.0" />
+               <Label text="Sunday" styleClass="text_labels" AnchorPane.leftAnchor="68.0" AnchorPane.topAnchor="347.0" />
+               <ChoiceBox fx:id="sundayOpenH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="117.0" AnchorPane.topAnchor="343.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="177.0" AnchorPane.topAnchor="346.0" />
+               <ChoiceBox fx:id="sundayOpenM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="189.0" AnchorPane.topAnchor="343.0" />
+               <Label text="-" styleClass="text_labels" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="347.0" />
+               <ChoiceBox fx:id="sundayCloseH" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="267.0" AnchorPane.topAnchor="343.0" />
+               <Label text=":" styleClass="text_labels" AnchorPane.leftAnchor="324.0" AnchorPane.topAnchor="347.0" />
+               <ChoiceBox fx:id="sundayCloseM" prefHeight="26.0" prefWidth="50.0" AnchorPane.leftAnchor="333.0" AnchorPane.topAnchor="343.0" />
+               <Label fx:id="sundayMsg" styleClass="text_labels" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="347.0" />
+               <Button mnemonicParsing="false" onAction="#addConfirm" prefHeight="6.0" prefWidth="90.0" text="Add Building" AnchorPane.leftAnchor="289.0" AnchorPane.topAnchor="373.0" />
+            </AnchorPane>
+         </children>
+      </GridPane>
+
+      <GridPane fx:id="deleteMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="141" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" >
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="400.0" maxWidth="600.0" GridPane.valignment="CENTER" GridPane.halignment="CENTER" style="-fx-background-color: rgba(57, 72, 102, 0.95);" >
+
+            </AnchorPane>
+         </children>
+      </GridPane>
 
       <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
          <children>
@@ -56,7 +173,7 @@
                   <Image url="@/icons/edit-icon.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="add" fitHeight="63.0" fitWidth="63.0" AnchorPane.rightAnchor="103" AnchorPane.topAnchor="58" visible="false" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="add" fitHeight="63.0" fitWidth="63.0" onMouseClicked="#showAddMenu" AnchorPane.rightAnchor="103" AnchorPane.topAnchor="58" visible="false" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/icons/add-icon.png" />
                </image>
