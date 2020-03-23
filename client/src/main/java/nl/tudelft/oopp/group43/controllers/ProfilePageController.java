@@ -1,16 +1,26 @@
 package nl.tudelft.oopp.group43.controllers;
 
 import java.io.IOException;
+import java.net.URL;
+
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.components.BackButton;
+import nl.tudelft.oopp.group43.components.SideBarMenu;
+import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
@@ -19,10 +29,6 @@ public class ProfilePageController {
 
     @FXML
     private AnchorPane changePasswordMenu;
-
-    @FXML
-    private void showMyReservationsMenu(ActionEvent event) {
-    }
 
     @FXML
     private void showChangePasswordMenu(ActionEvent event) {
@@ -60,5 +66,16 @@ public class ProfilePageController {
 
         st.setOnFinished(e -> changePasswordMenu.setVisible(false));
         st.play();
+    }
+
+    @FXML
+    private void navigateToMyReservations(MouseEvent e) {
+        SceneLoader.setScene("myreservations");
+        SceneLoader sl = new SceneLoader();
+        try {
+            sl.start((Stage) ((Node) e.getSource()).getScene().getWindow());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

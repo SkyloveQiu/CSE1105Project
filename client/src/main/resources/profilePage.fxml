@@ -31,7 +31,7 @@
             <RowConstraints percentHeight="34" />
          </rowConstraints>
          <children>
-            <Button fx:id="myreservations" text="My Reservations"  onAction="#showMyReservationsMenu" alignment="CENTER" styleClass="buttons"  maxHeight="400" maxWidth="700" >
+            <Button fx:id="myreservations" text="My Reservations"  onMouseClicked="#navigateToMyReservations" alignment="CENTER" styleClass="buttons"  maxHeight="400" maxWidth="700" >
                <font>
                   <Font name="Arial" size="45.0" />
                </font>

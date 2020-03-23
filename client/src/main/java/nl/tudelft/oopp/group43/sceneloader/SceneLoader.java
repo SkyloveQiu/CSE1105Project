@@ -16,6 +16,7 @@ import nl.tudelft.oopp.group43.content.BikePageContent;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import nl.tudelft.oopp.group43.content.FoodPageContent;
 import nl.tudelft.oopp.group43.content.MainPageContent;
+import nl.tudelft.oopp.group43.content.MyReservationsPageContent;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
 import nl.tudelft.oopp.group43.content.RegisterPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
@@ -203,6 +204,28 @@ public class SceneLoader extends Application {
 
                 primaryStage.show();
                 ProfilePageContent.addContent(scene);
+                break;
+
+            case "myreservations":
+                URL reservationsUrl = getClass().getResource("/myReservationsPage.fxml");
+                loader.setLocation(reservationsUrl);
+                root = loader.load();
+                scene = new Scene(root);
+
+                menu = new SideBarMenu(scene);
+                parent = (AnchorPane) scene.lookup("#root");
+                parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
+
+                BackButton.pushScene("myreservations");
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
+
+                primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+
+                primaryStage.show();
+                MyReservationsPageContent.addContent(scene);
                 break;
             default:
                 URL xmlUrl = getClass().getResource("/mainPage-overhaul.fxml");
