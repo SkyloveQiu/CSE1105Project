@@ -5,6 +5,7 @@ import static nl.tudelft.oopp.group43.controllers.RegisterPageController.emailVa
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -51,7 +52,7 @@ public class LoginPageController {
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void loginClicked(ActionEvent event) throws IOException, ParseException {
+    private void loginClicked(Event event) throws IOException, ParseException {
         boolean okEmpty = checkEmpty();
         if (okEmpty == false) {
             return;
