@@ -198,7 +198,7 @@ public class BuildingPageContent {
      * Getter for the JSONArray.
      * @return the jsonarray
      */
-    public static JSONArray getJSONArray() {
+    public static JSONArray getJsonArray() {
         return jsonArray;
     }
 

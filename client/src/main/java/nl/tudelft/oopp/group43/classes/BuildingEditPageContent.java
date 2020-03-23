@@ -2,15 +2,12 @@ package nl.tudelft.oopp.group43.classes;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import org.json.simple.JSONArray;
@@ -65,11 +62,9 @@ public class BuildingEditPageContent extends BuildDataScene implements Runnable 
     private void addBuildingList(Label[] labelArr) {
         AnchorPane ap = new AnchorPane();
         ap.setMinHeight(30.0 * labelArr.length);
-        JSONArray array = BuildingPageContent.getJSONArray();
+        JSONArray array = BuildingPageContent.getJsonArray();
 
         for (int i = 0; i < labelArr.length; i++) {
-            JSONObject obj = (JSONObject) array.get(i);
-
             String buildingName = labelArr[i].getText().replaceAll("\\n", " ");
             Label label = new Label(buildingName);
             label.setPrefHeight(30);
@@ -78,6 +73,7 @@ public class BuildingEditPageContent extends BuildDataScene implements Runnable 
             AnchorPane.setLeftAnchor(label,5.0);
             AnchorPane.setTopAnchor(label, i * 30.0);
 
+            JSONObject obj = (JSONObject) array.get(i);
             addEvent(label,(Long) obj.get("building_number"), obj);
 
             ap.getChildren().add(label);

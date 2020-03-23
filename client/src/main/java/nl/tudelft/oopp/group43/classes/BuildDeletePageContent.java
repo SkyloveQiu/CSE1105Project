@@ -2,14 +2,11 @@ package nl.tudelft.oopp.group43.classes;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import org.json.simple.JSONArray;
@@ -64,7 +61,7 @@ public class BuildDeletePageContent extends BuildDataScene implements Runnable {
     private void addBuildingList(Label[] labelArr, Label msg) {
         AnchorPane ap = new AnchorPane();
         ap.setMinHeight(30.0 * labelArr.length);
-        JSONArray array = BuildingPageContent.getJSONArray();
+        JSONArray array = BuildingPageContent.getJsonArray();
 
         for (int i = 0; i < labelArr.length; i++) {
             String buildingName = labelArr[i].getText().replaceAll("\\n", " ");
