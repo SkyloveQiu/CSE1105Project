@@ -119,6 +119,7 @@ public class BuildingPageContent {
                 databaseArr[i] = label;
             }
 
+
             addBuildings();
 
         } catch (ParseException e) {
@@ -191,6 +192,14 @@ public class BuildingPageContent {
         for (int i = 0; i < newArray.size(); i++) {
             labelArr[i] = newArray.get(i);
         }
+    }
+
+    /**
+     * Getter for the JSONArray.
+     * @return the jsonarray
+     */
+    public static JSONArray getJSONArray() {
+        return jsonArray;
     }
 
 }

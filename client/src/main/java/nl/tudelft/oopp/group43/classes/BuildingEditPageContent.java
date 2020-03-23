@@ -3,13 +3,17 @@ package nl.tudelft.oopp.group43.classes;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.content.BuildingPageContent;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,6 +21,7 @@ import org.json.simple.parser.ParseException;
 
 public class BuildingEditPageContent extends BuildDataScene implements Runnable {
 
+    private Scene scene;
 
     /**
      * Constructor for the BuildDataScene.
@@ -26,6 +31,7 @@ public class BuildingEditPageContent extends BuildDataScene implements Runnable 
      */
     public BuildingEditPageContent(Stage stage, ThreadLock lock) {
         super(stage, lock);
+        this.scene = stage.getScene();
     }
 
     /**
@@ -40,7 +46,7 @@ public class BuildingEditPageContent extends BuildDataScene implements Runnable 
                     getLock().wait();
                 }
 
-                Label[] labelArr = BuildingsConfig.getLabel();
+                Label[] labelArr = BuildingPageContent.getLabelArr();
                 addBuildingList(labelArr);
 
             } catch (Exception e) {
@@ -57,113 +63,86 @@ public class BuildingEditPageContent extends BuildDataScene implements Runnable 
      * @param labelArr The array containing all building labels.
      */
     private void addBuildingList(Label[] labelArr) {
-        final ScrollPane sp = (ScrollPane) this.getScene().lookup("#building_list");
-        Label buildingNumber = (Label) this.getStage().getScene().lookup("#buildingNumber");
-        TextField buildingName = (TextField) this.getStage().getScene().lookup("#buildingName");
-        TextField buildingAddress = (TextField) this.getStage().getScene().lookup("#buildingAddress");
-        Label editMsg = (Label) this.getStage().getScene().lookup("#editMsg");
-        Pane pane = new Pane();
-        double pos = 0.0;
-        String text = "Are you sure that you want to edit ";
-
+        AnchorPane ap = new AnchorPane();
+        ap.setMinHeight(30.0 * labelArr.length);
+        JSONArray array = BuildingPageContent.getJSONArray();
 
         for (int i = 0; i < labelArr.length; i++) {
-            Label label = new Label();
+            JSONObject obj = (JSONObject) array.get(i);
 
+            String buildingName = labelArr[i].getText().replaceAll("\\n", " ");
+            Label label = new Label(buildingName);
+            label.setPrefHeight(30);
+            label.getStyleClass().add("buildingLabel");
+            AnchorPane.setRightAnchor(label,5.0);
+            AnchorPane.setLeftAnchor(label,5.0);
+            AnchorPane.setTopAnchor(label, i * 30.0);
 
-            label.setText(labelArr[i].getText().replaceAll("\\n", " "));
+            addEvent(label,(Long) obj.get("building_number"), obj);
 
-            JSONObject obj = BuildingsConfig.getBuilding(i);
-
-
-            // handles the building labels being clicked + highlighting the selected building
-            EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    for (Node n : pane.getChildren()) {
-                        n.setStyle("-fx-border-color: black; -fx-border-width: 3;");
-                    }
-                    label.setStyle("-fx-border-color: blue; -fx-border-width: 3;");
-                    editMsg.setText(text + label.getText() + " building?");
-                    buildingNumber.setText(((Long) obj.get("building_number")).toString());
-                    buildingAddress.setText((String) obj.get("address"));
-                    buildingName.setText((String) obj.get("building_name"));
-
-
-                    JSONParser parser = new JSONParser();
-                    try {
-                        JSONObject hoursObj = (JSONObject) parser.parse(((String) obj.get("opening_hours")).replaceAll("\\\\", ""));
-                        putHours("monday", (String) hoursObj.get("mo"));
-                        putHours("tuesday", (String) hoursObj.get("tu"));
-                        putHours("wednesday", (String) hoursObj.get("we"));
-                        putHours("thursday", (String) hoursObj.get("th"));
-                        putHours("friday", (String) hoursObj.get("fr"));
-                        putHours("saturday", (String) hoursObj.get("sa"));
-                        putHours("sunday", (String) hoursObj.get("su"));
-
-                    } catch (ParseException ex) {
-                        ex.printStackTrace();
-                    }
-
-                }
-
-            };
-
-
-            label.addEventFilter(MouseEvent.MOUSE_CLICKED, event);
-            label.setMaxWidth(Integer.MAX_VALUE);
-            label.setPrefWidth(500);
-            label.setMinWidth(0);
-            label.setMinHeight(30.0);
-            label.setStyle("-fx-background-color: #daebeb");
-            label.setStyle("-fx-border-color: black; -fx-border-width: 3;");
-            label.setLayoutY(pos);
-
-            pane.getChildren().add(label);
-
-            pos += 35.0;
+            ap.getChildren().add(label);
         }
-        pane.setMinHeight(pos);
-        sp.setLayoutY(40.0);
-        sp.setLayoutX(40.0);
-        sp.setMinSize(150.0, 250.0);
 
-
+        ScrollPane sp = (ScrollPane) scene.lookup("#editBuildingList");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                sp.setContent(pane);
+                sp.setContent(ap);
             }
         });
     }
 
     /**
-     * Puts the information regarding the opening hours of a specific day of the week.
-     *
-     * @param day  - represents the day of a week
-     * @param data - data regarding the opening hours of that day.
+     * Adds an event to when the label is clicked.
+     * @param label label of the event
      */
-    private void putHours(String day, String data) {
-        ChoiceBox<String> openH = (ChoiceBox<String>) this.getStage().getScene().lookup("#" + day + "OpenH");
-        ChoiceBox<String> openM = (ChoiceBox<String>) this.getStage().getScene().lookup("#" + day + "OpenM");
-        ChoiceBox<String> closeH = (ChoiceBox<String>) this.getStage().getScene().lookup("#" + day + "CloseH");
-        ChoiceBox<String> closeM = (ChoiceBox<String>) this.getStage().getScene().lookup("#" + day + "CloseM");
-        String time = "--";
-        if (data.equals("closed")) {
-            openH.setValue(time);
-            openM.setValue(time);
-            closeH.setValue(time);
-            closeM.setValue(time);
-            return;
-        }
-        time = data.substring(0, 2);
-        openH.setValue(time);
-        time = data.substring(3, 5);
-        openM.setValue(time);
-        time = data.substring(6, 8);
-        closeH.setValue(time);
-        time = data.substring(9, 11);
-        closeM.setValue(time);
+    private void addEvent(Label label, long id, JSONObject obj) {
+        Label editId = (Label) scene.lookup("#editId");
 
+        label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                editId.setText(Long.toString(id));
+
+                Label number = (Label) scene.lookup("#editBuildingNumber");
+                number.setText("Building being edited: " + id);
+
+                TextField name = (TextField) scene.lookup("#editBuildingName");
+                name.setText((String) obj.get("building_name"));
+
+                TextField address = (TextField) scene.lookup("#editBuildingAddress");
+                address.setText((String) obj.get("address"));
+
+                JSONParser json = new JSONParser();
+                JSONObject oh = null;
+                try {
+                    oh = (JSONObject) json.parse((String) obj.get("opening_hours"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                TextField monday = (TextField) scene.lookup("#editMondayHours");
+                monday.setText((String) oh.get("mo"));
+
+                TextField tuesday = (TextField) scene.lookup("#editTuesdayHours");
+                tuesday.setText((String) oh.get("tu"));
+
+                TextField wednesday = (TextField) scene.lookup("#editWednesdayHours");
+                wednesday.setText((String) oh.get("we"));
+
+                TextField thursday = (TextField) scene.lookup("#editThursdayHours");
+                thursday.setText((String) oh.get("th"));
+
+                TextField friday = (TextField) scene.lookup("#editFridayHours");
+                friday.setText((String) oh.get("fr"));
+
+                TextField saturday = (TextField) scene.lookup("#editSaturdayHours");
+                saturday.setText((String) oh.get("sa"));
+
+                TextField sunday = (TextField) scene.lookup("#editSundayHours");
+                sunday.setText((String) oh.get("su"));
+            }
+        });
     }
+
 }

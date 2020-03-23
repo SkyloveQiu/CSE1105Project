@@ -3,6 +3,7 @@ package nl.tudelft.oopp.group43.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,7 +16,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.classes.BuildDataScene;
+import nl.tudelft.oopp.group43.classes.BuildDeletePageContent;
+import nl.tudelft.oopp.group43.classes.BuildingData;
+import nl.tudelft.oopp.group43.classes.BuildingEditPageContent;
 import nl.tudelft.oopp.group43.classes.StringChecker;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import org.json.simple.JSONObject;
@@ -51,6 +57,20 @@ public class BuildingPageController {
     private Label addAddressCheck;
     @FXML
     private Label addNameCheck;
+    @FXML
+    private TextField addMondayHours;
+    @FXML
+    private TextField addTuesdayHours;
+    @FXML
+    private TextField addWednesdayHours;
+    @FXML
+    private TextField addThursdayHours;
+    @FXML
+    private TextField addFridayHours;
+    @FXML
+    private TextField addSaturdayHours;
+    @FXML
+    private TextField addSundayHours;
 
     @FXML
     private Label editMsg;
@@ -78,11 +98,29 @@ public class BuildingPageController {
     private Label editAddressCheck;
     @FXML
     private Label editNameCheck;
+    @FXML
+    private TextField editMondayHours;
+    @FXML
+    private TextField editTuesdayHours;
+    @FXML
+    private TextField editWednesdayHours;
+    @FXML
+    private TextField editThursdayHours;
+    @FXML
+    private TextField editFridayHours;
+    @FXML
+    private TextField editSaturdayHours;
+    @FXML
+    private TextField editSundayHours;
+    @FXML
+    private Label editId;
 
     @FXML
     private Label deleteMsg;
     @FXML
     private ScrollPane deleteBuildingList;
+    @FXML
+    private Label deleteId;
 
     @FXML
     private Pane grayBackground;
@@ -124,9 +162,25 @@ public class BuildingPageController {
      */
 
     @FXML
-    private void showAddMenu(MouseEvent event) {
+    private void showAddMenu() {
         grayBackground.setVisible(true);
+        editMenu.setVisible(false);
+        deleteMenu.setVisible(false);
         addMenu.setVisible(true);
+
+        addTextFieldListener(addMondayHours);
+        addTextFieldListener(addTuesdayHours);
+        addTextFieldListener(addWednesdayHours);
+        addTextFieldListener(addThursdayHours);
+        addTextFieldListener(addFridayHours);
+        addTextFieldListener(addSaturdayHours);
+        addTextFieldListener(addSundayHours);
+    }
+
+    @FXML
+    private void closeAddMenu() {
+        grayBackground.setVisible(false);
+        addMenu.setVisible(false);
     }
 
     /**
@@ -146,13 +200,13 @@ public class BuildingPageController {
                 && addSaturdayMsg.getText().isEmpty() && addSundayMsg.getText().isEmpty() && ok) {
 
             JSONObject openingHours = new JSONObject();
-            openingHours.put("mo", getAddHoursDay(stage, "monday"));
-            openingHours.put("tu", getAddHoursDay(stage, "tuesday"));
-            openingHours.put("we", getAddHoursDay(stage, "wednesday"));
-            openingHours.put("th", getAddHoursDay(stage, "thursday"));
-            openingHours.put("fr", getAddHoursDay(stage, "friday"));
-            openingHours.put("sa", getAddHoursDay(stage, "saturday"));
-            openingHours.put("su", getAddHoursDay(stage, "sunday"));
+            openingHours.put("mo", addMondayHours.getText());
+            openingHours.put("tu", addTuesdayHours.getText());
+            openingHours.put("we", addWednesdayHours.getText());
+            openingHours.put("th", addThursdayHours.getText());
+            openingHours.put("fr", addFridayHours.getText());
+            openingHours.put("sa", addSaturdayHours.getText());
+            openingHours.put("su", addSundayHours.getText());
 
             JSONObject building = new JSONObject();
             building.put("building_number", Long.valueOf(addBuildingNumber.getText()));
@@ -168,6 +222,7 @@ public class BuildingPageController {
                 alert.setContentText("A building with this number already exists!!! \nPlease change the building number!");
             }
             alert.showAndWait();
+            BuildingPageContent.add();
         }
     }
 
@@ -191,29 +246,6 @@ public class BuildingPageController {
             addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
             return false;
         }
-    }
-
-    /**
-     * Gets the information regarding the opening hours of a day for a building.
-     *
-     * @param stage - the actual stage
-     * @param day   - string with the day of the week
-     * @return - the information regarding the opening hours of that day
-     */
-    @SuppressWarnings("unchecked")
-    private String getAddHoursDay(Stage stage, String day) {
-        ChoiceBox<String> openH = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "OpenH");
-        ChoiceBox<String> openM = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "OpenM");
-        ChoiceBox<String> closeH = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "CloseH");
-        ChoiceBox<String> closeM = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "CloseM");
-
-        String hours = openH.getSelectionModel().getSelectedItem() + ":" + openM.getSelectionModel().getSelectedItem();
-        hours = hours + "-" + closeH.getSelectionModel().getSelectedItem() + ":" + closeM.getSelectionModel().getSelectedItem();
-
-        if (hours.contains("--") == true) {
-            hours = "closed";
-        }
-        return hours;
     }
 
     /**
@@ -254,8 +286,27 @@ public class BuildingPageController {
     @FXML
     private void showEditMenu(MouseEvent event) {
         grayBackground.setVisible(true);
+        addMenu.setVisible(false);
+        deleteMenu.setVisible(false);
         editMenu.setVisible(true);
+
+        addTextFieldListener(editMondayHours);
+        addTextFieldListener(editTuesdayHours);
+        addTextFieldListener(editWednesdayHours);
+        addTextFieldListener(editThursdayHours);
+        addTextFieldListener(editFridayHours);
+        addTextFieldListener(editSaturdayHours);
+        addTextFieldListener(editSundayHours);
+
+        addEditBuildings((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
+
+    @FXML
+    private void closeEditMenu() {
+        grayBackground.setVisible(false);
+        editMenu.setVisible(false);
+    }
+
 
     /**
      * If you press the edit building button, the method will check if you selected a building and do the delete operation.
@@ -266,28 +317,25 @@ public class BuildingPageController {
     @SuppressWarnings("unchecked")
     private void editConfirm(ActionEvent event) {
 
-        if (editMsg.getText().isEmpty()) {
+        if (editId.getText().isEmpty()) {
             editMsg.setText("You have not selected a building!");
             return;
         }
-
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
         if (editMondayMsg.getText().isEmpty() && editTuesdayMsg.getText().isEmpty() && editWednesdayMsg.getText().isEmpty() && editThursdayMsg.getText().isEmpty()
                 && editFridayMsg.getText().isEmpty() && editSaturdayMsg.getText().isEmpty() && editSundayMsg.getText().isEmpty() && editNameCheck.getText().isEmpty() && editAddressCheck.getText().isEmpty()) {
 
             JSONObject openingHours = new JSONObject();
-            openingHours.put("mo", getEditHoursDay(stage, "monday"));
-            openingHours.put("tu", getEditHoursDay(stage, "tuesday"));
-            openingHours.put("we", getEditHoursDay(stage, "wednesday"));
-            openingHours.put("th", getEditHoursDay(stage, "thursday"));
-            openingHours.put("fr", getEditHoursDay(stage, "friday"));
-            openingHours.put("sa", getEditHoursDay(stage, "saturday"));
-            openingHours.put("su", getEditHoursDay(stage, "sunday"));
+            openingHours.put("mo", editMondayHours.getText());
+            openingHours.put("tu", editTuesdayHours.getText());
+            openingHours.put("we", editWednesdayHours.getText());
+            openingHours.put("th", editThursdayHours.getText());
+            openingHours.put("fr", editFridayHours.getText());
+            openingHours.put("sa", editSaturdayHours.getText());
+            openingHours.put("su", editSundayHours.getText());
 
             JSONObject building = new JSONObject();
-            building.put("building_number", Long.valueOf(editBuildingNumber.getText()));
+            building.put("building_number", Long.valueOf(editId.getText()));
             building.put("building_name", editBuildingName.getText());
             building.put("address", editBuildingAddress.getText());
             building.put("opening_hours", openingHours.toString());
@@ -301,32 +349,9 @@ public class BuildingPageController {
                 alert.setContentText("NOT OK");
             }
             alert.showAndWait();
+            BuildingPageContent.add();
         }
 
-    }
-
-
-    /**
-     * Gets the information regarding the opening hours of a day for a building.
-     *
-     * @param stage - the actual stage
-     * @param day   - string with the day of the week
-     * @return - the information regarding the opening hours of that day
-     */
-    @SuppressWarnings("unchecked")
-    private String getEditHoursDay(Stage stage, String day) {
-        ChoiceBox<String> openH = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "OpenH");
-        ChoiceBox<String> openM = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "OpenM");
-        ChoiceBox<String> closeH = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "CloseH");
-        ChoiceBox<String> closeM = (ChoiceBox<String>) stage.getScene().lookup("#" + day + "CloseM");
-
-        String hours = openH.getSelectionModel().getSelectedItem() + ":" + openM.getSelectionModel().getSelectedItem();
-        hours = hours + "-" + closeH.getSelectionModel().getSelectedItem() + ":" + closeM.getSelectionModel().getSelectedItem();
-
-        if (hours.contains("--") == true) {
-            hours = "closed";
-        }
-        return hours;
     }
 
     /**
@@ -355,6 +380,27 @@ public class BuildingPageController {
         }
     }
 
+    /**
+     * Adds all buildings as content using a new Thread.
+     * Doing this removes initial startup lag.
+     *
+     * @param stage Stage is passed as parameter to get all Nodes
+     */
+    private void addEditBuildings(Stage stage) {
+        ThreadLock lock = new ThreadLock();
+
+        BuildingData data = new BuildingData(lock);
+        Thread threadData = new Thread(data);
+        threadData.setDaemon(true);
+        threadData.start();
+
+        BuildDataScene editPage = new BuildingEditPageContent(stage, lock);
+        Thread threadEditBuildingPage = new Thread(editPage);
+        threadEditBuildingPage.setDaemon(true);
+        threadEditBuildingPage.start();
+
+    }
+
     /*
     =====================================================================
     METHODS FOR DELETE
@@ -363,9 +409,20 @@ public class BuildingPageController {
     @FXML
     private void showDeleteMenu(MouseEvent event) {
         grayBackground.setVisible(true);
+        addMenu.setVisible(false);
+        editMenu.setVisible(false);
         deleteBuildingList.setContent(null);
         deleteMenu.setVisible(true);
+
+        addDeleteBuildings((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
+
+    @FXML
+    private void closeDeleteMenu() {
+        grayBackground.setVisible(false);
+        deleteMenu.setVisible(false);
+    }
+
 
     /**
      * If you press the delete building button, the method will check if you selected a building and do the delete operation.
@@ -375,13 +432,13 @@ public class BuildingPageController {
     @SuppressWarnings("unchecked")
     private void deleteConfirm(ActionEvent event) {
 
-        if (deleteMsg.getText() == null) {
+        if (deleteId.getText().length() < 1) {
             deleteMsg.setText("You have not selected a building!");
             return;
         }
 
 
-        String a = ServerCommunication.sendDeleteBuilding(getBuildingID());
+        String a = ServerCommunication.sendDeleteBuilding(deleteId.getText());
         deleteMsg.setText("");
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if (a.equals("OK")) {
@@ -390,18 +447,49 @@ public class BuildingPageController {
             alert.setContentText("NOT OK");
         }
         alert.showAndWait();
+        BuildingPageContent.add();
     }
 
     /**
-     * Analyse the delete message, it extracts the id of the building.
-     * @return - the id of the building which is selected.
+     * Adds all buildings as content using a new Thread.
+     * Doing this removes initial startup lag.
+     *
+     * @param stage Stage is passed as parameter to get all Nodes
      */
-    private String getBuildingID() {
-        String sentence = deleteMsg.getText();
-        String[] words = sentence.split("\\s+");
-        String buildingId = words[9];
-        buildingId = buildingId.substring(0, buildingId.length() - 1);
+    private void addDeleteBuildings(Stage stage) {
+        ThreadLock  lock = new ThreadLock();
 
-        return buildingId;
+        BuildingData data = new BuildingData(lock);
+        Thread threadData = new Thread(data);
+        threadData.setDaemon(true);
+        threadData.start();
+
+        BuildDeletePageContent deletePage = new BuildDeletePageContent(stage, lock);
+        Thread threadDeleteBuildingPage = new Thread(deletePage);
+        threadDeleteBuildingPage.setDaemon(true);
+        threadDeleteBuildingPage.start();
+    }
+
+    /**
+     * Adds rules to the textfields of the hours.
+     * @param textField the textfield to add the rules to
+     */
+    private void addTextFieldListener(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 0) {
+                if (newValue.length() > 11) {
+                    ((StringProperty) observable).setValue(oldValue);
+                    return;
+                }
+                if (newValue.charAt(newValue.length() - 1) < 48 || newValue.charAt(newValue.length() - 1) > 57) {
+                    if (newValue.charAt(newValue.length() - 1) != ':' && newValue.length() - 1 != 2 && newValue.length() - 1 != 8 && newValue.charAt(newValue.length() - 1) != '-' && newValue.length() - 1 != 5) {
+                        String comp = "closed";
+                        if (newValue.length() > comp.length() || newValue.charAt(newValue.length() - 1) != comp.charAt(newValue.length() - 1)) {
+                            ((StringProperty) observable).setValue(oldValue);
+                        }
+                    }
+                }
+            }
+        });
     }
 }
