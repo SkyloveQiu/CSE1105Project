@@ -4,7 +4,7 @@ import nl.tudelft.oopp.group43.project.models.User;
 
 public class UserResponse {
     User user;
-    int  status;
+    int status;
 
     public UserResponse(User user, int status) {
         this.user = user;

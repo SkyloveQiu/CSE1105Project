@@ -97,6 +97,11 @@ public class UserController {
 
     }
 
+    /**
+     * find the user info by the user token.
+     * @param token the token of the user.
+     * @return the result of the request.
+     */
     @PostMapping("/name")
     public ResponseEntity getName(@RequestParam("token") final String token) {
         User user = userService.findByToken(token);
