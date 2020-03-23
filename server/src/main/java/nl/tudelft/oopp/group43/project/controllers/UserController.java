@@ -6,6 +6,7 @@ import java.util.List;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.payload.JwtRespones;
+import nl.tudelft.oopp.group43.project.payload.UserResponse;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import nl.tudelft.oopp.group43.project.service.SecurityService;
 import nl.tudelft.oopp.group43.project.service.TokenService;
@@ -97,9 +98,14 @@ public class UserController {
     }
 
     @PostMapping("/name")
-    public User getName(@RequestParam("token") final String token) {
+    public ResponseEntity getName(@RequestParam("token") final String token) {
         User user = userService.findByToken(token);
-        return user;
+        if (user == null) {
+            ErrorResponse errorResponse = new ErrorResponse("error","can not find user, please get token again", HttpStatus.FORBIDDEN.value());
+            return new  ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
+        }
+        UserResponse userResponse = new UserResponse(user,HttpStatus.OK.value());
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
 
