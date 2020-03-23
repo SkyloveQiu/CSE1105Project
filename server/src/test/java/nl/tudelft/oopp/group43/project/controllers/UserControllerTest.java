@@ -27,7 +27,7 @@ class UserControllerTest {
         MvcResult result = mockMvc.perform(post("/token")
                 .contentType("application/json")
                 .param("username", "ziang.qiu@gmail.com")
-                .param("password", "12345678"))
+                .param("password", "123456789"))
                 .andExpect(status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();
@@ -44,7 +44,7 @@ class UserControllerTest {
         MvcResult result = mockMvc.perform(post("/token")
                 .contentType("application/json")
                 .param("username", "ziang.qiu@gmail.com")
-                .param("password", "12345678"))
+                .param("password", "123456789"))
                 .andExpect(status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();
@@ -60,7 +60,7 @@ class UserControllerTest {
         MvcResult result = mockMvc.perform(post("/token")
                 .contentType("application/json")
                 .param("username", "ziang.qiu@gmail.com")
-                .param("password", "123456789"))
+                .param("password", "12345678"))
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()))
                 .andReturn();
     }
@@ -70,7 +70,7 @@ class UserControllerTest {
         MvcResult result = mockMvc.perform(post("/registration")
                 .contentType("application/json")
                 .param("username", "ziang.qiu@gmail.com")
-                .param("password", "123456789")
+                .param("password", "12345678")
                 .param("firstName", "Ziang")
                 .param("lastName", "Qiu")
                 .param("role", "student"))

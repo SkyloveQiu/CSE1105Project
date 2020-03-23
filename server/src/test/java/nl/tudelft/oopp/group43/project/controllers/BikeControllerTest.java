@@ -30,7 +30,7 @@ class BikeControllerTest {
         MvcResult result = mockMvc.perform(post("/token")
                 .contentType("application/json")
                 .param("username", "ziang.qiu@gmail.com")
-                .param("password", "12345678"))
+                .param("password", "123456789"))
                 .andExpect(status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();

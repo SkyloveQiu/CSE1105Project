@@ -62,19 +62,11 @@ dependencies {
 	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 	compile("org.apache.tomcat.embed:tomcat-embed-jasper")
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.2.5.RELEASE'
-	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.2.5.RELEASE'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	compile group: 'joda-time', name: 'joda-time', version: '2.3'
-	testCompile("org.mockito:mockito-core:2.23.4")
-
-	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile group: 'joda-time', name: 'joda-time', version: '2.3'
+	compileOnly('org.projectlombok:lombok')
+
 	testCompile 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
-	testCompile('org.mockito:mockito-junit-jupiter:2.23.0')
-	testCompile "net.bytebuddy:byte-buddy:1.8.22"
-	testCompile "net.bytebuddy:byte-buddy-agent:1.8.22"
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	//testImplementation 'org.springframework.security:spring-security-test'
 }
