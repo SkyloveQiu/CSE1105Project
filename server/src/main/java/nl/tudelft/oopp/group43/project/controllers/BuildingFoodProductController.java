@@ -5,6 +5,7 @@ import nl.tudelft.oopp.group43.project.models.BuildingFoodProduct;
 import nl.tudelft.oopp.group43.project.repositories.BuildingFoodProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +31,7 @@ public class BuildingFoodProductController {
      * @param newBuildingFoodProduct the product you want to create.
      * @return the product it found.
      */
-    @PutMapping("/buildingFoodProduct")
+    @PostMapping("/buildingFoodProduct")
     @ResponseBody
     public String createNewBuildingFoodProduct(@RequestBody BuildingFoodProduct newBuildingFoodProduct) {
         repository.save(newBuildingFoodProduct);

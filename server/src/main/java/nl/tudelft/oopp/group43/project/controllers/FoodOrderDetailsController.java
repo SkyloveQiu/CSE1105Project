@@ -5,6 +5,7 @@ import nl.tudelft.oopp.group43.project.models.FoodOrderDetails;
 import nl.tudelft.oopp.group43.project.repositories.FoodOrderDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,7 @@ public class FoodOrderDetailsController {
 
     /**
      * get the food orders details.
+     *
      * @return all the food order details.
      */
     @GetMapping("/foodOrderDetails")
@@ -26,12 +28,15 @@ public class FoodOrderDetailsController {
         return repository.findAll();
     }
 
+    //{"id":{"foodOrderId":1,"foodProductId":1},"amount":2}
+
     /**
      * create new food orders.
+     *
      * @param newFoodOrderDetails the order details you want to create.
      * @return the orders.
      */
-    @PutMapping("/foodOrderDetails")
+    @PostMapping("/foodOrderDetails")
     @ResponseBody
     public String createFoodOrderDetails(@RequestBody FoodOrderDetails newFoodOrderDetails) {
         repository.save(newFoodOrderDetails);
