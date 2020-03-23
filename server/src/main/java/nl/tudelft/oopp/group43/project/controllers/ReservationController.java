@@ -74,6 +74,13 @@ public class ReservationController {
     @ResponseBody
     public ResponseEntity createBuildingReservation(@RequestBody Reservation newReservation,
                                                     @RequestParam(value = "token", defaultValue = "invalid") String token) throws Exception {
+
+        if (!userRepository.findUserByToken(token).equals(newReservation.getUser())) {
+            ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist or the token is invalid.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+
         if (repository.existsReservationByStartingDateAndAndEndDateAndRoomId(newReservation.getStartingDate(),
             newReservation.getEndDate(),
             newReservation.getRoomId())) {
@@ -105,11 +112,6 @@ public class ReservationController {
 
             if (!userRepository.existsUserByUsername(newReservation.getUser().getUsername())) {
                 ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist.", HttpStatus.FORBIDDEN.value());
-                return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
-            }
-
-            if (!userRepository.findUserByToken(token).equals(newReservation.getUser()))  {
-                ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist or the token is invalid.", HttpStatus.FORBIDDEN.value());
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
 

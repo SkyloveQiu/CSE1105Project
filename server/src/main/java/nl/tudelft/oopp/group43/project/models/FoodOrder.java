@@ -2,7 +2,11 @@ package nl.tudelft.oopp.group43.project.models;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,8 +23,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 
-
-
 @Entity
 @Table(name = "food_order")
 public class FoodOrder implements java.io.Serializable {
@@ -30,18 +32,41 @@ public class FoodOrder implements java.io.Serializable {
     private Building building;
     private Reservation reservation;
     private User user;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private Date time;
-    private Set foodOrderDetails = new HashSet(0);
+
+    private Set<FoodOrderDetails> foodOrderDetails = new HashSet(0);
 
     public FoodOrder() {
     }
 
     /**
      * init the food order.
-     * @param building the building name.
+     *
+     * @param building    the building name.
      * @param reservation the reservation of user.
-     * @param user the user.
-     * @param time the time order it .
+     * @param user        the user.
+     * @param time        the time order it .
+     */
+    public FoodOrder(@JsonProperty("building") int building,
+                     @JsonProperty("reservation") int reservation,
+                     @JsonProperty("user") String user,
+                     @JsonProperty("time") Date time) {
+        this.building = new Building(building);
+        this.reservation = new Reservation(reservation);
+        this.user = new User(user);
+        this.time = time;
+    }
+
+
+    /**
+     * init the food order.
+     *
+     * @param building    the building name.
+     * @param reservation the reservation of user.
+     * @param user        the user.
+     * @param time        the time order it .
      */
     public FoodOrder(Building building, Reservation reservation, User user, Date time) {
         this.building = building;
@@ -50,15 +75,20 @@ public class FoodOrder implements java.io.Serializable {
         this.time = time;
     }
 
+
     /**
      * init the food order.
-     * @param building the building you order.
-     * @param reservation the reservation of the user.
-     * @param user the user.
-     * @param time the time you order the food.
+     *
+     * @param building         the building you order.
+     * @param reservation      the reservation of the user.
+     * @param user             the user.
+     * @param time             the time you order the food.
      * @param foodOrderDetails the details of this order.
      */
-    public FoodOrder(Building building, Reservation reservation, User user, Date time, Set foodOrderDetails) {
+    public FoodOrder(Building building,
+                     Reservation reservation,
+                     User user, Date time,
+                     Set<FoodOrderDetails> foodOrderDetails) {
         this.building = building;
         this.reservation = reservation;
         this.user = user;
@@ -68,8 +98,6 @@ public class FoodOrder implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-
-
     @Column(name = "id", unique = true, nullable = false)
     public Integer getId() {
         return this.id;
@@ -79,7 +107,7 @@ public class FoodOrder implements java.io.Serializable {
         this.id = id;
     }
 
-    @JsonManagedReference(value = "foodOrder")
+    //  @JsonManagedReference(value = "foodOrder")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "building", nullable = false)
     public Building getBuilding() {
@@ -90,6 +118,7 @@ public class FoodOrder implements java.io.Serializable {
         this.building = building;
     }
 
+    // @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reservation", nullable = false)
     public Reservation getReservation() {
@@ -100,6 +129,7 @@ public class FoodOrder implements java.io.Serializable {
         this.reservation = reservation;
     }
 
+    //  @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user", nullable = false)
     public User getUser() {
@@ -120,9 +150,11 @@ public class FoodOrder implements java.io.Serializable {
         this.time = time;
     }
 
+
+    @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn
-    public Set<FoodOrder> getFoodOrderDetails() {
+    @JoinColumn(name = "food_order_id")
+    public Set<FoodOrderDetails> getFoodOrderDetails() {
         return this.foodOrderDetails;
     }
 

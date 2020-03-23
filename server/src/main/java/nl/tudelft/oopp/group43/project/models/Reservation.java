@@ -30,7 +30,6 @@ public class Reservation implements java.io.Serializable {
     private Date startingDate;
     private Date endDate;
 
-    @JsonBackReference(value = "foodOrder")
     private Set<FoodOrder> foodOrders = new HashSet(0);
 
     public Reservation() {
@@ -38,10 +37,11 @@ public class Reservation implements java.io.Serializable {
 
     /**
      * init the reservation.
-     * @param user the user you need to init.
-     * @param roomId the roomid he want to book.
+     *
+     * @param user         the user you need to init.
+     * @param roomId       the roomid he want to book.
      * @param startingDate the starting date he wants to start.
-     * @param endDate the end date he wants to end.
+     * @param endDate      the end date he wants to end.
      */
     public Reservation(@JsonProperty("user") User user,
                        @JsonProperty("room_id") Integer roomId,
@@ -56,11 +56,12 @@ public class Reservation implements java.io.Serializable {
 
     /**
      * init reservation with food.
-     * @param user the user you want to add.
-     * @param roomId the room people want to reserve.
+     *
+     * @param user         the user you want to add.
+     * @param roomId       the room people want to reserve.
      * @param startingDate the start date.
-     * @param endDate the end date.
-     * @param foodOrders the food user booked.
+     * @param endDate      the end date.
+     * @param foodOrders   the food user booked.
      */
     public Reservation(User user, Integer roomId, Date startingDate, Date endDate, Set foodOrders) {
         this.user = user;
@@ -69,6 +70,11 @@ public class Reservation implements java.io.Serializable {
         this.endDate = endDate;
         this.foodOrders = foodOrders;
     }
+
+    public Reservation(int reservationId) {
+        this.reservationId = reservationId;
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -121,8 +127,9 @@ public class Reservation implements java.io.Serializable {
         this.endDate = endDate;
     }
 
+    @JsonBackReference(value = "foodOrdersReservation")
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn
+    @JoinColumn(name = "reservation")
     public Set<FoodOrder> getFoodOrders() {
         return this.foodOrders;
     }
