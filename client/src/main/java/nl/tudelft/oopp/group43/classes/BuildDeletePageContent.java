@@ -2,18 +2,20 @@ package nl.tudelft.oopp.group43.classes;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.content.BuildingPageContent;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 public class BuildDeletePageContent extends BuildDataScene implements Runnable {
 
+    private Scene scene;
 
     /**
      * Constructor for the BuildDeletePageContent.
@@ -23,6 +25,7 @@ public class BuildDeletePageContent extends BuildDataScene implements Runnable {
      */
     public BuildDeletePageContent(Stage stage, ThreadLock lock) {
         super(stage, lock);
+        this.scene = stage.getScene();
     }
 
     /**
@@ -38,7 +41,7 @@ public class BuildDeletePageContent extends BuildDataScene implements Runnable {
                 }
 
                 Label msg = (Label) this.getStage().getScene().lookup("#deleteMsg");
-                Label[] labelArr = BuildingsConfig.getLabel();
+                Label[] labelArr = BuildingPageContent.getLabelArr();
                 addBuildingList(labelArr, msg);
 
             } catch (Exception e) {
@@ -56,52 +59,46 @@ public class BuildDeletePageContent extends BuildDataScene implements Runnable {
      * @param msg      The msg for the warning message.
      */
     private void addBuildingList(Label[] labelArr, Label msg) {
-        final ScrollPane sp = (ScrollPane) this.getScene().lookup("#building_list");
-        Pane pane = new Pane();
-        double pos = 0.0;
-        String text = "Are you sure that you want to delete ";
-
+        AnchorPane ap = new AnchorPane();
+        ap.setMinHeight(30.0 * labelArr.length);
+        JSONArray array = BuildingPageContent.getJsonArray();
 
         for (int i = 0; i < labelArr.length; i++) {
-            Label label = new Label();
+            String buildingName = labelArr[i].getText().replaceAll("\\n", " ");
+            Label label = new Label(buildingName);
+            label.setPrefHeight(30);
+            label.getStyleClass().add("buildingLabel");
+            AnchorPane.setRightAnchor(label,5.0);
+            AnchorPane.setLeftAnchor(label,5.0);
+            AnchorPane.setTopAnchor(label, i * 30.0);
 
-            label.setText(labelArr[i].getText().replaceAll("\\n", " "));
+            JSONObject obj = (JSONObject) array.get(i);
+            addEvent(label, msg, (long) obj.get("building_number"));
 
-            // handles the building labels being clicked + highlighting the selected building
-            EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    msg.setText(text + label.getText() + " building?");
-                    for (Node n : pane.getChildren()) {
-                        n.setStyle("-fx-border-color: black; -fx-border-width: 3;");
-                    }
-                    label.setStyle("-fx-border-color: blue; -fx-border-width: 3;");
-                }
-            };
-
-
-            label.addEventFilter(MouseEvent.MOUSE_CLICKED, event);
-            label.setMaxWidth(Integer.MAX_VALUE);
-            label.setPrefWidth(500);
-            label.setMinWidth(0);
-            label.setMinHeight(30.0);
-            label.setStyle("-fx-background-color: #daebeb");
-            label.setStyle("-fx-border-color: black; -fx-border-width: 3;");
-            label.setLayoutY(pos);
-
-            pane.getChildren().add(label);
-
-            pos += 35.0;
+            ap.getChildren().add(label);
         }
-        pane.setMinHeight(pos);
-        sp.setLayoutY(40.0);
-        sp.setLayoutX(40.0);
-        sp.setMinSize(150.0, 250.0);
 
+        ScrollPane sp = (ScrollPane) scene.lookup("#deleteBuildingList");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                sp.setContent(pane);
+                sp.setContent(ap);
+            }
+        });
+    }
+
+    /**
+     * Adds an event to when the label is clicked.
+     * @param label label of the event
+     * @param msg message label to notify the user
+     */
+    private void addEvent(Label label, Label msg, long newId) {
+        Label id = (Label) scene.lookup("#deleteId");
+        label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                id.setText(Long.toString(newId));
+                msg.setText("Are you sure you want to delete " + label.getText());
             }
         });
     }
