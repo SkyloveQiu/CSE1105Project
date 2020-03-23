@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,9 +13,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class FoodPageContent {
 
     private static Scene scene;
@@ -24,12 +23,12 @@ public class FoodPageContent {
         addBuildings();
     }
 
-    private static void addRooms(String building_name) {
+    private static void addRooms(String buildingName) {
         ChoiceBox<String> roomsBox = (ChoiceBox<String>) scene.lookup("#returnRoomsList");
         long buildingNo = -1;
-        for (Object obj: array){
+        for (Object obj: array) {
             JSONObject jsonObject = (JSONObject) obj;
-            if (building_name.equals(jsonObject.get("building_name"))){
+            if (buildingName.equals(jsonObject.get("building_name"))) {
                 buildingNo = (long) jsonObject.get("building_number");
             }
 
@@ -44,7 +43,6 @@ public class FoodPageContent {
             }
             Collections.sort(rooms);
             roomsBox.setItems(FXCollections.observableArrayList(rooms));
-            System.out.println("This line is run.");
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -67,7 +65,7 @@ public class FoodPageContent {
             e.printStackTrace();
         }
 
-        buildingBox.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> addRooms(newValue));
+        buildingBox.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> addRooms(newValue));
 
     }
 }
