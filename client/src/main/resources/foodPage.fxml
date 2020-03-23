@@ -9,7 +9,13 @@
 
 
 <?import javafx.scene.control.ChoiceBox?>
-<AnchorPane fx:id="root" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.geometry.Insets?>
+<AnchorPane fx:id="root" fx:controller="nl.tudelft.oopp.group43.controllers.FoodPageController" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
    <children>
 
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" style="-fx-text-fill: #e7f2fe;" text="Order food" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
@@ -18,9 +24,28 @@
          </font>
       </Label>
 
-      <ChoiceBox fx:id="returnBuildingList" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="300.0" prefWidth="200.0"/>
+      <ChoiceBox fx:id="returnBuildingList" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="320.0" prefWidth="280.0"/>
 
-      <ChoiceBox fx:id="returnRoomsList" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="700.0" prefWidth="200.0"/>
+      <ChoiceBox fx:id="returnRoomsList" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="740.0" prefWidth="280.0"/>
+
+      <ScrollPane fx:id="foodList" style="-fx-background-color: #29293d;" fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="365.0" prefWidth="700.0" prefHeight="330.0" >
+         <content>
+            <GridPane fx:id="food_grid" style="-fx-background-color: #29293d;" minHeight="700" hgap="20.0" vgap="20.0" >
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="100" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints vgrow="SOMETIMES"  />
+               </rowConstraints>
+            </GridPane>
+         </content>
+      </ScrollPane>
+
+      <Button fx:id="orderFoodButton" onAction="#orderFood" alignment="CENTER"  mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Place order" layoutX="320.0" layoutY="710.0" prefHeight="70.0" prefWidth="700.0">
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+      </Button>
 
       <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
