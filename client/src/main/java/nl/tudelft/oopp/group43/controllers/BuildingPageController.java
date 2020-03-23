@@ -350,6 +350,7 @@ public class BuildingPageController {
             }
             alert.showAndWait();
             BuildingPageContent.add();
+            addEditBuildings((Stage) ((Node) event.getSource()).getScene().getWindow());
         }
 
     }
@@ -448,6 +449,7 @@ public class BuildingPageController {
         }
         alert.showAndWait();
         BuildingPageContent.add();
+        addDeleteBuildings((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
 
     /**
