@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.project.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -26,10 +29,11 @@ public class FoodOrderDetails implements java.io.Serializable {
 
     /**
      * init the food order details.
-     * @param id the id.
+     *
+     * @param id          the id.
      * @param foodProduct the product you ordered.
-     * @param foodOrder the food order.
-     * @param amount the amount price.
+     * @param foodOrder   the food order.
+     * @param amount      the amount price.
      */
     public FoodOrderDetails(FoodOrderDetailsId id, FoodProduct foodProduct, FoodOrder foodOrder, int amount) {
         this.id = id;
@@ -42,8 +46,8 @@ public class FoodOrderDetails implements java.io.Serializable {
 
 
     @AttributeOverrides({
-            @AttributeOverride(name = "foodOrderId", column = @Column(name = "food_order_id", nullable = false)),
-            @AttributeOverride(name = "foodProductId", column = @Column(name = "food_product_id", nullable = false))})
+        @AttributeOverride(name = "foodOrderId", column = @Column(name = "food_order_id", nullable = false)),
+        @AttributeOverride(name = "foodProductId", column = @Column(name = "food_product_id", nullable = false))})
     public FoodOrderDetailsId getId() {
         return this.id;
     }
@@ -52,6 +56,8 @@ public class FoodOrderDetails implements java.io.Serializable {
         this.id = id;
     }
 
+    @JsonIgnore
+    // @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_product_id", nullable = false, insertable = false, updatable = false)
     public FoodProduct getFoodProduct() {
@@ -63,6 +69,8 @@ public class FoodOrderDetails implements java.io.Serializable {
     }
 
 
+    @JsonIgnore
+    // @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_order_id", nullable = false, insertable = false, updatable = false)
     public FoodOrder getFoodOrder() {

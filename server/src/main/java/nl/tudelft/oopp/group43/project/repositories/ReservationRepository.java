@@ -10,6 +10,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     List<Reservation> findByUser(User user);
 
+    Reservation findByReservationId(int id);
+
     boolean existsReservationByStartingDateAndAndEndDateAndRoomId(Date startingDate, Date endDate, int id);
 
     List<Reservation> findByStartingDateGreaterThanEqualAndEndDateLessThanEqualAndRoomId(

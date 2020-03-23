@@ -2,6 +2,7 @@ package nl.tudelft.oopp.group43.project.payload;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,8 +22,9 @@ public class RoomAttributesUpdater implements Runnable {
 
     private static List<Room> rooms = new ArrayList<>();
     private static boolean run = false;
-    private static List<Integer> roomSeats = new ArrayList<>();
+    private static List<Integer> roomSeats;
     private static BucketsList roomList;
+    private static Hashtable tableRooms;
 
     @Autowired
     private RoomRepository roomRepository;
@@ -42,7 +44,8 @@ public class RoomAttributesUpdater implements Runnable {
     }
 
     /**
-     *  updates the data from the server regarding the rooms.
+     * updates the data from the server regarding the rooms.
+     *
      * @throws ParseException throws an error if the object is invalid
      */
     public void update() throws ParseException {
@@ -50,6 +53,8 @@ public class RoomAttributesUpdater implements Runnable {
 
 
         rooms = roomRepository.findAll();
+        roomSeats = new ArrayList<>();
+        tableRooms = new Hashtable<Integer, Room>();
 
         for (Room room : rooms) {
             JSONParser parser = new JSONParser();
@@ -74,6 +79,10 @@ public class RoomAttributesUpdater implements Runnable {
 
         }
 
+        for (Room room : rooms) {
+            tableRooms.put(room.getId(), room);
+        }
+
 
         run = false;
 
@@ -81,6 +90,7 @@ public class RoomAttributesUpdater implements Runnable {
 
     /**
      * Returns the valid seats.
+     *
      * @param number the number of seats
      * @return a list with the "valid seats"
      */
@@ -118,6 +128,10 @@ public class RoomAttributesUpdater implements Runnable {
         return roomList;
     }
 
+    public static Hashtable getTableRooms() {
+        return tableRooms;
+    }
+
     public static class BucketsList {
 
         private LinkedList<Room>[] buckets;
@@ -140,4 +154,6 @@ public class RoomAttributesUpdater implements Runnable {
             return buckets;
         }
     }
+
+
 }

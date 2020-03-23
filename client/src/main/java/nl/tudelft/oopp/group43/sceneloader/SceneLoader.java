@@ -12,10 +12,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
+import nl.tudelft.oopp.group43.content.BikePageContent;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
+import nl.tudelft.oopp.group43.content.FoodPageContent;
 import nl.tudelft.oopp.group43.content.MainPageContent;
+import nl.tudelft.oopp.group43.content.ProfilePageContent;
 import nl.tudelft.oopp.group43.content.RegisterPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
+
 
 public class SceneLoader extends Application {
 
@@ -93,6 +97,8 @@ public class SceneLoader extends Application {
                 primaryStage.setMinWidth(ap.getPrefWidth());
 
                 primaryStage.show();
+
+                BikePageContent.addContent(scene);
                 break;
             case "food":
                 URL foodUrl = getClass().getResource("/foodPage.fxml");
@@ -113,6 +119,7 @@ public class SceneLoader extends Application {
                 primaryStage.setMinWidth(ap.getPrefWidth());
 
                 primaryStage.show();
+                FoodPageContent.addContent(scene);
                 break;
             case "calendar":
                 URL calendarUrl = getClass().getResource("/calendarPage.fxml");
@@ -195,6 +202,7 @@ public class SceneLoader extends Application {
                 primaryStage.setMinWidth(ap.getPrefWidth());
 
                 primaryStage.show();
+                ProfilePageContent.addContent(scene);
                 break;
             default:
                 URL xmlUrl = getClass().getResource("/mainPage-overhaul.fxml");

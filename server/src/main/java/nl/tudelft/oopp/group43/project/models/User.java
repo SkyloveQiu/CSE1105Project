@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -88,13 +90,21 @@ public class User implements java.io.Serializable {
                 @JsonProperty("username") String username,
                 @JsonProperty("role") String role
     ) {
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.role = role;
+        this.password = utf8DecodeValue(password);
+        this.firstName = utf8DecodeValue(firstName);
+        this.lastName = utf8DecodeValue(lastName);
+        this.username = utf8DecodeValue(username);
+        this.role = utf8DecodeValue(role);
     }
 
+    /**
+     * Decodes a utf8 encoded value.
+     * @param value utf8-encoded string value
+     * @return decoded string value
+     */
+    private String utf8DecodeValue(String value) {
+        return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    }
 
     @Id
     @Column(name = "email", unique = true, nullable = false)

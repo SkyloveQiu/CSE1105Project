@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
@@ -79,7 +81,10 @@ public class UserController {
      */
     @PostMapping("/token")
     public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
-        User user = securityService.autoLogin(username, password);
+        String usernameDecoded = utf8DecodeValue(username);
+        String passwordDecoded = utf8DecodeValue(password);
+
+        User user = securityService.autoLogin(usernameDecoded, passwordDecoded);
 
         if (user == null) {
             ErrorResponse errorResponse = new ErrorResponse("auth fail", "username or password wrong", HttpStatus.FORBIDDEN.value());
@@ -91,9 +96,25 @@ public class UserController {
 
     }
 
+    @PostMapping("/name")
+    public User getName(@RequestParam("token") final String token) {
+        User user = userService.findByToken(token);
+        return user;
+    }
+
 
     @PostMapping("/api/hello")
     public String get() {
         return "ok";
+    }
+
+
+    /**
+     * Decodes a utf8 encoded value.
+     * @param value utf8-encoded string value
+     * @return decoded string value
+     */
+    private String utf8DecodeValue(String value) {
+        return URLDecoder.decode(value, StandardCharsets.UTF_8);
     }
 }
