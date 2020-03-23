@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.geometry.Insets?>
+<AnchorPane fx:id="root" fx:controller="nl.tudelft.oopp.group43.controllers.FoodPageController" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" style="-fx-text-fill: #e7f2fe;" text="Order food" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
+         <font>
+            <Font name="Arial" size="87.0" />
+         </font>
+      </Label>
+
+      <ChoiceBox fx:id="returnBuildingList" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="320.0" prefWidth="280.0"/>
+
+      <ChoiceBox fx:id="returnRoomsList" AnchorPane.topAnchor="300.0" AnchorPane.rightAnchor="234.0" prefWidth="280.0"/>
+
+      <ScrollPane fx:id="foodList" style="-fx-background-color: white;" fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="188.0" AnchorPane.topAnchor="365.0" AnchorPane.rightAnchor="100.0" prefWidth="700.0" prefHeight="330.0" >
+         <content>
+            <GridPane fx:id="food_grid" style="-fx-background-color: #29293d;" minHeight="700" hgap="20.0" vgap="20.0" >
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="100" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints vgrow="SOMETIMES"  />
+               </rowConstraints>
+            </GridPane>
+         </content>
+      </ScrollPane>
+
+      <Button fx:id="orderFoodButton" onAction="#orderFood" alignment="CENTER"  mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Place order" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="234.0" AnchorPane.leftAnchor="320.0" prefHeight="70.0" >
+         <font>
+            <Font name="Arial" size="20.0" />
+         </font>
+      </Button>
+
+      <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+      <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="back_arrow" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/back-arrow-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="buildingIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/building-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="roomIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/room.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="bikeIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/bike-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="foodIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/food-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="calendarIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/calendar-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="userIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0">
+               <image>
+                  <Image url="@/icons/user-icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
