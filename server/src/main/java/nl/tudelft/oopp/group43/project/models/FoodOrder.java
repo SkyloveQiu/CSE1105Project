@@ -59,6 +59,10 @@ public class FoodOrder implements java.io.Serializable {
         this.time = time;
     }
 
+    public FoodOrder(int reservation) {
+        this.reservation = new Reservation(reservation);
+    }
+
 
     /**
      * init the food order.

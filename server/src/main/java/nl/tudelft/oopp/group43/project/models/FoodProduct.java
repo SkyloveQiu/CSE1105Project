@@ -2,6 +2,8 @@ package nl.tudelft.oopp.group43.project.models;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +47,9 @@ public class FoodProduct implements java.io.Serializable {
         this.price = price;
     }
 
+    public FoodProduct(int id) {
+        this.id = id;
+    }
     /**
      * the food product init.
      *
@@ -106,6 +111,7 @@ public class FoodProduct implements java.io.Serializable {
         this.price = price;
     }
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "foodProduct")
     public Set<BuildingFoodProduct> getBuildingFoodProducts() {
         return this.buildingFoodProducts;
@@ -115,6 +121,7 @@ public class FoodProduct implements java.io.Serializable {
         this.buildingFoodProducts = buildingFoodProducts;
     }
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "foodProduct")
     public Set<FoodOrderDetails> getFoodOrderDetails() {
         return this.foodOrderDetails;
