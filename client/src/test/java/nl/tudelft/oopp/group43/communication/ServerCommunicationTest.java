@@ -4,35 +4,37 @@ package nl.tudelft.oopp.group43.communication;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.github.paweladamski.httpclientmock.HttpClientMock;
 import javafx.application.Application;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
-import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
 
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@AutoConfigureMockMvc
 public class ServerCommunicationTest {
-
-  //  @MockBean
-  //  private
-
 
     private final String cURL = "http://localhost:8000/";
 
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     public void testGetBuildingsNull() {
@@ -40,24 +42,24 @@ public class ServerCommunicationTest {
     }
 
    @Test
-    public void testGetBuildings() throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(cURL + "building")).build();
-        String building  = "{\"building_number\":0,\"building_name\":\"Pathe Delft\",\"address\":\"Vesteplein 5 2611 WG Delft\",\"opening_hours\":\"{\\\"fr\\\": \\\"07:00-19:00\\\", \\\"mo\\\": \\\"07:00-22:00\\\", \\\"sa\\\": \\\"closed\\\", \\\"su\\\": \\\"closed\\\", \\\"th\\\": \\\"07:00-22:00\\\", \\\"tu\\\": \\\"07:00-22:00\\\", \\\"we\\\": \\\"07:00-22:00\\\"}\"}";
-     //   System.out.println(building);
-       //HttpClientMock  httpClientMock = new HttpClientMock();
+    public void testGetBuildings() throws Exception {
+        String buildings = "[{\"building_number\":0,\"building_name\":\"Pathe Delft\",\"address\":\"Vesteplein 5 2611 WG Delft\",\"opening_hours\":\"{\\\"fr\\\": \\\"07:00-19:00\\\", \\\"mo\\\": \\\"07:00-22:00\\\", \\\"sa\\\": \\\"closed\\\", \\\"su\\\": \\\"closed\\\", \\\"th\\\": \\\"07:00-22:00\\\", \\\"tu\\\": \\\"07:00-22:00\\\", \\\"we\\\": \\\"07:00-22:00\\\"}\"}]";
 
-       //httpClientMock.onGet(cURL + "building").doReturn(building);
+        // HttpClient client = mock(HttpClient.class);
+        // HttpRequest req = mock(HttpRequest.class);
+        // this.mockMvc.perform(get(cURL + "building")).andExpect(content().string(buildings));
 
+        String buildingRegex = "\\[(?:\\{\\\"building_number\\\":[0-9]+,\\\"building_name\\\":\\\".*?\\\",\\\"address\\\":\\\".*?\\\",\\\"opening_hours\\\":\\\"\\{(?:\\\\\\\"[a-z]{2}\\\\\\\": \\\\\\\".*?\\\\\\\"(?:, )?){7}\\}\\\"\\}(?:, )?)*\\]";
 
-      // httpClientMock.verify().get("/login?user=john").called();
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpResponse <String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-         Mockito.when(request).thenReturn((HttpRequest) response);
-        System.out.println(ServerCommunication.getBuilding());
-
+        assertTrue(ServerCommunication.getBuilding().matches(buildingRegex));
     }
 
+    @Test
+    public void testGetRooms() {
+        String buildingRegex = "\\{\\\"building_number\\\":[0-9]+,\\\"building_name\\\":\\\".*?\\\",\\\"address\\\":\\\".*?\\\",\\\"opening_hours\\\":\\\"\\{(?:\\\\\\\"[a-z]{2}\\\\\\\": \\\\\\\".*?\\\\\\\"(?:, )?){7}\\}\\\"\\}";
+        String attributeRegex = "\\{(?:\\\\\\\"(?:(?!\\\\).)*?\\\\\\\": (?:true|false|[0-9]+|\\\\\\\"(?:(?!\\\\).)*?\\\\\\\")(?:, )?)+\\}";
+        String roomRegex = "\\[\\{\"building\":" + buildingRegex + ",\\\"room_name\":\".*?\\\",\"attributes\":\"" + attributeRegex + "\\\",\\\"id\\\":[0-9]+\\},?.*\\]";
 
-
+        assertTrue(ServerCommunication.getRooms().matches(roomRegex));
+    }
 }
