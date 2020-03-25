@@ -4,20 +4,30 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.Effect;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -109,8 +119,8 @@ public class RoomPageContent {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 for (Node node : gridPane.getChildren()) {
                     Pane root = (Pane) node;
-                    Button button = (Button) root.getChildren().get(1);
-                    Line line = (Line) root.getChildren().get(5);
+                    Button button = (Button) ((Pane) root.getChildren().get(0)).getChildren().get(1);
+                    Line line = (Line) ((Pane) root.getChildren().get(0)).getChildren().get(5);
 
                     line.setEndX((double) newValue - 80);
                     button.setLayoutX((double) newValue - 220);
@@ -219,7 +229,12 @@ public class RoomPageContent {
         Pane root = new Pane();
         String id = Long.toString((long) obj.get("id"));
         root.setId(id);
-        addRoomClickEvent(root, i);
+        root.setPrefHeight(100);
+        root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        Pane content = new Pane();
+        addRoomClickEvent(content, i);
+        root.getChildren().add(content);
 
         Label name = new Label((String) obj.get("room_name"));
         name.setLayoutX(30);
@@ -255,18 +270,22 @@ public class RoomPageContent {
         Label expanded = new Label("false");
         expanded.setVisible(false);
 
-        root.getChildren().add(name);
-        root.getChildren().add(reserveButton);
-        root.getChildren().add(expanded);
-        root.getChildren().add(building);
-        root.getChildren().add(info);
-        root.getChildren().add(line);
-        root.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
-        root.setPrefHeight(100);
-        root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        content.getChildren().add(name);
+        content.getChildren().add(reserveButton);
+        content.getChildren().add(expanded);
+        content.getChildren().add(building);
+        content.getChildren().add(info);
+        content.getChildren().add(line);
+        content.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
+        content.setPrefHeight(100);
+        content.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         //System.out.println("add room: " + name.getText());
         list.add(root, 0, i);
+
+        if (ServerCommunication.getRole().equals("admin")) {
+            addAdmin();
+        }
     }
 
     /**
@@ -318,12 +337,12 @@ public class RoomPageContent {
                     rc.setMinHeight(500);
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
-                        for (int i = 4; i < node.getChildren().size(); i++) {
+                        for (int i = 4; i < 6; i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
                     }
 
-                    for (int i = 4; i < root.getChildren().size(); i++) {
+                    for (int i = 4; i < 6; i++) {
                         root.getChildren().get(i).setVisible(true);
                     }
 
@@ -335,7 +354,7 @@ public class RoomPageContent {
                     }
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
-                        for (int i = 4; i < node.getChildren().size(); i++) {
+                        for (int i = 4; i < 6; i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
                     }
@@ -388,6 +407,55 @@ public class RoomPageContent {
                 }
             }
         });
+    }
+
+    /**
+     * Adds the admin buttons for CRUD.
+     */
+    public static void addAdmin() {
+        for (Node node : list.getChildren()) {
+            Pane root = (Pane) node;
+
+            CheckBox checkBox = new CheckBox();
+            checkBox.setLayoutX(10);
+            checkBox.setLayoutY(40);
+            root.getChildren().add(checkBox);
+        }
+
+        if (scene.lookup("delete") == null) {
+            ImageView delete = new ImageView();
+            delete.setImage(new Image("/icons/delete-icon.png"));
+            delete.setFitWidth(40);
+            delete.setFitHeight(40);
+            delete.setLayoutX(138);
+            delete.setLayoutY(265);
+            delete.setId("delete");
+            ColorAdjust adjust = new ColorAdjust();
+            Blend blend = new Blend(BlendMode.SRC_ATOP, adjust, new ColorInput(0, 0, 40, 40, Color.SLATEGREY));
+            delete.setEffect(blend);
+            delete.setCache(true);
+            delete.setCacheHint(CacheHint.SPEED);
+            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, delete);
+
+            Pane deleteHover = new Pane();
+            deleteHover.setPrefSize(44, 44);
+            deleteHover.setLayoutX(136);
+            deleteHover.setLayoutY(263);
+            deleteHover.getStyleClass().add("deleteHover");
+            delete.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    deleteHover.getStyleClass().add("deleteHoverhover");
+                }
+            });
+            delete.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent e) {
+                    deleteHover.getStyleClass().remove(1);
+                }
+            });
+            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
+        }
     }
 
     /**

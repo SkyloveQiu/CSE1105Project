@@ -9,3 +9,13 @@
     -fx-background-radius: 0;
     -fx-border-width: 0;
 }
+
+.deleteHover:hover {
+    -fx-background-color: silver;
+    -fx-background-radius: 22;
+}
+
+.deleteHoverhover {
+    -fx-background-color: silver;
+        -fx-background-radius: 22;
+}

@@ -24,6 +24,7 @@ public class ServerCommunication {
     private static HttpClient client = HttpClient.newBuilder().build();
     private static String token = "invalid";
     private static String username = "";
+    private static String role = "";
 
     /**
      * Gets the value of token.
@@ -59,6 +60,14 @@ public class ServerCommunication {
      */
     public static String getUsername() {
         return username;
+    }
+
+    /**
+     * Gets the role of the user.
+     * @return the role in String format
+     */
+    public static String getRole() {
+        return role;
     }
 
     /**

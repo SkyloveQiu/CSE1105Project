@@ -369,7 +369,6 @@ public class RoomPageController {
              */
             timeDateSelect.setVisible(false);
             RoomPageContent.addRooms();
-            //dateTimeSelect.setVisible(false);
         }
     }
 

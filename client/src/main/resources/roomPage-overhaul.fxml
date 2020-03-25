@@ -40,7 +40,7 @@
       </ImageView>
       <Pane prefHeight="500.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="245.0" />
 
-      <ScrollPane fx:id="scrollpane" fitToHeight="true" fitToWidth="true" layoutX="88.0" layoutY="362.0" prefHeight="492.0" prefWidth="1192.0" style="-fx-background-color: #29293d; -fx-border-width: 0 0 0 0;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="268.0">
+      <ScrollPane fx:id="scrollpane" fitToHeight="true" fitToWidth="true" layoutX="88.0" layoutY="362.0" prefHeight="492.0" prefWidth="1192.0" style="-fx-background-color: #29293d; -fx-border-width: 0 0 0 0;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="310.0">
          <content>
             <GridPane fx:id="roomList" prefHeight="492.0" prefWidth="1112.0" style="-fx-background-color: #29293d;" vgap="40">
               <columnConstraints>
