@@ -184,10 +184,10 @@ public class RoomPageContent {
      * @param i the index in the list.
      */
     private static void addRoom(JSONObject obj, int i) {
-        Pane root = new Pane();
+        AnchorPane root = new AnchorPane();
         String id = Long.toString((long) obj.get("id"));
         root.setId(id);
-        addRoomClickEvent(root, Integer.parseInt(id));
+        addRoomClickEvent(root, i);
 
         Label name = new Label((String) obj.get("room_name"));
         name.setLayoutX(30);
@@ -197,8 +197,8 @@ public class RoomPageContent {
         Button reserveButton = new Button("Reserve");
         reserveButton.setStyle("-fx-background-color: mediumseagreen;");
         reserveButton.setPrefSize(100, 30);
-        reserveButton.setLayoutX(930);
-        reserveButton.setLayoutY(33);
+        AnchorPane.setTopAnchor(reserveButton, 33.0);
+        AnchorPane.setRightAnchor(reserveButton, 30.0);
         addReservationButtonEvent(reserveButton);
 
         Label building = new Label((String) ((JSONObject) obj.get("building")).get("building_name"));
@@ -222,7 +222,7 @@ public class RoomPageContent {
         root.getChildren().add(building);
         root.getChildren().add(info);
         root.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
-        root.setPrefHeight(200);
+        root.setPrefHeight(100);
         root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         System.out.println("add room: " + name.getText());
@@ -242,8 +242,8 @@ public class RoomPageContent {
                     for (RowConstraints rc : list.getRowConstraints()) {
                         rc.setMinHeight(100);
                     }
-                    RowConstraints rc = list.getRowConstraints().get(id - 1);
-                    rc.setMinHeight(200);
+                    RowConstraints rc = list.getRowConstraints().get(id);
+                    rc.setMinHeight(500);
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
                         for (int i = 4; i < node.getChildren().size(); i++) {
