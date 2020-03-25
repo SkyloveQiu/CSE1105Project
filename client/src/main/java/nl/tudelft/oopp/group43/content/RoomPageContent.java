@@ -26,6 +26,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
@@ -71,6 +72,7 @@ public class RoomPageContent {
         fromTime = (ChoiceBox<String>) scene.lookup("#fromTime");
         untilTime = (ChoiceBox<String>) scene.lookup("#untilTime");
         list = (GridPane) scene.lookup("#roomList");
+        addGridPaneSizeListener(list);
 
         selectedRooms = new ArrayList<>();
 
@@ -95,6 +97,27 @@ public class RoomPageContent {
         untilTime.setItems(list);
 
         addChoiceboxListener();
+    }
+
+    /**
+     * Adds a width size listener to the specified gridpane that changes the location of the reserve button and extends the horizontal line.
+     * @param gridPane gridpane to add the listener to.
+     */
+    private static void addGridPaneSizeListener(GridPane gridPane) {
+        gridPane.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                for (Node node : gridPane.getChildren()) {
+                    Pane root = (Pane) node;
+                    Button button = (Button) root.getChildren().get(1);
+                    Line line = (Line) root.getChildren().get(5);
+
+                    line.setEndX((double) newValue - 80);
+                    button.setLayoutX((double) newValue - 220);
+                }
+                //System.out.println(newValue);
+            }
+        });
     }
 
     /**
@@ -193,7 +216,7 @@ public class RoomPageContent {
      * @param i the index in the list.
      */
     private static void addRoom(JSONObject obj, int i) {
-        AnchorPane root = new AnchorPane();
+        Pane root = new Pane();
         String id = Long.toString((long) obj.get("id"));
         root.setId(id);
         addRoomClickEvent(root, i);
@@ -206,8 +229,8 @@ public class RoomPageContent {
         Button reserveButton = new Button("Reserve");
         reserveButton.setStyle("-fx-background-color: mediumseagreen;");
         reserveButton.setPrefSize(100, 30);
-        AnchorPane.setTopAnchor(reserveButton, 33.0);
-        AnchorPane.setRightAnchor(reserveButton, 30.0);
+        reserveButton.setLayoutX(scene.getWidth() - 323);
+        reserveButton.setLayoutY(33);
         addReservationButtonEvent(reserveButton, id);
 
         Label building = new Label((String) ((JSONObject) obj.get("building")).get("building_name"));
@@ -216,11 +239,18 @@ public class RoomPageContent {
         building.setFont(new Font("Arial", 12));
         building.setTextFill(Color.FORESTGREEN);
 
+        Line line = new Line();
+        line.setStartX(0);
+        line.setEndX(1200);
+        line.setStartY(100);
+        line.setEndY(100);
+        line.setVisible(false);
         Label info = new Label("test");
-        info.setPrefHeight(100);
+        info.setPrefHeight(400);
         info.setLayoutX(20.0);
         info.setLayoutY(100.0);
         info.setVisible(false);
+        addInfo(info, obj);
 
         Label expanded = new Label("false");
         expanded.setVisible(false);
@@ -230,12 +260,45 @@ public class RoomPageContent {
         root.getChildren().add(expanded);
         root.getChildren().add(building);
         root.getChildren().add(info);
+        root.getChildren().add(line);
         root.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
         root.setPrefHeight(100);
         root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         //System.out.println("add room: " + name.getText());
         list.add(root, 0, i);
+    }
+
+    /**
+     * Adds information to the info label of a room.
+     * @param info the info label
+     * @param obj the json object of the room
+     */
+    private static void addInfo(Label info, JSONObject obj) {
+        JSONParser json = new JSONParser();
+        try {
+            JSONObject attr = (JSONObject) json.parse((String) obj.get("attributes"));
+
+            String information = "Space type: \t\t\t" + attr.get("spaceType")
+                    + "\nChalkboard: \t\t\t" + attr.get("chalkBoard")
+                    + "\nWhiteboard: \t\t\t" + attr.get("whiteBoard")
+                    + "\nSmartboard: \t\t\t" + attr.get("smartBoard")
+                    + "\nBlinds: \t\t\t\t" + attr.get("blinds")
+                    + "\nDisplay Screen: \t\t" + attr.get("display")
+                    + "\nDesktop PC: \t\t\t" + attr.get("desktopPc")
+                    + "\nProjector: \t\t\t" + attr.get("projector")
+                    + "\nPower supply: \t\t\t" + attr.get("powerSupply")
+                    + "\nSurface area: \t\t\t" + attr.get("surfaceArea")
+                    + "\nSeat capacity: \t\t\t" + attr.get("seatCapacity")
+                    + "\nMicrophone: \t\t\t" + attr.get("microphone")
+                    + "\nSound-installation: \t\t" + attr.get("soundInstallation")
+                    + "\nWheelchair accessible: \t" + attr.get("wheelChairAccessible");
+
+            info.setText(information);
+            info.setFont(new Font("Arial", 18));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -317,7 +380,6 @@ public class RoomPageContent {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setContentText("To reserve a room you must be logged in!\nYou will get redirected");
                     alert.showAndWait();
-
                     try {
                         sl.start((Stage) scene.getWindow());
                     } catch (IOException e) {

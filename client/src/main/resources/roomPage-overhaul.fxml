@@ -42,9 +42,9 @@
 
       <ScrollPane fx:id="scrollpane" fitToHeight="true" fitToWidth="true" layoutX="88.0" layoutY="362.0" prefHeight="492.0" prefWidth="1192.0" style="-fx-background-color: #29293d; -fx-border-width: 0 0 0 0;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="268.0">
          <content>
-            <GridPane fx:id="roomList" prefHeight="100.0" prefWidth="1112.0" style="-fx-background-color: #29293d;" vgap="40">
+            <GridPane fx:id="roomList" prefHeight="492.0" prefWidth="1112.0" style="-fx-background-color: #29293d;" vgap="40">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="100.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="100.0" vgrow="SOMETIMES" />

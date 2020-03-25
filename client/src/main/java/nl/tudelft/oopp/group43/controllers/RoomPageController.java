@@ -148,7 +148,7 @@ public class RoomPageController {
     @FXML
     private void searchRooms(MouseEvent event) {
         String searchQuery = searchBar.getText();
-        if (searchQuery != null) {
+        if (searchQuery != null && searchQuery.length() > 0) {
             System.out.println("Searching in rooms for: " + searchQuery);
 
             JSONArray rooms = RoomPageContent.getDatabaseRooms();
@@ -161,6 +161,14 @@ public class RoomPageController {
             }
 
             RoomPageContent.setSelectedRooms(newRooms);
+            RoomPageContent.addRooms();
+        } else {
+            JSONArray rooms = RoomPageContent.getDatabaseRooms();
+            ArrayList<JSONObject> selectedRooms = new ArrayList<>();
+            for (int i = 0; i < rooms.size(); i++) {
+                selectedRooms.add((JSONObject) rooms.get(i));
+            }
+            RoomPageContent.setSelectedRooms(selectedRooms);
             RoomPageContent.addRooms();
         }
     }
