@@ -1,9 +1,6 @@
 package nl.tudelft.oopp.group43.controllers;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
@@ -28,6 +25,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 public class RoomPageController {
 
     private boolean filterClicked = false;
@@ -38,12 +36,10 @@ public class RoomPageController {
     private ChoiceBox<String> untilTime;
     @FXML
     private DatePicker date;
-
     @FXML
     private TextField searchBar;
     @FXML
-    private AnchorPane root;
-    private AnchorPane selectTime;
+    private AnchorPane timeDateSelect;
 
     @FXML
     private CheckBox blinds;
@@ -321,12 +317,7 @@ public class RoomPageController {
                 day = "0" + localDate.getDayOfMonth();
             }
             String dateString = localDate.getYear() + "-" + month + "-" + day;
-
-            String beginHour = dateString + "-" + fromTime.getValue().substring(0, 2);
-            String endHour = dateString + "-" + untilTime.getValue().substring(0, 2);
-            //System.out.println(beginHour + " - " + endHour);
             int hoursBetween = Integer.parseInt(untilTime.getValue().substring(0, 2)) - Integer.parseInt(fromTime.getValue().substring(0, 2));
-            //System.out.println(hoursBetween);
 
             for (int i = 0; i <= hoursBetween; i++) {
                 int offset = i + Integer.parseInt(fromTime.getValue().substring(0, 2));
@@ -366,11 +357,9 @@ public class RoomPageController {
 
 
             /*
-            ===========================================
+            ==========================================
              */
-
-
-            selectTime = (AnchorPane) root.getChildren().remove(8);
+            timeDateSelect.setVisible(false);
             RoomPageContent.addRooms();
             //dateTimeSelect.setVisible(false);
         }

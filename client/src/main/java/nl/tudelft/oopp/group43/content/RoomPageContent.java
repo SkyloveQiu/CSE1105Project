@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -25,11 +27,18 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.classes.ReservationConfig;
+import nl.tudelft.oopp.group43.classes.ReservationPageContent;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class RoomPageContent {
 
@@ -199,7 +208,7 @@ public class RoomPageContent {
         reserveButton.setPrefSize(100, 30);
         AnchorPane.setTopAnchor(reserveButton, 33.0);
         AnchorPane.setRightAnchor(reserveButton, 30.0);
-        addReservationButtonEvent(reserveButton);
+        addReservationButtonEvent(reserveButton, id);
 
         Label building = new Label((String) ((JSONObject) obj.get("building")).get("building_name"));
         building.setLayoutX(35);
@@ -225,7 +234,7 @@ public class RoomPageContent {
         root.setPrefHeight(100);
         root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        System.out.println("add room: " + name.getText());
+        //System.out.println("add room: " + name.getText());
         list.add(root, 0, i);
     }
 
@@ -278,8 +287,45 @@ public class RoomPageContent {
      * Adds an event to the reservation button.
      * @param btn the button to which the event will be added.
      */
-    private static void addReservationButtonEvent(Button btn) {
-        System.out.println("reserve!");
+    private static void addReservationButtonEvent(Button btn, String id) {
+        btn.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (!ServerCommunication.getToken().equals("invalid")) {
+                    ArrayList selectedHours = ReservationConfig.getSelectedHours();
+                    ReservationConfig.setSelectedRoom(Long.parseLong(id));
+
+                    String response = "";
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
+                    formatter.withZone(ZoneId.of("UTC"));
+                    for (int i = 0; i < selectedHours.size(); i++) {
+                        LocalDateTime startDate = LocalDateTime.parse((String) selectedHours.get(i), formatter);
+                        LocalDateTime endDate = startDate.plusHours(1);
+
+                        String startTime = startDate.toString() + ":00.000+0000";
+                        String endTime = endDate.toString() + ":00.000+0000";
+                        System.out.println(startTime);
+                        response = ServerCommunication.reserveRoomForHour(startTime, endTime);
+                    }
+
+                    ReservationPageContent.setDateString("");
+                } else {
+                    SceneLoader.setScene("login");
+                    SceneLoader sl = new SceneLoader();
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("To reserve a room you must be logged in!\nYou will get redirected");
+                    alert.showAndWait();
+
+                    try {
+                        sl.start((Stage) scene.getWindow());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     /**
