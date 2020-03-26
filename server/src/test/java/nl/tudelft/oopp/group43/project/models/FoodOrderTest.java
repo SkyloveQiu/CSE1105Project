@@ -97,7 +97,7 @@ public class FoodOrderTest extends FoodOrderTestScaffolding {
     @Test(timeout = 4000)
     public void test09() throws Throwable {
         FoodOrder foodOrder0 = new FoodOrder();
-        Set<FoodOrder> set0 = foodOrder0.getFoodOrderDetails();
+        Set<FoodOrderDetails> set0 = foodOrder0.getFoodOrderDetails();
         foodOrder0.setFoodOrderDetails(set0);
     }
 
