@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,17 +18,14 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.ColorInput;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -66,6 +61,10 @@ public class RoomPageContent {
 
     private static JSONArray databaseRooms;
     private static ArrayList<JSONObject> selectedRooms;
+
+    private static boolean adminAdded = false;
+    private static ArrayList<CheckBox> checkBoxes;
+    private static ArrayList<String> deleteRoomList = new ArrayList<>();
 
     /**
      * Adds the content to the room page.
@@ -229,10 +228,10 @@ public class RoomPageContent {
         Pane root = new Pane();
         String id = Long.toString((long) obj.get("id"));
         root.setId(id);
-        root.setPrefHeight(100);
         root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         Pane content = new Pane();
+        content.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         addRoomClickEvent(content, i);
         root.getChildren().add(content);
 
@@ -329,14 +328,20 @@ public class RoomPageContent {
         root.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                for (RowConstraints rc : list.getRowConstraints()) {
+                    rc.setMinHeight(100);
+                }
+                for (Node node : list.getChildren()) {
+                    Pane pane = (Pane) node;
+                    ((Pane) pane.getChildren().get(0)).setMinHeight(100);
+                }
                 if (((Label) root.getChildren().get(2)).getText().equals("false")) {
-                    for (RowConstraints rc : list.getRowConstraints()) {
-                        rc.setMinHeight(100);
-                    }
                     RowConstraints rc = list.getRowConstraints().get(id);
                     rc.setMinHeight(500);
+                    root.setMinHeight(500);
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
+                        node = (Pane) node.getChildren().get(0);
                         for (int i = 4; i < 6; i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
@@ -349,11 +354,9 @@ public class RoomPageContent {
                     ((Label) root.getChildren().get(2)).setText("true");
 
                 } else {
-                    for (RowConstraints rc : list.getRowConstraints()) {
-                        rc.setMinHeight(100);
-                    }
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
+                        node = (Pane) node.getChildren().get(0);
                         for (int i = 4; i < 6; i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
@@ -412,17 +415,34 @@ public class RoomPageContent {
     /**
      * Adds the admin buttons for CRUD.
      */
-    public static void addAdmin() {
+    private static void addAdmin() {
+        checkBoxes = new ArrayList<>();
+
         for (Node node : list.getChildren()) {
             Pane root = (Pane) node;
-
             CheckBox checkBox = new CheckBox();
             checkBox.setLayoutX(10);
             checkBox.setLayoutY(40);
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    System.out.println("ticked room: " + root.getId());
+                    deleteRoomList.add(root.getId());
+                } else {
+                    for (int i = 0; i < deleteRoomList.size(); i++) {
+                        if (deleteRoomList.get(i).equals(root.getId())) {
+                            deleteRoomList.remove(i);
+                        }
+                    }
+                    System.out.println("unticked room: " + root.getId());
+                }
+            });
             root.getChildren().add(checkBox);
+            checkBoxes.add(checkBox);
         }
 
-        if (scene.lookup("delete") == null) {
+        if (!adminAdded) {
+            adminAdded = true;
+
             ImageView delete = new ImageView();
             delete.setImage(new Image("/icons/delete-icon.png"));
             delete.setFitWidth(40);
@@ -442,20 +462,48 @@ public class RoomPageContent {
             deleteHover.setLayoutX(136);
             deleteHover.setLayoutY(263);
             deleteHover.getStyleClass().add("deleteHover");
-            delete.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    deleteHover.getStyleClass().add("deleteHoverhover");
-                }
-            });
-            delete.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent e) {
-                    deleteHover.getStyleClass().remove(1);
-                }
-            });
+            addHover(delete, deleteHover);
             ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
+
+            Label deselect = new Label("deselect all");
+            deselect.setPrefSize(130,40);
+            deselect.setLayoutX(185);
+            deselect.setLayoutY(265);
+            deselect.getStyleClass().add("deselect");
+            deselect.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                for (CheckBox cb : checkBoxes) {
+                    cb.setSelected(false);
+                }
+            });
+            Pane deselectHover = new Pane();
+            deselectHover.setPrefSize(124, 44);
+            deselectHover.setLayoutX(183);
+            deselectHover.setLayoutY(263);
+            deselectHover.getStyleClass().add("filler"); //this is a filler because otherwise the addHover method does not work XD
+            addHover(deselect, deselectHover);
+            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselect);
+            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselectHover);
         }
+    }
+
+    /**
+     * This adds an event listener to the node where when hovered on the pane gets a styleclass.
+     * @param node the node that gets hovered
+     * @param pane the pane that gets the styleclass
+     */
+    private static void addHover(Node node, Pane pane) {
+        node.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                pane.getStyleClass().add("deleteHoverhover");
+            }
+        });
+        node.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                pane.getStyleClass().remove(1);
+            }
+        });
     }
 
     /**

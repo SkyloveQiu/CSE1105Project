@@ -19,3 +19,9 @@
     -fx-background-color: silver;
         -fx-background-radius: 22;
 }
+
+.deselect {
+    -fx-text-fill: slategrey;
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 25;
+}

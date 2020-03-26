@@ -117,21 +117,21 @@ public class RoomPageController {
         if (fromHour != null) {
             int i = 0;
             String time = "00:00";
-            while (!fromHour.equals(time)) {
+            while (!fromHour.substring(0, 2).equals(time.substring(0, 2))) {
                 i++;
                 if (i < 10) {
-                    time = "0" + i + ":00";
+                    time = "0" + i + ":59";
                 } else {
-                    time = i + ":00";
+                    time = i + ":59";
                 }
             }
 
             ArrayList<String> hours = new ArrayList<>();
-            for (i += 1; i < 24; i++) {
+            for (; i < 24; i++) {
                 if (i < 10) {
-                    hours.add("0" + Integer.toString(i) + ":00");
+                    hours.add("0" + Integer.toString(i) + ":59");
                 } else {
-                    hours.add(Integer.toString(i) + ":00");
+                    hours.add(Integer.toString(i) + ":59");
                 }
             }
             ObservableList<String> list = FXCollections.observableArrayList(hours);
