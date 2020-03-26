@@ -170,6 +170,24 @@ public class ServerCommunication {
     }
 
     /**
+     * Retrieves all reservations from the server.
+     *
+     * @return the body of a get request to the server.
+     * @throws Exception if communication with the server fails.
+     */
+    public static String getReservations() {
+        String url = cURL + "reservation";
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
      * Gets the rooms from the database.
      *
      * @return A String with in it a JSONArray or Object of all rooms
