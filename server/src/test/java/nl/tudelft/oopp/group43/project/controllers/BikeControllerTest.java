@@ -1,9 +1,11 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +15,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-
 @RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
-class UserControllerTest {
+@WebMvcTest(BikeController.class)
+class BikeControllerTest {
 
+    private String token;
+
+    private String reservationId;
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void loginTest() throws Exception {
-
+    @BeforeEach
+    void init() throws Exception {
         MvcResult result = mockMvc.perform(post("/token")
                 .contentType("application/json")
                 .param("username", "ziang.qiu@gmail.com")
@@ -31,51 +34,54 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String response = result.getResponse().getContentAsString();
-        String token = JsonPath.read(response, "$.token");
-        mockMvc.perform(post("/api/hello")
-                .header("authorization", "Bearer" + token)
-                .contentType("application/json"))
-                .andExpect(status().isOk());
-
+        token = JsonPath.read(response, "$.token");
     }
 
     @Test
-    void getNameTest() throws Exception {
-        MvcResult result = mockMvc.perform(post("/token")
-                .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "123456789"))
-                .andExpect(status().isOk())
-                .andReturn();
-        String response = result.getResponse().getContentAsString();
-        String token = JsonPath.read(response, "$.token");
-        mockMvc.perform(post("/name")
-                .param("token", token)
+    void getBikeTest() throws Exception {
+        mockMvc.perform(get("/bike/0")
                 .contentType("application/json"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void getWrongPassword() throws Exception {
-        MvcResult result = mockMvc.perform(post("/token")
+    void getReservations() throws Exception {
+        mockMvc.perform(post("/bikeReservation/user")
                 .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "12345678"))
+                .param("token", token))
+                .andExpect(status().isOk());
+    }
+
+
+    @Test
+    void createWrongBuildingTest() throws Exception {
+        mockMvc.perform(post("/bike")
+                .param("Building", "10")
+                .contentType("application/json")
+                .param("token", token))
+                .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
+    }
+
+    @Test
+    void createReservation() throws Exception {
+        mockMvc.perform(post("/bikeReservation/create")
+                .param("BikeId", "-1")
+                .contentType("application/json")
+                .param("token", token))
+                .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
+    }
+
+
+    @Test
+    void returnTheBikeFail() throws Exception {
+        MvcResult result = mockMvc.perform(post("/bikeReservation/create")
+                .param("BikeId", "-1")
+                .param("reservationId", "-2")
+                .contentType("application/json")
+                .param("token", token))
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()))
                 .andReturn();
     }
 
-    @Test
-    void registerDupicateUser() throws Exception {
-        MvcResult result = mockMvc.perform(post("/registration")
-                .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "12345678")
-                .param("firstName", "Ziang")
-                .param("lastName", "Qiu")
-                .param("role", "student"))
-                .andExpect(status().is(HttpStatus.FORBIDDEN.value()))
-                .andReturn();
-    }
 
 }
