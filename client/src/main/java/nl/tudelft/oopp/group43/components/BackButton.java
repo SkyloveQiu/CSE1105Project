@@ -89,10 +89,8 @@ public class BackButton {
                                 waitForSave.setContentText("Please wait for the calendar to save all entries of the calendar!");
                                 waitForSave.showAndWait();
                             }
-                            backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
-                        } else {
-                            backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
                         }
+                        backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

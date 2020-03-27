@@ -120,27 +120,28 @@ public class CalendarPageContent {
                 String path = Paths.get("").toAbsolutePath().toString() + "\\client\\src\\main\\resources\\calendars\\";
                 // Use relative path for Unix systems
                 File temp = new File(path + "temp-entries.conf");
-                path += "entries.conf";
-                File file = new File(path);
+                File file = new File(path + "entries.conf");
 
                 temp.getParentFile().mkdirs();
                 try {
                     temp.createNewFile();
-                    for (Calendar calendar : calendarView.getCalendars()) {
-                        for (Entry entry : entries) {
-                            JSONObject obj = new JSONObject();
 
-                            mapEntryToJson(entry, obj);
+                    for (Entry entry : entries) {
+                        JSONObject obj = new JSONObject();
 
-                            try {
-                                System.out.println("Trying to write to: " + Paths.get("").toAbsolutePath().toString() + "\\client\\src\\main\\resources\\calendars\\entries.conf");
-                                saveJsonToFile(obj, Paths.get("").toAbsolutePath().toString() + "\\client\\src\\main\\resources\\calendars\\entries.conf");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        mapEntryToJson(entry, obj);
+
+                        try {
+                            System.out.println("Trying to write to: " + Paths.get("").toAbsolutePath().toString() + "\\client\\src\\main\\resources\\calendars\\temp-entries.conf");
+                            saveJsonToFile(obj, Paths.get("").toAbsolutePath().toString() + "\\client\\src\\main\\resources\\calendars\\temp-entries.conf");
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
+
+                    file.delete();
                     System.out.println("succeeded = " + temp.renameTo(file));
+                    temp.delete();
                     ThreadLock.flag = 0;
                 } catch (IOException e) {
                     ThreadLock.flag = 0;

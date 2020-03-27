@@ -152,3 +152,6 @@ client/gradle/wrapper/gradle-wrapper.properties
 server/gradlew
 server/gradlew.bat
 server/gradle/wrapper/gradle-wrapper.properties
+
+# Ignore personal calendar entries conf
+client/src/main/resources/calendars/*.conf
