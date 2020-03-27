@@ -1,12 +1,12 @@
 .scroll-bar:vertical .thumb {
     -fx-background-color: skyblue;
-    -fx-background-radius: 0;
+    -fx-background-radius: 3;
     -fx-border-width: 0;
 }
 
 .scroll-bar:vertical .track {
     -fx-background-color: #2d3a61;
-    -fx-background-radius: 0;
+    -fx-background-radius: 3;
     -fx-border-width: 0;
 }
 
@@ -24,4 +24,21 @@
     -fx-text-fill: slategrey;
     -fx-font-family: 'Helvetica', Arial, sans-serif;
     -fx-font-size: 25;
+}
+
+.edit {
+    -fx-background-color: seagreen;
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 25;
+    -fx-text-fill: black;
+}
+
+.edit:hover {
+    -fx-background-color: palegreen;
+}
+
+.seperator {
+    -fx-background-color: slategrey;
+    -fx-background-radius: 2;
+    -fx-border-width: 0;
 }

@@ -1,6 +1,7 @@
 package nl.tudelft.oopp.group43.content;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -65,6 +66,7 @@ public class RoomPageContent {
     private static boolean adminAdded = false;
     private static ArrayList<CheckBox> checkBoxes;
     private static ArrayList<String> deleteRoomList = new ArrayList<>();
+    private static ArrayList<Button> editButtons;
 
     /**
      * Adds the content to the room page.
@@ -123,6 +125,13 @@ public class RoomPageContent {
 
                     line.setEndX((double) newValue - 80);
                     button.setLayoutX((double) newValue - 220);
+                }
+                if (editButtons != null) {
+                    for (Button editButton : editButtons) {
+                        System.out.println(editButton.getWidth());
+                        editButton.setPrefWidth(editButton.getWidth() + ((double) newValue - (double) oldValue));
+                        System.out.println(editButton.getWidth());
+                    }
                 }
                 //System.out.println(newValue);
             }
@@ -342,12 +351,12 @@ public class RoomPageContent {
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
                         node = (Pane) node.getChildren().get(0);
-                        for (int i = 4; i < 6; i++) {
+                        for (int i = 4; i < node.getChildren().size(); i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
                     }
 
-                    for (int i = 4; i < 6; i++) {
+                    for (int i = 4; i < root.getChildren().size(); i++) {
                         root.getChildren().get(i).setVisible(true);
                     }
 
@@ -357,7 +366,7 @@ public class RoomPageContent {
                     for (Node n : list.getChildren()) {
                         Pane node = (Pane) n;
                         node = (Pane) node.getChildren().get(0);
-                        for (int i = 4; i < 6; i++) {
+                        for (int i = 4; i < node.getChildren().size(); i++) {
                             node.getChildren().get(i).setVisible(false);
                         }
                     }
@@ -417,6 +426,7 @@ public class RoomPageContent {
      */
     private static void addAdmin() {
         checkBoxes = new ArrayList<>();
+        editButtons = new ArrayList<>();
 
         for (Node node : list.getChildren()) {
             Pane root = (Pane) node;
@@ -438,6 +448,20 @@ public class RoomPageContent {
             });
             root.getChildren().add(checkBox);
             checkBoxes.add(checkBox);
+
+            Button edit = new Button("Edit room");
+            edit.setLayoutY(400);
+            edit.setLayoutX(750);
+            edit.getStyleClass().add("edit");
+            edit.setMinSize(200, 75);
+            edit.setVisible(false);
+            editButtons.add(edit);
+            ((Pane) root.getChildren().get(0)).getChildren().add(edit);
+
+            ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
+            img.setFitHeight(25.0);
+            img.setFitWidth(25.0);
+            edit.setGraphic(img);
         }
 
         if (!adminAdded) {
@@ -466,7 +490,7 @@ public class RoomPageContent {
             ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
 
             Label deselect = new Label("deselect all");
-            deselect.setPrefSize(130,40);
+            deselect.setPrefSize(124,40);
             deselect.setLayoutX(185);
             deselect.setLayoutY(265);
             deselect.getStyleClass().add("deselect");
@@ -476,13 +500,40 @@ public class RoomPageContent {
                 }
             });
             Pane deselectHover = new Pane();
-            deselectHover.setPrefSize(124, 44);
+            deselectHover.setPrefSize(128, 44);
             deselectHover.setLayoutX(183);
             deselectHover.setLayoutY(263);
             deselectHover.getStyleClass().add("filler"); //this is a filler because otherwise the addHover method does not work XD
             addHover(deselect, deselectHover);
             ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselect);
             ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselectHover);
+
+            Label seperator = new Label();
+            seperator.setPrefSize(5, 44);
+            seperator.setLayoutX(316);
+            seperator.setLayoutY(263);
+            seperator.getStyleClass().add("seperator");
+            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, seperator);
+
+            ImageView add = new ImageView();
+            add.setImage(new Image("/icons/add-icon.png"));
+            add.setFitWidth(40);
+            add.setFitHeight(40);
+            add.setLayoutX(328);
+            add.setLayoutY(265);
+            add.setId("delete");
+            add.setEffect(blend);
+            add.setCache(true);
+            add.setCacheHint(CacheHint.SPEED);
+            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, add);
+
+            Pane addHover = new Pane();
+            addHover.setPrefSize(44, 44);
+            addHover.setLayoutX(326);
+            addHover.setLayoutY(263);
+            addHover.getStyleClass().add("deleteHover");
+            addHover(add, addHover);
+            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, addHover);
         }
     }
 
