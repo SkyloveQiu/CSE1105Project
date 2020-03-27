@@ -139,7 +139,7 @@ public class UserController {
      * @return the status of the password change
      */
     @PostMapping("/changePassword")
-    public ResponseEntity changePassword(@RequestParam("password") final String password, @RequestParam(value = "token", defaultValue = "invalid") final String token) {
+    public ResponseEntity changePassword(@RequestParam("password") final String password, @RequestParam(value = "token", defaultValue = "invalid") final String token) throws UnsupportedEncodingException {
         String passwordDecoded = utf8DecodeValue(password);
 
         User user = repository.findUserByToken(token);
