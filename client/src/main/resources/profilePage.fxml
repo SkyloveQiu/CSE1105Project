@@ -62,33 +62,36 @@
                <Font name="Arial" size="18.0" />
             </font>
          </Label>
-         <PasswordField fx:id="oldPassword" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="325.0">
+         <PasswordField fx:id="oldPassword" onKeyTyped="#checkOldPassword" prefHeight="25.0" prefWidth="149.0" promptText="Old password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="325.0">
             <font>
                <Font name="Arial" size="20.0" />
             </font>
          </PasswordField>
+            <Label fx:id="oldPasswordCheck" prefHeight="25.0" prefWidth="149.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="370.0" />
          <Label text="New password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="395.0">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <PasswordField fx:id="newPassword" promptText="Password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="420.0" >
+         <PasswordField fx:id="newPassword" onKeyTyped="#checkNewPassword" promptText="Password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="420.0" >
             <font>
                <Font name="Arial" size="20.0" />
             </font>
          </PasswordField>
+            <Label fx:id="newPasswordCheck" prefHeight="25.0" prefWidth="149.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="465.0" />
             <Label text="Confirm password" style="-fx-text-fill: aliceblue;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="490.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="confirmPassword" promptText="Confirm password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="515.0">
+            <PasswordField fx:id="confirmPassword" onKeyTyped="#checkConfimrPassword" promptText="Confirm password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="515.0">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
             </PasswordField>
+            <Label fx:id="confirmPasswordCheck" prefHeight="25.0" prefWidth="149.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="560.0" />
 
-         <Button fx:id="changePasswordButton"  alignment="CENTER"  mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Change password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="580.0">
+         <Button fx:id="changePasswordButton" onAction="#changePasswordConfirm"  alignment="CENTER"  mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Change password" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="580.0">
             <font>
                <Font name="Arial" size="20.0" />
             </font>

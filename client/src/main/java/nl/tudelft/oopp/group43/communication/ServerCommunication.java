@@ -512,5 +512,10 @@ public class ServerCommunication {
         return "OK";
 
     }
+
+    public static  String sendChangePassword(String oldPassword, String newPassword)
+    {
+      String 
+    }
 }
 
