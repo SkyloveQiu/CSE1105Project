@@ -17,12 +17,14 @@ public class CalendarPageContent {
         scene = currentScene;
 
         CalendarView calendarView = new CalendarView();
+        calendarView.getStylesheets().add("/stylesheets/calendarPage.css");
+        calendarView.showDeveloperConsoleProperty().setValue(true);
 
         Calendar calendar = new Calendar("Calendar");
-        calendar.setShortName("C");
+        calendar.setShortName("Calendar");
         calendar.setStyle(Calendar.Style.STYLE1);
 
-        CalendarSource calendarSource = new CalendarSource("My Calendar");
+        CalendarSource calendarSource = new CalendarSource("My Calendars");
         calendarSource.getCalendars().add(calendar);
 
         calendarView.getCalendarSources().setAll(calendarSource);
