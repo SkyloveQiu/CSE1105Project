@@ -100,6 +100,7 @@ public class UserController {
 
     /**
      * find the user info by the user token.
+     *
      * @param token the token of the user.
      * @return the result of the request.
      */
@@ -107,11 +108,11 @@ public class UserController {
     public ResponseEntity getName(@RequestParam("token") final String token) {
         User user = userService.findByToken(token);
         if (user == null) {
-            ErrorResponse errorResponse = new ErrorResponse("error","can not find user, please get token again", HttpStatus.FORBIDDEN.value());
-            return new  ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
+            ErrorResponse errorResponse = new ErrorResponse("error", "can not find user, please get token again", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
-        UserResponse userResponse = new UserResponse(user,HttpStatus.OK.value());
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        UserResponse userResponse = new UserResponse(user, HttpStatus.OK.value());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -123,10 +124,43 @@ public class UserController {
 
     /**
      * Decodes a utf8 encoded value.
+     *
      * @param value utf8-encoded string value
      * @return decoded string value
      */
     private String utf8DecodeValue(String value) throws UnsupportedEncodingException {
         return URLDecoder.decode(value, StandardCharsets.UTF_8.name());
+    }
+
+    /**
+     * Change the password of an user based on token.
+     * @param password the new password provided by the user
+     * @param token    the token assigned to a certain user
+     * @return the status of the password change
+     */
+    @PostMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestParam("password") final String password, @RequestParam(value = "token", defaultValue = "invalid") final String token) {
+        String passwordDecoded = utf8DecodeValue(password);
+
+        User user = repository.findUserByToken(token);
+
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Change password error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (repository.findUserByToken(token) == null) {
+            ErrorResponse errorResponse = new ErrorResponse("Change password error", "Invalid token.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        user.setPassword(password);
+
+
+        userService.save(user);
+        ErrorResponse okResponse = new ErrorResponse("Update building", "UPDATED PASSWORD", HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
+
+
     }
 }

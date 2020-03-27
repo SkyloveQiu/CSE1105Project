@@ -70,7 +70,7 @@ public class FoodOrderController {
         }
 
         try {
-            if (!userRepository.findUserByToken(token).getUsername().equals(newFoodOrder.getUser().getUsername())) {
+            if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals(newFoodOrder.getUser().getUsername())) {
                 ErrorResponse errorResponse = new ErrorResponse("Food Reservation error", "This user does not exist or the token is invalid.", HttpStatus.FORBIDDEN.value());
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
@@ -122,7 +122,7 @@ public class FoodOrderController {
             System.out.println(i + "    ");
         }
 
-        ErrorResponse errorResponse = new ErrorResponse("Food Reservation OK", "You have successfully ordered your food: " + finalOrder.toString(), HttpStatus.OK.value());
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        ErrorResponse okResponse = new ErrorResponse("Food Reservation OK", "You have successfully ordered your food: " + finalOrder.toString(), HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
     }
 }

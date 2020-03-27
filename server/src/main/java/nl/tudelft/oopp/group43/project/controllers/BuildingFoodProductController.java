@@ -2,12 +2,17 @@ package nl.tudelft.oopp.group43.project.controllers;
 
 import java.util.List;
 import nl.tudelft.oopp.group43.project.models.BuildingFoodProduct;
+import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.repositories.BuildingFoodProductRepository;
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,8 +21,12 @@ public class BuildingFoodProductController {
     @Autowired
     private BuildingFoodProductRepository repository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * get the list of building food product.
+     *
      * @return the list of building food product.
      */
     @GetMapping("/buildingFoodProduct")
@@ -28,15 +37,29 @@ public class BuildingFoodProductController {
 
     /**
      * create the new building food product.
+     *
      * @param newBuildingFoodProduct the product you want to create.
      * @return the product it found.
      */
     @PostMapping("/buildingFoodProduct")
     @ResponseBody
-    public String createNewBuildingFoodProduct(@RequestBody BuildingFoodProduct newBuildingFoodProduct) {
+    public ResponseEntity createNewBuildingFoodProduct(@RequestBody BuildingFoodProduct newBuildingFoodProduct, @RequestParam(value = "token", defaultValue = "invalid") String token) {
+
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Building food product creation error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+            ErrorResponse errorResponse = new ErrorResponse("Building food product creation error", "Only the administrator can create new buildings.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
         repository.save(newBuildingFoodProduct);
-        return "NEW BUILDING FOOD PRODUCT FOR BUILDING: " + newBuildingFoodProduct.getBuilding()
-                + " PRICE: " + newBuildingFoodProduct.getPrice()
-                + " FOOD PRODUCT: " + newBuildingFoodProduct.getFoodProduct();
+        ErrorResponse okResponse = new ErrorResponse("Building food product creation", "NEW BUILDING FOOD PRODUCT FOR BUILDING: " + newBuildingFoodProduct.getBuilding()
+            + " PRICE: " + newBuildingFoodProduct.getPrice()
+            + " FOOD PRODUCT: " + newBuildingFoodProduct.getFoodProduct(), HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
+
     }
 }
