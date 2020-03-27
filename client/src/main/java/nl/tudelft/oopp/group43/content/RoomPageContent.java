@@ -217,6 +217,10 @@ public class RoomPageContent {
             JSONObject obj = selectedRooms.get(i);
             addRoom(obj, i);
         }
+
+        if (ServerCommunication.getRole().equals("admin")) {
+            addAdmin();
+        }
     }
 
     /**
@@ -281,10 +285,6 @@ public class RoomPageContent {
 
         //System.out.println("add room: " + name.getText());
         list.add(root, 0, i);
-
-        if (ServerCommunication.getRole().equals("admin")) {
-            addAdmin();
-        }
     }
 
     /**
