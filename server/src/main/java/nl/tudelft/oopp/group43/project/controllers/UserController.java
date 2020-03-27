@@ -149,7 +149,7 @@ public class UserController {
         oldPassword = utf8DecodeValue(oldPassword);
 
         User user = repository.findUserByToken(token);
-        String usernameDecoded = utf8DecodeValue(user.getUsername());
+
         if (token.equals("invalid")) {
             ErrorResponse errorResponse = new ErrorResponse("Change password error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -159,6 +159,8 @@ public class UserController {
             ErrorResponse errorResponse = new ErrorResponse("Change password error", "Invalid token.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
+
+        String usernameDecoded = utf8DecodeValue(user.getUsername());
 
         try {
             user = securityService.autoLogin(usernameDecoded, oldPassword);
