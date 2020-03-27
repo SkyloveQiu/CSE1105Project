@@ -3,16 +3,21 @@ package nl.tudelft.oopp.group43.content;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.view.CalendarView;
+
+import java.time.LocalTime;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-
-import java.time.LocalTime;
 
 public class CalendarPageContent {
 
     private static Scene scene;
 
+    /**
+     * Adds the calendar to the calendar page, also loads saved entries + if user is logged in his/her reservations.
+     * @param currentScene the scene of the calendar
+     */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
 
