@@ -12,11 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+
 
 public class ServerCommunication {
 
@@ -45,20 +46,21 @@ public class ServerCommunication {
     }
 
     /**
+     * Returns the username.
+     *
+     * @return a String with in it the username
+     */
+    public static String getUsername() {
+        return username;
+    }
+
+    /**
      * Sets the username for the client.
      *
      * @param newUsername the username
      */
     public static void setUsername(String newUsername) {
         username = newUsername;
-    }
-
-    /**
-     * Returns the username.
-     * @return a String with in it the username
-     */
-    public static String getUsername() {
-        return username;
     }
 
     /**
@@ -312,7 +314,7 @@ public class ServerCommunication {
 
         return "OK";
     }
-    
+
     /**
      * Gets all available/non-booked hours from the database using the format /{roomID}/{startDate}/{endDate}.
      *
@@ -432,17 +434,18 @@ public class ServerCommunication {
 
     /**
      * Retrieves all rooms from the serve with the specified attributes.
-     * @param blinds - String which represents if the room has blinds or not.
-     * @param desktop - String which represents if the room has desktop or not.
-     * @param projector - String which represents if the room has projector or not.
-     * @param chalkBoard - String which represents if the room has chalk board or not.
-     * @param microphone - String which represents if the room has microphone or not.
-     * @param smartBoard - String which represents if the room has smart board or not.
-     * @param whiteBoard - String which represents if the room has white board or not.
-     * @param powerSupply - String which represents if the room has power supply or not.
+     *
+     * @param blinds            - String which represents if the room has blinds or not.
+     * @param desktop           - String which represents if the room has desktop or not.
+     * @param projector         - String which represents if the room has projector or not.
+     * @param chalkBoard        - String which represents if the room has chalk board or not.
+     * @param microphone        - String which represents if the room has microphone or not.
+     * @param smartBoard        - String which represents if the room has smart board or not.
+     * @param whiteBoard        - String which represents if the room has white board or not.
+     * @param powerSupply       - String which represents if the room has power supply or not.
      * @param soundInstallation - String which represents if the room has soundInstallation or not.
-     * @param wheelChair - String which represents if the room has the facilities for people with wheel chair or not.
-     * @param space - String which represents the minimum space capacity of the room (nr. of people).
+     * @param wheelChair        - String which represents if the room has the facilities for people with wheel chair or not.
+     * @param space             - String which represents the minimum space capacity of the room (nr. of people).
      * @return a String which can have 2 values:
      *         - "Communication with server failed" if the communication with the server failed.
      *         - the rooms selected by the filters.
@@ -471,6 +474,7 @@ public class ServerCommunication {
 
     /**
      * Encodes a value to standard utf8 format.
+     *
      * @param value - String value that needs to be encoded
      * @return the utf8-encoded String
      */
@@ -480,12 +484,13 @@ public class ServerCommunication {
 
     /**
      * Gives the id of the chosen buildings and receives the list of bikes available for that building.
+     *
      * @param buildingID - String which represents the id of the chosen building
      * @return a String which can have 2 values:
      *         - "Communication with server failed" if the communication with the server failed.
      *         - a list of bikes for that building.
      */
-    public static  String getBikeRenting(String buildingID) {
+    public static String getBikeRenting(String buildingID) {
         String url = cURL + "bike/" + buildingID;
         HttpResponse<String> response = get(url);
         if (response == null) {
@@ -497,10 +502,11 @@ public class ServerCommunication {
 
     /**
      * Gives the id of the chosen bike for renting it.
+     *
      * @param bikeId - String which represents the id of the chosen bike.
      * @return a String which can have 2 values:
-     *         - "Communication with server failed" if the communication with the server failed.
-     *         - "OK" if the server receives the information.
+     *        - "Communication with server failed" if the communication with the server failed.
+     *        - "OK" if the server receives the information.
      */
     public static String sendBikeRenting(String bikeId) {
         String url = cURL + "bikeReservation/create?BikeId=" + bikeId + "&token=" + getToken();
@@ -513,9 +519,29 @@ public class ServerCommunication {
 
     }
 
-    public static  String sendChangePassword(String oldPassword, String newPassword)
-    {
-      String 
+    /**
+     * Gives the new password of the user account.
+     *
+     * @param oldPassword - String which represents the old password of the account
+     * @param newPassword - String whcih represents the new password of the account
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server could change the password.
+     *         - "NOT OK" if the server could not change the password.
+     */
+    public static String sendChangePassword(String oldPassword, String newPassword) {
+        String url = cURL + "changePassword?oldPassword=" + oldPassword + "&newPassword=" + newPassword + "&token=" + getToken();
+        HttpResponse<String> response = post(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        if (response.statusCode() != 200) {
+            return "NOT OK";
+        } else {
+            return "OK";
+        }
     }
 }
 
