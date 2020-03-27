@@ -134,16 +134,22 @@ public class UserController {
 
     /**
      * Change the password of an user based on token.
-     * @param password the new password provided by the user
-     * @param token    the token assigned to a certain user
+     *
+     * @param oldPassword the old password of that user
+     * @param newPassword the new password provided by the user
+     * @param token       the token assigned to a certain user
      * @return the status of the password change
      */
     @PostMapping("/changePassword")
-    public ResponseEntity changePassword(@RequestParam("password") final String password, @RequestParam(value = "token", defaultValue = "invalid") final String token) throws UnsupportedEncodingException {
-        String passwordDecoded = utf8DecodeValue(password);
+    public ResponseEntity changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") final String newPassword, @RequestParam(value = "token", defaultValue = "invalid") final String token) throws UnsupportedEncodingException {
+
+        String passwordDecoded = utf8DecodeValue(newPassword);
+
+
+        oldPassword = utf8DecodeValue(oldPassword);
 
         User user = repository.findUserByToken(token);
-
+        String usernameDecoded = utf8DecodeValue(user.getUsername());
         if (token.equals("invalid")) {
             ErrorResponse errorResponse = new ErrorResponse("Change password error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -154,7 +160,15 @@ public class UserController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        user.setPassword(password);
+        try {
+            user = securityService.autoLogin(usernameDecoded, oldPassword);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse("Change password error", "Invalid old password.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+
+        user.setPassword(newPassword);
 
 
         userService.save(user);
