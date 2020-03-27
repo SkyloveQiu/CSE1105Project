@@ -6,10 +6,13 @@ import java.util.Stack;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
+import nl.tudelft.oopp.group43.content.CalendarPageContent;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 public class BackButton {
@@ -26,6 +29,7 @@ public class BackButton {
      */
     private static Stack<String> sceneStack = new Stack<String>();
     private ImageView backButton;
+    private boolean isCalendar = false;
 
     /**
      * Constructor for the back button, creates an instance of the back button that can be added to scenes.
@@ -39,6 +43,56 @@ public class BackButton {
                 public void handle(MouseEvent event) {
                     try {
                         backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            backButton.addEventFilter(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    ((Node) event.getSource()).getScene().setCursor(Cursor.HAND);
+                }
+            });
+
+            backButton.addEventFilter(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    ((Node) event.getSource()).getScene().setCursor(Cursor.DEFAULT);
+                }
+            });
+        } else {
+            backButton.setImage(null);
+        }
+    }
+
+    /**
+     * Constructor for the back button, creates an instance of the back button that can be added to scenes.
+     * This constructor is specially for the calendar page, when clicked on the backbutton a alert gets shown asking for the user to wait until all entries in the calendar are saved.
+     */
+    public BackButton(ImageView backButton, String calendar) {
+        isCalendar = true;
+
+        this.backButton = backButton;
+        backButton.setVisible(!sceneStack.isEmpty());
+        if (sceneStack.size() > 1) {
+            backButton.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    try {
+                        // Checks if the current scene is the calendar, and if any entries have been added that need to be saved.
+                        if (isCalendar && CalendarPageContent.areEntriesAdded()) {
+                            CalendarPageContent.saveEntries();
+                            while (ThreadLock.flag != 0) {
+                                Alert waitForSave = new Alert(Alert.AlertType.WARNING);
+                                waitForSave.setContentText("Please wait for the calendar to save all entries of the calendar!");
+                                waitForSave.showAndWait();
+                            }
+                            backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
+                        } else {
+                            backPressed((Stage) ((Node) event.getSource()).getScene().getWindow());
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

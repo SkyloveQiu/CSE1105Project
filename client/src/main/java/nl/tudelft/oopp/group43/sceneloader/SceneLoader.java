@@ -128,12 +128,12 @@ public class SceneLoader extends Application {
                 root = loader.load();
                 scene = new Scene(root);
 
-                menu = new SideBarMenu(scene);
+                menu = new SideBarMenu(scene, "calendar");
                 parent = (AnchorPane) scene.lookup("#root");
                 parent.getChildren().add(parent.getChildren().size() - 1, menu.getRoot());
 
                 BackButton.pushScene("calendar");
-                btn = new BackButton((ImageView) scene.lookup("#back_arrow"));
+                btn = new BackButton((ImageView) scene.lookup("#back_arrow"), "calendar");
 
                 primaryStage.setScene(scene);
                 ap = (AnchorPane) scene.lookup("#root");
