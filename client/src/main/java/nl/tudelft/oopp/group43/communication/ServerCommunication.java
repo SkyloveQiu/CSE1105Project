@@ -187,6 +187,18 @@ public class ServerCommunication {
         return response.body();
     }
 
+    public static String getReservationsByUser() {
+        String url = cURL + "reservation/" + getUsername();
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
     /**
      * Gets the rooms from the database.
      *
