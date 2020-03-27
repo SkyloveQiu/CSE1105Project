@@ -174,7 +174,7 @@ public class UserController {
 
 
         userService.save(user);
-        ErrorResponse okResponse = new ErrorResponse("Update building", "UPDATED PASSWORD", HttpStatus.OK.value());
+        ErrorResponse okResponse = new ErrorResponse("Change password", "UPDATED PASSWORD", HttpStatus.OK.value());
         return new ResponseEntity<>(okResponse, HttpStatus.OK);
 
 
