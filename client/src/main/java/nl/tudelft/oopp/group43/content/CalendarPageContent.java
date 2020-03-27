@@ -6,14 +6,6 @@ import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.model.Interval;
 import com.calendarfx.view.CalendarView;
-import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import nl.tudelft.oopp.group43.classes.ThreadLock;
-import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,6 +15,16 @@ import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
+import org.json.simple.JSONObject;
+
+
 public class CalendarPageContent {
 
     private static Scene scene;
@@ -31,6 +33,7 @@ public class CalendarPageContent {
 
     /**
      * The set up for adding content to the calendar page.
+     *
      * @param currentScene the current scene of the page
      */
     public static void addContent(Scene currentScene) {
@@ -49,6 +52,7 @@ public class CalendarPageContent {
     /**
      * Adds the calendar to the page + necessary listeners, is planned to be done in a seperate thread.
      * Also listeners to the calendars get added for saving entries.
+     * Also loads saved entries + if user is logged in his/her reservations
      */
     private static void addContent() {
         calendarView = new CalendarView();
@@ -58,7 +62,7 @@ public class CalendarPageContent {
         calendarView.getCalendars().addListener((ListChangeListener.Change<? extends Calendar> c) -> {
             while (c.next()) {
                 if (c.wasAdded()) {
-                    for (Calendar cal : c.getAddedSubList())
+                    for (Calendar cal : c.getAddedSubList()) {
                         cal.addEventHandler(new EventHandler<CalendarEvent>() {
                             @Override
                             public void handle(CalendarEvent event) {
@@ -72,6 +76,7 @@ public class CalendarPageContent {
                                 }
                             }
                         });
+                    }
                 }
             }
         });
@@ -156,17 +161,18 @@ public class CalendarPageContent {
 
     /**
      * This method maps the Entry of the calendar to a json object for storing for later use.
-     * @param entry
-     * @param obj the Json object containing all necessary fields of the entry:
-     *            - id (String)
-     *            - title (String)
-     *            - calendarName (String)
-     *            - interval (JSONObject)
-     *            - location (String)
-     *            - fullDay (boolean)
-     *            - multiDay (boolean)
-     *            - recurrence (boolean)
-     *            - recurrenceId (String)
+     *
+     * @param entry the entry to map
+     * @param obj   the Json object containing all necessary fields of the entry:
+     *              - id (String)
+     *              - title (String)
+     *              - calendarName (String)
+     *              - interval (JSONObject)
+     *              - location (String)
+     *              - fullDay (boolean)
+     *              - multiDay (boolean)
+     *              - recurrence (boolean)
+     *              - recurrenceId (String)
      */
     private static void mapEntryToJson(Entry entry, JSONObject obj) {
         obj.put("id", entry.getId());
@@ -182,6 +188,7 @@ public class CalendarPageContent {
 
     /**
      * Maps the Interval of calendarFX to a Json object for storing it.
+     *
      * @param interval the interval to map to json
      * @return A json object with fields:
      *          - zoneId
@@ -204,7 +211,8 @@ public class CalendarPageContent {
 
     /**
      * Writes and saves the json object to a file.
-     * @param obj the json object to save
+     *
+     * @param obj  the json object to save
      * @param file the location of the file
      * @throws IOException when something went wrong with writing to the file
      */
@@ -220,6 +228,7 @@ public class CalendarPageContent {
 
     /**
      * Checks if entries had been added to the calendars.
+     *
      * @return true if entries have been added, false if otherwise
      */
     public static boolean areEntriesAdded() {
