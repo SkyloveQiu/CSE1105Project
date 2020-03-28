@@ -308,13 +308,17 @@ public class ServerCommunication {
 
     }
 
+    /**
+     * Method for getting and storing the user information: name and role.
+     * @return the status of obtaining the information.
+     */
     public static String getUserInformation() {
         String url = cURL + "name?token=" + utf8EncodeValue(token);
 
         HttpResponse<String> response = post(url);
 
         if (response.statusCode() != 200) {
-            return "WRONG";
+            return "ERROR OBTAINING INFO";
         } else {
             JSONParser parser = new JSONParser();
             try {

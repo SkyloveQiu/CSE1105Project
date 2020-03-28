@@ -1,8 +1,10 @@
 package nl.tudelft.oopp.group43.content;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.beans.value.ChangeListener;
@@ -45,9 +47,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 public class RoomPageContent {
 
@@ -72,6 +71,7 @@ public class RoomPageContent {
 
     /**
      * Adds the content to the room page.
+     *
      * @param currentScene the current scene.
      */
     public static void addContent(Scene currentScene) {
@@ -114,6 +114,7 @@ public class RoomPageContent {
 
     /**
      * Adds a width size listener to the specified gridpane that changes the location of the reserve button and extends the horizontal line.
+     *
      * @param gridPane gridpane to add the listener to.
      */
     private static void addGridPaneSizeListener(GridPane gridPane) {
@@ -234,8 +235,9 @@ public class RoomPageContent {
 
     /**
      * Adds a single room instance to the list.
+     *
      * @param obj the JSONObject containing the room.
-     * @param i the index in the list.
+     * @param i   the index in the list.
      */
     private static void addRoom(JSONObject obj, int i) {
         Pane root = new Pane();
@@ -298,8 +300,9 @@ public class RoomPageContent {
 
     /**
      * Adds information to the info label of a room.
+     *
      * @param info the info label
-     * @param obj the json object of the room
+     * @param obj  the json object of the room
      */
     private static void addInfo(Label info, JSONObject obj) {
         JSONParser json = new JSONParser();
@@ -330,8 +333,9 @@ public class RoomPageContent {
 
     /**
      * Adds a click event to the room that when clicked on it expands or contracts.
+     *
      * @param root the pane of the room.
-     * @param id the id in the list.
+     * @param id   the id in the list.
      */
     private static void addRoomClickEvent(Pane root, int id) {
         root.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -379,6 +383,7 @@ public class RoomPageContent {
 
     /**
      * Adds an event to the reservation button.
+     *
      * @param btn the button to which the event will be added.
      */
     private static void addReservationButtonEvent(Button btn, String id) {
@@ -503,7 +508,7 @@ public class RoomPageContent {
             ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
 
             Label deselect = new Label("deselect all");
-            deselect.setPrefSize(124,40);
+            deselect.setPrefSize(124, 40);
             deselect.setLayoutX(185);
             deselect.setLayoutY(265);
             deselect.getStyleClass().add("deselect");
@@ -574,6 +579,7 @@ public class RoomPageContent {
 
     /**
      * This adds an event listener to the node where when hovered on the pane gets a styleclass.
+     *
      * @param node the node that gets hovered
      * @param pane the pane that gets the styleclass
      */
@@ -594,6 +600,7 @@ public class RoomPageContent {
 
     /**
      * Updates the fields of the edit menu to the values of the room being edited.
+     *
      * @param root the root of the fields in the edit menu
      * @param info the info of the room
      */
@@ -615,6 +622,7 @@ public class RoomPageContent {
 
     /**
      * Setter for the selected rooms arraylist.
+     *
      * @param rooms the new arraylist.
      */
     public static void setSelectedRooms(ArrayList<JSONObject> rooms) {
@@ -623,6 +631,7 @@ public class RoomPageContent {
 
     /**
      * Getter for the rooms in the database.
+     *
      * @return JSONArray with the database rooms.
      */
     public static JSONArray getDatabaseRooms() {
@@ -631,6 +640,7 @@ public class RoomPageContent {
 
     /**
      * Setter for the localDate.
+     *
      * @param date the new LocalDate.
      */
     public static void setDate(LocalDate date) {
@@ -639,6 +649,7 @@ public class RoomPageContent {
 
     /**
      * Setter for the hoursFrom field.
+     *
      * @param hoursFrom String with the new hoursFrom.
      */
     public static void setHoursFrom(String hoursFrom) {
@@ -647,6 +658,7 @@ public class RoomPageContent {
 
     /**
      * Setter for the hoursTil field.
+     *
      * @param hoursTil String with the new hoursTil.
      */
     public static void setHoursTil(String hoursTil) {
@@ -655,6 +667,7 @@ public class RoomPageContent {
 
     /**
      * Getter for the hoursFrom.
+     *
      * @return the String with the hoursFrom
      */
     public static String getHoursFrom() {
@@ -663,6 +676,7 @@ public class RoomPageContent {
 
     /**
      * Getter for the hoursTil.
+     *
      * @return the String with the hoursTil
      */
     public static String getHoursTil() {
@@ -671,6 +685,7 @@ public class RoomPageContent {
 
     /**
      * Getter for the localDate.
+     *
      * @return LocalDate
      */
     public static LocalDate getDate() {
