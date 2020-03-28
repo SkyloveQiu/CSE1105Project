@@ -83,6 +83,139 @@
             </AnchorPane>
          </content>
       </ScrollPane>
+      <Pane fx:id="grayBackground" style="-fx-background-color: rgba(40, 40, 40, 0.65);" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141" />
+
+      <GridPane fx:id="editMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141">
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="750.0" maxWidth="900.0" style="-fx-background-color: rgb(57, 72, 102); -fx-background-radius: 7;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <Label fx:id="editRoomNumber" alignment="CENTER" styleClass="text_labels" text="Room being edited: " AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="23.0"><font><Font name="Arial" size="25" /></font></Label>
+
+               <Label styleClass="text_labels" text="Room Name" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20"><font><Font name="Arial" size="17.0" /></font></Label>
+               <TextField fx:id="editRoomName" layoutX="20.0" layoutY="47.0" onKeyTyped="#editCheckName" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="47.0" />
+
+               <Label alignment="CENTER" styleClass="text_labels" text="Room facilities:" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="180.0"><font><Font name="Arial" size="20.0" /></font></Label>
+               <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" styleClass="editFields" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="500" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="80">
+                  <content>
+                     <AnchorPane minWidth="100.0" prefHeight="800" style="-fx-background-color: transparent;">
+                        <children>
+                           <Label styleClass="text_labels" text="Space type" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="235.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editMondayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="260.0" />
+
+                           <Label layoutX="20.0" layoutY="315.0" styleClass="text_labels" text="Chalkboard" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="315.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editTuesdayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="340.0" />
+
+                           <Label layoutX="20.0" layoutY="393.0" styleClass="text_labels" text="Whiteboard" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="395.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editWednesdayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="420.0" />
+
+                           <Label styleClass="text_labels" text="Smartboard" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="475.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="smartboard" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="500.0" />
+
+                           <Label styleClass="text_labels" text="Blinds" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="555.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="blindsAvailable" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="580.0" />
+
+                           <Label styleClass="text_labels" text="Display screen" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="620.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="display" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="660.0" />
+
+                           <Label styleClass="text_labels" text="Desktop PC available" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="700.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="desktopPc" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="740.0" />
+
+                           <Label fx:id="editSundayMsg" textFill="#d51414" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="343.0" />
+                           <Label fx:id="editSaturdayMsg" textFill="#d51414" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="308.0" />
+                           <Label fx:id="editFridayMsg" textFill="#d51414" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="270.0" />
+                           <Label fx:id="editThursdayMsg" textFill="#d51414" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="236.0" />
+                           <Label fx:id="editWednesdayMsg" textFill="#d51414" AnchorPane.topAnchor="199.0" />
+                           <Label fx:id="editTuesdayMsg" textFill="#d51414" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="168.0" />
+                           <Label fx:id="editMondayMsg" textFill="#d51414" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="133.0" />
+                           <Label fx:id="editNameCheck" prefHeight="18.0" prefWidth="118.0" textFill="#d51414" AnchorPane.leftAnchor="475.0" AnchorPane.topAnchor="59.0" />
+                           <Label fx:id="editAddressCheck" prefHeight="18.0" prefWidth="118.0" textFill="#d51414" AnchorPane.leftAnchor="469.0" AnchorPane.topAnchor="94.0" />
+                           <Label fx:id="editMsg" prefHeight="18.0" prefWidth="250.0" textFill="#d51414" AnchorPane.leftAnchor="218.0" AnchorPane.topAnchor="368.0" />
+                        </children>
+                     </AnchorPane>
+                  </content>
+               </ScrollPane>
+
+               <Button mnemonicParsing="false" onAction="#editConfirm" prefHeight="50" text="Confirm Changes" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="530" AnchorPane.rightAnchor="30" />
+               <Button alignment="CENTER" onAction="#closeEditMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
+               <Label fx:id="editId" text="" visible="false" />
+               <GridPane.margin>
+                  <Insets bottom="40.0" top="40.0" />
+               </GridPane.margin>
+            </AnchorPane>
+         </children>
+      </GridPane>
+
+      <GridPane fx:id="addMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141">
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="700.0" maxWidth="600.0" style="-fx-background-color: rgb(57, 72, 102);" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Number" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="27.0" />
+                  <Label fx:id="addNumberCheck" prefHeight="18.0" prefWidth="303.0" textFill="#d51414" AnchorPane.leftAnchor="274.0" AnchorPane.topAnchor="27.0" />
+                  <TextField fx:id="BuildingNumber" onKeyTyped="#addCheckNumber" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="24.0" />
+                  <Label styleClass="text_labels" text="Building Name" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="64.0" />
+                  <TextField fx:id="addBuildingName" onKeyTyped="#addCheckName" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="60.0" />
+                  <Label fx:id="addNameCheck" prefHeight="18.0" prefWidth="292.0" textFill="#d51414" />
+                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Address" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="98.0" />
+                  <TextField fx:id="addBuildingAddress" onKeyTyped="#addCheckAddress" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="95.0" />
+                  <Label fx:id="addAddressCheck" prefHeight="18.0" prefWidth="315.0" textFill="#d51414" />
+
+                  <Label alignment="CENTER" styleClass="text_labels" text="Room facilities:" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="180.0"><font><Font name="Arial" size="20.0" /></font></Label>
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" styleClass="editFields" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="210">
+                     <content>
+                        <AnchorPane minWidth="100.0" prefHeight="630" style="-fx-background-color: transparent;">
+                           <children>
+                              <Label styleClass="text_labels" text="Monday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="35.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addMondayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="60.0" />
+                              <Label fx:id="addMondayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="137.0" />
+
+                              <Label layoutX="20.0" layoutY="315.0" styleClass="text_labels" text="Tuesday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="115.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addTuesdayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="140.0" />
+                              <Label fx:id="addTuesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="172.0" />
+
+                              <Label layoutX="20.0" layoutY="393.0" styleClass="text_labels" text="Wednesday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="195.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addWednesdayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="220.0" />
+                              <Label fx:id="addWednesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="203.0" />
+
+                              <Label styleClass="text_labels" text="Thursday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="275.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addThursdayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="300.0" />
+                              <Label fx:id="addThursdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="240.0" />
+
+                              <Label styleClass="text_labels" text="Friday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="355.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addFridayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="380.0" />
+                              <Label fx:id="addFridayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="274.0" />
+
+                              <Label styleClass="text_labels" text="Saturday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="420.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addSaturdayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="460.0" />
+                              <Label fx:id="addSaturdayMsg" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="312.0" />
+
+                              <Label styleClass="text_labels" text="Sunday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="500.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addSundayHours" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="540.0" />
+                              <Label fx:id="addSundayMsg" styleClass="text_labels" textFill="#d51414" AnchorPane.leftAnchor="391.0" AnchorPane.topAnchor="347.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+
+                  <Button mnemonicParsing="false" onAction="#addConfirm" prefHeight="50" text="Add Building" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="7" />
+                  <Button alignment="CENTER" onAction="#closeAddMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
+               </children>
+               <GridPane.margin>
+                  <Insets bottom="40.0" top="40.0" />
+               </GridPane.margin>
+            </AnchorPane>
+         </children>
+      </GridPane>
 
       <AnchorPane fx:id="timeDateSelect" style="-fx-background-color: rgba(255,255,255,0.6)" visible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="141">
          <Label alignment="CENTER" text="Please select a time and date:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="100.0">

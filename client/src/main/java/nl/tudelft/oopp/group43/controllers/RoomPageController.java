@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -16,9 +18,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.classes.BuildDataScene;
+import nl.tudelft.oopp.group43.classes.BuildingData;
+import nl.tudelft.oopp.group43.classes.BuildingEditPageContent;
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.classes.StringChecker;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -70,6 +79,18 @@ public class RoomPageController {
 
     @FXML
     private ScrollPane filterPanel;
+
+    @FXML
+    private Pane grayBackground;
+    @FXML
+    private GridPane editMenu;
+    @FXML
+    private GridPane addMenu;
+
+    @FXML
+    private Label addBuildingNumber;
+    @FXML
+    private Label addNumberCheck;
 
     /**
      * Sets the hours in the choicebox to only the hours before until time choicebox.
@@ -171,6 +192,117 @@ public class RoomPageController {
             RoomPageContent.setSelectedRooms(selectedRooms);
             RoomPageContent.addRooms();
         }
+    }
+
+    @FXML
+    private void showAddMenu() {
+        grayBackground.setVisible(true);
+        editMenu.setVisible(false);
+        addMenu.setVisible(true);
+    }
+
+    @FXML
+    private void closeAddMenu() {
+        grayBackground.setVisible(false);
+        addMenu.setVisible(false);
+    }
+
+    /**
+     * If you press the add building button, the method will try to do this operation, it it will be possible.
+     *
+     * @param event - pressing the button
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void addConfirm(ActionEvent event) {
+
+    }
+
+    /**
+     * Checks if the user put a number which is greater than 0 and smaller than long.MAX_VALUE and show a proper message to the user.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private boolean addCheckNumber() {
+        if (addBuildingNumber.getText().isEmpty()) {
+            addNumberCheck.setText("You cannot have this field empty");
+            return false;
+        }
+        try {
+            String nunmberString = addBuildingNumber.getText();
+            long number = Long.valueOf(nunmberString);
+            addNumberCheck.setText("");
+            return true;
+        } catch (Exception e) {
+            addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the Building Name field is not empty.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private boolean addCheckName() {
+        return true;
+    }
+
+    /**
+     * Checks if the Address field is not empty.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private boolean addCheckAddress() {
+        return true;
+    }
+
+    /*
+    =====================================================================
+    METHODS FOR EDIT
+     */
+
+    @FXML
+    private void showEditMenu(MouseEvent event) {
+        grayBackground.setVisible(true);
+        addMenu.setVisible(false);
+        editMenu.setVisible(true);
+    }
+
+    @FXML
+    private void closeEditMenu() {
+        grayBackground.setVisible(false);
+        editMenu.setVisible(false);
+    }
+
+
+    /**
+     * If you press the edit building button, the method will check if you selected a building and do the delete operation.
+     *
+     * @param event - pressing the button
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void editConfirm(ActionEvent event) {
+
+    }
+
+    /**
+     * Checks if the Building Name field is not empty.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void editCheckName() {
+
+    }
+
+    /**
+     * Checks if the Address field is not empty.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void editCheckAddress() {
+
     }
 
     /**
