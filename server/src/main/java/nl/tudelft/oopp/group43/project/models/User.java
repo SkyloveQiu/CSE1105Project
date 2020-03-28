@@ -146,7 +146,6 @@ public class User implements java.io.Serializable {
     }
 
 
-    @JsonIgnore
     @Column(name = "role")
     public String getRole() {
         return this.role;
