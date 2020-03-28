@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.net.URL;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.BikePageContent;
@@ -141,6 +145,19 @@ public class SceneLoader extends Application {
                 primaryStage.setMinWidth(ap.getPrefWidth());
 
                 primaryStage.show();
+                primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        if (CalendarPageContent.areEntriesAddedAndNotSaved()) {
+                            CalendarPageContent.saveEntries();
+                            while (ThreadLock.flag != 0) {
+                                Alert waitForSave = new Alert(Alert.AlertType.WARNING);
+                                waitForSave.setContentText("Please wait for the calendar to save all entries of the calendar!");
+                                waitForSave.showAndWait();
+                            }
+                        }
+                    }
+                });
                 CalendarPageContent.addContent(scene);
                 break;
             case "login":

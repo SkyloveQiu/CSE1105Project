@@ -6,15 +6,6 @@ import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.model.Interval;
 import com.calendarfx.view.CalendarView;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Paths;
-import java.time.LocalTime;
-import java.util.ArrayList;
-
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -22,7 +13,22 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class CalendarPageContent {
@@ -30,6 +36,9 @@ public class CalendarPageContent {
     private static Scene scene;
     private static CalendarView calendarView;
     private static ArrayList<Entry> entries;
+    private static int savedEntries = 0;
+    private static boolean entriesAreSaved = true;
+    private static boolean finishedReadingEntries = true;
 
     /**
      * The set up for adding content to the calendar page.
@@ -70,9 +79,13 @@ public class CalendarPageContent {
                                     Entry entry = event.getEntry();
                                     System.out.println("Entry named: " + entry.getTitle() + " was added to calendar: " + entry.getCalendar().getName() + ", " + cal.getShortName());
                                     entries.add(entry);
+                                    if (finishedReadingEntries) {
+                                        entriesAreSaved = false;
+                                    }
                                 } else if (event.isEntryRemoved()) {
-                                    Entry entry = event.getEntry();
-                                    System.out.println("Entry named: " + entry.getTitle() + " was removed from calendar: " + entry.getCalendar().getName() + ", " + cal.getShortName());
+                                    System.out.println("Entry named was removed from calendar: " + cal.getName() + ", " + cal.getShortName());
+                                    System.out.println(entries.remove(event.getEntry()));
+                                    entriesAreSaved = false;
                                 }
                             }
                         });
@@ -84,6 +97,8 @@ public class CalendarPageContent {
         Calendar calendar = new Calendar("Calendar");
         calendar.setShortName("Calendar");
         calendar.setStyle(Calendar.Style.STYLE1);
+
+        addSavedEntries(calendar);
 
         CalendarSource calendarSource = new CalendarSource("My Calendars");
         calendarSource.getCalendars().add(calendar);
@@ -111,6 +126,75 @@ public class CalendarPageContent {
                 root.getChildren().add(0, stackPane);
             }
         });
+    }
+
+    /**
+     * Adds the saved entries, if any, to the calendar.
+     */
+    private static void addSavedEntries(Calendar calendar) {
+        finishedReadingEntries = false;
+        JSONParser json = new JSONParser();
+        try {
+            String jsonString = readSavedEntries(Paths.get("").toAbsolutePath().toString() + "\\client\\src\\main\\resources\\calendars\\entries.conf");
+            System.out.println(jsonString);
+            JSONArray array = (JSONArray) json.parse(jsonString);
+            savedEntries = array.size();
+
+            for (Object object : array) {
+                JSONObject obj = (JSONObject) object;
+
+                JSONObject intervalObj = (JSONObject) json.parse((String) obj.get("interval"));
+                LocalDate startDate = LocalDate.parse((String) intervalObj.get("startDate"));
+                LocalTime startTime = LocalTime.parse((String) intervalObj.get("startTime"));
+                LocalDate endDate = LocalDate.parse((String) intervalObj.get("endDate"));
+                LocalTime endTime = LocalTime.parse((String) intervalObj.get("endTime"));
+                ZoneId zone = ZoneId.of((String) intervalObj.get("zoneId"));
+
+                Interval interval = new Interval(startDate, startTime, endDate, endTime, zone);
+
+                Entry entry = new Entry((String) obj.get("title"), interval);
+                entry.setCalendar(calendar);
+                entry.setId((String) obj.get("id"));
+                entry.setLocation((String) obj.get("location"));
+                entry.setFullDay((boolean) obj.get("fullDay"));
+
+                calendar.addEntry(entry);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        finishedReadingEntries = true;
+    }
+
+    /**
+     * Reads the entries in a specified source.
+     *
+     * @param source the source
+     * @return the contents of this source as a json array string.
+     */
+    private static String readSavedEntries(String source) throws FileNotFoundException {
+        File file = new File(source);
+
+        System.out.println(file.exists());
+        if (file.exists()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("[");
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                stringBuilder.append(scanner.nextLine());
+            }
+            if (stringBuilder.length() > 1) {
+                stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(), "]");
+            } else {
+                stringBuilder.append("]");
+            }
+
+            return stringBuilder.toString();
+        } else {
+            return "[]";
+        }
     }
 
     /**
@@ -147,9 +231,11 @@ public class CalendarPageContent {
                     file.delete();
                     System.out.println("succeeded = " + temp.renameTo(file));
                     temp.delete();
+                    entriesAreSaved = true;
                     ThreadLock.flag = 0;
                 } catch (IOException e) {
                     ThreadLock.flag = 0;
+                    entriesAreSaved = true;
                     e.printStackTrace();
                 }
             }
@@ -178,7 +264,7 @@ public class CalendarPageContent {
         obj.put("id", entry.getId());
         obj.put("title", entry.getTitle());
         obj.put("calendarName", entry.getCalendar().getName());
-        obj.put("interval", intervalToJson(entry.getInterval()));
+        obj.put("interval",  intervalToJson(entry.getInterval()));
         obj.put("location", entry.getLocation());
         obj.put("fullDay", entry.isFullDay());
         obj.put("multiDay", entry.isMultiDay());
@@ -191,22 +277,23 @@ public class CalendarPageContent {
      *
      * @param interval the interval to map to json
      * @return A json object with fields:
-     *          - zoneId
-     *          - startDate
-     *          - startTime
-     *          - endDate
-     *          - endTime
+     * - zoneId
+     * - startDate
+     * - startTime
+     * - endDate
+     * - endTime
      */
-    private static JSONObject intervalToJson(Interval interval) {
-        JSONObject json = new JSONObject();
+    private static String intervalToJson(Interval interval) {
+        StringBuilder json = new StringBuilder();
+        json.append("{\"zoneId\":\"");
 
-        json.put("zoneId", interval.getZoneId().toString());
-        json.put("startingDate", interval.getStartDate().toString());
-        json.put("startingTime", interval.getStartTime().toString());
-        json.put("endDate", interval.getEndDate().toString());
-        json.put("endTime", interval.getEndTime().toString());
+        json.append(interval.getZoneId().toString() + "\",\"startDate\":\"");
+        json.append(interval.getStartDate().toString() + "\",\"startTime\":\"");
+        json.append(interval.getStartTime().toString() + "\",\"endDate\":\"");
+        json.append(interval.getEndDate().toString() + "\",\"endTime\":\"");
+        json.append(interval.getEndTime().toString() + "\"}");
 
-        return json;
+        return json.toString();
     }
 
     /**
@@ -232,8 +319,12 @@ public class CalendarPageContent {
      * @return true if entries have been added, false if otherwise
      */
     public static boolean areEntriesAdded() {
-        System.out.println("Are entries added?: " + (entries.size() > 0));
-        return entries.size() > 0;
+        System.out.println("Are entries added?: " + (entries.size() != savedEntries));
+        return entries.size() != savedEntries;
+    }
+
+    public static boolean areEntriesAddedAndNotSaved() {
+        return areEntriesAdded() && !entriesAreSaved;
     }
 
 }
