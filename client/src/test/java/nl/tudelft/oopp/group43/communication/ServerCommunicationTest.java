@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.github.paweladamski.httpclientmock.HttpClientMock;
 import javafx.application.Application;
+import org.apache.http.client.HttpClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.runner.RunWith;
@@ -23,18 +24,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@AutoConfigureMockMvc
 public class ServerCommunicationTest {
 
     private final String cURL = "http://localhost:8000/";
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Test
     public void testGetBuildingsNull() {
@@ -45,13 +42,16 @@ public class ServerCommunicationTest {
     public void testGetBuildings() throws Exception {
         String buildings = "[{\"building_number\":0,\"building_name\":\"Pathe Delft\",\"address\":\"Vesteplein 5 2611 WG Delft\",\"opening_hours\":\"{\\\"fr\\\": \\\"07:00-19:00\\\", \\\"mo\\\": \\\"07:00-22:00\\\", \\\"sa\\\": \\\"closed\\\", \\\"su\\\": \\\"closed\\\", \\\"th\\\": \\\"07:00-22:00\\\", \\\"tu\\\": \\\"07:00-22:00\\\", \\\"we\\\": \\\"07:00-22:00\\\"}\"}]";
 
-        // HttpClient client = mock(HttpClient.class);
-        // HttpRequest req = mock(HttpRequest.class);
-        // this.mockMvc.perform(get(cURL + "building")).andExpect(content().string(buildings));
+        HttpClientMock httpClientMock = new HttpClientMock();
+        httpClientMock.onGet(cURL + "building").doReturn(buildings);
+
+        HttpClient client = httpClientMock;
 
         String buildingRegex = "\\[(?:\\{\\\"building_number\\\":[0-9]+,\\\"building_name\\\":\\\".*?\\\",\\\"address\\\":\\\".*?\\\",\\\"opening_hours\\\":\\\"\\{(?:\\\\\\\"[a-z]{2}\\\\\\\": \\\\\\\".*?\\\\\\\"(?:, )?){7}\\}\\\"\\}(?:, )?)*\\]";
 
         assertTrue(ServerCommunication.getBuilding().matches(buildingRegex));
+
+        httpClientMock.verify().get(cURL + "building").called();
     }
 
     @Test
