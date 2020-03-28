@@ -216,6 +216,7 @@ public class RoomPageController {
     @SuppressWarnings("unchecked")
     private void addConfirm(ActionEvent event) {
 
+        closeAddMenu();
     }
 
     /**
@@ -248,15 +249,6 @@ public class RoomPageController {
         return true;
     }
 
-    /**
-     * Checks if the Address field is not empty.
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private boolean addCheckAddress() {
-        return true;
-    }
-
     /*
     =====================================================================
     METHODS FOR EDIT
@@ -285,6 +277,7 @@ public class RoomPageController {
     @SuppressWarnings("unchecked")
     private void editConfirm(ActionEvent event) {
 
+        closeEditMenu();
     }
 
     /**
@@ -296,14 +289,10 @@ public class RoomPageController {
 
     }
 
-    /**
-     * Checks if the Address field is not empty.
+    /*
+    =====================================================================
+    END OF CRUD METHODS
      */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private void editCheckAddress() {
-
-    }
 
     /**
      * Drops down or retracts the filters when clicked on the filter button.

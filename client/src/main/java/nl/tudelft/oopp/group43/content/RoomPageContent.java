@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
@@ -19,6 +20,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
@@ -128,9 +130,7 @@ public class RoomPageContent {
                 }
                 if (editButtons != null) {
                     for (Button editButton : editButtons) {
-                        System.out.println(editButton.getWidth());
                         editButton.setPrefWidth(editButton.getWidth() + ((double) newValue - (double) oldValue));
-                        System.out.println(editButton.getWidth());
                     }
                 }
                 //System.out.println(newValue);
@@ -456,12 +456,25 @@ public class RoomPageContent {
             edit.setMinSize(200, 75);
             edit.setVisible(false);
             editButtons.add(edit);
-            ((Pane) root.getChildren().get(0)).getChildren().add(edit);
-
             ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
             img.setFitHeight(25.0);
             img.setFitWidth(25.0);
             edit.setGraphic(img);
+            ((Pane) root.getChildren().get(0)).getChildren().add(edit);
+            edit.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    scene.lookup("#grayBackground").setVisible(true);
+                    scene.lookup("#addMenu").setVisible(false);
+
+                    ((TextField) scene.lookup("#editRoomName")).setText(((Label) ((Pane) root.getChildren().get(0)).getChildren().get(0)).getText());
+                    ((Label) scene.lookup("#editRoomNumber")).setText("Room being edited: " + root.getId());
+                    ((Label) scene.lookup("#editId")).setText(root.getId());
+                    updateFields((AnchorPane) scene.lookup("#editFields"), ((Label) ((Pane) root.getChildren().get(0)).getChildren().get(4)).getText());
+
+                    scene.lookup("#editMenu").setVisible(true);
+                }
+            });
         }
 
         if (!adminAdded) {
@@ -525,6 +538,28 @@ public class RoomPageContent {
             add.setEffect(blend);
             add.setCache(true);
             add.setCacheHint(CacheHint.SPEED);
+            add.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    scene.lookup("#grayBackground").setVisible(true);
+                    scene.lookup("#editMenu").setVisible(false);
+
+                    AnchorPane addFields = (AnchorPane) scene.lookup("#addFields");
+                    for (Node n : addFields.getChildren()) {
+                        if (n instanceof TextField) {
+                            ((TextField) n).setText("");
+                        }
+                    }
+                    addFields = (AnchorPane) scene.lookup("#addFacilities");
+                    for (Node n : addFields.getChildren()) {
+                        if (n instanceof TextField) {
+                            ((TextField) n).setText("");
+                        }
+                    }
+
+                    scene.lookup("#addMenu").setVisible(true);
+                }
+            });
             ((AnchorPane) scene.lookup("#root")).getChildren().add(9, add);
 
             Pane addHover = new Pane();
@@ -555,6 +590,27 @@ public class RoomPageContent {
                 pane.getStyleClass().remove(1);
             }
         });
+    }
+
+    /**
+     * Updates the fields of the edit menu to the values of the room being edited.
+     * @param root the root of the fields in the edit menu
+     * @param info the info of the room
+     */
+    private static void updateFields(AnchorPane root, String info) {
+        String[] infoArr = info.split("\n");
+        String[][] fields = new String[infoArr.length][];
+        for (int i = 0; i < infoArr.length; i++) {
+            fields[i] = infoArr[i].split("\t");
+        }
+
+        int index = 0;
+        for (Node n : root.getChildren()) {
+            if (n instanceof TextField) {
+                ((TextField) n).setText(fields[index][fields[index].length - 1]);
+                index++;
+            }
+        }
     }
 
     /**
