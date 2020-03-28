@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.repositories;
 
+import java.util.List;
 import nl.tudelft.oopp.group43.project.keys.BuildingFoodProductKey;
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.BuildingFoodProduct;
@@ -11,4 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface BuildingFoodProductRepository extends JpaRepository<BuildingFoodProduct, BuildingFoodProductKey> {
 
     boolean existsBuildingFoodProductByBuildingAndAndFoodProduct(Building building, FoodProduct foodProduct);
+
+    List<BuildingFoodProduct> findAllByBuilding(Building building);
 }

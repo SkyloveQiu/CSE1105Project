@@ -1,6 +1,8 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.BuildingFoodProduct;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.repositories.BuildingFoodProductRepository;
@@ -61,5 +63,21 @@ public class BuildingFoodProductController {
             + " FOOD PRODUCT: " + newBuildingFoodProduct.getFoodProduct(), HttpStatus.OK.value());
         return new ResponseEntity<>(okResponse, HttpStatus.OK);
 
+    }
+
+    /**
+     * Returns the products in a certain building.
+     *
+     * @param building the building number
+     * @return all the products in that building
+     */
+    @GetMapping("/buildingFoodProduct/moreDetails")
+    @ResponseBody
+    public List<BuildingFoodProduct> getBuildingFoodProductBasedOnBuilding(@RequestParam(value = "building", defaultValue = "0") int building) {
+        try {
+            return repository.findAllByBuilding(new Building(building));
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 }
