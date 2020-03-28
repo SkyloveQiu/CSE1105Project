@@ -19,7 +19,7 @@ public class ProfilePageContent {
      */
     public static void addContent(Scene scene) {
         Label log = (Label) scene.lookup("#userAccountName");
-        log.setText(ServerCommunication.getUsername() + "'s account");
+        log.setText(ServerCommunication.getFirstName() + "'s account");
         log.setStyle("-fx-text-fill: aliceblue;");
 
 

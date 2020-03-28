@@ -63,6 +63,7 @@ public class LoginPageController {
         if (response.equals("OK")) {
             emailCheck.setText("");
             ServerCommunication.setUsername(email.getText());
+            ServerCommunication.getUserInformation();
             SceneLoader.setScene("");
             SceneLoader sl = new SceneLoader();
             sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
