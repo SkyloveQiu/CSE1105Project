@@ -67,6 +67,10 @@ public class ProfilePageController {
     @FXML
     private void logOut(ActionEvent event) {
         ServerCommunication.setToken("invalid");
+        ServerCommunication.setUsername("");
+        ServerCommunication.setRole("");
+        ServerCommunication.setFirstName("");
+        ServerCommunication.setLastName("");
         SceneLoader.setScene("main");
         SceneLoader sl = new SceneLoader();
         try {

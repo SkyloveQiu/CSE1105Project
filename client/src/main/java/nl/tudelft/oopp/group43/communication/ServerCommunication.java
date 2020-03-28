@@ -25,6 +25,8 @@ public class ServerCommunication {
     private static HttpClient client = HttpClient.newBuilder().build();
     private static String token = "invalid";
     private static String username = "";
+    private static String firstName = "";
+    private static String lastName = "";
     private static String role = "admin";
 
     /**
@@ -70,6 +72,46 @@ public class ServerCommunication {
      */
     public static String getRole() {
         return role;
+    }
+
+    /**
+     * Setter for the user role.
+     * @param newRole the role of the user.
+     */
+    public static void setRole(String newRole) {
+        role = newRole;
+    }
+
+    /**
+     * Getter for the name of the user.
+     * @return the name of the user
+     */
+    public static String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Setter for the name of the user.
+     * @param newName the name of the user
+     */
+    public static void setFirstName(String newName) {
+        firstName = newName;
+    }
+
+    /**
+     * Setter for the name of the user.
+     * @param newName the name of the user
+     */
+    public static void setLastName(String newName) {
+        lastName = newName;
+    }
+
+    /**
+     * Getter for the name of the user.
+     * @return the name of the user
+     */
+    public static String getLastName() {
+        return lastName;
     }
 
     /**
@@ -264,6 +306,30 @@ public class ServerCommunication {
             return "OK";
         }
 
+    }
+
+    public static String getUserInformation() {
+        String url = cURL + "name?token=" + utf8EncodeValue(token);
+
+        HttpResponse<String> response = post(url);
+
+        if (response.statusCode() != 200) {
+            return "WRONG";
+        } else {
+            JSONParser parser = new JSONParser();
+            try {
+                JSONObject obj = (JSONObject) parser.parse(response.body());
+                setFirstName((String) obj.get("first_name"));
+                setLastName((String) obj.get("last_name"));
+                //setRole((String) obj.get("role"));
+
+                return "OK";
+            } catch (ParseException e) {
+                e.printStackTrace();
+                System.out.println(response.body());
+                return "ERROR OBTAINING INFO";
+            }
+        }
     }
 
     /**
