@@ -38,7 +38,7 @@ public class UserValidatorTest extends UserValidatorTestScaffolding {
 
     @Test(timeout = 4000)
     public void test1() throws Throwable {
-        boolean boolean0 = UserValidator.isValidEmailAddress("1SP_L@TOUXvg0Ndj");
+        boolean boolean0 = UserValidator.isValidEmailAddress("z.qiu@student.tudelft.nl");
         assertTrue(boolean0);
     }
 
@@ -99,19 +99,6 @@ public class UserValidatorTest extends UserValidatorTestScaffolding {
         }
     }
 
-    @Test(timeout = 4000)
-    public void test5() throws Throwable {
-        // Undeclared exception!
-        try {
-            UserValidator.isValidEmailAddress((String) null);
-            fail("Expecting exception: NullPointerException");
-
-        } catch (NullPointerException e) {
-            //
-            // no message in exception (getMessage() returned null)
-            //
-        }
-    }
 
     @Test(timeout = 4000)
     public void test6() throws Throwable {

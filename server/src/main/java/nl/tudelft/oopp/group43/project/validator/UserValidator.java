@@ -1,9 +1,8 @@
 package nl.tudelft.oopp.group43.project.validator;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.service.UserService;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -14,6 +13,19 @@ import org.springframework.validation.Validator;
 public class UserValidator implements Validator {
     @Autowired
     private UserService userService;
+
+    /**
+     * check the email is valid address or not.
+     *
+     * @param email the email address.
+     * @return the result of the check.
+     */
+    public static boolean isValidEmailAddress(String email) {
+        boolean result;
+        EmailValidator validator = EmailValidator.getInstance();
+        result = validator.isValid(email);
+        return result;
+    }
 
     @Override
     public boolean supports(Class<?> aclass) {
@@ -41,21 +53,5 @@ public class UserValidator implements Validator {
         }
 
 
-    }
-
-    /**
-     * check the email is valid address or not.
-     * @param email the email address.
-     * @return the result of the check.
-     */
-    public static boolean isValidEmailAddress(String email) {
-        boolean result = true;
-        try {
-            InternetAddress emailAddr = new InternetAddress(email);
-            emailAddr.validate();
-        } catch (AddressException ex) {
-            result = false;
-        }
-        return result;
     }
 }
