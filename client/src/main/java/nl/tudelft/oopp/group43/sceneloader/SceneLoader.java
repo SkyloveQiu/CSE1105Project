@@ -14,6 +14,8 @@ import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.BikePageContent;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
+import nl.tudelft.oopp.group43.content.CalendarPageContent;
+import nl.tudelft.oopp.group43.content.FoodPageContent;
 import nl.tudelft.oopp.group43.content.MainPageContent;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
 import nl.tudelft.oopp.group43.content.RegisterPageContent;
@@ -118,6 +120,7 @@ public class SceneLoader extends Application {
                 primaryStage.setMinWidth(ap.getPrefWidth());
 
                 primaryStage.show();
+                FoodPageContent.addContent(scene);
                 break;
             case "calendar":
                 URL calendarUrl = getClass().getResource("/calendarPage.fxml");
@@ -138,6 +141,7 @@ public class SceneLoader extends Application {
                 primaryStage.setMinWidth(ap.getPrefWidth());
 
                 primaryStage.show();
+                CalendarPageContent.addContent(scene);
                 break;
             case "login":
                 URL loginUrl = getClass().getResource("/loginPage-overhaul.fxml");

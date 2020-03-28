@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 public class BackButton {
@@ -59,7 +60,7 @@ public class BackButton {
                 }
             });
         } else {
-            backButton.setImage(null);
+            backButton.setVisible(false);
         }
     }
 
@@ -74,9 +75,17 @@ public class BackButton {
             sceneStack.pop();
             if (!sceneStack.isEmpty()) {
                 String scene = sceneStack.pop();
-                SceneLoader.setScene("scene");
-                SceneLoader sl = new SceneLoader();
-                sl.start(stage);
+                while (!sceneStack.isEmpty() && !ServerCommunication.getToken().equals("invalid") && scene.equals("login")) {
+                    scene = sceneStack.pop();
+                }
+                if (sceneStack.isEmpty()) {
+                    ImageView btn = (ImageView) stage.getScene().lookup("#back_arrow");
+                    btn.setVisible(false);
+                } else {
+                    SceneLoader.setScene(scene);
+                    SceneLoader sl = new SceneLoader();
+                    sl.start(stage);
+                }
             }
         }
     }

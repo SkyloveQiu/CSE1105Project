@@ -17,33 +17,31 @@ import org.json.simple.JSONObject;
 public class EditBuildingSceneController {
 
     @FXML
-    Label editMsg;
+    private Label editMsg;
     @FXML
-    Label buildingNumber;
+    private Label editBuildingNumber;
     @FXML
-    Label numberCheck;
+    private TextField editBuildingName;
     @FXML
-    TextField buildingName;
+    private TextField editBuildingAddress;
     @FXML
-    TextField buildingAddress;
+    private Label editMondayMsg;
     @FXML
-    Label mondayMsg;
+    private Label editTuesdayMsg;
     @FXML
-    Label tuesdayMsg;
+    private Label editWednesdayMsg;
     @FXML
-    Label wednesdayMsg;
+    private Label editThursdayMsg;
     @FXML
-    Label thursdayMsg;
+    private Label editFridayMsg;
     @FXML
-    Label fridayMsg;
+    private Label editSaturdayMsg;
     @FXML
-    Label saturdayMsg;
+    private Label editSundayMsg;
     @FXML
-    Label sundayMsg;
+    private Label editAddressCheck;
     @FXML
-    Label addressCheck;
-    @FXML
-    Label nameCheck;
+    private Label editNameCheck;
 
     /**
      * If you press the edit building button, the method will check if you selected a building and do the delete operation.
@@ -63,8 +61,8 @@ public class EditBuildingSceneController {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        if (mondayMsg.getText().isEmpty() && tuesdayMsg.getText().isEmpty() && wednesdayMsg.getText().isEmpty() && thursdayMsg.getText().isEmpty()
-                && fridayMsg.getText().isEmpty() && saturdayMsg.getText().isEmpty() && sundayMsg.getText().isEmpty() && nameCheck.getText().isEmpty() && addressCheck.getText().isEmpty()) {
+        if (editMondayMsg.getText().isEmpty() && editTuesdayMsg.getText().isEmpty() && editWednesdayMsg.getText().isEmpty() && editThursdayMsg.getText().isEmpty()
+                && editFridayMsg.getText().isEmpty() && editSaturdayMsg.getText().isEmpty() && editSundayMsg.getText().isEmpty() && editNameCheck.getText().isEmpty() && editAddressCheck.getText().isEmpty()) {
 
             JSONObject openingHours = new JSONObject();
             openingHours.put("mo", getHoursDay(stage, "monday"));
@@ -76,9 +74,9 @@ public class EditBuildingSceneController {
             openingHours.put("su", getHoursDay(stage, "sunday"));
 
             JSONObject building = new JSONObject();
-            building.put("building_number", Long.valueOf(buildingNumber.getText()));
-            building.put("building_name", buildingName.getText());
-            building.put("address", buildingAddress.getText());
+            building.put("building_number", Long.valueOf(editBuildingNumber.getText()));
+            building.put("building_name", editBuildingName.getText());
+            building.put("address", editBuildingAddress.getText());
             building.put("opening_hours", openingHours.toString());
 
             String a = ServerCommunication.sendEditBuilding(building);
@@ -90,11 +88,6 @@ public class EditBuildingSceneController {
                 alert.setContentText("NOT OK");
             }
             alert.showAndWait();
-
-            /*
-            MainPageDisplay md = new MainPageDisplay();
-            md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-             */
         }
 
     }
@@ -129,10 +122,10 @@ public class EditBuildingSceneController {
     @FXML
     @SuppressWarnings("unchecked")
     private void checkName() {
-        if (buildingName.getText().isEmpty()) {
-            nameCheck.setText("You cannot have this field empty");
+        if (editBuildingName.getText().isEmpty()) {
+            editNameCheck.setText("You cannot have this field empty");
         } else {
-            nameCheck.setText("");
+            editNameCheck.setText("");
         }
     }
 
@@ -142,10 +135,10 @@ public class EditBuildingSceneController {
     @FXML
     @SuppressWarnings("unchecked")
     private void checkAddress() {
-        if (buildingAddress.getText().isEmpty()) {
-            addressCheck.setText("You cannot have this field empty");
+        if (editBuildingAddress.getText().isEmpty()) {
+            editAddressCheck.setText("You cannot have this field empty");
         } else {
-            addressCheck.setText("");
+            editAddressCheck.setText("");
         }
     }
 

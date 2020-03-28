@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -20,6 +21,7 @@ import org.json.simple.parser.ParseException;
 public class BuildingPageContent {
 
     private static Scene scene;
+    private static Label[] databaseArr;
     private static Label[] labelArr;
     private static GridPane gp;
     private static ScrollPane sp;
@@ -32,6 +34,15 @@ public class BuildingPageContent {
      */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
+
+        if (!ServerCommunication.getToken().equals("invalid") && ServerCommunication.getUsername().contains("admin")) {
+            ImageView add = (ImageView) scene.lookup("#add");
+            ImageView edit = (ImageView) scene.lookup("#edit");
+            ImageView delete = (ImageView) scene.lookup("#delete");
+            add.setVisible(true);
+            edit.setVisible(true);
+            delete.setVisible(true);
+        }
 
         ScrollPane scp = (ScrollPane) scene.lookup("#buildings");
         sp = scp;
@@ -86,6 +97,7 @@ public class BuildingPageContent {
             jsonArray = (JSONArray) json.parse(ServerCommunication.getBuilding());
 
             labelArr = new Label[jsonArray.size()];
+            databaseArr = new Label[jsonArray.size()];
 
             for (int i = 0; i < labelArr.length; i++) {
                 Label label = new Label();
@@ -104,7 +116,9 @@ public class BuildingPageContent {
                 label.setId(Long.toString((Long) obj.get("building_number")));
 
                 labelArr[i] = label;
+                databaseArr[i] = label;
             }
+
 
             addBuildings();
 
@@ -159,7 +173,7 @@ public class BuildingPageContent {
      * @return An array with all building labels
      */
     public static Label[] getLabelArr() {
-        return labelArr;
+        return databaseArr;
     }
 
     /**
@@ -178,6 +192,14 @@ public class BuildingPageContent {
         for (int i = 0; i < newArray.size(); i++) {
             labelArr[i] = newArray.get(i);
         }
+    }
+
+    /**
+     * Getter for the JSONArray.
+     * @return the jsonarray
+     */
+    public static JSONArray getJsonArray() {
+        return jsonArray;
     }
 
 }

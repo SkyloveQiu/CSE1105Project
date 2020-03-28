@@ -32,6 +32,10 @@
     -fx-font-size: 15px;
 }
 
+.selected_building {
+    -fx-background-color: forestgreen;
+}
+
 .scroll-bar:vertical .thumb {
     -fx-background-color: mediumslateblue;
     -fx-background-radius: 0;

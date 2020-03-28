@@ -22,3 +22,27 @@
     -fx-background-radius: 0;
     -fx-border-width: 0;
 }
+
+.text_labels {
+    -fx-text-fill: silver;
+}
+
+.buildingLabel {
+    -fx-background-color: darkslateblue;
+    -fx-text-fill: silver;
+}
+
+.buildingLabel:hover {
+    -fx-background-color: mediumslateblue;
+    -fx-text-fill: silver;
+}
+
+.buildingLabel:selected {
+    -fx-background-color: slateblue;
+    -fx-text-fill: silver;
+}
+
+.deleteBuildings {
+    -fx-background: rgb(57, 72, 102);
+    -fx-background-color: rgb(57, 72, 102);
+}
