@@ -34,16 +34,30 @@ public class MyReservationsPageContent {
             for(int i = 0; i < jsonArray.size(); i++){
                 JSONObject obj = (JSONObject) jsonArray.get(i);
                 AnchorPane reservation = new AnchorPane();
-                reservation.setPrefSize(400,200);
+                reservation.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 Label userLabel = new Label();
+                Label timeLabel = new Label();
+                Label roomLabel = new Label();
+                userLabel.getStyleClass().add("reservation-label");
+                timeLabel.getStyleClass().add("reservation-label");
+                roomLabel.getStyleClass().add("reservation-label");
+                reservation.getStyleClass().add("reservation-box");
                 JSONObject user = (JSONObject) obj.get("user");
-                String firstName = (String) user.get("first_name");
-                String lastName = (String) user.get("last_name");
-                String userName = (String) user.get("username");
-                userLabel.setText(firstName + lastName + "\n" + userName);
-                
-                reservation.getChildren().add(userLabel);
+                userLabel.setText("Reserved by: " + user.get("first_name") + " " + user.get("last_name") + "\n" + user.get("username"));
+                timeLabel.setText("Reserved from " + obj.get("starting_date") + " to " + obj.get("end_date"));
+                roomLabel.setText("Room number " + obj.get("room_id"));
 
+                AnchorPane.setLeftAnchor(userLabel, 50.0);
+                AnchorPane.setLeftAnchor(timeLabel, 50.0);
+                AnchorPane.setLeftAnchor(roomLabel, 50.0);
+
+                AnchorPane.setTopAnchor(roomLabel, 10.0);
+                AnchorPane.setTopAnchor(timeLabel, 30.0);
+                AnchorPane.setTopAnchor(userLabel, 50.0);
+
+                reservation.getChildren().add(userLabel);
+                reservation.getChildren().add(roomLabel);
+                reservation.getChildren().add(timeLabel);
                 gp.add(reservation, 0, i);
 
 
@@ -57,8 +71,11 @@ public class MyReservationsPageContent {
     private static void createGrid() {
         int constraints = jsonArray.size();
         ColumnConstraints cc = new ColumnConstraints();
-        cc.setPercentWidth(100);
+        cc.setPercentWidth(90);
         gp.getColumnConstraints().add(cc);
+        ColumnConstraints kk = new ColumnConstraints();
+        kk.setPercentWidth(10);
+        gp.getColumnConstraints().add(kk);
 
         RowConstraints rr = new RowConstraints();
         rr.setPercentHeight(100/constraints);
@@ -66,6 +83,7 @@ public class MyReservationsPageContent {
             gp.getRowConstraints().add(rr);
         }
 
-        gp.setStyle("-fx-background-color: black;");
+        gp.setStyle("-fx-background-color: aliceblue;");
+        gp.setVgap(20.0);
     }
 }
