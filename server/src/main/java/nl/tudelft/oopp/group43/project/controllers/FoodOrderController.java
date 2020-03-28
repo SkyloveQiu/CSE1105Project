@@ -127,6 +127,12 @@ public class FoodOrderController {
         return new ResponseEntity<>(okResponse, HttpStatus.OK);
     }
 
+    /**
+     * Returns all the orders based on user-token.
+     *
+     * @param token the token that identifies the user
+     * @return the orders based on one the user
+     */
     @GetMapping("/foodOrder/moreDetails")
     @ResponseBody
     public List<FoodOrder> getFoodOrderByUser(@RequestParam(value = "token", defaultValue = "invalid") String token) {
