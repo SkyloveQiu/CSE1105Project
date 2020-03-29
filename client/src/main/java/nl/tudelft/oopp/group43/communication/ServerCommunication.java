@@ -187,6 +187,13 @@ public class ServerCommunication {
         return response.body();
     }
 
+    /**
+     * Retrieves all reservations from the server by current user.
+     *
+     * @return the body of a get request to the server.
+     * @throws Exception if communication with the server fails.
+     */
+
     public static String getReservationsByUser() {
         String url = cURL + "reservation/" + getUsername();
 

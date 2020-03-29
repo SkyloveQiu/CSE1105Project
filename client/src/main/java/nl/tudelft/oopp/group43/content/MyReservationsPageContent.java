@@ -31,8 +31,7 @@ public class MyReservationsPageContent {
         try {
             jsonArray = (JSONArray) jsonParser.parse(ServerCommunication.getReservationsByUser());
             createGrid();
-            for(int i = 0; i < jsonArray.size(); i++){
-                JSONObject obj = (JSONObject) jsonArray.get(i);
+            for (int i = 0; i < jsonArray.size(); i++) {
                 AnchorPane reservation = new AnchorPane();
                 reservation.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 Label userLabel = new Label();
@@ -42,6 +41,7 @@ public class MyReservationsPageContent {
                 timeLabel.getStyleClass().add("reservation-label");
                 roomLabel.getStyleClass().add("reservation-label");
                 reservation.getStyleClass().add("reservation-box");
+                JSONObject obj = (JSONObject) jsonArray.get(i);
                 JSONObject user = (JSONObject) obj.get("user");
                 userLabel.setText("Reserved by: " + user.get("first_name") + " " + user.get("last_name") + "\n" + user.get("username"));
                 timeLabel.setText("Reserved from " + obj.get("starting_date") + " to " + obj.get("end_date"));
@@ -69,7 +69,6 @@ public class MyReservationsPageContent {
     }
 
     private static void createGrid() {
-        int constraints = jsonArray.size();
         ColumnConstraints cc = new ColumnConstraints();
         cc.setPercentWidth(90);
         gp.getColumnConstraints().add(cc);
@@ -77,9 +76,10 @@ public class MyReservationsPageContent {
         kk.setPercentWidth(10);
         gp.getColumnConstraints().add(kk);
 
+        int constraints = jsonArray.size();
         RowConstraints rr = new RowConstraints();
-        rr.setPercentHeight(100/constraints);
-        for(int i = 0; i < constraints; i++){
+        rr.setPercentHeight(100 / constraints);
+        for (int i = 0; i < constraints; i++) {
             gp.getRowConstraints().add(rr);
         }
 
