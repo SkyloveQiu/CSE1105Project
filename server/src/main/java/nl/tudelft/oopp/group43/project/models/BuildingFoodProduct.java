@@ -56,8 +56,8 @@ public class BuildingFoodProduct implements java.io.Serializable {
 
     @EmbeddedId
     @AttributeOverrides({
-            @AttributeOverride(name = "building", column = @Column(name = "building", nullable = false)),
-            @AttributeOverride(name = "foodProduct", column = @Column(name = "food_product", nullable = false))})
+        @AttributeOverride(name = "building", column = @Column(name = "building", nullable = false)),
+        @AttributeOverride(name = "foodProduct", column = @Column(name = "food_product", nullable = false))})
     public BuildingFoodProductId getId() {
         return this.id;
     }
@@ -67,7 +67,7 @@ public class BuildingFoodProduct implements java.io.Serializable {
     }
 
     @JsonManagedReference(value = "buildingFoodProducts")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "building", nullable = false, insertable = false, updatable = false)
     public Building getBuilding() {
         return this.building;
@@ -77,7 +77,7 @@ public class BuildingFoodProduct implements java.io.Serializable {
         this.building = building;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_product", nullable = false, insertable = false, updatable = false)
     public FoodProduct getFoodProduct() {
         return this.foodProduct;

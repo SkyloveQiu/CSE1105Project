@@ -41,12 +41,6 @@ public class DeleteBuildingSceneController {
             alert.setContentText("NOT OK");
         }
         alert.showAndWait();
-
-        /*
-        MainPageDisplay md = new MainPageDisplay();
-        md.start((Stage) ((Node) event.getSource()).getScene().getWindow());
-         */
-
     }
 
     /**

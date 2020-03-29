@@ -48,8 +48,6 @@ public class SecurityServiceImpl implements SecurityService {
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            System.out.println(usernamePasswordAuthenticationToken.getCredentials());
-            System.out.println(token);
             user.setToken(token);
             return user;
         }

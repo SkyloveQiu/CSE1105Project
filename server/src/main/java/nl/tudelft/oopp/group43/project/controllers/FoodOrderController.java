@@ -8,6 +8,8 @@ import nl.tudelft.oopp.group43.project.models.FoodOrder;
 import nl.tudelft.oopp.group43.project.models.FoodOrderDetails;
 import nl.tudelft.oopp.group43.project.models.FoodOrderDetailsId;
 import nl.tudelft.oopp.group43.project.models.FoodProduct;
+import nl.tudelft.oopp.group43.project.models.Reservation;
+import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.repositories.BuildingFoodProductRepository;
 import nl.tudelft.oopp.group43.project.repositories.FoodOrderDetailsRepository;
@@ -19,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FoodOrderController {
 
     @Autowired
-    private FoodOrderRepository foodOrderrepository;
+    private FoodOrderRepository foodOrderRepository;
 
     @Autowired
     private ReservationRepository reservationRepository;
@@ -43,10 +44,11 @@ public class FoodOrderController {
     @Autowired
     private BuildingFoodProductRepository buildingFoodProductRepository;
 
+
     @GetMapping("/foodOrder")
     @ResponseBody
     public List<FoodOrder> getFoodOrder() {
-        return foodOrderrepository.findAll();
+        return foodOrderRepository.findAll();
     }
 
     // {"building":0,"reservation":1,"user":"a@tudelft.nl","time":"17:00:00"}
@@ -61,7 +63,8 @@ public class FoodOrderController {
     @ResponseBody
     public ResponseEntity createFoodOrder(@RequestBody FoodOrder newFoodOrder,
                                           @RequestParam(value = "token", defaultValue = "invalid") String token,
-                                          @RequestParam(value = "order", defaultValue = "invalid") String order) {
+                                          @RequestParam(value = "order", defaultValue = "invalid") String order,
+                                          @RequestParam(value = "away", defaultValue = "invalid") String takeAway) {
 
 
         if (token.equals("invalid") || order.equals("invalid")) {
@@ -70,7 +73,7 @@ public class FoodOrderController {
         }
 
         try {
-            if (!userRepository.findUserByToken(token).getUsername().equals(newFoodOrder.getUser().getUsername())) {
+            if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals(newFoodOrder.getUser().getUsername())) {
                 ErrorResponse errorResponse = new ErrorResponse("Food Reservation error", "This user does not exist or the token is invalid.", HttpStatus.FORBIDDEN.value());
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
@@ -79,12 +82,10 @@ public class FoodOrderController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-
-        if (reservationRepository.findByReservationId(newFoodOrder.getReservation().getReservationId()) == null
-            || !reservationRepository.findByReservationId(newFoodOrder.getReservation().getReservationId()).getUser().getUsername().equals(newFoodOrder.getUser().getUsername())) {
-            ErrorResponse errorResponse = new ErrorResponse("Food Reservation error", "There is no valid reservation on this room.", HttpStatus.FORBIDDEN.value());
-            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        if (!takeAway.equals("invalid")) {
+            newFoodOrder.setReservation(new Reservation(1));
         }
+
 
         String processedOrder;
         processedOrder = order.replaceAll("-", " ");
@@ -107,7 +108,7 @@ public class FoodOrderController {
             }
         }
 
-        int currId = foodOrderrepository.save(newFoodOrder).getId();
+        int currId = foodOrderRepository.save(newFoodOrder).getId();
 
         List<FoodOrderDetails> detailsList = new ArrayList<>();
 
@@ -122,7 +123,32 @@ public class FoodOrderController {
             System.out.println(i + "    ");
         }
 
-        ErrorResponse errorResponse = new ErrorResponse("Food Reservation OK", "You have successfully ordered your food: " + finalOrder.toString(), HttpStatus.OK.value());
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        ErrorResponse okResponse = new ErrorResponse("Food Reservation OK", "You have successfully ordered your food: " + finalOrder.toString(), HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
+    }
+
+    /**
+     * Returns all the orders based on user-token.
+     *
+     * @param token the token that identifies the user
+     * @return the orders based on one the user
+     */
+    @GetMapping("/foodOrder/moreDetails")
+    @ResponseBody
+    public List<FoodOrder> getFoodOrderByUser(@RequestParam(value = "token", defaultValue = "invalid") String token) {
+
+        if (token.equals("invalid")) {
+            return new ArrayList<>();
+        }
+
+        User user = userRepository.findUserByToken(token);
+
+        if (user == null) {
+            return new ArrayList<>();
+        }
+
+        return foodOrderRepository.getAllByUser(user);
+
+
     }
 }
