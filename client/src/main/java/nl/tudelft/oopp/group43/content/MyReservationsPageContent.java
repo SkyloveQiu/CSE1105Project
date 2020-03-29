@@ -1,6 +1,10 @@
 package nl.tudelft.oopp.group43.content;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -8,6 +12,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -59,6 +64,29 @@ public class MyReservationsPageContent {
                 reservation.getChildren().add(roomLabel);
                 reservation.getChildren().add(timeLabel);
                 gp.add(reservation, 0, i);
+                //edit button
+                Button editButton = new Button();
+                editButton.setText("Edit");
+                editButton.setMaxWidth(Double.MAX_VALUE);
+                editButton.getStyleClass().add("button");
+                //cancel button
+                Button cancelButton = new Button();
+                cancelButton.setText("Cancel");
+                cancelButton.setMaxWidth(Double.MAX_VALUE);
+                cancelButton.getStyleClass().add("button");
+                AnchorPane.setBottomAnchor(cancelButton, 0.0);
+                //vbox
+                VBox box = new VBox();
+                box.getChildren().add(editButton);
+                box.getChildren().add(cancelButton);
+                box.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        editButton.setPrefHeight((Double) newValue / 2);
+                        cancelButton.setPrefHeight((Double) newValue / 2);
+                    }
+                });
+                gp.add(box, 1, i);
 
 
 
@@ -82,8 +110,6 @@ public class MyReservationsPageContent {
         for (int i = 0; i < constraints; i++) {
             gp.getRowConstraints().add(rr);
         }
-
-        gp.setStyle("-fx-background-color: aliceblue;");
         gp.setVgap(20.0);
     }
 }
