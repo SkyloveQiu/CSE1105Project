@@ -84,7 +84,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testLoginToken() throws ParseException {
+    public void testLoginTokenOK() throws ParseException {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -95,7 +95,18 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testGetUserInformation() {
+    public void testLoginTokenWRONG() throws ParseException {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onPost(cURL + "token?username=a&password=b").doReturnStatus(201);
+
+        assertEquals("WRONG", ServerCommunication.loginToken("a", "b"));
+        httpClientMock.verify().post(cURL + "token?username=a&password=b");
+    }
+
+    @Test
+    public void testGetUserInformationOK() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -103,6 +114,18 @@ public class ServerCommunicationTest {
 
         ServerCommunication.setToken("a");
         assertEquals("OK", ServerCommunication.getUserInformation());
+        httpClientMock.verify().post(cURL + "name?token=a").called();
+    }
+
+    @Test
+    public void testGetUserInformationStatusError() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onPost(cURL + "name?token=a").doReturnStatus(201);
+
+        ServerCommunication.setToken("a");
+        assertEquals("ERROR OBTAINING INFO", ServerCommunication.getUserInformation());
         httpClientMock.verify().post(cURL + "name?token=a").called();
     }
 
@@ -234,7 +257,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testSendChangePassword() {
+    public void testSendChangePasswordOK() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -242,6 +265,18 @@ public class ServerCommunicationTest {
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendChangePassword("a", "b"));
+        httpClientMock.verify().post(cURL + "changePassword?oldPassword=a&newPassword=b&token=1");
+    }
+
+    @Test
+    public void testSendChangePasswordNOTOK() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onPost(cURL + "changePassword?oldPassword=a&newPassword=b&token=1").doReturnStatus(201);
+
+        ServerCommunication.setToken("1");
+        assertEquals("NOT OK", ServerCommunication.sendChangePassword("a", "b"));
         httpClientMock.verify().post(cURL + "changePassword?oldPassword=a&newPassword=b&token=1");
     }
 
