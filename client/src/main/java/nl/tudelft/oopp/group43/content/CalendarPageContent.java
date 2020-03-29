@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -77,10 +79,12 @@ public class CalendarPageContent {
                             public void handle(CalendarEvent event) {
                                 if (event.isEntryAdded()) {
                                     Entry entry = event.getEntry();
-                                    System.out.println("Entry named: " + entry.getTitle() + " was added to calendar: " + entry.getCalendar().getName() + ", " + cal.getShortName());
-                                    entries.add(entry);
-                                    if (finishedReadingEntries) {
-                                        entriesAreSaved = false;
+                                    if (!entry.getCalendar().getShortName().equals("Room")) {
+                                        System.out.println("Entry named: " + entry.getTitle() + " was added to calendar: " + entry.getCalendar().getName() + ", " + cal.getShortName());
+                                        entries.add(entry);
+                                        if (finishedReadingEntries) {
+                                            entriesAreSaved = false;
+                                        }
                                     }
                                 } else if (event.isEntryRemoved()) {
                                     System.out.println("Entry named was removed from calendar: " + cal.getName() + ", " + cal.getShortName());
@@ -93,19 +97,6 @@ public class CalendarPageContent {
                 }
             }
         });
-
-        Calendar calendar = new Calendar("Calendar");
-        calendar.setShortName("Calendar");
-        calendar.setStyle(Calendar.Style.STYLE1);
-
-        addSavedEntries(calendar);
-
-        CalendarSource calendarSource = new CalendarSource("My Calendars");
-        calendarSource.getCalendars().add(calendar);
-
-        calendarView.getCalendarSources().setAll(calendarSource);
-        calendarView.setRequestedTime(LocalTime.now());
-
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(calendarView);
         AnchorPane.setLeftAnchor(stackPane, 88.0);
@@ -126,12 +117,66 @@ public class CalendarPageContent {
                 root.getChildren().add(0, stackPane);
             }
         });
+
+
+        Calendar impCalendar = new Calendar("Important");
+        impCalendar.setShortName("Imp");
+        impCalendar.setStyle(Calendar.Style.STYLE6);
+
+        Calendar meetCalendar = new Calendar("Meetings");
+        meetCalendar.setShortName("Meet");
+        meetCalendar.setStyle(Calendar.Style.STYLE5);
+
+        Calendar persCalendar = new Calendar("Personal");
+        persCalendar.setShortName("Pers");
+        persCalendar.setStyle(Calendar.Style.STYLE3);
+
+        Calendar roomCalendar = new Calendar("Room reservations");
+        roomCalendar.setShortName("Room");
+        roomCalendar.setStyle(Calendar.Style.STYLE1);
+        roomCalendar.setReadOnly(true);
+
+        addSavedEntries(impCalendar, persCalendar, meetCalendar);
+        if (!ServerCommunication.getToken().equals("invalid")) {
+            addRoomReservations(roomCalendar);
+        }
+
+        CalendarSource calendarSource = new CalendarSource("My Calendars");
+        calendarSource.getCalendars().add(impCalendar);
+        calendarSource.getCalendars().add(persCalendar);
+        calendarSource.getCalendars().add(meetCalendar);
+        calendarSource.getCalendars().add(roomCalendar);
+
+        calendarView.getCalendarSources().setAll(calendarSource);
+        calendarView.setRequestedTime(LocalTime.now());
+
+        //TODO: remove the comments when sure the current version works without problems
+        //StackPane stackPane = new StackPane();
+        //stackPane.getChildren().add(calendarView);
+        //AnchorPane.setLeftAnchor(stackPane, 88.0);
+        //AnchorPane.setTopAnchor(stackPane, 141.0);
+        //AnchorPane.setBottomAnchor(stackPane, 0.0);
+        //AnchorPane.setRightAnchor(stackPane, 0.0);
+
+        //AnchorPane root = (AnchorPane) scene.lookup("#root");
+
+        //try {
+            //Thread.sleep(50);
+        //} catch (InterruptedException e) {
+            //e.printStackTrace();
+        //}
+        //Platform.runLater(new Runnable() {
+            //@Override
+            //public void run() {
+                //root.getChildren().add(0, stackPane);
+            //}
+        //});
     }
 
     /**
      * Adds the saved entries, if any, to the calendar.
      */
-    private static void addSavedEntries(Calendar calendar) {
+    private static void addSavedEntries(Calendar impCalendar, Calendar persCalendar, Calendar meetCalendar) {
         finishedReadingEntries = false;
         JSONParser json = new JSONParser();
         try {
@@ -153,18 +198,54 @@ public class CalendarPageContent {
                 Interval interval = new Interval(startDate, startTime, endDate, endTime, zone);
 
                 Entry entry = new Entry((String) obj.get("title"), interval);
-                entry.setCalendar(calendar);
+                switch((String) obj.get("calendarName")) {
+                    case "Important":
+                        entry.setCalendar(impCalendar);
+                        impCalendar.addEntry(entry);
+                        break;
+                    case "Meetings":
+                        entry.setCalendar(meetCalendar);
+                        meetCalendar.addEntry(entry);
+                        break;
+                    case "Personal":
+                        entry.setCalendar(persCalendar);
+                        persCalendar.addEntry(entry);
+                        break;
+                    default:
+                        break;
+                }
                 entry.setId((String) obj.get("id"));
                 entry.setLocation((String) obj.get("location"));
                 entry.setFullDay((boolean) obj.get("fullDay"));
-
-                calendar.addEntry(entry);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         finishedReadingEntries = true;
+    }
+
+    /**
+     * This methods adds the room reservations to the calendar, if the user is logged in.
+     */
+    private static void addRoomReservations(Calendar room) {
+        /* TODO: remove the comments when the getReservation method is implemented.
+        JSONParser json = new JSONParser();
+        JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getReservationsByUser());
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            LocalDateTime start = LocalDateTime.parse(((String) ((JSONObject) jsonArray.get(i)).get("starting_date")));
+            LocalDateTime end = LocalDateTime.parse(((String) ((JSONObject) jsonArray.get(i)).get("end_date")));
+            Interval interval = new Interval(start, end);
+
+            //TODO: change the room id to the room name
+            Entry entry = new Entry("Reservation in: " + ((JSONObject) jsonArray.get(i)).get("room_id"), interval);
+            //TODO: get and set the location to the building address
+            entry.setLocation("building address");
+
+            room.addEntry(entry);
+        }
+         */
     }
 
     /**
