@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.project.service;
 
+import nl.tudelft.oopp.group43.project.models.User;
+
 public interface EmailService {
-    void sendEmail(String email);
+    void sendEmail(User user);
 }

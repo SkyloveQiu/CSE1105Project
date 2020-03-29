@@ -9,6 +9,7 @@ import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.payload.JwtRespones;
 import nl.tudelft.oopp.group43.project.payload.UserResponse;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
+import nl.tudelft.oopp.group43.project.service.EmailService;
 import nl.tudelft.oopp.group43.project.service.SecurityService;
 import nl.tudelft.oopp.group43.project.service.TokenService;
 import nl.tudelft.oopp.group43.project.service.UserService;
@@ -42,6 +43,9 @@ public class UserController {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private EmailService emailService;
+
     /**
      * post message to set up a new account.
      *
@@ -52,8 +56,6 @@ public class UserController {
      */
     @PostMapping("/registration")
     public ResponseEntity registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-        System.out.println("we have receive message!");
-        System.out.println(userForm.toString());
         userValidator.validate(userForm, bindingResult);
         final String password = userForm.getPassword();
         if (bindingResult.hasErrors()) {
@@ -70,6 +72,7 @@ public class UserController {
         userService.save(userForm);
         User user = securityService.autoLogin(userForm.getUsername(), password);
         tokenService.save(userForm);
+        emailService.sendEmail(user);
         JwtRespones jwtRespones = new JwtRespones(user.getToken(), user.getUsername(), user.getRole(), user.getFirstName(), user.getLastName(), HttpStatus.OK.value());
         return new ResponseEntity<>(jwtRespones, HttpStatus.OK);
     }
