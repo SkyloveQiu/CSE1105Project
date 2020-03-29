@@ -28,19 +28,4 @@ public class FoodOrderDetailsController {
         return repository.findAll();
     }
 
-    //{"id":{"foodOrderId":1,"foodProductId":1},"amount":2}
-
-    /**
-     * create new food orders.
-     *
-     * @param newFoodOrderDetails the order details you want to create.
-     * @return the orders.
-     */
-    @PostMapping("/foodOrderDetails")
-    @ResponseBody
-    public String createFoodOrderDetails(@RequestBody FoodOrderDetails newFoodOrderDetails) {
-        repository.save(newFoodOrderDetails);
-        return "ok";
-        // return "NEW FOOD ORDER DETAILS FOR ID: " + newFoodOrderDetails.getOrderId();
-    }
 }

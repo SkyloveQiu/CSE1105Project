@@ -155,7 +155,7 @@ public class FoodOrder implements java.io.Serializable {
     }
 
 
-    @JsonBackReference
+
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_order_id")
     public Set<FoodOrderDetails> getFoodOrderDetails() {

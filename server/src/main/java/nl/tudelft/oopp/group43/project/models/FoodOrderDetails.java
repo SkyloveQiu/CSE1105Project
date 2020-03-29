@@ -56,7 +56,7 @@ public class FoodOrderDetails implements java.io.Serializable {
         this.id = id;
     }
 
-    @JsonIgnore
+
     // @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_product_id", nullable = false, insertable = false, updatable = false)
