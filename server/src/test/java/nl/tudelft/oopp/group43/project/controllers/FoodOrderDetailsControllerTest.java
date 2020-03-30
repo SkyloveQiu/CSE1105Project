@@ -45,15 +45,4 @@ public class FoodOrderDetailsControllerTest {
 
     }
 
-    @Test
-    public void testCreateFoodOrderDetails() {
-        final FoodOrderDetails newFoodOrderDetails = new FoodOrderDetails(new FoodOrderDetailsId(0, 0), new FoodProduct("name", "description", new BigDecimal("0.00"), new HashSet<>(), new HashSet<>()), new FoodOrder(0, 0, "admin@tudelft.nl", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime()), 0);
-
-        final FoodOrderDetails foodOrderDetails = new FoodOrderDetails(new FoodOrderDetailsId(0, 0), new FoodProduct("name", "description", new BigDecimal("0.00"), new HashSet<>(), new HashSet<>()), new FoodOrder(0, 0, "admin@tudelft.nl", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime()), 0);
-        when(mockRepository.save(any(FoodOrderDetails.class))).thenReturn(foodOrderDetails);
-
-        final String result = foodOrderDetailsControllerUnderTest.createFoodOrderDetails(newFoodOrderDetails);
-
-        assertNotNull(result);
-    }
 }

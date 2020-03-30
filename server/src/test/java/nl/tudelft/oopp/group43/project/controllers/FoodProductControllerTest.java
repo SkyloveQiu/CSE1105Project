@@ -1,6 +1,5 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -11,16 +10,21 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import nl.tudelft.oopp.group43.project.models.FoodProduct;
+import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.repositories.FoodProductRepository;
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.ResponseEntity;
 
 public class FoodProductControllerTest {
 
     @Mock
     private FoodProductRepository mockRepository;
+    @Mock
+    private UserRepository mockUserRepository;
 
     @InjectMocks
     private FoodProductController foodProductControllerUnderTest;
@@ -41,12 +45,15 @@ public class FoodProductControllerTest {
 
     @Test
     public void testCreateFoodProduct() {
-        final FoodProduct newFoodProduct = new FoodProduct("admin@tudelft.nl", "description", new BigDecimal("0.00"), new HashSet<>(), new HashSet<>());
+        final FoodProduct newFoodProduct = new FoodProduct("name", "description", new BigDecimal("0.00"), new HashSet<>(), new HashSet<>());
+
+        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
         final FoodProduct foodProduct = new FoodProduct("name", "description", new BigDecimal("0.00"), new HashSet<>(), new HashSet<>());
         when(mockRepository.save(any(FoodProduct.class))).thenReturn(foodProduct);
 
-        final String result = foodProductControllerUnderTest.createFoodProduct(newFoodProduct);
+        final ResponseEntity result = foodProductControllerUnderTest.createFoodProduct(newFoodProduct, "token");
 
         assertNotNull(result);
     }

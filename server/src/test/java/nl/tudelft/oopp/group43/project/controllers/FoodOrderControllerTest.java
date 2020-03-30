@@ -85,7 +85,7 @@ public class FoodOrderControllerTest {
         when(mockFoodOrderDetailsRepository.save(any(FoodOrderDetails.class))).thenReturn(foodOrderDetails);
 
         // Run the test
-        final ResponseEntity result = foodOrderControllerUnderTest.createFoodOrder(newFoodOrder, "token", "order");
+        final ResponseEntity result = foodOrderControllerUnderTest.createFoodOrder(newFoodOrder, "token", "order","true");
 
         assertNotNull(result);
     }
