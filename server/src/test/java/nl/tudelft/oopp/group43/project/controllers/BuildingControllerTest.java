@@ -1,7 +1,7 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-
 import static org.junit.Assert.assertEquals;
+
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,33 +10,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
+
+import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(Building.class)
+@WebMvcTest(BuildingController.class)
 @EnableAutoConfiguration
-public class BuildingControllerTest {
+@AutoConfigureMockMvc
+@Transactional
+class BuildingControllerTest {
 
     private static String token;
 
@@ -50,7 +47,6 @@ public class BuildingControllerTest {
 
     @Autowired
     private BuildingRepository buildingRepository;
-
 
     @BeforeEach
     void init() throws Exception {
@@ -69,6 +65,11 @@ public class BuildingControllerTest {
 
     }
 
+    /**
+     * Deletes the created building.
+     *
+     * @throws Exception throws an exception based on the error
+     */
     @AfterEach
     public void uninit() throws Exception {
         if (buildingRepository.existsBuildingByBuildingNumber(9999)) {
@@ -86,6 +87,7 @@ public class BuildingControllerTest {
     }
 
     // {"building_number":33,"building_name":"EWI","address":"32","opening_hours":"32"}
+
     @Test
     void postNewBuildingWithNoAdminRights() throws Exception {
         mockMvc.perform(post("/building")
