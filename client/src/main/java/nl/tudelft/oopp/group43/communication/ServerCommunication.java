@@ -49,6 +49,15 @@ public class ServerCommunication {
     }
 
     /**
+     * Sets the value of the HttpClient.
+     * @param client the httpClient
+     */
+
+    public static void setClient(HttpClient client) {
+        ServerCommunication.client = client;
+    }
+
+    /**
      * Returns the username.
      *
      * @return a String with in it the username
