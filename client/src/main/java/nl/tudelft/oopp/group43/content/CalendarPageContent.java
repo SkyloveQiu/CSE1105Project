@@ -6,6 +6,21 @@ import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
 import com.calendarfx.model.Interval;
 import com.calendarfx.view.CalendarView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -18,19 +33,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class CalendarPageContent {
@@ -150,27 +152,6 @@ public class CalendarPageContent {
         calendarView.getCalendarSources().setAll(calendarSource);
         calendarView.setRequestedTime(LocalTime.now());
 
-        //TODO: remove the comments when sure the current version works without problems
-        //StackPane stackPane = new StackPane();
-        //stackPane.getChildren().add(calendarView);
-        //AnchorPane.setLeftAnchor(stackPane, 88.0);
-        //AnchorPane.setTopAnchor(stackPane, 141.0);
-        //AnchorPane.setBottomAnchor(stackPane, 0.0);
-        //AnchorPane.setRightAnchor(stackPane, 0.0);
-
-        //AnchorPane root = (AnchorPane) scene.lookup("#root");
-
-        //try {
-            //Thread.sleep(50);
-        //} catch (InterruptedException e) {
-            //e.printStackTrace();
-        //}
-        //Platform.runLater(new Runnable() {
-            //@Override
-            //public void run() {
-                //root.getChildren().add(0, stackPane);
-            //}
-        //});
     }
 
     /**
@@ -198,7 +179,7 @@ public class CalendarPageContent {
                 Interval interval = new Interval(startDate, startTime, endDate, endTime, zone);
 
                 Entry entry = new Entry((String) obj.get("title"), interval);
-                switch((String) obj.get("calendarName")) {
+                switch ((String) obj.get("calendarName")) {
                     case "Important":
                         entry.setCalendar(impCalendar);
                         impCalendar.addEntry(entry);
@@ -229,23 +210,28 @@ public class CalendarPageContent {
      * This methods adds the room reservations to the calendar, if the user is logged in.
      */
     private static void addRoomReservations(Calendar room) {
-        /* TODO: remove the comments when the getReservation method is implemented.
         JSONParser json = new JSONParser();
-        JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getReservationsByUser());
+        try {
+            JSONArray jsonArray = (JSONArray) json.parse(ServerCommunication.getReservationsByUser());
 
-        for (int i = 0; i < jsonArray.size(); i++) {
-            LocalDateTime start = LocalDateTime.parse(((String) ((JSONObject) jsonArray.get(i)).get("starting_date")));
-            LocalDateTime end = LocalDateTime.parse(((String) ((JSONObject) jsonArray.get(i)).get("end_date")));
-            Interval interval = new Interval(start, end);
+            for (int i = 0; i < jsonArray.size(); i++) {
+                DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00.000+0000'");
+                LocalDateTime start = LocalDateTime.parse((String) ((JSONObject) jsonArray.get(i)).get("starting_date"), customFormatter);
+                LocalDateTime end = LocalDateTime.parse((String) ((JSONObject) jsonArray.get(i)).get("end_date"), customFormatter);
+                Interval interval = new Interval(start, end);
+                System.out.println((String) ((JSONObject) jsonArray.get(i)).get("starting_date") + " : " + (String) ((JSONObject) jsonArray.get(i)).get("end_date"));
 
-            //TODO: change the room id to the room name
-            Entry entry = new Entry("Reservation in: " + ((JSONObject) jsonArray.get(i)).get("room_id"), interval);
-            //TODO: get and set the location to the building address
-            entry.setLocation("building address");
+                //TODO: change the room id to the room name
+                Entry entry = new Entry("Reservation in: " + ((JSONObject) jsonArray.get(i)).get("room_id"), interval);
+                //TODO: get and set the location to the building address
+                entry.setLocation("building address");
+                System.out.println("Reservation in: " + ((JSONObject) jsonArray.get(i)).get("room_id"));
 
-            room.addEntry(entry);
+                room.addEntry(entry);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-         */
     }
 
     /**
@@ -358,11 +344,11 @@ public class CalendarPageContent {
      *
      * @param interval the interval to map to json
      * @return A json object with fields:
-     * - zoneId
-     * - startDate
-     * - startTime
-     * - endDate
-     * - endTime
+     *          - zoneId
+     *          - startDate
+     *          - startTime
+     *          - endDate
+     *          - endTime
      */
     private static String intervalToJson(Interval interval) {
         StringBuilder json = new StringBuilder();

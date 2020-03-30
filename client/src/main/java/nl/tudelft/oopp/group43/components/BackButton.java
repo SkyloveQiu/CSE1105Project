@@ -1,5 +1,8 @@
 package nl.tudelft.oopp.group43.components;
 
+import java.io.IOException;
+import java.util.Stack;
+
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -11,9 +14,6 @@ import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.CalendarPageContent;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
-
-import java.io.IOException;
-import java.util.Stack;
 
 public class BackButton {
 
