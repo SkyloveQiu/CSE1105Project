@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -215,6 +216,17 @@ public class ProfilePageController {
                 logOut(event);
             }
 
+        }
+    }
+
+    @FXML
+    private void navigateToMyReservations(MouseEvent e) {
+        SceneLoader.setScene("myreservations");
+        SceneLoader sl = new SceneLoader();
+        try {
+            sl.start((Stage) ((Node) e.getSource()).getScene().getWindow());
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
