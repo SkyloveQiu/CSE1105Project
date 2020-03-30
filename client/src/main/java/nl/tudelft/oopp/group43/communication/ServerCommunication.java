@@ -27,7 +27,7 @@ public class ServerCommunication {
     private static String username = "";
     private static String firstName = "";
     private static String lastName = "";
-    private static String role = "admin";
+    private static String role = "";
 
     /**
      * Gets the value of token.
@@ -325,7 +325,8 @@ public class ServerCommunication {
                 JSONObject obj = (JSONObject) parser.parse(response.body());
                 setFirstName((String) obj.get("first_name"));
                 setLastName((String) obj.get("last_name"));
-                //setRole((String) obj.get("role"));
+                setRole((String) obj.get("role"));
+                //System.out.println(response.body());
 
                 return "OK";
             } catch (ParseException e) {
@@ -621,6 +622,63 @@ public class ServerCommunication {
         } else {
             return "OK";
         }
+    }
+
+    /**
+     * Gives the room which has to be added or edited.
+     * @param obj - JSONObject which represents the room
+     * @return a String which can have 3 values:
+     *        - "Communication with server failed" if the communication with the server failed.
+     *        - "OK" if the server could edit/add the room
+     *        - "NOT OK" if the server could edit/add room
+     */
+    public static String sendRoom(JSONObject obj) {
+        String url = cURL + "room?token=" + getToken();
+        HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
+
+        if (response == null) {
+            System.out.println("Communication with server failed");
+            return "Communication with server failed";
+
+        }
+
+        if (response.statusCode() != 200) {
+            System.out.println(response.body());
+            return "NOT OK";
+        } else {
+
+            return "OK";
+        }
+    }
+
+    /**
+     * Gives the room which has to be delete.
+     * @param index - String which represents the index of the room which has to benn deleted.
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server could delete the room
+     *         - "NOT OK" if the server could delete the room
+     *
+     */
+    public static String sendDeleteRoom(String index) {
+        String url = cURL + "room/" + index + "?token=" + getToken();
+        HttpResponse<String> response = delete(url);
+
+        if (response == null) {
+            System.out.println("Communication with server failed");
+            return "Communication with server failed";
+
+        }
+
+        if (response.statusCode() != 200) {
+            System.out.println(response.body());
+            return "NOT OK";
+        } else {
+
+            return "OK";
+        }
+
+
     }
 }
 

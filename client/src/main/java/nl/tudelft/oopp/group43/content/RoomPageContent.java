@@ -48,6 +48,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
+
 public class RoomPageContent {
 
     private static Scene scene;
@@ -68,6 +70,7 @@ public class RoomPageContent {
     private static ArrayList<CheckBox> checkBoxes;
     private static ArrayList<String> deleteRoomList = new ArrayList<>();
     private static ArrayList<Button> editButtons;
+    private static String menu = "";
 
     /**
      * Adds the content to the room page.
@@ -100,9 +103,9 @@ public class RoomPageContent {
         ArrayList<String> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             if (i < 10) {
-                hours.add("0" + Integer.toString(i) + ":00");
+                hours.add("0" + i + ":00");
             } else {
-                hours.add(Integer.toString(i) + ":00");
+                hours.add(i + ":00");
             }
         }
         ObservableList<String> list = FXCollections.observableArrayList(hours);
@@ -242,6 +245,7 @@ public class RoomPageContent {
     private static void addRoom(JSONObject obj, int i) {
         Pane root = new Pane();
         String id = Long.toString((long) obj.get("id"));
+        id = id + ";" + ((JSONObject) obj.get("building")).get("building_number");
         root.setId(id);
         root.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
@@ -471,11 +475,25 @@ public class RoomPageContent {
                 public void handle(ActionEvent event) {
                     scene.lookup("#grayBackground").setVisible(true);
                     scene.lookup("#addMenu").setVisible(false);
+                    menu = "edit";
 
                     ((TextField) scene.lookup("#editRoomName")).setText(((Label) ((Pane) root.getChildren().get(0)).getChildren().get(0)).getText());
-                    ((Label) scene.lookup("#editRoomNumber")).setText("Room being edited: " + root.getId());
+                    ((Label) scene.lookup("#editRoomNumber")).setText("Room being edited: " + root.getId().split(";")[0]);
                     ((Label) scene.lookup("#editId")).setText(root.getId());
                     updateFields((AnchorPane) scene.lookup("#editFields"), ((Label) ((Pane) root.getChildren().get(0)).getChildren().get(4)).getText());
+
+                    AnchorPane editFields = (AnchorPane) scene.lookup("#editFields");
+                    for (Node n : editFields.getChildren()) {
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
+                        }
+                    }
+                    editFields = (AnchorPane) scene.lookup("#edit");
+                    for (Node n : editFields.getChildren()) {
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
+                        }
+                    }
 
                     scene.lookup("#editMenu").setVisible(true);
                 }
@@ -498,6 +516,13 @@ public class RoomPageContent {
             delete.setCache(true);
             delete.setCacheHint(CacheHint.SPEED);
             ((AnchorPane) scene.lookup("#root")).getChildren().add(9, delete);
+            delete.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    deleteRooms(event);
+
+                }
+            });
 
             Pane deleteHover = new Pane();
             deleteHover.setPrefSize(44, 44);
@@ -549,16 +574,24 @@ public class RoomPageContent {
                     scene.lookup("#grayBackground").setVisible(true);
                     scene.lookup("#editMenu").setVisible(false);
 
+                    menu = "add";
+
                     AnchorPane addFields = (AnchorPane) scene.lookup("#addFields");
                     for (Node n : addFields.getChildren()) {
                         if (n instanceof TextField) {
                             ((TextField) n).setText("");
+                        }
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
                         }
                     }
                     addFields = (AnchorPane) scene.lookup("#addFacilities");
                     for (Node n : addFields.getChildren()) {
                         if (n instanceof TextField) {
                             ((TextField) n).setText("");
+                        }
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
                         }
                     }
 
@@ -639,12 +672,12 @@ public class RoomPageContent {
     }
 
     /**
-     * Setter for the localDate.
+     * Getter for the hoursFrom.
      *
-     * @param date the new LocalDate.
+     * @return the String with the hoursFrom
      */
-    public static void setDate(LocalDate date) {
-        RoomPageContent.date = date;
+    public static String getHoursFrom() {
+        return hoursFrom;
     }
 
     /**
@@ -657,24 +690,6 @@ public class RoomPageContent {
     }
 
     /**
-     * Setter for the hoursTil field.
-     *
-     * @param hoursTil String with the new hoursTil.
-     */
-    public static void setHoursTil(String hoursTil) {
-        RoomPageContent.hoursTil = hoursTil;
-    }
-
-    /**
-     * Getter for the hoursFrom.
-     *
-     * @return the String with the hoursFrom
-     */
-    public static String getHoursFrom() {
-        return hoursFrom;
-    }
-
-    /**
      * Getter for the hoursTil.
      *
      * @return the String with the hoursTil
@@ -684,11 +699,86 @@ public class RoomPageContent {
     }
 
     /**
+     * Setter for the hoursTil field.
+     *
+     * @param hoursTil String with the new hoursTil.
+     */
+    public static void setHoursTil(String hoursTil) {
+        RoomPageContent.hoursTil = hoursTil;
+    }
+
+    /**
      * Getter for the localDate.
      *
      * @return LocalDate
      */
     public static LocalDate getDate() {
         return date;
+    }
+
+    /**
+     * Setter for the localDate.
+     *
+     * @param date the new LocalDate.
+     */
+    public static void setDate(LocalDate date) {
+        RoomPageContent.date = date;
+    }
+
+    private static void deleteRooms(MouseEvent event) {
+        // if(deleteRoomList.size() == 0)
+        //   return;
+        String verification = "OK";
+        for (int i = 0; i < deleteRoomList.size(); i++) {
+            String index = deleteRoomList.get(i);
+
+            String message = ServerCommunication.sendDeleteRoom(index.split(";")[0]);
+            if (!message.equals("OK")) {
+                verification = "NOT OK";
+                break;
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (verification.equals("NOT OK")) {
+            alert.setContentText("Something goes wrong during the procedure!" + "\n" + " Please try again!");
+        } else {
+            alert.setContentText("The operation has been successfully done!");
+            reloadRooms();
+        }
+        alert.showAndWait();
+
+    }
+
+    /**
+     * Reloads the rooms, after an operation is done.
+     */
+    public static void reloadRooms() {
+        if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+            try {
+                JSONParser json = new JSONParser();
+                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+                databaseRooms = rooms;
+                for (int i = 0; i < rooms.size(); i++) {
+                    selectedRooms.add((JSONObject) rooms.get(i));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        addRooms();
+    }
+
+    public static String getMenu() {
+        return menu;
+    }
+
+    public static void setMenu(String menuValue) {
+        menu = menuValue;
+    }
+
+    public static void setAdminAdd(boolean admin) {
+        adminAdded = admin;
+
     }
 }

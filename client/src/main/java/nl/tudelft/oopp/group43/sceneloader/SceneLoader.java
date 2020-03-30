@@ -33,6 +33,7 @@ public class SceneLoader extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
+        RoomPageContent.setAdminAdd(false);
 
         switch (sceneString) {
             case "building":
@@ -244,4 +245,5 @@ public class SceneLoader extends Application {
     public static void setScene(String newScene) {
         sceneString = newScene;
     }
+
 }
