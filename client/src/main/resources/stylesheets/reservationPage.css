@@ -1,5 +1,14 @@
 .reservation-label {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 25;
     -fx-font-weight: bold;
+    -fx-text-fill: black;
+}
+
+.time-label {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 18;
+    -fx-text-fill: black;
 }
 
 .reservation-box {

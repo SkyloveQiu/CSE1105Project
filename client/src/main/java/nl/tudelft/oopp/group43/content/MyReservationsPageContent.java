@@ -1,16 +1,14 @@
 package nl.tudelft.oopp.group43.content;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -25,11 +23,21 @@ public class MyReservationsPageContent {
     private static JSONArray jsonArray;
     private static GridPane gp;
 
+    /**
+     * Adds content to the My Reservations Page.
+     *
+     * @param currentScene the current scene.
+     */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
         addReservations();
+        ScrollPane sp = (ScrollPane) scene.lookup("#reservationScroll");
+        sp.setContent(gp);
     }
 
+    /**
+     * Adds the reservations to the gridpane.
+     */
     private static void addReservations() {
         gp = (GridPane) scene.lookup("#reservations");
         JSONParser jsonParser = new JSONParser();
@@ -38,56 +46,55 @@ public class MyReservationsPageContent {
             createGrid();
             for (int i = 0; i < jsonArray.size(); i++) {
                 AnchorPane reservation = new AnchorPane();
-                reservation.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                Label userLabel = new Label();
+                //reservation.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 Label timeLabel = new Label();
                 Label roomLabel = new Label();
-                userLabel.getStyleClass().add("reservation-label");
-                timeLabel.getStyleClass().add("reservation-label");
+                timeLabel.getStyleClass().add("time-label");
                 roomLabel.getStyleClass().add("reservation-label");
                 reservation.getStyleClass().add("reservation-box");
                 JSONObject obj = (JSONObject) jsonArray.get(i);
-                JSONObject user = (JSONObject) obj.get("user");
-                userLabel.setText("Reserved by: " + user.get("first_name") + " " + user.get("last_name") + "\n" + user.get("username"));
-                timeLabel.setText("Reserved from " + obj.get("starting_date") + " to " + obj.get("end_date"));
+                String startDate = getFancyText((String) obj.get("starting_date"));
+                String endDate = getFancyText((String) obj.get("end_date"));
+                timeLabel.setText("The room is reserved from " + startDate + " to " + endDate);
                 roomLabel.setText("Room number " + obj.get("room_id"));
 
-                AnchorPane.setLeftAnchor(userLabel, 50.0);
                 AnchorPane.setLeftAnchor(timeLabel, 50.0);
                 AnchorPane.setLeftAnchor(roomLabel, 50.0);
 
                 AnchorPane.setTopAnchor(roomLabel, 10.0);
-                AnchorPane.setTopAnchor(timeLabel, 30.0);
-                AnchorPane.setTopAnchor(userLabel, 50.0);
+                AnchorPane.setTopAnchor(timeLabel, 50.0);
 
-                reservation.getChildren().add(userLabel);
                 reservation.getChildren().add(roomLabel);
                 reservation.getChildren().add(timeLabel);
                 gp.add(reservation, 0, i);
+
                 //edit button
                 Button editButton = new Button();
-                editButton.setText("Edit");
-                editButton.setMaxWidth(Double.MAX_VALUE);
+                editButton.setMinSize(75.0, 75.0);
+                editButton.setPrefSize(75.0, 75.0);
+                editButton.setMaxSize(75.0, 75.0);
                 editButton.getStyleClass().add("button");
+                ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
+                img.setFitHeight(40.0);
+                img.setFitWidth(40.0);
+                editButton.setGraphic(img);
+
                 //cancel button
                 Button cancelButton = new Button();
-                cancelButton.setText("Cancel");
-                cancelButton.setMaxWidth(Double.MAX_VALUE);
+                cancelButton.setMinSize(75.0, 75.0);
+                cancelButton.setPrefSize(75.0, 75.0);
+                cancelButton.setMaxSize(75.0, 75.0);
                 cancelButton.getStyleClass().add("button");
-                AnchorPane.setBottomAnchor(cancelButton, 0.0);
+                ImageView img2 = new ImageView(new Image("/icons/delete-icon.png"));
+                img2.setFitHeight(40.0);
+                img2.setFitWidth(40.0);
+                cancelButton.setGraphic(img2);
+
                 //vbox
                 VBox box = new VBox();
                 box.getChildren().add(editButton);
                 box.getChildren().add(cancelButton);
-                box.heightProperty().addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        editButton.setPrefHeight((Double) newValue / 2);
-                        cancelButton.setPrefHeight((Double) newValue / 2);
-                    }
-                });
                 gp.add(box, 1, i);
-
 
 
             }
@@ -96,20 +103,92 @@ public class MyReservationsPageContent {
         }
     }
 
+    /**
+     * Creates the empty grid.
+     */
     private static void createGrid() {
-        ColumnConstraints cc = new ColumnConstraints();
-        cc.setPercentWidth(90);
-        gp.getColumnConstraints().add(cc);
-        ColumnConstraints kk = new ColumnConstraints();
-        kk.setPercentWidth(10);
-        gp.getColumnConstraints().add(kk);
-
-        int constraints = jsonArray.size();
         RowConstraints rr = new RowConstraints();
-        rr.setPercentHeight(100 / constraints);
+        rr.setMaxHeight(150.0);
+        rr.setMinHeight(150.0);
+        rr.setPrefHeight(150.0);
+        int constraints = jsonArray.size();
         for (int i = 0; i < constraints; i++) {
             gp.getRowConstraints().add(rr);
         }
         gp.setVgap(20.0);
+    }
+
+    /**
+     * A method to transform a date-time into a more user-friendly text.
+     *
+     * @param date the date to be transformed into fancy text
+     * @return the date in a fancier way: 12-04-2001 10:00 will be returned as 'the 12th of April 10:00'
+     */
+    private static String getFancyText(String date) {
+        String dateMonth = date.substring(5, 7);
+        String dateDay = date.substring(8, 10);
+        String dateYear = date.substring(0, 4);
+        String dateHour = date.substring(11, 16);
+        switch (dateMonth) {
+            case "01":
+                dateMonth = "January";
+                break;
+            case "02":
+                dateMonth = "February";
+                break;
+            case "03":
+                dateMonth = "March";
+                break;
+            case "04":
+                dateMonth = "April";
+                break;
+            case "05":
+                dateMonth = "May";
+                break;
+            case "06":
+                dateMonth = "June";
+                break;
+            case "07":
+                dateMonth = "July";
+                break;
+            case "08":
+                dateMonth = "August";
+                break;
+            case "09":
+                dateMonth = "September";
+                break;
+            case "10":
+                dateMonth = "Oktober";
+                break;
+            case "11":
+                dateMonth = "November";
+                break;
+            case "12":
+                dateMonth = "December";
+                break;
+            default:
+                dateMonth = "NaMonth";
+
+        }
+        int day = Integer.parseInt(dateDay);
+        if ((day == 11 || day == 12) || day == 13) {
+            dateDay = dateDay + "th";
+        } else {
+            switch (day % 10) {
+                case 1:
+                    dateDay = dateDay + "st";
+                    break;
+                case 2:
+                    dateDay = dateDay + "nd";
+                    break;
+                case 3:
+                    dateDay = dateDay + "rd";
+                    break;
+                default:
+                    dateDay = dateDay + "th";
+            }
+        }
+
+        return "the " + dateDay + " of " + dateMonth + " " + dateHour;
     }
 }
