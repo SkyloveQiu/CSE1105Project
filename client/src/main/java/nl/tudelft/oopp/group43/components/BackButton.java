@@ -1,19 +1,19 @@
 package nl.tudelft.oopp.group43.components;
 
-import java.io.IOException;
-import java.util.Stack;
-
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.CalendarPageContent;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
+
+import java.io.IOException;
+import java.util.Stack;
 
 public class BackButton {
 
@@ -63,7 +63,7 @@ public class BackButton {
                 }
             });
         } else {
-            backButton.setImage(null);
+            backButton.setVisible(false);
         }
     }
 
@@ -126,9 +126,17 @@ public class BackButton {
             sceneStack.pop();
             if (!sceneStack.isEmpty()) {
                 String scene = sceneStack.pop();
-                SceneLoader.setScene("scene");
-                SceneLoader sl = new SceneLoader();
-                sl.start(stage);
+                while (!sceneStack.isEmpty() && !ServerCommunication.getToken().equals("invalid") && scene.equals("login")) {
+                    scene = sceneStack.pop();
+                }
+                if (sceneStack.isEmpty()) {
+                    ImageView btn = (ImageView) stage.getScene().lookup("#back_arrow");
+                    btn.setVisible(false);
+                } else {
+                    SceneLoader.setScene(scene);
+                    SceneLoader sl = new SceneLoader();
+                    sl.start(stage);
+                }
             }
         }
     }

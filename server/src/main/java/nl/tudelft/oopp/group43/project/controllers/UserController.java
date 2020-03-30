@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -8,6 +9,7 @@ import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.payload.JwtRespones;
 import nl.tudelft.oopp.group43.project.payload.UserResponse;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
+import nl.tudelft.oopp.group43.project.service.EmailService;
 import nl.tudelft.oopp.group43.project.service.SecurityService;
 import nl.tudelft.oopp.group43.project.service.TokenService;
 import nl.tudelft.oopp.group43.project.service.UserService;
@@ -41,6 +43,9 @@ public class UserController {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private EmailService emailService;
+
     /**
      * post message to set up a new account.
      *
@@ -51,8 +56,6 @@ public class UserController {
      */
     @PostMapping("/registration")
     public ResponseEntity registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-        System.out.println("we have receive message!");
-        System.out.println(userForm.toString());
         userValidator.validate(userForm, bindingResult);
         final String password = userForm.getPassword();
         if (bindingResult.hasErrors()) {
@@ -69,6 +72,7 @@ public class UserController {
         userService.save(userForm);
         User user = securityService.autoLogin(userForm.getUsername(), password);
         tokenService.save(userForm);
+        emailService.sendEmail(user);
         JwtRespones jwtRespones = new JwtRespones(user.getToken(), user.getUsername(), user.getRole(), user.getFirstName(), user.getLastName(), HttpStatus.OK.value());
         return new ResponseEntity<>(jwtRespones, HttpStatus.OK);
     }
@@ -81,7 +85,7 @@ public class UserController {
      * @return the result of the login system.
      */
     @PostMapping("/token")
-    public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) {
+    public ResponseEntity getToken(@RequestParam("username") final String username, @RequestParam("password") final String password) throws UnsupportedEncodingException {
         String usernameDecoded = utf8DecodeValue(username);
         String passwordDecoded = utf8DecodeValue(password);
 
@@ -99,6 +103,7 @@ public class UserController {
 
     /**
      * find the user info by the user token.
+     *
      * @param token the token of the user.
      * @return the result of the request.
      */
@@ -106,11 +111,11 @@ public class UserController {
     public ResponseEntity getName(@RequestParam("token") final String token) {
         User user = userService.findByToken(token);
         if (user == null) {
-            ErrorResponse errorResponse = new ErrorResponse("error","can not find user, please get token again", HttpStatus.FORBIDDEN.value());
-            return new  ResponseEntity<>(errorResponse,HttpStatus.FORBIDDEN);
+            ErrorResponse errorResponse = new ErrorResponse("error", "can not find user, please get token again", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
-        UserResponse userResponse = new UserResponse(user,HttpStatus.OK.value());
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        UserResponse userResponse = new UserResponse(user, HttpStatus.OK.value());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -122,10 +127,59 @@ public class UserController {
 
     /**
      * Decodes a utf8 encoded value.
+     *
      * @param value utf8-encoded string value
      * @return decoded string value
      */
-    private String utf8DecodeValue(String value) {
-        return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    private String utf8DecodeValue(String value) throws UnsupportedEncodingException {
+        return URLDecoder.decode(value, StandardCharsets.UTF_8.name());
+    }
+
+    /**
+     * Change the password of an user based on token.
+     *
+     * @param oldPassword the old password of that user
+     * @param newPassword the new password provided by the user
+     * @param token       the token assigned to a certain user
+     * @return the status of the password change
+     */
+    @PostMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") final String newPassword, @RequestParam(value = "token", defaultValue = "invalid") final String token) throws UnsupportedEncodingException {
+
+        String passwordDecoded = utf8DecodeValue(newPassword);
+
+
+        oldPassword = utf8DecodeValue(oldPassword);
+
+        User user = repository.findUserByToken(token);
+
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Change password error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (repository.findUserByToken(token) == null) {
+            ErrorResponse errorResponse = new ErrorResponse("Change password error", "Invalid token.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        String usernameDecoded = utf8DecodeValue(user.getUsername());
+
+        try {
+            user = securityService.autoLogin(usernameDecoded, oldPassword);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse("Change password error", "Invalid old password.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+
+        user.setPassword(newPassword);
+
+
+        userService.save(user);
+        ErrorResponse okResponse = new ErrorResponse("Change password", "UPDATED PASSWORD", HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
+
+
     }
 }

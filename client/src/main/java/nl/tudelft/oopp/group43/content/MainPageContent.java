@@ -24,7 +24,7 @@ public class MainPageContent {
         Label log = (Label) scene.lookup("#logged_in");
 
         if (!ServerCommunication.getToken().equals("invalid")) {
-            log.setText(ServerCommunication.getUsername());
+            log.setText(ServerCommunication.getFirstName() + " " + ServerCommunication.getLastName());
             log.setStyle("-fx-text-fill: #e7f2fe;");
         } else {
             log.setText("Sign-In");
