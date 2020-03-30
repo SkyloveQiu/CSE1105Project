@@ -1,87 +1,160 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.List;
+import nl.tudelft.oopp.group43.project.models.Bike;
+import nl.tudelft.oopp.group43.project.models.BikeReservation;
+import nl.tudelft.oopp.group43.project.models.Building;
+import nl.tudelft.oopp.group43.project.models.User;
+import nl.tudelft.oopp.group43.project.repositories.BikeRepository;
+import nl.tudelft.oopp.group43.project.repositories.BikeReservationRepository;
+import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.ResponseEntity;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(BikeController.class)
-class BikeControllerTest {
+public class BikeControllerTest {
 
-    private String token;
+    @Mock
+    private BikeRepository mockBikeRepository;
+    @Mock
+    private BikeReservationRepository mockReservationRepository;
+    @Mock
+    private BuildingRepository mockBuildingRepository;
+    @Mock
+    private UserRepository mockUserRepository;
 
-    private String reservationId;
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private BikeController bikeControllerUnderTest;
 
-    @BeforeEach
-    void init() throws Exception {
-        MvcResult result = mockMvc.perform(post("/token")
-                .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "123456789"))
-                .andExpect(status().isOk())
-                .andReturn();
-        String response = result.getResponse().getContentAsString();
-        token = JsonPath.read(response, "$.token");
+    @Before
+    public void setUp() {
+        initMocks(this);
     }
 
     @Test
-    void getBikeTest() throws Exception {
-        mockMvc.perform(get("/bike/0")
-                .contentType("application/json"))
-                .andExpect(status().isOk());
+    public void testGetBike() {
+        final Building building = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockBuildingRepository.findBuildingByBuildingNumber(0)).thenReturn(building);
+
+
+        final List<Bike> bikes = Arrays.asList(new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false));
+        when(mockBikeRepository.findBikesByBuilding(any(Building.class))).thenReturn(bikes);
+
+
+        final List<Bike> result = bikeControllerUnderTest.getBike(0);
+
+        assertNotNull(result);
+
+
     }
 
     @Test
-    void getReservations() throws Exception {
-        mockMvc.perform(post("/bikeReservation/user")
-                .contentType("application/json")
-                .param("token", token))
-                .andExpect(status().isOk());
-    }
+    public void testCreateBike() {
 
+        final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+
+        final Building building = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockBuildingRepository.findBuildingByBuildingNumber(0)).thenReturn(building);
+
+
+        final Bike bike = new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false);
+        when(mockBikeRepository.save(any(Bike.class))).thenReturn(bike);
+
+
+        final ResponseEntity result = bikeControllerUnderTest.createBike(0, "token");
+
+        assertNotNull(result);
+    }
 
     @Test
-    void createWrongBuildingTest() throws Exception {
-        mockMvc.perform(post("/bike")
-                .param("Building", "10")
-                .contentType("application/json")
-                .param("token", token))
-                .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
+    public void testCreateReservation() {
+
+        final Bike bike = new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false);
+        when(mockBikeRepository.findBikeBybikeId(0)).thenReturn(bike);
+
+
+        final Bike bike1 = new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false);
+        when(mockBikeRepository.save(any(Bike.class))).thenReturn(bike1);
+
+
+        final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+        when(mockReservationRepository.save(any(BikeReservation.class))).thenReturn(new BikeReservation());
+
+
+        final ResponseEntity result = bikeControllerUnderTest.createReservation(0, "token");
+
+        assertNotNull(result);
     }
 
     @Test
-    void createReservation() throws Exception {
-        mockMvc.perform(post("/bikeReservation/create")
-                .param("BikeId", "-1")
-                .contentType("application/json")
-                .param("token", token))
-                .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
-    }
+    public void testCreateReservationWithTime() {
 
+        final Bike bike = new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false);
+        when(mockBikeRepository.findBikeBybikeId(0)).thenReturn(bike);
+
+
+        final Bike bike1 = new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false);
+        when(mockBikeRepository.save(any(Bike.class))).thenReturn(bike1);
+
+
+        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+        when(mockReservationRepository.save(any(BikeReservation.class))).thenReturn(new BikeReservation());
+
+
+        final ResponseEntity result = bikeControllerUnderTest.createReservationWithTime(0, "token", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime());
+
+        assertNotNull(result);
+    }
 
     @Test
-    void returnTheBikeFail() throws Exception {
-        MvcResult result = mockMvc.perform(post("/bikeReservation/create")
-                .param("BikeId", "-1")
-                .param("reservationId", "-2")
-                .contentType("application/json")
-                .param("token", token))
-                .andExpect(status().is(HttpStatus.FORBIDDEN.value()))
-                .andReturn();
+    public void testFindUserReservations() {
+        final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+        when(mockReservationRepository.findByUser(any(User.class))).thenReturn(Arrays.asList(new BikeReservation()));
+
+        final List<BikeReservation> result = bikeControllerUnderTest.findUserReservations("token");
+
+        assertNotNull(result);
     }
 
-
+    //    @Test
+    //    public void testCloseReservation() {
+    //
+    //        when(mockReservationRepository.findBybikeReservationId(0)).thenReturn(new BikeReservation());
+    //
+    //
+    //        final Building building = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //        when(mockBuildingRepository.findBuildingByBuildingNumber(0)).thenReturn(building);
+    //
+    //
+    //        final Bike bike = new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false);
+    //        when(mockBikeRepository.save(any(Bike.class))).thenReturn(bike);
+    //
+    //        when(mockReservationRepository.save(any(BikeReservation.class))).thenReturn(new BikeReservation());
+    //
+    //
+    //        final ResponseEntity result = bikeControllerUnderTest.closeReservation(0, "token", 0);
+    //
+    //        assertNotNull(result);
+    //    }
 }
