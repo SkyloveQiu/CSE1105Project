@@ -1,81 +1,147 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import com.jayway.jsonpath.JsonPath;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
+import nl.tudelft.oopp.group43.project.models.User;
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
+import nl.tudelft.oopp.group43.project.service.SecurityService;
+import nl.tudelft.oopp.group43.project.service.TokenService;
+import nl.tudelft.oopp.group43.project.service.UserService;
+import nl.tudelft.oopp.group43.project.validator.UserValidator;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 
+public class UserControllerTest {
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(UserController.class)
-class UserControllerTest {
+    @Mock
+    private UserService mockUserService;
+    @Mock
+    private SecurityService mockSecurityService;
+    @Mock
+    private UserValidator mockUserValidator;
+    @Mock
+    private TokenService mockTokenService;
+    @Mock
+    private UserRepository mockRepository;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private UserController userControllerUnderTest;
+
+    @Before
+    public void setUp() {
+        initMocks(this);
+    }
+
+    //    @Test
+    //    public void testRegistration() {
+    //        final User userForm = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //        final BindingResult bindingResult = null;
+    //        final Model model = null;
+    //
+    //        final User user = new User("email1", "firstName", "lastName", "password", "role", "token1", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //        when(mockSecurityService.autoLogin("username", "password")).thenReturn(user);
+    //
+    //        final ResponseEntity result = userControllerUnderTest.registration(userForm, bindingResult, model);
+    //
+    //        verify(mockUserValidator).validate(any(Object.class), any(Errors.class));
+    //        verify(mockUserService).save(any(User.class));
+    //        verify(mockTokenService).save(any(User.class));
+    //    }
 
     @Test
-    void loginTest() throws Exception {
+    public void testGetToken() throws Exception {
+        // Setup
 
-        MvcResult result = mockMvc.perform(post("/token")
-                .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "123456789"))
-                .andExpect(status().isOk())
-                .andReturn();
-        String response = result.getResponse().getContentAsString();
-        String token = JsonPath.read(response, "$.token");
-        mockMvc.perform(post("/api/hello")
-                .header("authorization", "Bearer" + token)
-                .contentType("application/json"))
-                .andExpect(status().isOk());
+        // Configure SecurityService.autoLogin(...).
+        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockSecurityService.autoLogin("username", "password")).thenReturn(user);
 
+        // Run the test
+        final ResponseEntity result = userControllerUnderTest.getToken("username", "password");
+
+        // Verify the results
+        verify(mockTokenService).save(any(User.class));
+    }
+
+    //    @Test(expected = UnsupportedEncodingException.class)
+    //    public void testGetToken_ThrowsUnsupportedEncodingException() throws Exception {
+    //        Assertions.assertThrows(UnsupportedEncodingException.class, () -> {
+    //            final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //            when(mockSecurityService.autoLogin("username", "password")).thenReturn(user);
+    //
+    //            userControllerUnderTest.getToken("username", "password");
+    //        });
+    //    }
+
+    @Test
+    public void testGetName() {
+        // Setup
+
+        // Configure UserService.findByToken(...).
+        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserService.findByToken("token")).thenReturn(user);
+
+        // Run the test
+        final ResponseEntity result = userControllerUnderTest.getName("token");
+
+        // Verify the results
     }
 
     @Test
-    void getNameTest() throws Exception {
-        MvcResult result = mockMvc.perform(post("/token")
-                .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "123456789"))
-                .andExpect(status().isOk())
-                .andReturn();
-        String response = result.getResponse().getContentAsString();
-        String token = JsonPath.read(response, "$.token");
-        mockMvc.perform(post("/name")
-                .param("token", token)
-                .contentType("application/json"))
-                .andExpect(status().isOk());
+    public void testGet() {
+        // Setup
+
+        // Run the test
+        final String result = userControllerUnderTest.get();
+
+        // Verify the results
+        assertNotNull(result);
     }
 
-    @Test
-    void getWrongPassword() throws Exception {
-        MvcResult result = mockMvc.perform(post("/token")
-                .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "12345678"))
-                .andExpect(status().is(HttpStatus.FORBIDDEN.value()))
-                .andReturn();
-    }
+    //    @Test
+    //    public void testChangePassword() throws Exception {
+    //
+    //        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //        when(mockRepository.findUserByToken("token")).thenReturn(user);
+    //
+    //
+    //        final User user1 = new User("email1", "firstName", "lastName", "password", "role", "token1", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //        when(mockSecurityService.autoLogin("username", "password")).thenReturn(user1);
+    //
+    //        // Run the test
+    //        final ResponseEntity result = userControllerUnderTest.changePassword("oldPassword", "newPassword", "token");
+    //
+    //        // Verify the results
+    //        verify(mockUserService).save(any(User.class));
+    //    }
 
-    @Test
-    void registerDupicateUser() throws Exception {
-        MvcResult result = mockMvc.perform(post("/registration")
-                .contentType("application/json")
-                .param("username", "ziang.qiu@gmail.com")
-                .param("password", "12345678")
-                .param("firstName", "Ziang")
-                .param("lastName", "Qiu")
-                .param("role", "student"))
-                .andExpect(status().is(HttpStatus.FORBIDDEN.value()))
-                .andReturn();
-    }
-
+    //    @Test(expected = UnsupportedEncodingException.class)
+    //    public void testChangePassword_ThrowsUnsupportedEncodingException() throws Exception {
+    //        // Setup
+    //
+    //        // Configure UserRepository.findUserByToken(...).
+    //        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //        when(mockRepository.findUserByToken("token")).thenReturn(user);
+    //
+    //        // Configure SecurityService.autoLogin(...).
+    //        final User user1 = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+    //        when(mockSecurityService.autoLogin("username", "password")).thenReturn(user1);
+    //
+    //        // Run the test
+    //        userControllerUnderTest.changePassword("oldPassword", "newPassword", "token");
+    //    }
 }

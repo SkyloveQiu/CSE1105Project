@@ -1,132 +1,100 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import nl.tudelft.oopp.group43.project.models.Building;
+import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
-
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.ResponseEntity;
 
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
+public class BuildingControllerTest {
 
+    @Mock
+    private BuildingRepository mockRepository;
+    @Mock
+    private UserRepository mockUserRepository;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(BuildingController.class)
-@EnableAutoConfiguration
-@AutoConfigureMockMvc
-@Transactional
-class BuildingControllerTest {
+    @InjectMocks
+    private BuildingController buildingControllerUnderTest;
 
-    private static String token;
-
-    private Building building;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private BuildingRepository buildingRepository;
-
-    @BeforeEach
-    void init() throws Exception {
-        MvcResult result = mockMvc.perform(post("/token")
-            .contentType("application/json")
-            .param("username", "admin@tudelft.nl")
-            .param("password", "12345678"))
-            .andExpect(status().isOk())
-            .andReturn();
-        String response = result.getResponse().getContentAsString();
-
-        token = JsonPath.read(response, "$.token");
-
-
-        building = new Building(9999, "NICE BUILDING", "straat", "9999");
-
-    }
-
-    /**
-     * Deletes the created building.
-     *
-     * @throws Exception throws an exception based on the error
-     */
-    @AfterEach
-    public void uninit() throws Exception {
-        if (buildingRepository.existsBuildingByBuildingNumber(9999)) {
-            mockMvc.perform(RestDocumentationRequestBuilders.delete("/building/9999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .param("token", token));
-        }
+    @Before
+    public void setUp() {
+        initMocks(this);
     }
 
     @Test
-    void getBuildingTest() throws Exception {
-        mockMvc.perform(get("/building")
-            .contentType("application/json"))
-            .andExpect(status().isOk());
-    }
+    public void testGetBuilding() {
 
-    // {"building_number":33,"building_name":"EWI","address":"32","opening_hours":"32"}
+        final List<Building> buildings = Arrays.asList(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()));
+        when(mockRepository.findAll()).thenReturn(buildings);
 
-    @Test
-    void postNewBuildingWithNoAdminRights() throws Exception {
-        mockMvc.perform(post("/building")
-            .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(building))
-            .param("token", "invalid"))
-            .andExpect(status().is4xxClientError());
+        final List<Building> result = buildingControllerUnderTest.getBuilding();
+
+        assertNotNull(result);
+
     }
 
     @Test
-    void addAndUpdateNewBuilding() throws Exception {
-        mockMvc.perform(post("/building")
-            .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(building))
-            .param("token", token))
-            .andExpect(status().isOk());
+    public void testCreateBuilding() {
 
-        building.setBuildingName("EXTREMELY NICE BUILDING");
+        final Building newBuilding = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
-        mockMvc.perform(post("/building/update")
-            .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(building))
-            .param("token", token))
-            .andExpect(status().isOk());
+
+        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+        when(mockRepository.existsBuildingByBuildingNumber(0)).thenReturn(false);
+
+
+        final Building building = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockRepository.save(any(Building.class))).thenReturn(building);
+
+        final ResponseEntity result = buildingControllerUnderTest.createBuilding(newBuilding, "token");
+
+        assertNotNull(result);
     }
 
     @Test
-    void addAndThenDeleteBuilding() throws Exception {
-        mockMvc.perform(post("/building")
-            .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(building))
-            .param("token", token))
-            .andExpect(status().isOk());
+    public void testUpdateBuilding() {
 
-        assertEquals(true, buildingRepository.existsBuildingByBuildingNumber(9999));
+        final Building newBuilding = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/building/9999")
-            .contentType(MediaType.APPLICATION_JSON)
-            .param("token", token));
 
-        assertEquals(false, buildingRepository.existsBuildingByBuildingNumber(9999));
+        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+
+        final Building building = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockRepository.save(any(Building.class))).thenReturn(building);
+
+
+        final ResponseEntity result = buildingControllerUnderTest.updateBuilding(newBuilding, "token");
+
+        assertNotNull(result);
 
 
     }
 
+    @Test
+    public void testRemoveBuilding() {
+
+        final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+        final ResponseEntity result = buildingControllerUnderTest.removeBuilding(0, "token");
+
+        verify(mockRepository).deleteById(0);
+    }
 }
