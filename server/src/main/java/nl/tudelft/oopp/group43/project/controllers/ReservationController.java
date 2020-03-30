@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -126,6 +127,34 @@ public class ReservationController {
             ReservationResponse roomReservation = new ReservationResponse("Room RESERVED", HttpStatus.OK.value());
             return new ResponseEntity<>(roomReservation, HttpStatus.OK);
         }
+    }
+
+    /**
+     * Deletes a reservation as admin or user.
+     *
+     * @param reservationId the id of the reservation
+     * @param token         the admin/user token
+     * @return a http message
+     */
+    @DeleteMapping("reservation/{reservationId}")
+    @ResponseBody
+    public ResponseEntity removeReservation(@PathVariable int reservationId, @RequestParam(value = "token", defaultValue = "invalid") String token) {
+
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Reservation delete error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (!userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+            System.out.print("");
+        } else if (userRepository.findUserByToken(token) == null || repository.getByReservationId(reservationId) == null || !userRepository.findUserByToken(token).getUsername().equals(repository.getByReservationId(reservationId))) {
+            ErrorResponse errorResponse = new ErrorResponse("Reservation delete error", "Only the administrator or user can delete reservations.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        repository.deleteById(reservationId);
+        ErrorResponse okResponse = new ErrorResponse("Reservation deleted", "Reservation: " + reservationId, HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
     }
 
 }

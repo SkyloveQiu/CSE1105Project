@@ -18,4 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
         Date startingDate,
         Date endDate,
         int roomId);
+
+    Reservation getByReservationId(int id);
 }

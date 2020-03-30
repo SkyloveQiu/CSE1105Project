@@ -9,14 +9,18 @@ import java.util.Set;
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
 
+import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.payload.RoomAttributesUpdater;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
+import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.joda.time.DateTime;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +41,9 @@ public class RoomController {
     @Autowired
     private BuildingRepository buildingRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/room")
     @ResponseBody
     public List<Room> getRoom() {
@@ -55,17 +62,30 @@ public class RoomController {
      */
     @PostMapping("/room")
     @ResponseBody
-    public String createRoom(@RequestBody Room newRoom) {
+    public ResponseEntity createRoom(@RequestBody Room newRoom, @RequestParam(value = "token", defaultValue = "invalid") String token) {
+
+
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Room creation error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+            ErrorResponse errorResponse = new ErrorResponse("Room creation error", "Only the administrator can create new rooms.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+
         roomRepository.save(newRoom);
-
         Thread updateData = new Thread(new RoomAttributesUpdater());
-
         if (!RoomAttributesUpdater.isRunning()) {
             updateData.start();
         }
 
+        ErrorResponse okResponse = new ErrorResponse("New building created", "NEW ROOM: " + newRoom.getRoomName(), HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
 
-        return "NEW ROOM: " + newRoom.getRoomName();
+
     }
 
     /**
@@ -253,13 +273,27 @@ public class RoomController {
      */
     @DeleteMapping("room/{roomId}")
     @ResponseBody
-    public void removeRoom(@PathVariable int roomId) {
+    public ResponseEntity removeRoom(@PathVariable int roomId, @RequestParam(value = "token", defaultValue = "invalid") String token) {
+
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Room delete error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+            ErrorResponse errorResponse = new ErrorResponse("Room delete error", "Only the administrator can delete rooms.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
         roomRepository.deleteById(roomId);
 
         Thread updateData = new Thread(new RoomAttributesUpdater());
         if (!RoomAttributesUpdater.isRunning()) {
             updateData.start();
         }
+
+        ErrorResponse okResponse = new ErrorResponse("Room deleted", "DELETED ROOM: " + roomId, HttpStatus.OK.value());
+        return new ResponseEntity<>(okResponse, HttpStatus.OK);
     }
 
 

@@ -3,8 +3,7 @@ package nl.tudelft.oopp.group43.project.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.net.URLDecoder;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
@@ -89,7 +88,7 @@ public class User implements java.io.Serializable {
                 @JsonProperty("last_name") String lastName,
                 @JsonProperty("username") String username,
                 @JsonProperty("role") String role
-    ) {
+    ) throws UnsupportedEncodingException {
         this.password = utf8DecodeValue(password);
         this.firstName = utf8DecodeValue(firstName);
         this.lastName = utf8DecodeValue(lastName);
@@ -102,8 +101,8 @@ public class User implements java.io.Serializable {
      * @param value utf8-encoded string value
      * @return decoded string value
      */
-    private String utf8DecodeValue(String value) {
-        return URLDecoder.decode(value, StandardCharsets.UTF_8);
+    private String utf8DecodeValue(String value) throws UnsupportedEncodingException {
+        return  java.net.URLDecoder.decode(value, StandardCharsets.UTF_8.name());
     }
 
     @Id
@@ -147,7 +146,6 @@ public class User implements java.io.Serializable {
     }
 
 
-    @JsonIgnore
     @Column(name = "role")
     public String getRole() {
         return this.role;

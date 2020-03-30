@@ -36,12 +36,12 @@
           <RowConstraints percentHeight="100.0" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <Button maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onMouseClicked="#navigateToRooms" style="-fx-background-color: lightskyblue; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10;" text="Rooms">
+            <Button maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#navigateToRooms" style="-fx-background-color: lightskyblue; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10;" text="Rooms">
                <font>
                   <Font name="Arial" size="35.0" />
                </font></Button>
 
-            <Button maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" style="-fx-background-color: lightskyblue; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10;" text="Calendar" GridPane.columnIndex="1">
+            <Button maxHeight="Infinity" maxWidth="Infinity" mnemonicParsing="false" onAction="#navigateToCalendar" style="-fx-background-color: lightskyblue; -fx-background-radius: 10 10 10 10; -fx-border-radius: 10 10 10 10;" text="Calendar" GridPane.columnIndex="1">
                <font>
                   <Font name="Arial" size="35.0" />
                </font></Button>
