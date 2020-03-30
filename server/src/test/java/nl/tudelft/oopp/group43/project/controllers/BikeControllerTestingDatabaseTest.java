@@ -39,7 +39,7 @@ class BikeControllerTestingDatabaseTest {
 
     @Test
     void getBikeTest() throws Exception {
-        mockMvc.perform(get("/bike/0")
+        mockMvc.perform(get("/bike/1")
                 .contentType("application/json"))
                 .andExpect(status().isOk());
     }
