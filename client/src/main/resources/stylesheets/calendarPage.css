@@ -4,13 +4,13 @@
  */
 
  * {
-     -style1-color: rgba(119.0, 192.0, 75.0, 0.9);
-     -style2-color: rgba(65.0, 143.0, 203.0, 0.9);
-     -style3-color: rgba(247.0, 209.0, 91.0, 0.9);
-     -style4-color: rgba(157.0, 91.0, 159.0, 0.9);
-     -style5-color: rgba(208.0, 82.0, 95.0, 0.9);
-     -style6-color: rgba(249.0, 132.0, 75.0, 0.9);
-     -style7-color: rgba(174.0, 102.0, 62.0, 0.9);
+     -style1-color: rgba(119.0, 192.0, 75.0, 0.9); //green
+     -style2-color: rgba(65.0, 143.0, 203.0, 0.9); //blue
+     -style3-color: rgba(247.0, 209.0, 91.0, 0.9); //yellow
+     -style4-color: rgba(157.0, 91.0, 159.0, 0.9); //purple
+     -style5-color: rgba(208.0, 82.0, 95.0, 0.9); //red
+     -style6-color: rgba(249.0, 132.0, 75.0, 0.9); //orange
+     -style7-color: rgba(174.0, 102.0, 62.0, 0.9); //brown
 
      -weekend-fill-color: #464c63;
      -today-fill-color: darkorange;

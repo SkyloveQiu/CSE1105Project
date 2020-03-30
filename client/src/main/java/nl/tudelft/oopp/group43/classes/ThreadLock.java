@@ -4,5 +4,5 @@ public class ThreadLock {
     /**
      * The flag to establish the order of the Threads.
      */
-    public volatile int flag = 0;
+    public static volatile int flag = 0;
 }

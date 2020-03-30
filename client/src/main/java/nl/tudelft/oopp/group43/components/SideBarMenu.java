@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
@@ -21,7 +22,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.content.CalendarPageContent;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
 public class SideBarMenu {
@@ -33,11 +36,13 @@ public class SideBarMenu {
     private Label food;
     private Label calendar;
     private Label profile;
+    private Scene scene;
 
     private final double layoutXExpanded = 0.0;
     private final double layoutXContracted = -228.0;
     private boolean expanded;
     private boolean allowedToContract;
+    private boolean isCalendar = false;
 
     /**
      * Constructor of the slidable sidebar.
@@ -45,6 +50,27 @@ public class SideBarMenu {
      * @param scene scene to which the sidebar will be added.
      */
     public SideBarMenu(Scene scene) {
+        this.scene = scene;
+
+        addSideBar();
+    }
+
+    /**
+     * Constructor of the slidable sidebar.
+     *
+     * @param scene scene to which the sidebar will be added.
+     */
+    public SideBarMenu(Scene scene, String calendar) {
+        this.scene = scene;
+
+        this.isCalendar = true;
+        addSideBar();
+    }
+
+    /**
+     * Adds all components of the side bar + its events.
+     */
+    private void addSideBar() {
         expanded = false;
         allowedToContract = false;
 
@@ -194,12 +220,30 @@ public class SideBarMenu {
         node.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                SceneLoader.setScene(event);
-                SceneLoader sl = new SceneLoader();
-                try {
-                    sl.start((Stage) ((Node) e.getSource()).getScene().getWindow());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                // Checks if the current scene is the calendar, and if any entries have been added that need to be saved.
+                if (isCalendar && CalendarPageContent.areEntriesAdded()) {
+                    CalendarPageContent.saveEntries();
+                    while (ThreadLock.flag != 0) {
+                        Alert waitForSave = new Alert(Alert.AlertType.WARNING);
+                        waitForSave.setContentText("Please wait for the calendar to save all entries of the calendar!");
+                        waitForSave.showAndWait();
+                    }
+
+                    SceneLoader.setScene(event);
+                    SceneLoader sl = new SceneLoader();
+                    try {
+                        sl.start((Stage) ((Node) e.getSource()).getScene().getWindow());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    SceneLoader.setScene(event);
+                    SceneLoader sl = new SceneLoader();
+                    try {
+                        sl.start((Stage) ((Node) e.getSource()).getScene().getWindow());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
