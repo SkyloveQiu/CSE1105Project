@@ -296,5 +296,18 @@ public class RoomController {
         return new ResponseEntity<>(okResponse, HttpStatus.OK);
     }
 
+    /**
+     * get the roomName.
+     *
+     * @param roomId the number of building you want to get.
+     * @return the result.
+     */
+    @GetMapping("/room/getName/{roomId}")
+    @ResponseBody
+    public String getRoomNameBasedOnRoomId(@PathVariable int roomId) {
+        Room room = roomRepository.getRoomById(roomId);
+        return room.getRoomName();
+    }
+
 
 }
