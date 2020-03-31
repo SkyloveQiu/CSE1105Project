@@ -35,16 +35,17 @@ public class ExceptionDates {
 
     /**
      * Describes an exception date.
-     * @param id the id of the exception Date
-     * @param endDate the end date of the exception
-     * @param startingDate the starting date of the exception
+     *
+     * @param id             the id of the exception Date
+     * @param endDate        the end date of the exception
+     * @param startingDate   the starting date of the exception
      * @param buildingNumber the building that has an exception
      */
-    public ExceptionDates(Integer id, Date endDate,Date startingDate,Integer buildingNumber) {
-        this.id=id;
-        this.endDate=endDate;
-        this.startingDate=startingDate;
-        this.buildingNumber=buildingNumber;
+    public ExceptionDates(Integer id, Date endDate, Date startingDate, Integer buildingNumber) {
+        this.id = id;
+        this.endDate = endDate;
+        this.startingDate = startingDate;
+        this.buildingNumber = buildingNumber;
     }
 
 
@@ -52,7 +53,7 @@ public class ExceptionDates {
         return this.id;
     }
 
-    public Integer getBuildingNumber(){
+    public Integer getBuildingNumber() {
         return buildingNumber;
     }
 
