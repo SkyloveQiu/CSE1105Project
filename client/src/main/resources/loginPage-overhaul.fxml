@@ -9,36 +9,55 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.LoginPageController">
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="830.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.LoginPageController">
    <children>
-      <AnchorPane layoutX="418.0" layoutY="79.0" prefHeight="650.0" prefWidth="484.0" style="-fx-background-color: aliceblue; -fx-background-radius: 5 5 5 5;" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="438.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="79.0">
+      <GridPane style="-fx-background-color: transparent;" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
          <children>
-            <Label alignment="CENTER" layoutX="202.0" layoutY="71.0" text="Login" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="71.0">
+            <ImageView fx:id="logo" GridPane.halignment="CENTER" GridPane.valignment="TOP" style="-fx-opacity: 0.6;" fitHeight="300" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="60">
+               <image>
+                  <Image url="@/icons/tu-delft-logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </GridPane>
+
+      <AnchorPane layoutX="418.0" layoutY="79.0" maxHeight="650.0" maxWidth="484.0" style="-fx-background-color: aliceblue; -fx-background-radius: 5 5 5 5;" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="438.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="250.0">
+         <children>
+            <Label alignment="CENTER" layoutX="202.0" layoutY="71.0" text="Login" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="31.0">
                <font>
                   <Font name="Arial" size="56.0" />
                </font>
             </Label>
-            <Label layoutX="100.0" layoutY="160.0" text="Username" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
+            <Label layoutX="100.0" layoutY="120.0" text="Username" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
                <font>
                   <Font name="Arial" size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="email" onAction="#loginClicked" layoutX="100.0" layoutY="186.0" prefHeight="25.0" prefWidth="149.0" promptText="Username/E-mail" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="186.0">
+            <TextField fx:id="email" onAction="#loginClicked" layoutX="100.0" layoutY="186.0" prefHeight="25.0" prefWidth="149.0" promptText="Username/E-mail" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="146.0">
                <font>
                   <Font name="Arial" size="20.0" />
                </font></TextField>
-            <Label fx:id="emailCheck" layoutX="100.0" layoutY="223.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" text="" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="223.0" />
-            <Label layoutX="100.0" layoutY="264.0" text="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
+            <Label fx:id="emailCheck" layoutX="100.0" layoutY="223.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" text="" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="183.0" />
+            <Label layoutX="100.0" layoutY="244.0" text="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="password" onAction="#loginClicked" layoutX="100.0" layoutY="291.0" promptText="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="291.0">
+            <PasswordField fx:id="password" onAction="#loginClicked" layoutX="100.0" layoutY="291.0" promptText="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="231.0">
                <font>
                   <Font name="Arial" size="20.0" />
                </font></PasswordField>
-            <Label fx:id="passwordCheck" layoutX="100.0" layoutY="328.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" text="" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="328.0" />
-            <Button onAction="#loginClicked" alignment="CENTER" layoutX="100.0" layoutY="374.0" mnemonicParsing="false" style="-fx-background-color: darkslateblue; -fx-background-radius: 50 50 50 50; -fx-border-radius: 50 50 50 50; -fx-text-fill: silver;" text="Login" textAlignment="CENTER" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="374.0">
+            <Label fx:id="passwordCheck" layoutX="100.0" layoutY="328.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" text="" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="268.0" />
+            <Button onAction="#loginClicked" alignment="CENTER" layoutX="100.0" layoutY="374.0" mnemonicParsing="false" style="-fx-background-color: darkslateblue; -fx-background-radius: 50 50 50 50; -fx-border-radius: 50 50 50 50; -fx-text-fill: silver;" text="Login" textAlignment="CENTER" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="304.0">
                <font>
                   <Font name="Arial" size="26.0" />
                </font>
