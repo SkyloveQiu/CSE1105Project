@@ -1,37 +1,16 @@
 package nl.tudelft.oopp.group43.communication;
 
-
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.pgssoft.httpclient.HttpClientMock;
-import javafx.application.Application;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.ResourceLock;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
@@ -39,7 +18,7 @@ public class ServerCommunicationTest {
 
     private final String cURL = "http://localhost:8000/";
 
-   @Test
+    @Test
     public void testGetBuildings() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
@@ -227,7 +206,7 @@ public class ServerCommunicationTest {
                 "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&" +
                 "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").doReturn("rooms");
 
-        assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d","e","f", "g", "h", "i", "j", "k"));
+        assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"));
         httpClientMock.verify().get(cURL + "filter?" +
                 "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&" +
                 "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").called();

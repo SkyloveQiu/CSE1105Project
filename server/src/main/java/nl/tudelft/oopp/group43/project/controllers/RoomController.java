@@ -5,16 +5,13 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import nl.tudelft.oopp.group43.project.models.Building;
 import nl.tudelft.oopp.group43.project.models.Room;
-
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.payload.RoomAttributesUpdater;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
-import org.joda.time.DateTime;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -70,7 +67,7 @@ public class RoomController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getRole().equals("admin")) {
             ErrorResponse errorResponse = new ErrorResponse("Room creation error", "Only the administrator can create new rooms.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
@@ -280,7 +277,7 @@ public class RoomController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getRole().equals("admin")) {
             ErrorResponse errorResponse = new ErrorResponse("Room delete error", "Only the administrator can delete rooms.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }

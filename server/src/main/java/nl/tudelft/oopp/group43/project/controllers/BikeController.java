@@ -59,6 +59,10 @@ public class BikeController {
     public ResponseEntity createBike(@RequestParam("Building") final int buildingNumber,@RequestParam("token") String token) {
         User user = userRepository.findUserByToken(token);
         System.out.println(user.getRole());
+        if (user == null) {
+            ErrorResponse errorResponse = new ErrorResponse("creating fail", "no permission", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
         if (!user.getRole().equals("admin")) {
             ErrorResponse errorResponse = new ErrorResponse("creating fail", "no permission", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
