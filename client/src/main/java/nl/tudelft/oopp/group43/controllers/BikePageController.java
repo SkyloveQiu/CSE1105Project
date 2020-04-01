@@ -159,6 +159,40 @@ public class BikePageController {
 
     }
 
+    @FXML
+    private void returnBike(ActionEvent event) throws IOException {
+        if (ServerCommunication.getToken().equals("invalid")) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You are not logged in! Please login!");
+            alert.showAndWait();
+
+            SceneLoader.setScene("login");
+            SceneLoader sl = new SceneLoader();
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+            return;
+        }
+
+        String building = BikePageContent.getSelectedReturnBuilding();
+        if (building.equals("-1")) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You haven't selected a return building!");
+            alert.showAndWait();
+            return;
+        }
+
+        String bike = BikePageContent.getSelectedBike();
+
+        String response = ServerCommunication.returnBike(bike, building);
+        if (!response.equals("OK")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Something went wrong!");
+            alert.showAndWait();
+            return;
+        }
+        closeReturnMenu(event);
+        BikePageContent.refreshRentedBikes();
+    }
+
 }
 
 

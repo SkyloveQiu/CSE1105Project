@@ -106,7 +106,7 @@
                   </content>
                </ScrollPane>
 
-               <Button fx:id="returnBike" maxHeight="Infinity" maxWidth="Infinity" styleClass="menuButtons" text="Return" GridPane.columnIndex="1" GridPane.rowIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
+               <Button fx:id="returnBike" maxHeight="Infinity" maxWidth="Infinity" onAction="#returnBike" styleClass="menuButtons" text="Return" GridPane.columnIndex="1" GridPane.rowIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
             </children>
          </GridPane>
 

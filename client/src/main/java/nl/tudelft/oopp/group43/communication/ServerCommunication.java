@@ -645,6 +645,30 @@ public class ServerCommunication {
 
     }
 
+    public static String getBikesRentedByUser() {
+        String url = cURL + "bikeReservation/user?token=" + getToken();
+        HttpResponse<String> response = post(url);
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    public static String returnBike(String reservationId, String buildingNumber) {
+        String url = cURL + "bikeReservation/return?reservationId=" + reservationId + "&token=" + getToken() + "&buildingNumber=" + buildingNumber;
+        HttpResponse<String> response = post(url);
+        System.out.println(url);
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        if (response.statusCode() != 200) {
+            return "WRONG";
+        }
+        return "OK";
+    }
+
     /**
      * Gives the new password of the user account.
      *

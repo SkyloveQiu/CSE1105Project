@@ -34,6 +34,9 @@ public class BikePageContent {
     private static ArrayList<String> buildingsID;
     private static String selectedBuilding;
 
+    private static ArrayList<String> bikesID;
+    private static String selectedBike;
+
     /**
      * Adds the dynamic content to the bike Page.
      *
@@ -55,6 +58,7 @@ public class BikePageContent {
         });
 
         addBuildings();
+        addRentedBikes();
         disableDatePickerDates();
     }
 
@@ -116,6 +120,79 @@ public class BikePageContent {
     }
 
     /**
+     * Gets the id of the currently selected bike
+     *
+     * @return String with the id of the currently selected bike
+     */
+    public static String getSelectedBike() { return selectedBike; }
+
+    /**
+     * Gets the id of the currently selected building
+     * @return
+     */
+    public static String getSelectedReturnBuilding() {
+        int index = ((ChoiceBox<String>) scene.lookup("#returnBuildingList")).getSelectionModel().getSelectedIndex();
+        if (index == -1) {
+            return "-1";
+        }
+        return buildingsID.get(index);
+    }
+
+    /**
+     * Refreshes the rented bikes in the interface.
+     */
+    public static void refreshRentedBikes() {
+        removeRentedBikes();
+        addRentedBikes();
+    }
+
+    /**
+     * Clears the rented bikes from the interface.
+     */
+    private static void removeRentedBikes() {
+        GridPane returnBikeList = (GridPane) scene.lookup("#returnBikeList");
+        returnBikeList.getRowConstraints().clear();
+        returnBikeList.getChildren().clear();
+    }
+
+    /**
+     * Adds the rented bike to the return bike panel.
+     */
+    private static void addRentedBikes() {
+        GridPane returnBikeList = (GridPane) scene.lookup("#returnBikeList");
+        returnBikeList.setVgap(20);
+
+        JSONParser jsonParser = new JSONParser();
+        try {
+            if (ServerCommunication.getToken().equals("invalid")) return;
+
+            JSONArray array = (JSONArray)jsonParser.parse(ServerCommunication.getBikesRentedByUser());
+            ArrayList<JSONObject> bikes = new ArrayList<>();
+            for (Object obj : array) {
+                bikes.add((JSONObject) obj);
+            }
+
+            for (int i = 0; i < bikes.size(); i++) {
+                RowConstraints rowConstraints = new RowConstraints();
+                rowConstraints.setPrefHeight(50);
+                returnBikeList.getRowConstraints().add(rowConstraints);
+
+                String buildingName = ((JSONObject)bikes.get(i).get("buildingByBuildingStart")).get("building_name").toString();
+                String date = bikes.get(i).get("datetimeStart").toString();
+
+                Label label = new Label(buildingName + " : " + date);
+                label.setId(bikes.get(i).get("bikeReservationId").toString());
+                label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                label.getStyleClass().add("buildingLabels");
+                returnBikeList.add(label, 0, i);
+                addBikeSelectEvent(label, returnBikeList);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Disables all dates in the date picker that are in the past.
      */
     private static void disableDatePickerDates() {
@@ -163,6 +240,35 @@ public class BikePageContent {
                 if (!selected) {
                     label.getStyleClass().add("selected_building");
                     selectedBuilding = label.getId();
+                }
+            }
+        });
+        label.setCursor(Cursor.HAND);
+    }
+
+    /**
+     * Adds an event to the label when it gets clicked.
+     *
+     * @param label the label to add the event to
+     * @param list  the list of the label
+     */
+    private static void addBikeSelectEvent(Label label, GridPane list) {
+        label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                boolean selected = false;
+                if (label.getStyleClass().size() > 2) {
+                    selected = true;
+                }
+
+                for (Node node : list.getChildren()) {
+                    if (node.getStyleClass().size() > 2) {
+                        node.getStyleClass().remove(2);
+                    }
+                }
+                if (!selected) {
+                    label.getStyleClass().add("selected_building");
+                    selectedBike = label.getId();
                 }
             }
         });
