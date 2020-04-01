@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,6 +72,7 @@ public class ReservationController {
      * @return the building details and result.
      * @throws Exception the exception of the create.
      */
+    @Transactional
     @PostMapping("/reservation")
     @ResponseBody
     public ResponseEntity createBuildingReservation(@RequestBody Reservation newReservation,

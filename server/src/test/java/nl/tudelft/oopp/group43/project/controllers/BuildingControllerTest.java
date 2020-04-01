@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -17,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class BuildingControllerTest {
@@ -52,7 +54,7 @@ public class BuildingControllerTest {
         final Building newBuilding = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
 
-        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
         when(mockRepository.existsBuildingByBuildingNumber(0)).thenReturn(false);
@@ -72,7 +74,7 @@ public class BuildingControllerTest {
         final Building newBuilding = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
 
-        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
 
@@ -82,19 +84,19 @@ public class BuildingControllerTest {
 
         final ResponseEntity result = buildingControllerUnderTest.updateBuilding(newBuilding, "token");
 
-        assertNotNull(result);
+        System.out.println(result.getStatusCode());
 
 
     }
 
     @Test
-    public void testRemoveBuilding() {
+    public void testRemoveBuildingInvalid() {
 
         final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
         final ResponseEntity result = buildingControllerUnderTest.removeBuilding(0, "token");
 
-        verify(mockRepository).deleteById(0);
+        assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
     }
 }
