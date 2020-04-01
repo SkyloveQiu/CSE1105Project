@@ -103,50 +103,50 @@ public class RoomControllerTestingDatabaseTest {
             .andExpect(status().is4xxClientError());
     }
 
-//    @Test
-//    public void addAndUpdateNewRoom() throws Exception {
-//        if (buildingRepository.existsBuildingByBuildingNumber(0)) {
-//            mockMvc.perform(post("/room?token=" + token)
-//                .contentType(MediaType.APPLICATION_JSON).content("{\"building\":{\"building_number\":0},\"room_name\":\"32\",\"attributes\":\"32\",\"id\":9999}")
-//            )
-//                .andExpect(status().isOk());
-//
-//            room.setRoomName("EXTREMELY NICE ROOM");
-//
-//            mockMvc.perform(post("/room?token=" + token)
-//                .contentType(MediaType.APPLICATION_JSON).content("{\"building\":{\"building_number\":0},\"room_name\":\"nice room\",\"attributes\":\"32\",\"id\":9999}")
-//            )
-//                .andExpect(status().isOk());
-//
-//            room.setRoomName("nice room");
-//        } else {
-//            assertTrue(true);
-//        }
-//    }
-//
-//    @Test
-//    public void addAndThenDeleteRoom() throws Exception {
-//        if (buildingRepository.existsBuildingByBuildingNumber(0)) {
-//
-//            mockMvc.perform(post("/room")
-//                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(room))
-//                .param("token", token))
-//                .andExpect(status().isOk());
-//
-//            assertEquals(true, roomRepository.existsRoomById(9999));
-//
-//            mockMvc.perform(RestDocumentationRequestBuilders.delete("/room/9999")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .param("token", token));
-//
-//            assertEquals(false, roomRepository.existsRoomById(9999));
-//
-//        } else {
-//            assertTrue(true);
-//        }
-//
-//
-//    }
+    //    @Test
+    //    public void addAndUpdateNewRoom() throws Exception {
+    //        if (buildingRepository.existsBuildingByBuildingNumber(0)) {
+    //            mockMvc.perform(post("/room?token=" + token)
+    //                .contentType(MediaType.APPLICATION_JSON).content("{\"building\":{\"building_number\":0},\"room_name\":\"32\",\"attributes\":\"32\",\"id\":9999}")
+    //            )
+    //                .andExpect(status().isOk());
+    //
+    //            room.setRoomName("EXTREMELY NICE ROOM");
+    //
+    //            mockMvc.perform(post("/room?token=" + token)
+    //                .contentType(MediaType.APPLICATION_JSON).content("{\"building\":{\"building_number\":0},\"room_name\":\"nice room\",\"attributes\":\"32\",\"id\":9999}")
+    //            )
+    //                .andExpect(status().isOk());
+    //
+    //            room.setRoomName("nice room");
+    //        } else {
+    //            assertTrue(true);
+    //        }
+    //    }
+    //
+    //    @Test
+    //    public void addAndThenDeleteRoom() throws Exception {
+    //        if (buildingRepository.existsBuildingByBuildingNumber(0)) {
+    //
+    //            mockMvc.perform(post("/room")
+    //                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(room))
+    //                .param("token", token))
+    //                .andExpect(status().isOk());
+    //
+    //            assertEquals(true, roomRepository.existsRoomById(9999));
+    //
+    //            mockMvc.perform(RestDocumentationRequestBuilders.delete("/room/9999")
+    //                .contentType(MediaType.APPLICATION_JSON)
+    //                .param("token", token));
+    //
+    //            assertEquals(false, roomRepository.existsRoomById(9999));
+    //
+    //        } else {
+    //            assertTrue(true);
+    //        }
+    //
+    //
+    //    }
 
 
 }
