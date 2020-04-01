@@ -120,14 +120,16 @@ public class BikePageContent {
     }
 
     /**
-     * Gets the id of the currently selected bike
+     * Gets the id of the currently selected bike.
      *
      * @return String with the id of the currently selected bike
      */
-    public static String getSelectedBike() { return selectedBike; }
+    public static String getSelectedBike() {
+        return selectedBike;
+    }
 
     /**
-     * Gets the id of the currently selected building
+     * Gets the id of the currently selected building.
      * @return
      */
     public static String getSelectedReturnBuilding() {
@@ -164,7 +166,9 @@ public class BikePageContent {
 
         JSONParser jsonParser = new JSONParser();
         try {
-            if (ServerCommunication.getToken().equals("invalid")) return;
+            if (ServerCommunication.getToken().equals("invalid")) {
+                return;
+            }
 
             JSONArray array = (JSONArray)jsonParser.parse(ServerCommunication.getBikesRentedByUser());
             ArrayList<JSONObject> bikes = new ArrayList<>();

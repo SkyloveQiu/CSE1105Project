@@ -645,6 +645,10 @@ public class ServerCommunication {
 
     }
 
+    /**
+     * Retrieves the bikes that are rented by the user from the server.
+     * @return the bike reservations
+     */
     public static String getBikesRentedByUser() {
         String url = cURL + "bikeReservation/user?token=" + getToken();
         HttpResponse<String> response = post(url);
@@ -655,6 +659,12 @@ public class ServerCommunication {
         return response.body();
     }
 
+    /**
+     * Returns a bike that was reserved by a user.
+     * @param reservationId the reservation id of the bike reservation
+     * @param buildingNumber the building number of the building where the bike was returned
+     * @return status message if something went wrong or not
+     */
     public static String returnBike(String reservationId, String buildingNumber) {
         String url = cURL + "bikeReservation/return?reservationId=" + reservationId + "&token=" + getToken() + "&buildingNumber=" + buildingNumber;
         HttpResponse<String> response = post(url);
