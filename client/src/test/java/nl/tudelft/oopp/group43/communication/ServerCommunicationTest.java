@@ -39,7 +39,7 @@ public class ServerCommunicationTest {
 
     private final String cURL = "http://localhost:8000/";
 
-   @Test
+    @Test
     public void testGetBuildings() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
@@ -62,7 +62,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testConfirmRegistrationOK() {
+    public void testConfirmRegistrationOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -84,7 +84,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testLoginTokenOK() throws ParseException {
+    public void testLoginTokenOk() throws ParseException {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -95,7 +95,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testLoginTokenWRONG() throws ParseException {
+    public void testLoginTokenWrong() throws ParseException {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -106,7 +106,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testGetUserInformationOK() {
+    public void testGetUserInformationOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -195,7 +195,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testSendAddBuildingOK() {
+    public void testSendAddBuildingOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -207,7 +207,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testSendAddBuildingNOTOK() {
+    public void testSendAddBuildingNotOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -223,14 +223,14 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onGet(cURL + "filter?" +
-                "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&" +
-                "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").doReturn("rooms");
+        httpClientMock.onGet(cURL + "filter?"
+                + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
+                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").doReturn("rooms");
 
         assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d","e","f", "g", "h", "i", "j", "k"));
-        httpClientMock.verify().get(cURL + "filter?" +
-                "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&" +
-                "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").called();
+        httpClientMock.verify().get(cURL + "filter?"
+                + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
+                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").called();
     }
 
     @Test
@@ -269,7 +269,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testSendChangePasswordNOTOK() {
+    public void testSendChangePasswordNotOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 

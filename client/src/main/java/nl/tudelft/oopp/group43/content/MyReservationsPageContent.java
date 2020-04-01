@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.content;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,11 +9,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.controllers.MyReservationsPageController;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -78,6 +80,17 @@ public class MyReservationsPageContent {
                 img.setFitHeight(40.0);
                 img.setFitWidth(40.0);
                 editButton.setGraphic(img);
+                int finalI = i;
+                //editButton.onMouseClickedProperty().addListener((v, oldValue, newValue) -> MyReservationsPageController.editReservation(finalI));
+                editButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        Long resId = (Long) obj.get("reservationId");
+                        MyReservationsPageController.editReservation(resId);
+                    }
+                });
+
+
 
                 //cancel button
                 Button cancelButton = new Button();
@@ -89,6 +102,13 @@ public class MyReservationsPageContent {
                 img2.setFitHeight(40.0);
                 img2.setFitWidth(40.0);
                 cancelButton.setGraphic(img2);
+                cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        Long resId = (Long) obj.get("reservationId");
+                        MyReservationsPageController.deleteReservation(resId);
+                    }
+                });
 
                 //vbox
                 VBox box = new VBox();
