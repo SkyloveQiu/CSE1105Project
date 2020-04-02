@@ -668,7 +668,6 @@ public class ServerCommunication {
     public static String returnBike(String reservationId, String buildingNumber) {
         String url = cURL + "bikeReservation/return?reservationId=" + reservationId + "&token=" + getToken() + "&buildingNumber=" + buildingNumber;
         HttpResponse<String> response = post(url);
-        System.out.println(url);
         if (response == null) {
             return "Communication with server failed";
         }
