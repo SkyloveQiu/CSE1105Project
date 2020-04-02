@@ -39,14 +39,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.classes.*;
+import nl.tudelft.oopp.group43.classes.BuildingData;
+import nl.tudelft.oopp.group43.classes.BuildingsConfig;
+import nl.tudelft.oopp.group43.classes.ReservationConfig;
+import nl.tudelft.oopp.group43.classes.ReservationPageContent;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 
 
 public class RoomPageContent {
@@ -579,21 +582,20 @@ public class RoomPageContent {
                     scene.lookup("#grayBackground").setVisible(true);
                     scene.lookup("#editMenu").setVisible(false);
 
-                    ChoiceBox <String> addBuildings = (ChoiceBox <String>) scene.lookup("#addBuildings");
-
                     buildingNumberAdd = Long.valueOf(-1);
 
                     int size = BuildingsConfig.getNumberBuildings();
                     buildings = new ArrayList<>();
 
-                    for(int i =0; i<size; i++)
-                    {
+                    for (int i = 0; i < size; i++) {
                         JSONObject obj = BuildingsConfig.getBuilding(i);
                         buildings.add((String) obj.get("building_name"));
                     }
+
+                    ChoiceBox<String> addBuildings = (ChoiceBox<String>) scene.lookup("#addBuildings");
                     addBuildings.setItems(FXCollections.observableArrayList(buildings));
                     addBuildings.getSelectionModel().selectFirst();
-                    ChangeListener <String> buildingListener = new ChangeListener<String>() {
+                    ChangeListener<String> buildingListener = new ChangeListener<String>() {
                         @Override
                         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                             getBuilding(newValue);
@@ -601,7 +603,6 @@ public class RoomPageContent {
                     };
                     addBuildings.getSelectionModel().selectedItemProperty().removeListener(buildingListener);
                     addBuildings.getSelectionModel().selectedItemProperty().addListener(buildingListener);
-
 
 
                     menu = "add";
@@ -812,29 +813,37 @@ public class RoomPageContent {
 
     }
 
-    private static void  getBuilding(String name) {
-       if(name == null)
-           return;
+    /**
+     * Gets the building_number of a a building with a specific name.
+     *
+     * @param name - String which represents the name of the building
+     */
+    private static void getBuilding(String name) {
+        if (name == null) {
+            return;
+        }
         int size = BuildingsConfig.getNumberBuildings();
 
         long buildingId = -1;
-        for(int i =0 ; i<size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             JSONObject obj = BuildingsConfig.getBuilding(i);
             String buildingName = (String) obj.get("building_name");
-            if(name.equals(buildingName))
-            {
-                 buildingId =  (Long) obj.get("building_number");
-                 break;
+            if (name.equals(buildingName)) {
+                buildingId = (Long) obj.get("building_number");
+                break;
             }
         }
-        buildingNumberAdd =  buildingId;
+        buildingNumberAdd = buildingId;
     }
 
+    /**
+     * Gets the building_number of the building chosen in the Add Menu.
+     *
+     * @return - long value which represents  the building_number of the building chosen in the Add Menu.
+     */
     public static long getBuildingNumberAdd() {
         return buildingNumberAdd;
     }
-
 
 
 }

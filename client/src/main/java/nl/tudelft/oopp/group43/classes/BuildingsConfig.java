@@ -39,9 +39,11 @@ public class BuildingsConfig {
     }
 
     /**
-     * Returns the number of the buildings
+     * Returns the number of the buildings.
      * @return - an integer which represents the number of the buildings.
      */
-    public static int getNumberBuildings(){ return listBuildings.size();}
+    public static int getNumberBuildings() {
+        return listBuildings.size();
+    }
 
 }
