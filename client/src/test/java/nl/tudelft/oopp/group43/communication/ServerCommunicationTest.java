@@ -253,7 +253,7 @@ public class ServerCommunicationTest {
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendBikeRenting("1"));
-        httpClientMock.verify().post(cURL + "bikeReservation/create?BikeIde=1&token=1").called();
+        httpClientMock.verify().post(cURL + "bikeReservation/create?BikeId=1&token=1").called();
     }
 
     @Test
