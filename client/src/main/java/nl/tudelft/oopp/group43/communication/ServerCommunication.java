@@ -666,7 +666,7 @@ public class ServerCommunication {
      * @return status message if something went wrong or not
      */
     public static String returnBike(String reservationId, String buildingNumber) {
-        String url = cURL + "bikeReservation/return?reservationId=" + reservationId + "&token=" + getToken() + "&buildingNumber=" + buildingNumber;
+        String url = cURL + "bikeReservation/return?reservationId=" + reservationId + "&token=" + getToken() + "&building=" + buildingNumber;
         HttpResponse<String> response = post(url);
         if (response == null) {
             return "Communication with server failed";
