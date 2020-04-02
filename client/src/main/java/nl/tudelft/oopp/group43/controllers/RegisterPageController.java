@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,6 +127,17 @@ public class RegisterPageController {
     }
 
     /**
+     * Checks if the input from the user is good for the First Name field.
+     * @param event - the user puts a new character in the First Name field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkFirstName(KeyEvent event) {
+        checkFirstName();
+    }
+
+
+    /**
      * Checks if the first name field is empty and show special messages to the user.
      *
      * @return true if the first name field is not empty, false otherwise
@@ -141,6 +153,17 @@ public class RegisterPageController {
             return true;
         }
     }
+
+    /**
+     * Checks if the input from the user is good for the Last Name field.
+     * @param event - the user puts a new character in the Last Name field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkLastName(KeyEvent event) {
+        checkLastName();
+    }
+
 
     /**
      * Checks if the last name field is empty and show special messages to the user.
@@ -182,6 +205,17 @@ public class RegisterPageController {
     }
 
     /**
+     * Checks if the input from the user is good for the Password field.
+     * @param event - the user puts a new character in the Password field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkPassword(KeyEvent event) {
+        checkPassword();
+    }
+
+
+    /**
      * Checks if the password field is empty and show special messages to the user.
      * + a password must be between 8 and 32 characters
      *
@@ -196,7 +230,11 @@ public class RegisterPageController {
             return false;
         } else {
             if (password.getText().length() < 8 || password.getText().length() > 32) {
-                passwordCheck.setText("The password must have more than 8 characters and maximum 32 characters");
+                if (password.getText().length() < 8) {
+                    passwordCheck.setText("The password must have at least 8 characters");
+                } else {
+                    passwordCheck.setText("The password must have maximum 32 characters");
+                }
                 ok = false;
             } else {
                 passwordCheck.setText("");
@@ -208,9 +246,18 @@ public class RegisterPageController {
                 return ok;
             }
         }
-
-
     }
+
+    /**
+     * Checks if the input from the user is good for the Confirm Password field.
+     * @param event - the user puts a new character in the Confirm Password field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkCPassword(KeyEvent event) {
+        checkCPassword();
+    }
+
 
     /**
      * Checks if the confirm password field is empty and show special messages to the user.
@@ -254,7 +301,7 @@ public class RegisterPageController {
     @SuppressWarnings("unchecked")
     private boolean checkBoxCheck() {
         if (!check.isSelected()) {
-            termsCheck.setText("You have to accept the terms and condtions");
+            termsCheck.setText("You have to accept the terms and conditions");
             return false;
         } else {
             termsCheck.setText("");
