@@ -72,10 +72,10 @@ public class RoomPageController {
     private Label checkSpace;
     @FXML
     private GridPane roomList;
-
+    @FXML
+    private Label checkBuildingNumber;
     @FXML
     private ScrollPane filterPanel;
-
     @FXML
     private Pane grayBackground;
     @FXML
@@ -86,8 +86,6 @@ public class RoomPageController {
     private Label editId;
     @FXML
     private Label addNumberCheck;
-    @FXML
-    private TextField addBuildingId;
     @FXML
     private TextField addRoomNumber;
     @FXML
@@ -210,6 +208,8 @@ public class RoomPageController {
     private Label editWheelchairCheck;
     @FXML
     private Label editRoomNameCheck;
+    @FXML
+    private ChoiceBox<String> addBuildings;
 
 
     /**
@@ -330,6 +330,9 @@ public class RoomPageController {
         grayBackground.setVisible(false);
         addMenu.setVisible(false);
         RoomPageContent.setMenu(null);
+       // RoomPageContent.removeChoiceBox();
+        addBuildings.getItems().clear();
+
     }
 
     /**
@@ -341,7 +344,11 @@ public class RoomPageController {
     @SuppressWarnings("unchecked")
     private void addConfirm(ActionEvent event) {
 
-        boolean ok = !addBuildingId.getText().isEmpty();
+        Long buildingNumber = RoomPageContent.getBuildingNumberAdd();
+        boolean ok = true;
+        if(buildingNumber < 0){
+            ok = false;
+        }
         ok = checkRoomName() && ok;
         ok = checkRoomNumber() && ok;
         ok = checkSpaceType() && ok;
@@ -362,7 +369,8 @@ public class RoomPageController {
         if (ok) {
             System.out.println("dai balan");
             JSONObject building = new JSONObject();
-            building.put("building_number", Long.valueOf(addBuildingId.getText()));
+            building.put("building_number", buildingNumber);
+
 
             JSONObject room = new JSONObject();
             room.put("room_name", addRoomName.getText());
@@ -399,41 +407,6 @@ public class RoomPageController {
 
             alert.showAndWait();
             closeAddMenu();
-        }
-    }
-
-    /**
-     * Checks if the user put a number which is greater than 0 and smaller than long.MAX_VALUE and show a proper message to the user.
-     */
-    private boolean checkBuildingNumber() {
-        if (RoomPageContent.getMenu().equals("add")) {
-            if (addBuildingId.getText().isEmpty()) {
-                addNumberCheck.setText("You cannot have this field empty");
-                return false;
-            }
-            try {
-                String nunmberString = addBuildingId.getText();
-                long number = Long.valueOf(nunmberString);
-                addNumberCheck.setText("");
-                return true;
-            } catch (Exception e) {
-                addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-                return false;
-            }
-        } else {
-            if (addBuildingId.getText().isEmpty()) {
-                addNumberCheck.setText("You cannot have this field empty");
-                return false;
-            }
-            try {
-                String nunmberString = addBuildingId.getText();
-                long number = Long.valueOf(nunmberString);
-                addNumberCheck.setText("");
-                return true;
-            } catch (Exception e) {
-                addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-                return false;
-            }
         }
     }
 

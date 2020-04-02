@@ -39,8 +39,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import nl.tudelft.oopp.group43.classes.ReservationConfig;
-import nl.tudelft.oopp.group43.classes.ReservationPageContent;
+import nl.tudelft.oopp.group43.classes.*;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 import org.json.simple.JSONArray;
@@ -71,6 +70,9 @@ public class RoomPageContent {
     private static ArrayList<String> deleteRoomList = new ArrayList<>();
     private static ArrayList<Button> editButtons;
     private static String menu = "";
+
+    private static ArrayList<String> buildings;
+    private static Long buildingNumberAdd;
 
     /**
      * Adds the content to the room page.
@@ -502,6 +504,9 @@ public class RoomPageContent {
 
         if (!adminAdded) {
             adminAdded = true;
+            ThreadLock lock = new ThreadLock();
+            BuildingData buildingData = new BuildingData(lock);
+            buildingData.run();
 
             ImageView delete = new ImageView();
             delete.setImage(new Image("/icons/delete-icon.png"));
@@ -573,6 +578,31 @@ public class RoomPageContent {
                 public void handle(MouseEvent event) {
                     scene.lookup("#grayBackground").setVisible(true);
                     scene.lookup("#editMenu").setVisible(false);
+
+                    ChoiceBox <String> addBuildings = (ChoiceBox <String>) scene.lookup("#addBuildings");
+
+                    buildingNumberAdd = Long.valueOf(-1);
+
+                    int size = BuildingsConfig.getNumberBuildings();
+                    buildings = new ArrayList<>();
+
+                    for(int i =0; i<size; i++)
+                    {
+                        JSONObject obj = BuildingsConfig.getBuilding(i);
+                        buildings.add((String) obj.get("building_name"));
+                    }
+                    addBuildings.setItems(FXCollections.observableArrayList(buildings));
+                    addBuildings.getSelectionModel().selectFirst();
+                    ChangeListener <String> buildingListener = new ChangeListener<String>() {
+                        @Override
+                        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                            getBuilding(newValue);
+                        }
+                    };
+                    addBuildings.getSelectionModel().selectedItemProperty().removeListener(buildingListener);
+                    addBuildings.getSelectionModel().selectedItemProperty().addListener(buildingListener);
+
+
 
                     menu = "add";
 
@@ -781,4 +811,30 @@ public class RoomPageContent {
         adminAdded = admin;
 
     }
+
+    private static void  getBuilding(String name) {
+       if(name == null)
+           return;
+        int size = BuildingsConfig.getNumberBuildings();
+
+        long buildingId = -1;
+        for(int i =0 ; i<size; i++)
+        {
+            JSONObject obj = BuildingsConfig.getBuilding(i);
+            String buildingName = (String) obj.get("building_name");
+            if(name.equals(buildingName))
+            {
+                 buildingId =  (Long) obj.get("building_number");
+                 break;
+            }
+        }
+        buildingNumberAdd =  buildingId;
+    }
+
+    public static long getBuildingNumberAdd() {
+        return buildingNumberAdd;
+    }
+
+
+
 }
