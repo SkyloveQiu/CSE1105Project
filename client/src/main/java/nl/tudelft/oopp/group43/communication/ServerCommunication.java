@@ -726,5 +726,24 @@ public class ServerCommunication {
 
 
     }
+
+    /**
+     * Gets all food from the server.
+     * @return All foods in json format
+     */
+    public static String getFood() {
+        String url = cURL + "foodProduct";
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    public static String createFoodOrder() {
+        return "";
+    }
 }
 
