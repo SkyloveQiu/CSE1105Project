@@ -34,6 +34,8 @@ public class RegisterPageController {
     @FXML
     private TextField email;
     @FXML
+    private TextField cemail;
+    @FXML
     private CheckBox check;
     @FXML
     private RadioButton employee;
@@ -55,6 +57,8 @@ public class RegisterPageController {
     private Label firstNameCheck;
     @FXML
     private Label lastNameCheck;
+    @FXML
+    private Label cemailCheck;
 
     /**
      * Checks if the email is valid.
@@ -85,6 +89,8 @@ public class RegisterPageController {
         empty = (checkCPassword() && empty);
         empty = (checkRole() && empty);
         empty = (checkBoxCheck() && empty);
+        empty = (checkBoxCheck() && empty);
+        empty = (checkCEmail() && empty);
 
         return empty;
     }
@@ -128,6 +134,7 @@ public class RegisterPageController {
 
     /**
      * Checks if the input from the user is good for the First Name field.
+     *
      * @param event - the user puts a new character in the First Name field.
      */
     @FXML
@@ -156,6 +163,7 @@ public class RegisterPageController {
 
     /**
      * Checks if the input from the user is good for the Last Name field.
+     *
      * @param event - the user puts a new character in the Last Name field.
      */
     @FXML
@@ -190,6 +198,7 @@ public class RegisterPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkEmail() {
+        boolean ok = true;
         if (email.getText().isEmpty()) {
             emailCheck.setText("You did not complete the email field");
             return false;
@@ -199,6 +208,12 @@ public class RegisterPageController {
                 return false;
             } else {
                 emailCheck.setText("");
+            }
+            if (cemail.getText().isEmpty() || !email.getText().equals(cemail.getText())) {
+                cemailCheck.setText("The emails don't match");
+                return false;
+            } else {
+                cemailCheck.setText("");
                 return true;
             }
         }
@@ -206,6 +221,7 @@ public class RegisterPageController {
 
     /**
      * Checks if the input from the user is good for the Password field.
+     *
      * @param event - the user puts a new character in the Password field.
      */
     @FXML
@@ -243,6 +259,7 @@ public class RegisterPageController {
                 cpasswordCheck.setText("The passwords don't match");
                 return false;
             } else {
+                cpasswordCheck.setText("");
                 return ok;
             }
         }
@@ -250,6 +267,7 @@ public class RegisterPageController {
 
     /**
      * Checks if the input from the user is good for the Confirm Password field.
+     *
      * @param event - the user puts a new character in the Confirm Password field.
      */
     @FXML
@@ -337,7 +355,32 @@ public class RegisterPageController {
             roleCheck.setText("");
             return true;
         }
+    }
+
+    @FXML
+
+    private void checkCEmail(KeyEvent event) {
+        checkCEmail();
 
     }
+
+    @FXML
+    private boolean checkCEmail() {
+        if (cemail.getText().isEmpty()) {
+            cemailCheck.setText("You did not complete the confirm email field");
+            return false;
+        } else {
+            if (email.getText().isEmpty() || !email.getText().equals(cemail.getText())) {
+                cemailCheck.setText("The emails don't match");
+                return false;
+            } else {
+                cemailCheck.setText("");
+                return true;
+            }
+        }
+
+    }
+
+
 }
 

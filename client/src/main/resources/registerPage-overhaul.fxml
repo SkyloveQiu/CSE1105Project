@@ -57,9 +57,9 @@
                         <TextField fx:id="email" onKeyTyped="#checkEmail" layoutX="174.0" layoutY="334.0" promptText="Email" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="296.0"><font><Font name="Arial" size="20.0" /></font></TextField>
                         <Label fx:id="emailCheck" layoutX="110.0" layoutY="338.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="333.0"><font><Font name="Arial" size="12.0" /></font></Label>
 
-                        <Label layoutX="120.0" layoutY="284.0" text="Email:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="375.0"><font><Font size="18.0" /></font></Label>
-                        <TextField layoutX="184.0" layoutY="344.0" promptText="Email" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="401.0"><font><Font name="Arial" size="20.0" /></font></TextField>
-                        <Label layoutX="120.0" layoutY="348.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="438.0"><font><Font name="Arial" size="12.0" /></font></Label>
+                        <Label layoutX="120.0" layoutY="284.0" text="Confirm Email:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="375.0"><font><Font size="18.0" /></font></Label>
+                        <TextField fx:id="cemail" layoutX="184.0" layoutY="344.0" promptText="Confirm Email"   onKeyTyped="#checkCEmail" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="401.0"><font><Font name="Arial" size="20.0" /></font></TextField>
+                        <Label fx:id = "cemailCheck" layoutX="120.0" layoutY="348.0" prefHeight="17.0" prefWidth="392.0" style="-fx-text-fill: #ab2b2b;" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="438.0"><font><Font name="Arial" size="12.0" /></font></Label>
 
                         <Label layoutX="130.0" layoutY="294.0" text="Password:" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="480.0"><font><Font size="18.0" /></font></Label>
                         <PasswordField fx:id="password" onKeyTyped="#checkPassword" promptText="Password" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="506.0"><font><Font name="Arial" size="20.0" /></font></PasswordField>
