@@ -76,6 +76,7 @@ public class RoomPageContent {
 
     private static ArrayList<String> buildings;
     private static Long buildingNumberAdd;
+    private static ChangeListener<String> buildingListener;
 
     /**
      * Adds the content to the room page.
@@ -595,12 +596,14 @@ public class RoomPageContent {
                     ChoiceBox<String> addBuildings = (ChoiceBox<String>) scene.lookup("#addBuildings");
                     addBuildings.setItems(FXCollections.observableArrayList(buildings));
                     addBuildings.getSelectionModel().selectFirst();
-                    ChangeListener<String> buildingListener = new ChangeListener<String>() {
-                        @Override
-                        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                            getBuilding(newValue);
-                        }
-                    };
+                    if (buildingListener == null) {
+                        buildingListener = new ChangeListener<String>() {
+                            @Override
+                            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                                getBuilding(newValue);
+                            }
+                        };
+                    }
                     addBuildings.getSelectionModel().selectedItemProperty().removeListener(buildingListener);
                     addBuildings.getSelectionModel().selectedItemProperty().addListener(buildingListener);
 
