@@ -187,14 +187,14 @@
          <children>
             <AnchorPane fx:id="addFields" maxHeight="700.0" maxWidth="500.0" style="-fx-background-color: rgb(57, 72, 102);" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <children>
-                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Room Number" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
-                  <Label fx:id="addNumberCheck" prefHeight="18.0" prefWidth="303.0" textFill="#d51414" AnchorPane.leftAnchor="274.0" AnchorPane.topAnchor="50.0" />
+                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Room Number" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="25.0" />
+                  <Label fx:id="addNumberCheck" prefHeight="18.0" prefWidth="303.0" textFill="#d51414" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="50.0" />
                   <TextField fx:id="addRoomNumber" onKeyTyped="#checkRoomNumber" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="20.0" />
-                  <Label styleClass="text_labels" text="Room Name" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="64.0" />
-                  <TextField fx:id="addRoomName" onKeyTyped="#checkRoomName" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="60.0" />
-                  <Label fx:id="addRoomNameCheck" prefHeight="18.0" prefWidth="292.0" textFill="#d51414" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="90.0"/>
-                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Number" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="98.0" />
-                  <ChoiceBox fx:id="addBuildings" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="95.0" />
+                  <Label styleClass="text_labels" text="Room Name" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="75.0" />
+                  <TextField fx:id="addRoomName" onKeyTyped="#checkRoomName" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="70.0" />
+                  <Label fx:id="addRoomNameCheck" prefHeight="18.0" prefWidth="292.0" textFill="#d51414" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="100.0"/>
+                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Number" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="125.0" />
+                  <ChoiceBox fx:id="addBuildings" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="120.0" />
 
 
                   <Label alignment="CENTER" styleClass="text_labels" text="Room facilities:" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="180.0"><font><Font name="Arial" size="20.0" /></font></Label>
