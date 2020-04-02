@@ -1,13 +1,14 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 
 public class MyReservationsPageController {
+
     public static void editReservation(Long i) {
         System.out.println("editReservation with reservation id " + i);
-
     }
 
     /**
@@ -20,13 +21,12 @@ public class MyReservationsPageController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText("Are you sure you want to delete this reservation?");
         alert.showAndWait().ifPresent(response -> {
-            if(response == ButtonType.OK){
+            if (response == ButtonType.OK) {
                 System.out.println("deleteReservation with reservation id " + resId);
                 String reservationId = Long.toString(resId);
-                //System.out.println(ServerCommunication.sendDeleteReservation(reservationId));
+                System.out.println(ServerCommunication.sendDeleteReservation(reservationId));
                 System.out.println("deleted");
-            }
-            else{
+            } else {
                 System.out.println("nothing happened");
             }
         });
