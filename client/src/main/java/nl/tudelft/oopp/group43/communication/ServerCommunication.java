@@ -269,6 +269,36 @@ public class ServerCommunication {
     }
 
     /**
+     * Gives the room which has to be delete.
+     * @param resId - String which represents the index of the room which has to benn deleted.
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server could delete the room
+     *         - "NOT OK" if the server could delete the room
+     *
+     */
+    public static String sendDeleteReservation(String resId) {
+        String url = cURL + "reservation/" + resId + "?token=" + getToken();
+        HttpResponse<String> response = delete(url);
+
+        if (response == null) {
+            System.out.println("Communication with server failed");
+            return "Communication with server failed";
+
+        }
+
+        if (response.statusCode() != 200) {
+            System.out.println(response.body());
+            return "NOT OK";
+        } else {
+
+            return "OK";
+        }
+
+
+    }
+
+    /**
      * Retrieves all reservations from the server by current user.
      *
      * @return the body of a get request to the server.
