@@ -292,6 +292,34 @@ public class ServerCommunicationTest {
         ServerCommunication.setToken(tempToken);
     }
 
+    @Test
+    public void testGetRoomName() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "room/getName/0").doReturn("room");
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("room", ServerCommunication.getRoomName(0));
+        httpClientMock.verify().get(curl + "room/getName/0").called();
+        ServerCommunication.setToken(tempToken);
+    }
+
+    @Test
+    public void testGetRoomNameErrorCode() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "room/getName/0").doReturnStatus(201);
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("Communication with server failed", ServerCommunication.getRoomName(0));
+        httpClientMock.verify().get(curl + "room/getName/0").called();
+        ServerCommunication.setToken(tempToken);
+    }
+
     /*
     @Test
     public void testTemplate() {

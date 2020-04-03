@@ -291,25 +291,36 @@ public class SceneLoader extends Application {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    BuildingMap.init();
-                    JSONParser json = new JSONParser();
-                    try {
-                        System.out.println("Adding all buildings to map");
-                        JSONArray buildings = (JSONArray) json.parse(ServerCommunication.getBuilding());
-                        for (Object object : buildings) {
-                            JSONObject obj = (JSONObject) object;
-                            BuildingMap.put((long) obj.get("building_number"), obj);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("Adding buildings to map: Done!");
+                    configureBuildingMap();
                 }
             });
             thread.setDaemon(true);
             thread.start();
         }
     }
+
+    public static void configureBuildingMap() {
+        BuildingMap.init();
+        JSONParser json = new JSONParser();
+        try {
+            System.out.println("Adding all buildings to map");
+            JSONArray buildings = (JSONArray) json.parse(ServerCommunication.getBuilding());
+            for (Object object : buildings) {
+                JSONObject obj = (JSONObject) object;
+                BuildingMap.put((long) obj.get("building_number"), obj);
+
+                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
+                for (Object roomObj : rooms) {
+                    JSONObject room = (JSONObject) roomObj;
+                    BuildingMap.setBuildingToRoom((long) obj.get("building_number"), (long) room.get("id"));
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Adding buildings to map: Done!");
+    }
+
 
     public static void setScene(String newScene) {
         sceneString = newScene;

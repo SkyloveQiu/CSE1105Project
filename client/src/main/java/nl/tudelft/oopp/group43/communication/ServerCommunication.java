@@ -402,6 +402,23 @@ public class ServerCommunication {
     }
 
     /**
+     * Returns the name of the room.
+     * @param id the id of the room
+     * @return the name of the room
+     */
+    public static String getRoomName(long id) {
+        String url = cURL + "room/getName/" + id;
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
      * Sends the buildID for deleting it.
      *
      * @param buildID - the id of the building

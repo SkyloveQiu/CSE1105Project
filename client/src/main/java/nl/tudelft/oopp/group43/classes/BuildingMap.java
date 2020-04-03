@@ -8,16 +8,18 @@ import java.util.Map;
 
 public class BuildingMap {
 
-    private static Map buildings;
+    private static Map<Long, JSONObject> buildings;
     private static ArrayList<JSONObject> arr;
+    private static Map<Long, Long> buildingOfRoom;
 
     public static boolean isNull() {
         return buildings == null;
     }
 
     public static void init() {
-        buildings = new HashMap();
+        buildings = new HashMap<Long, JSONObject>();
         arr = new ArrayList();
+        buildingOfRoom = new HashMap<Long, Long>();
     }
 
     public static void put(long id, JSONObject value) {
@@ -26,11 +28,19 @@ public class BuildingMap {
     }
 
     public static JSONObject get(long id) {
-        return (JSONObject) buildings.get(id);
+        return buildings.get(id);
     }
 
     public static ArrayList<JSONObject> getAll() {
         return arr;
+    }
+
+    public static JSONObject getBuildingOfRoom(long id) {
+        return buildings.get(buildingOfRoom.get(id));
+    }
+
+    public static void setBuildingToRoom(long buildingId, long roomId) {
+        buildingOfRoom.put(roomId, buildingId);
     }
 
 }
