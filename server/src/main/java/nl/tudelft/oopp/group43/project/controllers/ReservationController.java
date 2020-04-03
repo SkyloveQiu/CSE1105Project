@@ -60,6 +60,14 @@ public class ReservationController {
 
     }
 
+    @GetMapping("/reservation/{startDate}/{endDate}")
+    @ResponseBody
+    public List<Reservation> getReservationsByUser(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                                   @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return repository.findByStartingDateGreaterThanEqualAndEndDateLessThanEqual(startDate, endDate);
+
+    }
+
 
     //  {"user":{"username":"thom@gmail.com"},"room_id":1,"starting_date":"2020-03-06T12:00:00.000+0000",
     //  "end_date":"2020-03-06T13:00:00.000+0000"}

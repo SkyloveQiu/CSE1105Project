@@ -484,22 +484,41 @@ public class ServerCommunication {
      */
     public static String reserveRoomForHour(String startHour, String endHour) {
         // form parameters
-        Map<Object, Object> data = new HashMap<>();
-        data.put("user", "{\"username\":\"" + username + "\"}");
+        JSONObject data = new JSONObject();
         data.put("room_id", ReservationConfig.getSelectedRoom());
         data.put("starting_date", startHour);
         data.put("end_date", endHour);
+        System.out.println("making a reservation for: " + data.toJSONString() + " token = " + token);
 
-        String url = cURL + "reservation";
+        String url = cURL + "reservation?token=" + token + "&username=" + username;
 
-        HttpResponse<String> response = post(url, buildFormDataFromMap(data),
+        HttpResponse<String> response = post(url, data.toJSONString(),
                 "User-Agent", "Java 11 HttpClient Bot",
                 "Content-Type", "application/json");
 
         if (response == null) {
             return "Communication with server failed";
         }
+        System.out.println(response.body());
+        return response.body();
+    }
 
+    /**
+     * Gets the reservations that exist in between the time frame.
+     * @param startDate the starting date.
+     * @param endDate the ending date (for single day it is startDate +1 day)
+     * @return The information returned by the api
+     */
+    public static String getReservationsByDate(String startDate, String endDate) {
+        String url = cURL + "reservation/" + startDate + "/" + endDate;
+        System.out.println(startDate + " ; " + endDate);
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+        System.out.println(response.body());
         return response.body();
     }
 
@@ -726,5 +745,6 @@ public class ServerCommunication {
 
 
     }
+
 }
 

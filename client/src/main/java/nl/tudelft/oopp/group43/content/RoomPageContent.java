@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -97,7 +98,6 @@ public class RoomPageContent {
         selectedRooms = new ArrayList<>();
         unavailableRooms = new ArrayList<>();
 
-        addChoiceboxContent();
         addDatepickerListener();
         disableDatePickerDates();
 
@@ -109,25 +109,6 @@ public class RoomPageContent {
         });
         thread.setDaemon(true);
         thread.start();
-    }
-
-    /**
-     * Adds the content to the hour choiceboxes.
-     */
-    private static void addChoiceboxContent() {
-        ArrayList<String> hours = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {
-                hours.add("0" + i + ":00");
-            } else {
-                hours.add(i + ":00");
-            }
-        }
-        ObservableList<String> list = FXCollections.observableArrayList(hours);
-        fromTime.setItems(list);
-        untilTime.setItems(list);
-
-        addChoiceboxListener();
     }
 
     /**
@@ -182,6 +163,8 @@ public class RoomPageContent {
      */
     public static void addRooms() {
         list = (GridPane) scene.lookup("#roomList");
+        checkBoxes = new ArrayList<>();
+        editButtons = new ArrayList<>();
 
         Platform.runLater(new Runnable() {
             @Override
@@ -191,7 +174,7 @@ public class RoomPageContent {
             }
         });
         try {
-            Thread.sleep(30);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -238,7 +221,9 @@ public class RoomPageContent {
         Label reserveable = new Label();
         reserveable.setLayoutY(33);
         reserveable.setPrefHeight(30);
+        reserveable.setPrefWidth(350);
         reserveable.setFont(new Font("Arial", 15));
+        reserveable.setAlignment(Pos.CENTER_RIGHT);
 
         Button reserveButton = new Button("Reserve");
         reserveButton.setPrefSize(100, 30);
@@ -248,10 +233,10 @@ public class RoomPageContent {
             reserveButton.setStyle("-fx-background-color: mediumseagreen;");
             addReservationButtonEvent(reserveButton, id);
             reserveable.setText("available");
-            reserveable.setStyle("-fx-text-fill: seagreen;");
+            reserveable.setStyle("-fx-text-fill: darkseagreen;");
         } else {
             reserveButton.setStyle("-fx-background-color: lightgray;");
-            reserveable.setText("available");
+            reserveable.setText("unavailable");
             reserveable.setStyle("-fx-text-fill: crimson;");
         }
 
@@ -284,7 +269,7 @@ public class RoomPageContent {
             reserveable.setStyle("-fx-text-fill: crimson;");
             reserveable.setText("Please log in first before making a reservation!");
         }
-        reserveable.setLayoutX(scene.getWidth() - 333 - reserveable.getWidth());
+        reserveable.setLayoutX(scene.getWidth() - 333 - 350);
 
         content.getChildren().add(name);
         content.getChildren().add(reserveButton);
@@ -297,17 +282,80 @@ public class RoomPageContent {
         content.setPrefHeight(100);
         content.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        System.out.println("add room: " + name.getText());
+        //System.out.println("add room: " + name.getText());
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 list.add(root, 0, i);
             }
         });
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        if (ServerCommunication.getRole().equals("admin")) {
+            CheckBox checkBox = new CheckBox();
+            checkBox.setLayoutX(10);
+            checkBox.setLayoutY(40);
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    System.out.println("ticked room: " + root.getId());
+                    deleteRoomList.add(root.getId());
+                } else {
+                    for (int in = 0; in < deleteRoomList.size(); in++) {
+                        if (deleteRoomList.get(in).equals(root.getId())) {
+                            deleteRoomList.remove(in);
+                        }
+                    }
+                    System.out.println("unticked room: " + root.getId());
+                }
+            });
+
+            checkBoxes.add(checkBox);
+
+            Button edit = new Button("Edit room");
+            edit.setLayoutY(400);
+            edit.setLayoutX(750);
+            edit.getStyleClass().add("edit");
+            edit.setMinSize(200, 75);
+            edit.setVisible(false);
+            editButtons.add(edit);
+            ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
+            img.setFitHeight(25.0);
+            img.setFitWidth(25.0);
+            edit.setGraphic(img);
+            edit.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    scene.lookup("#grayBackground").setVisible(true);
+                    scene.lookup("#addMenu").setVisible(false);
+                    menu = "edit";
+
+                    ((TextField) scene.lookup("#editRoomName")).setText(((Label) ((Pane) root.getChildren().get(0)).getChildren().get(0)).getText());
+                    ((Label) scene.lookup("#editRoomNumber")).setText("Room being edited: " + root.getId().split(";")[0]);
+                    ((Label) scene.lookup("#editId")).setText(root.getId());
+                    updateFields((AnchorPane) scene.lookup("#editFields"), info.getText());
+
+                    AnchorPane editFields = (AnchorPane) scene.lookup("#editFields");
+                    for (Node n : editFields.getChildren()) {
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
+                        }
+                    }
+                    editFields = (AnchorPane) scene.lookup("#edit");
+                    for (Node n : editFields.getChildren()) {
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
+                        }
+                    }
+
+                    scene.lookup("#editMenu").setVisible(true);
+                }
+            });
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    root.getChildren().add(checkBox);
+                    content.getChildren().add(edit);
+                }
+            });
         }
     }
 
@@ -447,72 +495,6 @@ public class RoomPageContent {
      * Adds the admin buttons for CRUD.
      */
     private static void addAdmin() {
-        checkBoxes = new ArrayList<>();
-        editButtons = new ArrayList<>();
-
-        for (Node node : list.getChildren()) {
-            Pane root = (Pane) node;
-            CheckBox checkBox = new CheckBox();
-            checkBox.setLayoutX(10);
-            checkBox.setLayoutY(40);
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    System.out.println("ticked room: " + root.getId());
-                    deleteRoomList.add(root.getId());
-                } else {
-                    for (int i = 0; i < deleteRoomList.size(); i++) {
-                        if (deleteRoomList.get(i).equals(root.getId())) {
-                            deleteRoomList.remove(i);
-                        }
-                    }
-                    System.out.println("unticked room: " + root.getId());
-                }
-            });
-            root.getChildren().add(checkBox);
-            checkBoxes.add(checkBox);
-
-            Button edit = new Button("Edit room");
-            edit.setLayoutY(400);
-            edit.setLayoutX(750);
-            edit.getStyleClass().add("edit");
-            edit.setMinSize(200, 75);
-            edit.setVisible(false);
-            editButtons.add(edit);
-            ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
-            img.setFitHeight(25.0);
-            img.setFitWidth(25.0);
-            edit.setGraphic(img);
-            ((Pane) root.getChildren().get(0)).getChildren().add(edit);
-            edit.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    scene.lookup("#grayBackground").setVisible(true);
-                    scene.lookup("#addMenu").setVisible(false);
-                    menu = "edit";
-
-                    ((TextField) scene.lookup("#editRoomName")).setText(((Label) ((Pane) root.getChildren().get(0)).getChildren().get(0)).getText());
-                    ((Label) scene.lookup("#editRoomNumber")).setText("Room being edited: " + root.getId().split(";")[0]);
-                    ((Label) scene.lookup("#editId")).setText(root.getId());
-                    updateFields((AnchorPane) scene.lookup("#editFields"), ((Label) ((Pane) root.getChildren().get(0)).getChildren().get(4)).getText());
-
-                    AnchorPane editFields = (AnchorPane) scene.lookup("#editFields");
-                    for (Node n : editFields.getChildren()) {
-                        if (n.getId() != null && n.getId().contains("Check")) {
-                            ((Label) n).setText("");
-                        }
-                    }
-                    editFields = (AnchorPane) scene.lookup("#edit");
-                    for (Node n : editFields.getChildren()) {
-                        if (n.getId() != null && n.getId().contains("Check")) {
-                            ((Label) n).setText("");
-                        }
-                    }
-
-                    scene.lookup("#editMenu").setVisible(true);
-                }
-            });
-        }
-
         if (!adminAdded) {
             adminAdded = true;
 
@@ -528,7 +510,6 @@ public class RoomPageContent {
             delete.setEffect(blend);
             delete.setCache(true);
             delete.setCacheHint(CacheHint.SPEED);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, delete);
             delete.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -543,7 +524,6 @@ public class RoomPageContent {
             deleteHover.setLayoutY(263);
             deleteHover.getStyleClass().add("deleteHover");
             addHover(delete, deleteHover);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
 
             Label deselect = new Label("deselect all");
             deselect.setPrefSize(124, 40);
@@ -561,15 +541,12 @@ public class RoomPageContent {
             deselectHover.setLayoutY(263);
             deselectHover.getStyleClass().add("filler"); //this is a filler because otherwise the addHover method does not work XD
             addHover(deselect, deselectHover);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselect);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselectHover);
 
             Label seperator = new Label();
             seperator.setPrefSize(5, 44);
             seperator.setLayoutX(316);
             seperator.setLayoutY(263);
             seperator.getStyleClass().add("seperator");
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, seperator);
 
             ImageView add = new ImageView();
             add.setImage(new Image("/icons/add-icon.png"));
@@ -611,7 +588,6 @@ public class RoomPageContent {
                     scene.lookup("#addMenu").setVisible(true);
                 }
             });
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, add);
 
             Pane addHover = new Pane();
             addHover.setPrefSize(44, 44);
@@ -619,7 +595,19 @@ public class RoomPageContent {
             addHover.setLayoutY(263);
             addHover.getStyleClass().add("deleteHover");
             addHover(add, addHover);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, addHover);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, delete);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselect);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselectHover);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, seperator);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, add);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, addHover);
+                }
+            });
         }
     }
 
@@ -714,20 +702,22 @@ public class RoomPageContent {
      * Adds listeners to the choiceboxes that set the hours when one is selected + gets the available rooms when all fields are inputted.
      */
     private static void addChoiceboxListener() {
-        fromTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+        fromTime.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                setHoursFrom(fromTime.getItems().get((Integer) number2));
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println(newValue);
+                setHoursFrom(newValue);
 
                 if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
                     timeSelected = true;
                 }
             }
         });
-        untilTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+        untilTime.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                setHoursTil(untilTime.getItems().get((Integer) number2));
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println(newValue);
+                setHoursTil(newValue);
 
                 if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
                     timeSelected = true;
@@ -846,6 +836,13 @@ public class RoomPageContent {
 
     public static void setAdminAdd(boolean admin) {
         adminAdded = admin;
+    }
 
+    public static ArrayList<String> getUnavailableRooms() {
+        return unavailableRooms;
+    }
+
+    public static void setTimeSelected(boolean b) {
+        timeSelected = b;
     }
 }

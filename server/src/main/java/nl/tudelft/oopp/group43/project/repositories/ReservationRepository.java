@@ -20,4 +20,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
         int roomId);
 
     Reservation getByReservationId(int id);
+
+    List<Reservation> findByStartingDateGreaterThanEqualAndEndDateLessThanEqual(Date startDate, Date endDate);
 }

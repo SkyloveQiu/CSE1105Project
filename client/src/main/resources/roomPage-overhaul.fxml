@@ -17,6 +17,8 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RoomPageController" stylesheets="stylesheets/roomPage.css">
    <children>
       <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" prefWidth="967.0" promptText="Search for rooms" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="180.0">
@@ -289,15 +291,74 @@
                   <Font name="Arial" size="20" />
                </font>
             </Label>
-            <ChoiceBox fx:id="fromTime" onMouseClicked="#fromHourSelected" prefWidth="150.0" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="237.0" />
+            <ChoiceBox fx:id="fromTime" onMouseClicked="#addHoursFrom" prefWidth="150.0" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="237.0" >
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="00:00" />
+                     <String fx:value="01:00" />
+                     <String fx:value="02:00" />
+                     <String fx:value="03:00" />
+                     <String fx:value="04:00" />
+                     <String fx:value="05:00" />
+                     <String fx:value="06:00" />
+                     <String fx:value="07:00" />
+                     <String fx:value="08:00" />
+                     <String fx:value="09:00" />
+                     <String fx:value="10:00" />
+                     <String fx:value="11:00" />
+                     <String fx:value="12:00" />
+                     <String fx:value="13:00" />
+                     <String fx:value="14:00" />
+                     <String fx:value="15:00" />
+                     <String fx:value="16:00" />
+                     <String fx:value="17:00" />
+                     <String fx:value="18:00" />
+                     <String fx:value="19:00" />
+                     <String fx:value="20:00" />
+                     <String fx:value="21:00" />
+                     <String fx:value="22:00" />
+                     <String fx:value="23:00" />
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
 
             <Label alignment="CENTER" textFill="silver" text="Until:" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="270.0">
                <font>
                   <Font name="Arial" size="20" />
                </font>
             </Label>
-            <ChoiceBox fx:id="untilTime" onMouseClicked="#untilHourSelected" prefWidth="150.0" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="300.0" />
+            <ChoiceBox fx:id="untilTime" onMouseClicked="#addHoursUntil" prefWidth="150.0" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="300.0" >
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="00:59" />
+                     <String fx:value="01:59" />
+                     <String fx:value="02:59" />
+                     <String fx:value="03:59" />
+                     <String fx:value="04:59" />
+                     <String fx:value="05:59" />
+                     <String fx:value="06:59" />
+                     <String fx:value="07:59" />
+                     <String fx:value="08:59" />
+                     <String fx:value="09:59" />
+                     <String fx:value="10:59" />
+                     <String fx:value="11:59" />
+                     <String fx:value="12:59" />
+                     <String fx:value="13:59" />
+                     <String fx:value="14:59" />
+                     <String fx:value="15:59" />
+                     <String fx:value="16:59" />
+                     <String fx:value="17:59" />
+                     <String fx:value="18:59" />
+                     <String fx:value="19:59" />
+                     <String fx:value="20:59" />
+                     <String fx:value="21:59" />
+                     <String fx:value="22:59" />
+                     <String fx:value="23:59" />
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
 
+            <Label fx:id="warning" text="" textFill="crimson" alignment="CENTER" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="360.0" />
             <Button alignment="CENTER" onAction="#confirmDateTime" text="Confirm" maxWidth="200" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="380.0">
                <font>
                   <Font name="Arial" size="20" />
