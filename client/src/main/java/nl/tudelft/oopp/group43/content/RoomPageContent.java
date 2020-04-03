@@ -128,9 +128,11 @@ public class RoomPageContent {
                     Pane root = (Pane) node;
                     Button button = (Button) ((Pane) root.getChildren().get(0)).getChildren().get(1);
                     Line line = (Line) ((Pane) root.getChildren().get(0)).getChildren().get(5);
+                    Label reservable = (Label) ((Pane) root.getChildren().get(0)).getChildren().get(6);
 
                     line.setEndX((double) newValue - 80);
                     button.setLayoutX((double) newValue - 220);
+                    reservable.setLayoutX((double) newValue - 230 - reservable.getWidth());
                 }
                 if (editButtons != null) {
                     for (Button editButton : editButtons) {
@@ -259,18 +261,31 @@ public class RoomPageContent {
         name.setLayoutY(30);
         name.setFont(new Font("Arial", 20));
 
+        Label reserveable = new Label();
+        reserveable.setLayoutY(33);
+        reserveable.setPrefHeight(30);
+        reserveable.setFont(new Font("Arial", 15));
+
         Button reserveButton = new Button("Reserve");
-        reserveButton.setStyle("-fx-background-color: mediumseagreen;");
         reserveButton.setPrefSize(100, 30);
         reserveButton.setLayoutX(scene.getWidth() - 323);
         reserveButton.setLayoutY(33);
-        addReservationButtonEvent(reserveButton, id);
+        if (!unavailableRooms.contains(id.split(";")[0]) && timeSelected) {
+            reserveButton.setStyle("-fx-background-color: mediumseagreen;");
+            addReservationButtonEvent(reserveButton, id);
+            reserveable.setText("available");
+            reserveable.setStyle("-fx-text-fill: seagreen;");
+        } else {
+            reserveButton.setStyle("-fx-background-color: lightgray;");
+            reserveable.setText("available");
+            reserveable.setStyle("-fx-text-fill: crimson;");
+        }
 
         Label building = new Label((String) ((JSONObject) obj.get("building")).get("building_name"));
         building.setLayoutX(35);
         building.setLayoutY(55);
         building.setFont(new Font("Arial", 12));
-        building.setTextFill(Color.FORESTGREEN);
+        building.setTextFill(Color.SILVER);
 
         Line line = new Line();
         line.setStartX(0);
@@ -288,13 +303,23 @@ public class RoomPageContent {
         Label expanded = new Label("false");
         expanded.setVisible(false);
 
+        if (!timeSelected) {
+            reserveable.setText("Please select a time and date!");
+        }
+        if (ServerCommunication.getToken().equals("invalid")) {
+            reserveable.setStyle("-fx-text-fill: crimson;");
+            reserveable.setText("Please log in first before making a reservation!");
+        }
+        reserveable.setLayoutX(scene.getWidth() - 333 - reserveable.getWidth());
+
         content.getChildren().add(name);
         content.getChildren().add(reserveButton);
         content.getChildren().add(expanded);
         content.getChildren().add(building);
         content.getChildren().add(info);
         content.getChildren().add(line);
-        content.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
+        content.getChildren().add(reserveable);
+        content.setStyle("-fx-background-color: rgb(86, 128, 176); -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
         content.setPrefHeight(100);
         content.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
@@ -360,7 +385,9 @@ public class RoomPageContent {
                         Pane node = (Pane) n;
                         node = (Pane) node.getChildren().get(0);
                         for (int i = 4; i < node.getChildren().size(); i++) {
-                            node.getChildren().get(i).setVisible(false);
+                            if (i != 6) { // this is so that this does not make the label with the reserve status invisible
+                                node.getChildren().get(i).setVisible(false);
+                            }
                         }
                     }
 
@@ -375,7 +402,9 @@ public class RoomPageContent {
                         Pane node = (Pane) n;
                         node = (Pane) node.getChildren().get(0);
                         for (int i = 4; i < node.getChildren().size(); i++) {
-                            node.getChildren().get(i).setVisible(false);
+                            if (i != 6) { // this is so that this does not make the label with the reserve status invisible
+                                node.getChildren().get(i).setVisible(false);
+                            }
                         }
                     }
 

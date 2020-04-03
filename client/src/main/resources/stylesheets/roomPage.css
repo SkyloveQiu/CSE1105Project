@@ -21,7 +21,7 @@
 
 .deleteHoverhover {
     -fx-background-color: silver;
-        -fx-background-radius: 22;
+    -fx-background-radius: 22;
 }
 
 .deselect {
