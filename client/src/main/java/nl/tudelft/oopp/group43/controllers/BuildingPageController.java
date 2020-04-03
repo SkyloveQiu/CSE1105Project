@@ -1,14 +1,13 @@
 package nl.tudelft.oopp.group43.controllers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -74,8 +73,6 @@ public class BuildingPageController {
 
     @FXML
     private Label editMsg;
-    @FXML
-    private Label editBuildingNumber;
     @FXML
     private TextField editBuildingName;
     @FXML
@@ -165,7 +162,9 @@ public class BuildingPageController {
     private void showAddMenu() {
         grayBackground.setVisible(true);
         editMenu.setVisible(false);
+        removeEditFields();
         deleteMenu.setVisible(false);
+        deleteId.setText("");
         addMenu.setVisible(true);
 
         addTextFieldListener(addMondayHours);
@@ -181,6 +180,8 @@ public class BuildingPageController {
     private void closeAddMenu() {
         grayBackground.setVisible(false);
         addMenu.setVisible(false);
+        removeAddFields();
+        clearAddCheckFields();
     }
 
     /**
@@ -191,14 +192,8 @@ public class BuildingPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private void addConfirm(ActionEvent event) {
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        boolean ok = addCheckNumber();
-        ok = addCheckAddress() && ok;
-        ok = addCheckName() && ok;
-        if (addMondayMsg.getText().isEmpty() && addTuesdayMsg.getText().isEmpty() && addWednesdayMsg.getText().isEmpty() && addThursdayMsg.getText().isEmpty() && addFridayMsg.getText().isEmpty()
-                && addSaturdayMsg.getText().isEmpty() && addSundayMsg.getText().isEmpty() && ok) {
-
+        boolean ok = addCheckFields();
+        if (ok) {
             JSONObject openingHours = new JSONObject();
             openingHours.put("mo", addMondayHours.getText());
             openingHours.put("tu", addTuesdayHours.getText());
@@ -222,60 +217,159 @@ public class BuildingPageController {
                 alert.setContentText("A building with this number already exists!!! \nPlease change the building number!");
             }
             alert.showAndWait();
+            removeAddFields();
             BuildingPageContent.add();
         }
     }
 
     /**
-     * Checks if the user put a number which is grater than 0 and smaller than long.MAX_VALUE and show a proper message to the user.
+     * Checks if the user has provided every field + correct input for each field.
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private boolean addCheckNumber() {
-        if (addBuildingNumber.getText().isEmpty()) {
-            addNumberCheck.setText("You cannot have this field empty");
-            return false;
+    private boolean addCheckFields() {
+        boolean ok = true;
+        if (!addTestField("addBuildingNumber", "addBuildingName", "addBuildingAddress", "addMondayHours", "addTuesdayHours", "addWednesdayHours",
+                "addThursdayHours", "addFridayHours", "addSaturdayHours", "addSundayHours")) {
+            ok = false;
         }
-        try {
-            String nunmberString = addBuildingNumber.getText();
-            System.out.println(Long.MAX_VALUE);
-            long number = Long.valueOf(nunmberString);
-            addNumberCheck.setText("");
-            return true;
-        } catch (Exception e) {
-            addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-            return false;
+        return ok;
+    }
+
+    private void clearAddCheckFields() {
+        addNumberCheck.setText("");
+        addNameCheck.setText("");
+        addAddressCheck.setText("");
+        addMondayMsg.setText("");
+        addTuesdayMsg.setText("");
+        addWednesdayMsg.setText("");
+        addThursdayMsg.setText("");
+        addFridayMsg.setText("");
+        addSaturdayMsg.setText("");
+        addSundayMsg.setText("");
+    }
+
+    @FXML
+    private void addCheckField(Event e) {
+        addTestField(((Node) e.getSource()).getId());
+    }
+
+    private boolean addTestField(String... names) {
+        boolean ok = true;
+        for (int i = 0; i < names.length; i++) {
+            switch (names[i]) {
+                case "addBuildingNumber":
+                    if (addBuildingNumber.getText().isEmpty()) {
+                        addNumberCheck.setText("You cannot have this field empty");
+                        ok = false;
+                    } else {
+                        addNumberCheck.setText("");
+                    }
+                    try {
+                        boolean valid = Long.parseLong(addBuildingNumber.getText()) >= 0;
+                        if (!valid) {
+                            addNumberCheck.setText("Please provide a correct building ID");
+                            ok = false;
+                        }
+                    } catch (Exception e) {
+                        addNumberCheck.setText("Please provide a correct building ID");
+                        ok = false;
+                    }
+                    break;
+                case "addBuildingName":
+                    if (addBuildingName.getText().isEmpty()) {
+                        addNameCheck.setText("You cannot have this field empty");
+                        ok = false;
+                    } else {
+                        addNameCheck.setText("");
+                    }
+                    break;
+                case "addBuildingAddress":
+                    if (addBuildingAddress.getText().isEmpty()) {
+                        addAddressCheck.setText("You cannot have this field empty");
+                        ok = false;
+                    } else {
+                        addAddressCheck.setText("");
+                    }
+                    break;
+                case "addMondayHours":
+                    if (addMondayHours.getText().isEmpty() || (addMondayHours.getText().length() < 11 && !addMondayHours.getText().equals("closed"))) {
+                        addMondayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        addMondayMsg.setText("");
+                    }
+                    break;
+                case "addTuesdayHours":
+                    if (addTuesdayHours.getText().isEmpty() || (addTuesdayHours.getText().length() < 11 && !addTuesdayHours.getText().equals("closed"))) {
+                        addTuesdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        addTuesdayMsg.setText("");
+                    }
+                    break;
+                case "addWednesdayHours":
+                    if (addWednesdayHours.getText().isEmpty() || (addWednesdayHours.getText().length() < 11 && !addWednesdayHours.getText().equals("closed"))) {
+                        addWednesdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        addWednesdayMsg.setText("");
+                    }
+                    break;
+                case "addThursdayHours":
+                    if (addThursdayHours.getText().isEmpty() || (addThursdayHours.getText().length() < 11 && !addThursdayHours.getText().equals("closed"))) {
+                        addThursdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        addThursdayMsg.setText("");
+                    }
+                    break;
+                case "addFridayHours":
+                    if (addFridayHours.getText().isEmpty() || (addFridayHours.getText().length() < 11 && !addFridayHours.getText().equals("closed"))) {
+                        addFridayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        addFridayMsg.setText("");
+                    }
+                    break;
+                case "addSaturdayHours":
+                    if (addSaturdayHours.getText().isEmpty() || (addSaturdayHours.getText().length() < 11 && !addSaturdayHours.getText().equals("closed"))) {
+                        addSaturdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        addSaturdayMsg.setText("");
+                    }
+                    break;
+                case "addSundayHours":
+                    if (addSundayHours.getText().isEmpty() || (addSundayHours.getText().length() < 11 && !addSundayHours.getText().equals("closed"))) {
+                        addSundayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        addSundayMsg.setText("");
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+
+        return ok;
     }
 
     /**
-     * Checks if the Building Name field is not empty.
+     * Removes the input in the fields of the menu.
      */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private boolean addCheckName() {
-        if (addBuildingName.getText().isEmpty()) {
-            addNameCheck.setText("You cannot have this field empty");
-            return false;
-        } else {
-            addNameCheck.setText("");
-            return true;
-        }
-    }
-
-    /**
-     * Checks if the Address field is not empty.
-     */
-    @FXML
-    @SuppressWarnings("unchecked")
-    private boolean addCheckAddress() {
-        if (addBuildingAddress.getText().isEmpty()) {
-            addAddressCheck.setText("You cannot have this field empty");
-            return false;
-        } else {
-            addAddressCheck.setText("");
-            return true;
-        }
+    private void removeAddFields() {
+        addBuildingNumber.setText("");
+        addBuildingName.setText("");
+        addBuildingAddress.setText("");
+        addMondayHours.setText("");
+        addTuesdayHours.setText("");
+        addWednesdayHours.setText("");
+        addThursdayHours.setText("");
+        addFridayHours.setText("");
+        addSaturdayHours.setText("");
+        addSundayHours.setText("");
     }
 
     /*
@@ -287,7 +381,9 @@ public class BuildingPageController {
     private void showEditMenu(MouseEvent event) {
         grayBackground.setVisible(true);
         addMenu.setVisible(false);
+        removeAddFields();
         deleteMenu.setVisible(false);
+        deleteId.setText("");
         editMenu.setVisible(true);
 
         addTextFieldListener(editMondayHours);
@@ -305,6 +401,8 @@ public class BuildingPageController {
     private void closeEditMenu() {
         grayBackground.setVisible(false);
         editMenu.setVisible(false);
+        removeEditFields();
+        clearEditCheckFields();
     }
 
 
@@ -322,8 +420,7 @@ public class BuildingPageController {
             return;
         }
 
-        if (editMondayMsg.getText().isEmpty() && editTuesdayMsg.getText().isEmpty() && editWednesdayMsg.getText().isEmpty() && editThursdayMsg.getText().isEmpty()
-                && editFridayMsg.getText().isEmpty() && editSaturdayMsg.getText().isEmpty() && editSundayMsg.getText().isEmpty() && editNameCheck.getText().isEmpty() && editAddressCheck.getText().isEmpty()) {
+        if (editCheckFields()) {
 
             JSONObject openingHours = new JSONObject();
             openingHours.put("mo", editMondayHours.getText());
@@ -350,35 +447,125 @@ public class BuildingPageController {
             }
             alert.showAndWait();
             BuildingPageContent.add();
+            removeEditFields();
             addEditBuildings((Stage) ((Node) event.getSource()).getScene().getWindow());
         }
 
     }
 
     /**
-     * Checks if the Building Name field is not empty.
+     * Checks if the user has provided every field + correct input for each field.
      */
     @FXML
     @SuppressWarnings("unchecked")
-    private void editCheckName() {
-        if (editBuildingName.getText().isEmpty()) {
-            editNameCheck.setText("You cannot have this field empty");
-        } else {
-            editNameCheck.setText("");
+    private boolean editCheckFields() {
+        boolean ok = true;
+        if (!editTestField("editBuildingName", "editBuildingAddress", "editMondayHours", "editTuesdayHours", "editWednesdayHours",
+                "editThursdayHours", "editFridayHours", "editSaturdayHours", "editSundayHours")) {
+            ok = false;
         }
+        return ok;
     }
 
-    /**
-     * Checks if the Address field is not empty.
-     */
     @FXML
-    @SuppressWarnings("unchecked")
-    private void editCheckAddress() {
-        if (editBuildingAddress.getText().isEmpty()) {
-            editAddressCheck.setText("You cannot have this field empty");
-        } else {
-            editAddressCheck.setText("");
+    private void editCheckField(Event e) {
+        editTestField(((Node) e.getSource()).getId());
+    }
+
+    private boolean editTestField(String... names) {
+        boolean ok = true;
+        for (int i = 0; i < names.length; i++) {
+            switch (names[i]) {
+                case "editBuildingName":
+                    if (editBuildingName.getText().isEmpty()) {
+                        editNameCheck.setText("You cannot have this field empty");
+                        ok = false;
+                    } else {
+                        editNameCheck.setText("");
+                    }
+                    break;
+                case "editBuildingAddress":
+                    if (editBuildingAddress.getText().isEmpty()) {
+                        editAddressCheck.setText("You cannot have this field empty");
+                        ok = false;
+                    } else {
+                        editAddressCheck.setText("");
+                    }
+                    break;
+                case "editMondayHours":
+                    if (editMondayHours.getText().isEmpty() || (editMondayHours.getText().length() < 11 && !editMondayHours.getText().equals("closed"))) {
+                        editMondayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        editMondayMsg.setText("");
+                    }
+                    break;
+                case "editTuesdayHours":
+                    if (editTuesdayHours.getText().isEmpty() || (editTuesdayHours.getText().length() < 11 && !editTuesdayHours.getText().equals("closed"))) {
+                        editTuesdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        editTuesdayMsg.setText("");
+                    }
+                    break;
+                case "editWednesdayHours":
+                    if (editWednesdayHours.getText().isEmpty() || (editWednesdayHours.getText().length() < 11 && !editWednesdayHours.getText().equals("closed"))) {
+                        editWednesdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        editWednesdayMsg.setText("");
+                    }
+                    break;
+                case "editThursdayHours":
+                    if (editThursdayHours.getText().isEmpty() || (editThursdayHours.getText().length() < 11 && !editThursdayHours.getText().equals("closed"))) {
+                        editThursdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        editThursdayMsg.setText("");
+                    }
+                    break;
+                case "editFridayHours":
+                    if (editFridayHours.getText().isEmpty() || (editFridayHours.getText().length() < 11 && !editFridayHours.getText().equals("closed"))) {
+                        editFridayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        editFridayMsg.setText("");
+                    }
+                    break;
+                case "editSaturdayHours":
+                    if (editSaturdayHours.getText().isEmpty() || (editSaturdayHours.getText().length() < 11 && !editSaturdayHours.getText().equals("closed"))) {
+                        editSaturdayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        editSaturdayMsg.setText("");
+                    }
+                    break;
+                case "editSundayHours":
+                    if (editSundayHours.getText().isEmpty() || (editSundayHours.getText().length() < 11 && !editSundayHours.getText().equals("closed"))) {
+                        editSundayMsg.setText("Please provide a correct time frame.");
+                        ok = false;
+                    } else {
+                        editSundayMsg.setText("");
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+
+        return ok;
+    }
+
+    private void clearEditCheckFields() {
+        editNameCheck.setText("");
+        editAddressCheck.setText("");
+        editMondayMsg.setText("");
+        editTuesdayMsg.setText("");
+        editWednesdayMsg.setText("");
+        editThursdayMsg.setText("");
+        editFridayMsg.setText("");
+        editSaturdayMsg.setText("");
+        editSundayMsg.setText("");
     }
 
     /**
@@ -402,6 +589,22 @@ public class BuildingPageController {
 
     }
 
+    /**
+     * Removes the input in the fields of the menu.
+     */
+    private void removeEditFields() {
+        editBuildingName.setText("");
+        editBuildingAddress.setText("");
+        editMondayHours.setText("");
+        editTuesdayHours.setText("");
+        editWednesdayHours.setText("");
+        editThursdayHours.setText("");
+        editFridayHours.setText("");
+        editSaturdayHours.setText("");
+        editSundayHours.setText("");
+        editId.setText("");
+    }
+
     /*
     =====================================================================
     METHODS FOR DELETE
@@ -411,7 +614,9 @@ public class BuildingPageController {
     private void showDeleteMenu(MouseEvent event) {
         grayBackground.setVisible(true);
         addMenu.setVisible(false);
+        removeAddFields();
         editMenu.setVisible(false);
+        removeEditFields();
         deleteBuildingList.setContent(null);
         deleteMenu.setVisible(true);
 
@@ -422,6 +627,7 @@ public class BuildingPageController {
     private void closeDeleteMenu() {
         grayBackground.setVisible(false);
         deleteMenu.setVisible(false);
+        deleteId.setText("");
     }
 
 
@@ -448,6 +654,7 @@ public class BuildingPageController {
             alert.setContentText("NOT OK");
         }
         alert.showAndWait();
+        deleteId.setText("");
         BuildingPageContent.add();
         addDeleteBuildings((Stage) ((Node) event.getSource()).getScene().getWindow());
     }
