@@ -89,7 +89,7 @@ public class ReservationController {
         newReservation.setUser(new User(username));
 
         try {
-            if (username.equals("invalid")|| !userRepository.findUserByToken(token).getUsername().toLowerCase().equals(newReservation.getUser().getUsername().toLowerCase())) {
+            if (username.equals("invalid") || !userRepository.findUserByToken(token).getUsername().toLowerCase().equals(newReservation.getUser().getUsername().toLowerCase())) {
                 ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist or the token is invalid.", HttpStatus.FORBIDDEN.value());
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
