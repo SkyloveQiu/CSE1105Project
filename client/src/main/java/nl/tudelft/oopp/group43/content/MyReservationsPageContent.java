@@ -70,37 +70,16 @@ public class MyReservationsPageContent {
                 reservation.getChildren().add(timeLabel);
                 gp.add(reservation, 0, i);
 
-                //edit button
-                Button editButton = new Button();
-                editButton.setMinSize(75.0, 75.0);
-                editButton.setPrefSize(75.0, 75.0);
-                editButton.setMaxSize(75.0, 75.0);
-                editButton.getStyleClass().add("button");
-                ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
-                img.setFitHeight(40.0);
-                img.setFitWidth(40.0);
-                editButton.setGraphic(img);
-                int finalI = i;
-                //editButton.onMouseClickedProperty().addListener((v, oldValue, newValue) -> MyReservationsPageController.editReservation(finalI));
-                editButton.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        Long resId = (Long) obj.get("reservationId");
-                        MyReservationsPageController.editReservation(resId);
-                    }
-                });
-
-
 
                 //cancel button
                 Button cancelButton = new Button();
-                cancelButton.setMinSize(75.0, 75.0);
-                cancelButton.setPrefSize(75.0, 75.0);
-                cancelButton.setMaxSize(75.0, 75.0);
+                cancelButton.setMinSize(150.0, 150.0);
+                cancelButton.setPrefSize(150.0, 150.0);
+                cancelButton.setMaxSize(150.0, 150.0);
                 cancelButton.getStyleClass().add("button");
                 ImageView img2 = new ImageView(new Image("/icons/delete-icon.png"));
-                img2.setFitHeight(40.0);
-                img2.setFitWidth(40.0);
+                img2.setFitHeight(80.0);
+                img2.setFitWidth(80.0);
                 cancelButton.setGraphic(img2);
                 cancelButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -112,7 +91,6 @@ public class MyReservationsPageContent {
 
                 //vbox
                 VBox box = new VBox();
-                box.getChildren().add(editButton);
                 box.getChildren().add(cancelButton);
                 gp.add(box, 1, i);
 

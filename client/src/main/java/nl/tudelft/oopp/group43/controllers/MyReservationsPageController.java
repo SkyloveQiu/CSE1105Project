@@ -7,10 +7,6 @@ import nl.tudelft.oopp.group43.communication.ServerCommunication;
 
 public class MyReservationsPageController {
 
-    public static void editReservation(Long i) {
-        System.out.println("editReservation with reservation id " + i);
-    }
-
     /**
      * If you press the delete reservation button, the method will warn you and delete the reservation.
      *
