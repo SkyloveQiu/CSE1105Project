@@ -3,6 +3,7 @@ package nl.tudelft.oopp.group43.controllers;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -304,16 +305,30 @@ public class RoomPageController {
                 }
             }
 
-            RoomPageContent.setSelectedRooms(newRooms);
-            RoomPageContent.addRooms();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RoomPageContent.setSelectedRooms(newRooms);
+                    RoomPageContent.addRooms();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
         } else {
             JSONArray rooms = RoomPageContent.getDatabaseRooms();
             ArrayList<JSONObject> selectedRooms = new ArrayList<>();
             for (int i = 0; i < rooms.size(); i++) {
                 selectedRooms.add((JSONObject) rooms.get(i));
             }
-            RoomPageContent.setSelectedRooms(selectedRooms);
-            RoomPageContent.addRooms();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RoomPageContent.setSelectedRooms(selectedRooms);
+                    RoomPageContent.addRooms();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
         }
     }
 
@@ -632,35 +647,68 @@ public class RoomPageController {
      * Takes the rooms from the server with the chosen attributes.
      */
     public void getRoomsFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
-        JSONParser json = new JSONParser();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONParser json = new JSONParser();
 
-        try {
-            String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
+                try {
+                    String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
 
-            Label load = new Label("Loading Rooms");
-            roomList.getChildren().add(0, load);
+                    Label load = new Label("Loading Rooms");
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            roomList.getChildren().add(0, load);
+                        }
+                    });
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-            /*
-            Checks if the rooms are in JSONArray format or in JSONObject format.
-            If it is something other than this it means there was an error with the server communication.
-            If that happens it shows an 'useful' error :).
-             */
-            if (response.charAt(0) == '[') {
-                JSONArray rooms = (JSONArray) json.parse(response);
-                ArrayList<JSONObject> filterSelection = new ArrayList<>();
+                    /*
+                    Checks if the rooms are in JSONArray format or in JSONObject format.
+                    If it is something other than this it means there was an error with the server communication.
+                    If that happens it shows an 'useful' error :).
+                     */
+                    if (response.charAt(0) == '[') {
+                        JSONArray rooms = (JSONArray) json.parse(response);
+                        ArrayList<JSONObject> filterSelection = new ArrayList<>();
 
-                for (int i = 0; i < rooms.size(); i++) {
-                    filterSelection.add((JSONObject) rooms.get(i));
+                        for (int i = 0; i < rooms.size(); i++) {
+                            filterSelection.add((JSONObject) rooms.get(i));
+                        }
+                        RoomPageContent.setSelectedRooms(filterSelection);
+                        RoomPageContent.addRooms();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                load.setText("");
+                                dropFilter(null);
+                            }
+                        });
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
+                            }
+                        });
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-                RoomPageContent.setSelectedRooms(filterSelection);
-                load.setText("");
-                RoomPageContent.addRooms();
-            } else {
-                load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
@@ -756,7 +804,14 @@ public class RoomPageController {
             ==========================================
              */
             timeDateSelect.setVisible(false);
-            RoomPageContent.addRooms();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RoomPageContent.addRooms();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
         }
     }
 
@@ -1324,5 +1379,13 @@ public class RoomPageController {
         checkRoomName();
     }
 
+    @FXML
+    private void closeTimeMenu(ActionEvent event) {
+        timeDateSelect.setVisible(false);
+    }
 
+    @FXML
+    private void showTimeMenu(MouseEvent event) {
+        timeDateSelect.setVisible(true);
+    }
 }

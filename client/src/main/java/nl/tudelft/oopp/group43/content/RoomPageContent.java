@@ -7,6 +7,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -56,6 +58,7 @@ public class RoomPageContent {
     private static LocalDate date;
     private static String hoursFrom;
     private static String hoursTil;
+    private static boolean timeSelected = false;
 
     private static AnchorPane ap;
     private static GridPane list;
@@ -65,6 +68,7 @@ public class RoomPageContent {
 
     private static JSONArray databaseRooms;
     private static ArrayList<JSONObject> selectedRooms;
+    private static ArrayList<String> unavailableRooms;
 
     private static boolean adminAdded = false;
     private static ArrayList<CheckBox> checkBoxes;
@@ -91,9 +95,20 @@ public class RoomPageContent {
         addGridPaneSizeListener(list);
 
         selectedRooms = new ArrayList<>();
+        unavailableRooms = new ArrayList<>();
 
         addChoiceboxContent();
         addDatepickerListener();
+        disableDatePickerDates();
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getAndAddRooms();
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
@@ -145,69 +160,21 @@ public class RoomPageContent {
     }
 
     /**
-     * Adds listeners to the choiceboxes that set the hours when one is selected + gets the available rooms when all fields are inputted.
+     * Gets and adds all rooms from the database and adds them in the arrays.
      */
-    private static void addChoiceboxListener() {
-        fromTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                setHoursFrom(fromTime.getItems().get((Integer) number2));
-
-                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                    try {
-                        JSONParser json = new JSONParser();
-                        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                        databaseRooms = rooms;
-                        for (int i = 0; i < rooms.size(); i++) {
-                            selectedRooms.add((JSONObject) rooms.get(i));
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
+    public static void getAndAddRooms() {
+        try {
+            JSONParser json = new JSONParser();
+            JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+            databaseRooms = rooms;
+            for (int i = 0; i < rooms.size(); i++) {
+                selectedRooms.add((JSONObject) rooms.get(i));
             }
-        });
-        untilTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                setHoursTil(untilTime.getItems().get((Integer) number2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                    try {
-                        JSONParser json = new JSONParser();
-                        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                        databaseRooms = rooms;
-                        for (int i = 0; i < rooms.size(); i++) {
-                            selectedRooms.add((JSONObject) rooms.get(i));
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Adds a listener to the datepicker that sets the date when one is selected + gets the available rooms when all fields are inputted.
-     */
-    private static void addDatepickerListener() {
-        datepicker.valueProperty().addListener((ov, oldValue, newValue) -> {
-            setDate(newValue);
-
-            if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                try {
-                    JSONParser json = new JSONParser();
-                    JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                    databaseRooms = rooms;
-                    for (int i = 0; i < rooms.size(); i++) {
-                        selectedRooms.add((JSONObject) rooms.get(i));
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        addRooms();
     }
 
     /**
@@ -216,11 +183,17 @@ public class RoomPageContent {
     public static void addRooms() {
         list = (GridPane) scene.lookup("#roomList");
 
-        while (list.getRowConstraints().size() > 0) {
-            list.getRowConstraints().remove(0);
-        }
-        while (list.getChildren().size() > 0) {
-            list.getChildren().remove(0);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                list.getRowConstraints().clear();
+                list.getChildren().clear();
+            }
+        });
+        try {
+            Thread.sleep(30);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         for (int i = 0; i < selectedRooms.size(); i++) {
@@ -228,7 +201,8 @@ public class RoomPageContent {
             rc.setMinHeight(100);
             rc.setVgrow(Priority.SOMETIMES);
             list.getRowConstraints().add(rc);
-
+        }
+        for (int i = 0; i < selectedRooms.size(); i++) {
             JSONObject obj = selectedRooms.get(i);
             addRoom(obj, i);
         }
@@ -323,8 +297,18 @@ public class RoomPageContent {
         content.setPrefHeight(100);
         content.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        //System.out.println("add room: " + name.getText());
-        list.add(root, 0, i);
+        System.out.println("add room: " + name.getText());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                list.add(root, 0, i);
+            }
+        });
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -425,7 +409,7 @@ public class RoomPageContent {
             public void handle(MouseEvent event) {
                 if (!ServerCommunication.getToken().equals("invalid")) {
                     ArrayList selectedHours = ReservationConfig.getSelectedHours();
-                    ReservationConfig.setSelectedRoom(Long.parseLong(id));
+                    ReservationConfig.setSelectedRoom(Long.parseLong(id.split(";")[0]));
 
                     String response = "";
 
@@ -682,6 +666,104 @@ public class RoomPageContent {
         }
     }
 
+    private static void deleteRooms(MouseEvent event) {
+        // if(deleteRoomList.size() == 0)
+        //   return;
+        String verification = "OK";
+        for (int i = 0; i < deleteRoomList.size(); i++) {
+            String index = deleteRoomList.get(i);
+
+            String message = ServerCommunication.sendDeleteRoom(index.split(";")[0]);
+            if (!message.equals("OK")) {
+                verification = "NOT OK";
+                break;
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (verification.equals("NOT OK")) {
+            alert.setContentText("Something goes wrong during the procedure!" + "\n" + " Please try again!");
+        } else {
+            alert.setContentText("The operation has been successfully done!");
+            reloadRooms();
+        }
+        alert.showAndWait();
+
+    }
+
+    /**
+     * Reloads the rooms, after an operation is done.
+     */
+    public static void reloadRooms() {
+        if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+            try {
+                JSONParser json = new JSONParser();
+                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+                databaseRooms = rooms;
+                for (int i = 0; i < rooms.size(); i++) {
+                    selectedRooms.add((JSONObject) rooms.get(i));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        addRooms();
+    }
+
+    /**
+     * Adds listeners to the choiceboxes that set the hours when one is selected + gets the available rooms when all fields are inputted.
+     */
+    private static void addChoiceboxListener() {
+        fromTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                setHoursFrom(fromTime.getItems().get((Integer) number2));
+
+                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+                    timeSelected = true;
+                }
+            }
+        });
+        untilTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                setHoursTil(untilTime.getItems().get((Integer) number2));
+
+                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+                    timeSelected = true;
+                }
+            }
+        });
+    }
+
+    /**
+     * Adds a listener to the datepicker that sets the date when one is selected + gets the available rooms when all fields are inputted.
+     */
+    private static void addDatepickerListener() {
+        datepicker.valueProperty().addListener((ov, oldValue, newValue) -> {
+            setDate(newValue);
+
+            if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+                timeSelected = true;
+            }
+        });
+    }
+
+    /**
+     * Disables all dates in the date picker that are in the past.
+     */
+    private static void disableDatePickerDates() {
+        DatePicker startingDatePicker = (DatePicker) scene.lookup("#date");
+        startingDatePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
+    }
+
     /**
      * Setter for the selected rooms arraylist.
      *
@@ -752,50 +834,6 @@ public class RoomPageContent {
      */
     public static void setDate(LocalDate date) {
         RoomPageContent.date = date;
-    }
-
-    private static void deleteRooms(MouseEvent event) {
-        // if(deleteRoomList.size() == 0)
-        //   return;
-        String verification = "OK";
-        for (int i = 0; i < deleteRoomList.size(); i++) {
-            String index = deleteRoomList.get(i);
-
-            String message = ServerCommunication.sendDeleteRoom(index.split(";")[0]);
-            if (!message.equals("OK")) {
-                verification = "NOT OK";
-                break;
-            }
-        }
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        if (verification.equals("NOT OK")) {
-            alert.setContentText("Something goes wrong during the procedure!" + "\n" + " Please try again!");
-        } else {
-            alert.setContentText("The operation has been successfully done!");
-            reloadRooms();
-        }
-        alert.showAndWait();
-
-    }
-
-    /**
-     * Reloads the rooms, after an operation is done.
-     */
-    public static void reloadRooms() {
-        if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-            try {
-                JSONParser json = new JSONParser();
-                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                databaseRooms = rooms;
-                for (int i = 0; i < rooms.size(); i++) {
-                    selectedRooms.add((JSONObject) rooms.get(i));
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        addRooms();
     }
 
     public static String getMenu() {

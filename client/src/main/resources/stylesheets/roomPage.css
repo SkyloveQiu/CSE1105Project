@@ -46,3 +46,14 @@
     -fx-background-radius: 2;
     -fx-border-width: 0;
 }
+
+.selectTime {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 25;
+    -fx-text-fill: slategrey;
+    -fx-background-radius: 5;
+}
+
+.selectTime:hover {
+    -fx-background-color: silver;
+}
