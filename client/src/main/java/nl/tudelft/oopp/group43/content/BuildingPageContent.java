@@ -215,7 +215,7 @@ public class BuildingPageContent {
                         expanded.setText("true");
 
                         infoPane.setLayoutX(pane.getLayoutX() + 88);
-                        double vOffset = ((ScrollPane) scene.lookup("#buildings")).vvalueProperty()
+                        double offset = ((ScrollPane) scene.lookup("#buildings")).vvalueProperty()
                                 // multiplied by (scrollableAreaHeight - visibleViewportHeight)
                                 .multiply(
                                         gp.heightProperty()
@@ -224,7 +224,7 @@ public class BuildingPageContent {
 
                         //System.out.println(vOffset);
                         infoPaneY = pane.getLayoutY();
-                        infoPane.setLayoutY(pane.getLayoutY() - vOffset + 308 + 200);
+                        infoPane.setLayoutY(pane.getLayoutY() - offset + 308 + 200);
                         infoPane.setVisible(true);
                         //System.out.println("x: " + pane.getLayoutX() + "; y: " + pane.getLayoutY());
 
