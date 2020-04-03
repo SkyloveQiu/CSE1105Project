@@ -26,6 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -137,6 +138,8 @@ public class BuildingPageContent {
      * adds all buildings in the database to the main page.
      */
     public static void add() {
+        SceneLoader.configureBuildingMap();
+
         JSONParser json = new JSONParser();
 
         try {
