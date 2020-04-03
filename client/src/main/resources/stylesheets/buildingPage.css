@@ -13,7 +13,7 @@
 
 .scroll-bar:vertical .thumb {
     -fx-background-color: skyblue;
-    -fx-background-radius: 0;
+    -fx-background-radius: 3;
     -fx-border-width: 0;
 }
 
