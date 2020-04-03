@@ -290,9 +290,9 @@ public class RoomPageContent {
             @Override
             public void run() {
                 //try {
-                    list.add(root, 0, i);
+                list.add(root, 0, i);
                 //} catch (IndexOutOfBoundsException e) {
-                    //list.add(root, 0, i);
+                //list.add(root, 0, i);
                 //}
             }
         });

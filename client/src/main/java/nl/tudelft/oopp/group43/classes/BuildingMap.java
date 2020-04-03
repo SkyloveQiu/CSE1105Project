@@ -1,10 +1,10 @@
 package nl.tudelft.oopp.group43.classes;
 
-import org.json.simple.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.json.simple.JSONObject;
 
 public class BuildingMap {
 
@@ -16,6 +16,9 @@ public class BuildingMap {
         return buildings == null;
     }
 
+    /**
+     * Initializes all fields of this class.
+     */
     public static void init() {
         buildings = new HashMap<Long, JSONObject>();
         arr = new ArrayList();

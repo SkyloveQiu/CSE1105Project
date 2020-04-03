@@ -221,7 +221,7 @@ public class CalendarPageContent {
                 LocalDateTime end = LocalDateTime.parse((String) ((JSONObject) jsonArray.get(i)).get("end_date"), customFormatter);
                 Interval interval = new Interval(start, end);
                 System.out.println(((JSONObject) jsonArray.get(i)).get("starting_date") + " : " + ((JSONObject) jsonArray.get(i)).get("end_date"));
-                
+
                 Entry entry = new Entry("Reservation in: " + ServerCommunication.getRoomName((long) ((JSONObject) jsonArray.get(i)).get("room_id")), interval);
                 JSONObject building = BuildingMap.getBuildingOfRoom((Long) ((JSONObject) jsonArray.get(i)).get("room_id"));
                 entry.setLocation((String) building.get("address"));

@@ -299,6 +299,9 @@ public class SceneLoader extends Application {
         }
     }
 
+    /**
+     * Adds all buildings to the Building hashmap, and also gives a reference to which room belongs to which building.
+     */
     public static void configureBuildingMap() {
         BuildingMap.init();
         JSONParser json = new JSONParser();
