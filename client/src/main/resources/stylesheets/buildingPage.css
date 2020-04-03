@@ -46,3 +46,8 @@
     -fx-background: rgb(57, 72, 102);
     -fx-background-color: rgb(57, 72, 102);
 }
+
+.crudPane {
+    -fx-background-color: silver;
+    -fx-background-radius: 22;
+}

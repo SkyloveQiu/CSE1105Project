@@ -4,14 +4,23 @@ import java.util.ArrayList;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.CacheHint;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -35,13 +44,63 @@ public class BuildingPageContent {
     public static void addContent(Scene currentScene) {
         scene = currentScene;
 
-        if (!ServerCommunication.getToken().equals("invalid") && ServerCommunication.getUsername().contains("admin")) {
+        if (ServerCommunication.getRole().equals("admin")) {
             ImageView add = (ImageView) scene.lookup("#add");
             ImageView edit = (ImageView) scene.lookup("#edit");
             ImageView delete = (ImageView) scene.lookup("#delete");
             add.setVisible(true);
             edit.setVisible(true);
             delete.setVisible(true);
+
+            ColorAdjust adjust = new ColorAdjust();
+            Blend blend = new Blend(BlendMode.SRC_ATOP, adjust, new ColorInput(0, 0, 40, 40, Color.SLATEGREY));
+            delete.setEffect(blend);
+            delete.setCache(true);
+            delete.setCacheHint(CacheHint.SPEED);
+            delete.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    scene.lookup("#deletePane").getStyleClass().add("crudPane");
+                }
+            });
+            delete.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    scene.lookup("#deletePane").getStyleClass().clear();
+                }
+            });
+
+            edit.setEffect(blend);
+            edit.setCache(true);
+            edit.setCacheHint(CacheHint.SPEED);
+            edit.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    scene.lookup("#editPane").getStyleClass().add("crudPane");
+                }
+            });
+            edit.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    scene.lookup("#editPane").getStyleClass().clear();
+                }
+            });
+
+            add.setEffect(blend);
+            add.setCache(true);
+            add.setCacheHint(CacheHint.SPEED);
+            add.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    scene.lookup("#addPane").getStyleClass().add("crudPane");
+                }
+            });
+            add.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    scene.lookup("#addPane").getStyleClass().clear();
+                }
+            });
         }
 
         ScrollPane scp = (ScrollPane) scene.lookup("#buildings");

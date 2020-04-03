@@ -72,10 +72,10 @@ public class RoomPageController {
     private Label checkSpace;
     @FXML
     private GridPane roomList;
-
+    @FXML
+    private Label checkBuildingNumber;
     @FXML
     private ScrollPane filterPanel;
-
     @FXML
     private Pane grayBackground;
     @FXML
@@ -86,8 +86,6 @@ public class RoomPageController {
     private Label editId;
     @FXML
     private Label addNumberCheck;
-    @FXML
-    private TextField addBuildingId;
     @FXML
     private TextField addRoomNumber;
     @FXML
@@ -210,6 +208,8 @@ public class RoomPageController {
     private Label editWheelchairCheck;
     @FXML
     private Label editRoomNameCheck;
+    @FXML
+    private ChoiceBox<String> addBuildings;
 
 
     /**
@@ -330,6 +330,8 @@ public class RoomPageController {
         grayBackground.setVisible(false);
         addMenu.setVisible(false);
         RoomPageContent.setMenu(null);
+        addBuildings.getItems().clear();
+
     }
 
     /**
@@ -341,7 +343,11 @@ public class RoomPageController {
     @SuppressWarnings("unchecked")
     private void addConfirm(ActionEvent event) {
 
-        boolean ok = !addBuildingId.getText().isEmpty();
+        Long buildingNumber = RoomPageContent.getBuildingNumberAdd();
+        boolean ok = true;
+        if (buildingNumber < 0) {
+            ok = false;
+        }
         ok = checkRoomName() && ok;
         ok = checkRoomNumber() && ok;
         ok = checkSpaceType() && ok;
@@ -360,14 +366,14 @@ public class RoomPageController {
         ok = checkSurfaceArea() && ok;
 
         if (ok) {
-            System.out.println("dai balan");
+
             JSONObject building = new JSONObject();
-            building.put("building_number", Long.valueOf(addBuildingId.getText()));
+            building.put("building_number", buildingNumber);
+
 
             JSONObject room = new JSONObject();
             room.put("room_name", addRoomName.getText());
 
-            //room.put("id", Long.valueOf(addRoomNumber.getText()));
             room.put("building", building);
 
             JSONObject attributes = new JSONObject();
@@ -402,41 +408,6 @@ public class RoomPageController {
         }
     }
 
-    /**
-     * Checks if the user put a number which is greater than 0 and smaller than long.MAX_VALUE and show a proper message to the user.
-     */
-    private boolean checkBuildingNumber() {
-        if (RoomPageContent.getMenu().equals("add")) {
-            if (addBuildingId.getText().isEmpty()) {
-                addNumberCheck.setText("You cannot have this field empty");
-                return false;
-            }
-            try {
-                String nunmberString = addBuildingId.getText();
-                long number = Long.valueOf(nunmberString);
-                addNumberCheck.setText("");
-                return true;
-            } catch (Exception e) {
-                addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-                return false;
-            }
-        } else {
-            if (addBuildingId.getText().isEmpty()) {
-                addNumberCheck.setText("You cannot have this field empty");
-                return false;
-            }
-            try {
-                String nunmberString = addBuildingId.getText();
-                long number = Long.valueOf(nunmberString);
-                addNumberCheck.setText("");
-                return true;
-            } catch (Exception e) {
-                addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-                return false;
-            }
-        }
-    }
-
     private boolean checkRoomNumber() {
 
         if (addRoomNumber.getText().isEmpty()) {
@@ -452,7 +423,6 @@ public class RoomPageController {
             addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
             return false;
         }
-
     }
 
     @FXML
@@ -768,14 +738,14 @@ public class RoomPageController {
     private boolean checkChalkboard() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addChalkboard.getText().isEmpty() || (!addChalkboard.getText().equals("true") && !addChalkboard.getText().equals("false"))) {
-                addChalkboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addChalkboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addChalkboardCheck.setText("");
             return true;
         } else {
             if (editChalkboard.getText().isEmpty() || (!editChalkboard.getText().equals("true") && !editChalkboard.getText().equals("false"))) {
-                editChalkboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editChalkboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editChalkboardCheck.setText("");
@@ -803,14 +773,14 @@ public class RoomPageController {
     private boolean checkWhiteboard() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addWhiteboard.getText().isEmpty() || (!addWhiteboard.getText().equals("true") && !addWhiteboard.getText().equals("false"))) {
-                addWhiteboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addWhiteboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addWhiteboardCheck.setText("");
             return true;
         } else {
             if (editWhiteboard.getText().isEmpty() || (!editWhiteboard.getText().equals("true") && !editWhiteboard.getText().equals("false"))) {
-                editWhiteboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editWhiteboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editWhiteboardCheck.setText("");
@@ -837,14 +807,14 @@ public class RoomPageController {
     private boolean checkSmartbaord() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addSmartboard.getText().isEmpty() || (!addSmartboard.getText().equals("true") && !addSmartboard.getText().equals("false"))) {
-                addSmartboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addSmartboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addSmartboardCheck.setText("");
             return true;
         } else {
             if (editSmartboard.getText().isEmpty() || (!editSmartboard.getText().equals("true") && !editSmartboard.getText().equals("false"))) {
-                editSmartboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editSmartboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editSmartboardCheck.setText("");
@@ -872,14 +842,14 @@ public class RoomPageController {
     private boolean checkBlinds() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addBlinds.getText().isEmpty() || (!addBlinds.getText().equals("true") && !addBlinds.getText().equals("false"))) {
-                addBlindsCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addBlindsCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addBlindsCheck.setText("");
             return true;
         } else {
             if (editBlinds.getText().isEmpty() || (!editBlinds.getText().equals("true") && !editBlinds.getText().equals("false"))) {
-                editBlindsCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editBlindsCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editBlindsCheck.setText("");
@@ -907,14 +877,14 @@ public class RoomPageController {
         if (RoomPageContent.getMenu().equals("add")) {
 
             if (addDisplay.getText().isEmpty() || (!addDisplay.getText().equals("true") && !addDisplay.getText().equals("false"))) {
-                addDisplayCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addDisplayCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addDisplayCheck.setText("");
             return true;
         } else {
             if (editDisplay.getText().isEmpty() || (!editDisplay.getText().equals("true") && !editDisplay.getText().equals("false"))) {
-                editDisplayCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editDisplayCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editDisplayCheck.setText("");
@@ -944,14 +914,14 @@ public class RoomPageController {
     private boolean checkDesktop() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addDesktopPc.getText().isEmpty() || (!addDesktopPc.getText().equals("true") && !addDesktopPc.getText().equals("false"))) {
-                addDesktopPcCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addDesktopPcCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addDesktopPcCheck.setText("");
             return true;
         } else {
             if (editDesktopPc.getText().isEmpty() || (!editDesktopPc.getText().equals("true") && !editDesktopPc.getText().equals("false"))) {
-                editDesktopPcCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editDesktopPcCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editDesktopPcCheck.setText("");
@@ -979,14 +949,14 @@ public class RoomPageController {
     private boolean checkProjector() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addProjector.getText().isEmpty() || (!addProjector.getText().equals("true") && !addProjector.getText().equals("false"))) {
-                addProjectorCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addProjectorCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addProjectorCheck.setText("");
             return true;
         } else {
             if (editProjector.getText().isEmpty() || (!editProjector.getText().equals("true") && !editProjector.getText().equals("false"))) {
-                editProjectorCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editProjectorCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editProjectorCheck.setText("");
@@ -1013,14 +983,14 @@ public class RoomPageController {
     private boolean checkPowerSupply() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addPowerSupply.getText().isEmpty() || (!addPowerSupply.getText().equals("true") && !addPowerSupply.getText().equals("false"))) {
-                addPowerSupplyCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addPowerSupplyCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addPowerSupplyCheck.setText("");
             return true;
         } else {
             if (editPowerSupply.getText().isEmpty() || (!editPowerSupply.getText().equals("true") && !editPowerSupply.getText().equals("false"))) {
-                editPowerSupplyCheck.setText("You have to complete this field with 'true' or 'false' !");
+                editPowerSupplyCheck.setText("You have to complete this field with 'true'or 'false' !");
                 return false;
             }
             editPowerSupplyCheck.setText("");
@@ -1156,7 +1126,7 @@ public class RoomPageController {
     private boolean checkMicrophone() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addMicrophone.getText().isEmpty() || (!addMicrophone.getText().equals("true") && !addMicrophone.getText().equals("false"))) {
-                addMicrophoneCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addMicrophoneCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addMicrophoneCheck.setText("");
@@ -1164,7 +1134,7 @@ public class RoomPageController {
 
         } else {
             if (editMicrophone.getText().isEmpty() || (!editMicrophone.getText().equals("true") && !editMicrophone.getText().equals("false"))) {
-                editMicrophoneCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editMicrophoneCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editMicrophoneCheck.setText("");
@@ -1191,14 +1161,14 @@ public class RoomPageController {
     private boolean checkSoundInstallation() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addSoundInstallation.getText().isEmpty() || (!addSoundInstallation.getText().equals("true") && !addSoundInstallation.getText().equals("false"))) {
-                addSoundInstallationCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addSoundInstallationCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addSoundInstallationCheck.setText("");
             return true;
         } else {
             if (editSoundInstallation.getText().isEmpty() || (!editSoundInstallation.getText().equals("true") && !editSoundInstallation.getText().equals("false"))) {
-                editSoundInstallationCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editSoundInstallationCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editSoundInstallationCheck.setText("");
@@ -1225,14 +1195,14 @@ public class RoomPageController {
     private boolean checkWheelchair() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addWheelchair.getText().isEmpty() || (!addWheelchair.getText().equals("true") && !addWheelchair.getText().equals("false"))) {
-                addWheelchairCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addWheelchairCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addWheelchairCheck.setText("");
             return true;
         } else {
             if (editWheelchair.getText().isEmpty() || (!editWheelchair.getText().equals("true") && !editWheelchair.getText().equals("false"))) {
-                editWheelchairCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editWheelchairCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editWheelchairCheck.setText("");

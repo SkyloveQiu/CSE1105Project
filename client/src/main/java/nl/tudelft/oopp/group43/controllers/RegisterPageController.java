@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.components.BackButton;
@@ -32,6 +33,8 @@ public class RegisterPageController {
     private TextField lastName;
     @FXML
     private TextField email;
+    @FXML
+    private TextField cemail;
     @FXML
     private CheckBox check;
     @FXML
@@ -54,6 +57,8 @@ public class RegisterPageController {
     private Label firstNameCheck;
     @FXML
     private Label lastNameCheck;
+    @FXML
+    private Label cemailCheck;
 
     /**
      * Checks if the email is valid.
@@ -84,6 +89,8 @@ public class RegisterPageController {
         empty = (checkCPassword() && empty);
         empty = (checkRole() && empty);
         empty = (checkBoxCheck() && empty);
+        empty = (checkBoxCheck() && empty);
+        empty = (checkCEmail() && empty);
 
         return empty;
     }
@@ -126,6 +133,18 @@ public class RegisterPageController {
     }
 
     /**
+     * Checks if the input from the user is good for the First Name field.
+     *
+     * @param event - the user puts a new character in the First Name field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkFirstName(KeyEvent event) {
+        checkFirstName();
+    }
+
+
+    /**
      * Checks if the first name field is empty and show special messages to the user.
      *
      * @return true if the first name field is not empty, false otherwise
@@ -141,6 +160,18 @@ public class RegisterPageController {
             return true;
         }
     }
+
+    /**
+     * Checks if the input from the user is good for the Last Name field.
+     *
+     * @param event - the user puts a new character in the Last Name field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkLastName(KeyEvent event) {
+        checkLastName();
+    }
+
 
     /**
      * Checks if the last name field is empty and show special messages to the user.
@@ -167,6 +198,7 @@ public class RegisterPageController {
     @FXML
     @SuppressWarnings("unchecked")
     private boolean checkEmail() {
+        boolean ok = true;
         if (email.getText().isEmpty()) {
             emailCheck.setText("You did not complete the email field");
             return false;
@@ -176,10 +208,28 @@ public class RegisterPageController {
                 return false;
             } else {
                 emailCheck.setText("");
+            }
+            if (cemail.getText().isEmpty() || !email.getText().equals(cemail.getText())) {
+                cemailCheck.setText("The emails don't match");
+                return false;
+            } else {
+                cemailCheck.setText("");
                 return true;
             }
         }
     }
+
+    /**
+     * Checks if the input from the user is good for the Password field.
+     *
+     * @param event - the user puts a new character in the Password field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkPassword(KeyEvent event) {
+        checkPassword();
+    }
+
 
     /**
      * Checks if the password field is empty and show special messages to the user.
@@ -196,7 +246,11 @@ public class RegisterPageController {
             return false;
         } else {
             if (password.getText().length() < 8 || password.getText().length() > 32) {
-                passwordCheck.setText("The password must have more than 8 characters and maximum 32 characters");
+                if (password.getText().length() < 8) {
+                    passwordCheck.setText("The password must have at least 8 characters");
+                } else {
+                    passwordCheck.setText("The password must have maximum 32 characters");
+                }
                 ok = false;
             } else {
                 passwordCheck.setText("");
@@ -205,12 +259,23 @@ public class RegisterPageController {
                 cpasswordCheck.setText("The passwords don't match");
                 return false;
             } else {
+                cpasswordCheck.setText("");
                 return ok;
             }
         }
-
-
     }
+
+    /**
+     * Checks if the input from the user is good for the Confirm Password field.
+     *
+     * @param event - the user puts a new character in the Confirm Password field.
+     */
+    @FXML
+    @SuppressWarnings("unchecked")
+    private void checkCPassword(KeyEvent event) {
+        checkCPassword();
+    }
+
 
     /**
      * Checks if the confirm password field is empty and show special messages to the user.
@@ -254,7 +319,7 @@ public class RegisterPageController {
     @SuppressWarnings("unchecked")
     private boolean checkBoxCheck() {
         if (!check.isSelected()) {
-            termsCheck.setText("You have to accept the terms and condtions");
+            termsCheck.setText("You have to accept the terms and conditions");
             return false;
         } else {
             termsCheck.setText("");
@@ -290,7 +355,32 @@ public class RegisterPageController {
             roleCheck.setText("");
             return true;
         }
+    }
+
+    @FXML
+
+    private void checkCEmail(KeyEvent event) {
+        checkCEmail();
 
     }
+
+    @FXML
+    private boolean checkCEmail() {
+        if (cemail.getText().isEmpty()) {
+            cemailCheck.setText("You did not complete the confirm email field");
+            return false;
+        } else {
+            if (email.getText().isEmpty() || !email.getText().equals(cemail.getText())) {
+                cemailCheck.setText("The emails don't match");
+                return false;
+            } else {
+                cemailCheck.setText("");
+                return true;
+            }
+        }
+
+    }
+
+
 }
 
