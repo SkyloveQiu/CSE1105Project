@@ -166,10 +166,16 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(curl + "reservation").doReturn("response");
+        httpClientMock.onPost(curl + "reservation?token=1&username=name").doReturn("response");
 
+        final String tempToken = ServerCommunication.getToken();
+        final String tempName = ServerCommunication.getUsername();
+        ServerCommunication.setToken("1");
+        ServerCommunication.setUsername("name");
         assertEquals("response", ServerCommunication.reserveRoomForHour("2020-01-01T12:00:00.000+0000", "2020-01-01T13:00:00.000+0000"));
-        httpClientMock.verify().post(curl + "reservation").called();
+        httpClientMock.verify().post(curl + "reservation?token=1&username=name").called();
+        ServerCommunication.setToken(tempToken);
+        ServerCommunication.setUsername(tempName);
     }
 
     @Test
@@ -256,6 +262,34 @@ public class ServerCommunicationTest {
         ServerCommunication.setToken("1");
         assertEquals("NOT OK", ServerCommunication.sendChangePassword("a", "b"));
         httpClientMock.verify().post(curl + "changePassword?oldPassword=a&newPassword=b&token=1");
+    }
+
+    @Test
+    public void testGetReservationsFromDate() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "reservation/0000-00-00/0000-00-00").doReturn("[]");
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("[]", ServerCommunication.getReservationsByDate("0000-00-00", "0000-00-00"));
+        httpClientMock.verify().get(curl + "reservation/0000-00-00/0000-00-00").called();
+        ServerCommunication.setToken(tempToken);
+    }
+
+    @Test
+    public void testGetReservationsFromDateErrorCode() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "reservation/0000-00-00/0000-00-00").doReturnStatus(201);
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("Communication with server failed", ServerCommunication.getReservationsByDate("0000-00-00", "0000-00-00"));
+        httpClientMock.verify().get(curl + "reservation/0000-00-00/0000-00-00").called();
+        ServerCommunication.setToken(tempToken);
     }
 
     /*

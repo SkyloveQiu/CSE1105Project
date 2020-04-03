@@ -712,81 +712,11 @@ public class RoomPageController {
                     ReservationConfig.addHour(hour);
                 }
 
-
-                /*
-                ===========================================
-                 */
-
-
-                //ArrayList selectedHours = ReservationConfig.getSelectedHours();
-                //
-                //String response = "";
-                //
-                //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
-                //formatter.withZone(ZoneId.of("UTC"));
-                //for (int i = 0; i < selectedHours.size(); i++) {
-                //    LocalDateTime startDate = LocalDateTime.parse((String) selectedHours.get(i), formatter);
-                //    LocalDateTime endDate = startDate.plusHours(1);
-                //
-                //    String startTime = startDate.toString() + ":00.000+0000";
-                //    String endTime = endDate.toString() + ":00.000+0000";
-                //    System.out.println(startTime);
-                //    response = ServerCommunication.reserveRoomForHour(startTime, endTime);
-                //
-                //    System.out.println(response);
-                //}
-
-
-                /*
-                ==========================================
-                 */
                 timeDateSelect.setVisible(false);
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String month = Integer.toString(localDate.plusDays(1).getMonthValue());
-                        String day = Integer.toString(localDate.plusDays(1).getDayOfMonth());
-                        if (localDate.plusDays(1).getMonthValue() < 10) {
-                            month = "0" + localDate.plusDays(1).getMonthValue();
-                        }
-                        if (localDate.plusDays(1).getDayOfMonth() < 10) {
-                            day = "0" + localDate.plusDays(1).getDayOfMonth();
-                        }
-                        String startDate = dateString;
-                        String endDate = localDate.plusDays(1).getYear() + "-" + month + "-" + day;
-
-                        String jsonString = ServerCommunication.getReservationsByDate(startDate, endDate);
-                        ArrayList<String> unavailableRooms = RoomPageContent.getUnavailableRooms();
-                        try {
-                            JSONParser json = new JSONParser();
-                            JSONArray reservedRooms = (JSONArray) json.parse(jsonString);
-                            DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00.000+0000'");
-
-                            for (Object object : reservedRooms) {
-                                JSONObject obj = (JSONObject) object;
-                                boolean isInTimeFrame = false;
-                                LocalDateTime startTime = LocalDateTime.parse((String) obj.get("starting_date"), customFormatter);
-                                LocalDateTime endTime = LocalDateTime.parse((String) obj.get("end_date"), customFormatter);
-                                int endHour = Integer.parseInt(untilTime.getValue().substring(0, 2)) + 1;
-                                int startHour = Integer.parseInt(fromTime.getValue().substring(0, 2));
-                                System.out.println(startHour + " : " + endHour);
-                                System.out.println("testing room: " + obj.toJSONString());
-
-                                if ((startTime.getHour() >= startHour && endTime.getHour() <= endHour) || (startTime.getHour() >= startHour && startTime.getHour() < endHour) || (endTime.getHour() > startHour && endTime.getHour() <= endHour)) {
-                                    isInTimeFrame = true;
-                                    System.out.println(obj.get("room_id") + " is in the timeframe");
-                                }
-
-                                if (isInTimeFrame && !unavailableRooms.contains(obj.get("room_id"))) {
-                                    unavailableRooms.add(Long.toString((Long) obj.get("room_id")));
-                                }
-                            }
-
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        RoomPageContent.addRooms();
+                        getUnavailableRooms(localDate, dateString);
                     }
                 });
                 thread.setDaemon(true);
@@ -795,6 +725,57 @@ public class RoomPageController {
                 warning.setText("Please provide a starting time less than the ending time!");
             }
         }
+    }
+
+    /**
+     * Gets all unavailable rooms of the database and puts them in a list.
+     * @param localDate The local date of the selected day
+     * @param dateString The string version of the selected day (yyyy-MM-dd)
+     */
+    private void getUnavailableRooms(LocalDate localDate, String dateString) {
+        String month = Integer.toString(localDate.plusDays(1).getMonthValue());
+        String day = Integer.toString(localDate.plusDays(1).getDayOfMonth());
+        if (localDate.plusDays(1).getMonthValue() < 10) {
+            month = "0" + localDate.plusDays(1).getMonthValue();
+        }
+        if (localDate.plusDays(1).getDayOfMonth() < 10) {
+            day = "0" + localDate.plusDays(1).getDayOfMonth();
+        }
+        String startDate = dateString;
+        String endDate = localDate.plusDays(1).getYear() + "-" + month + "-" + day;
+
+        String jsonString = ServerCommunication.getReservationsByDate(startDate, endDate);
+        ArrayList<String> unavailableRooms = RoomPageContent.getUnavailableRooms();
+        try {
+            JSONParser json = new JSONParser();
+            JSONArray reservedRooms = (JSONArray) json.parse(jsonString);
+            DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00.000+0000'");
+
+            for (Object object : reservedRooms) {
+                JSONObject obj = (JSONObject) object;
+                boolean isInTimeFrame = false;
+                LocalDateTime startTime = LocalDateTime.parse((String) obj.get("starting_date"), customFormatter);
+                LocalDateTime endTime = LocalDateTime.parse((String) obj.get("end_date"), customFormatter);
+                int endHour = Integer.parseInt(untilTime.getValue().substring(0, 2)) + 1;
+                int startHour = Integer.parseInt(fromTime.getValue().substring(0, 2));
+                System.out.println(startHour + " : " + endHour);
+                System.out.println("testing room: " + obj.toJSONString());
+
+                if ((startTime.getHour() >= startHour && endTime.getHour() <= endHour) || (startTime.getHour() >= startHour && startTime.getHour() < endHour) || (endTime.getHour() > startHour && endTime.getHour() <= endHour)) {
+                    isInTimeFrame = true;
+                    System.out.println(obj.get("room_id") + " is in the timeframe");
+                }
+
+                if (isInTimeFrame && !unavailableRooms.contains(obj.get("room_id"))) {
+                    unavailableRooms.add(Long.toString((Long) obj.get("room_id")));
+                }
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        RoomPageContent.addRooms();
     }
 
     @FXML

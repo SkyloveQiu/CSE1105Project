@@ -515,7 +515,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
         System.out.println(response.body());
