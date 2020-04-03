@@ -60,6 +60,14 @@ public class ReservationController {
 
     }
 
+    @GetMapping("/reservation/{startDate}/{endDate}")
+    @ResponseBody
+    public List<Reservation> getReservationsByUser(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                                   @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return repository.findByStartingDateGreaterThanEqualAndEndDateLessThanEqual(startDate, endDate);
+
+    }
+
 
     //  {"user":{"username":"thom@gmail.com"},"room_id":1,"starting_date":"2020-03-06T12:00:00.000+0000",
     //  "end_date":"2020-03-06T13:00:00.000+0000"}
@@ -74,17 +82,21 @@ public class ReservationController {
     @PostMapping("/reservation")
     @ResponseBody
     public ResponseEntity createBuildingReservation(@RequestBody Reservation newReservation,
-                                                    @RequestParam(value = "token", defaultValue = "invalid") String token) throws Exception {
+                                                    @RequestParam(value = "token", defaultValue = "invalid") String token,
+                                                    @RequestParam(value = "username", defaultValue = "invalid") String username) throws Exception {
+
+
+        newReservation.setUser(new User(username));
 
         try {
-            if (!userRepository.findUserByToken(token).getUsername().equals(newReservation.getUser().getUsername())) {
+            if (username.equals("invalid") || !userRepository.findUserByToken(token).getUsername().toLowerCase().equals(newReservation.getUser().getUsername().toLowerCase())) {
                 ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist or the token is invalid.", HttpStatus.FORBIDDEN.value());
                 return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
             }
 
         } catch (Exception e) {
 
-            ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist or the token is invalid.", HttpStatus.FORBIDDEN.value());
+            ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist or the token is invalid(try).", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
@@ -125,6 +137,7 @@ public class ReservationController {
 
             repository.save(newReservation);
             ReservationResponse roomReservation = new ReservationResponse("Room RESERVED", HttpStatus.OK.value());
+            roomReservation.setReservation(newReservation);
             return new ResponseEntity<>(roomReservation, HttpStatus.OK);
         }
     }
