@@ -2,6 +2,7 @@ package nl.tudelft.oopp.group43.controllers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.classes.StringChecker;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -743,6 +745,32 @@ public class RoomPageController {
         }
         String startDate = dateString;
         String endDate = localDate.plusDays(1).getYear() + "-" + month + "-" + day;
+        String today = "";
+        switch (localDate.getDayOfWeek()) {
+            case MONDAY:
+                today = "mo";
+                break;
+            case TUESDAY:
+                today = "tu";
+                break;
+            case WEDNESDAY:
+                today = "we";
+                break;
+            case THURSDAY:
+                today = "th";
+                break;
+            case FRIDAY:
+                today = "fr";
+                break;
+            case SATURDAY:
+                today = "sa";
+                break;
+            case SUNDAY:
+                today = "su";
+                break;
+            default:
+                break;
+        }
 
         String jsonString = ServerCommunication.getReservationsByDate(startDate, endDate);
         ArrayList<String> unavailableRooms = RoomPageContent.getUnavailableRooms();
@@ -751,23 +779,42 @@ public class RoomPageController {
             JSONArray reservedRooms = (JSONArray) json.parse(jsonString);
             DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00.000+0000'");
 
+            final int endHour = Integer.parseInt(untilTime.getValue().substring(0, 2)) + 1;
+            final int startHour = Integer.parseInt(fromTime.getValue().substring(0, 2));
+            final LocalTime selectedStart = LocalTime.of(startHour, 0);
+            final LocalTime selectedEnd = LocalTime.of(endHour - 1, 59);
+
+            for (int i = 0; i < BuildingMap.getAll().size(); i++) {
+                JSONObject obj = BuildingMap.getAll().get(i);
+                System.out.println("testing building: " + obj.get("building_number"));
+                JSONObject openingHours = (JSONObject) json.parse((String) obj.get("opening_hours"));
+                LocalTime start = LocalTime.parse(((String) openingHours.get(today)).split("-")[0]);
+                LocalTime end = LocalTime.parse(((String) openingHours.get(today)).split("-")[1]);
+                if (start.compareTo(selectedStart) > 0 || end.compareTo(selectedEnd) < 0) {
+                    JSONArray arr = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
+                    for (Object object : arr) {
+                        JSONObject room = (JSONObject) object;
+                        unavailableRooms.add(Long.toString((long) room.get("id")));
+                        System.out.println("Timeframe is outside of opening hours for room: " + room.get("id"));
+                    }
+                }
+            }
+
             for (Object object : reservedRooms) {
                 JSONObject obj = (JSONObject) object;
                 boolean isInTimeFrame = false;
                 LocalDateTime startTime = LocalDateTime.parse((String) obj.get("starting_date"), customFormatter);
                 LocalDateTime endTime = LocalDateTime.parse((String) obj.get("end_date"), customFormatter);
-                int endHour = Integer.parseInt(untilTime.getValue().substring(0, 2)) + 1;
-                int startHour = Integer.parseInt(fromTime.getValue().substring(0, 2));
                 System.out.println(startHour + " : " + endHour);
                 System.out.println("testing room: " + obj.toJSONString());
 
                 if ((startTime.getHour() >= startHour && endTime.getHour() <= endHour) || (startTime.getHour() >= startHour && startTime.getHour() < endHour) || (endTime.getHour() > startHour && endTime.getHour() <= endHour)) {
                     isInTimeFrame = true;
-                    System.out.println(obj.get("room_id") + " is in the timeframe");
                 }
 
                 if (isInTimeFrame && !unavailableRooms.contains(obj.get("room_id"))) {
                     unavailableRooms.add(Long.toString((Long) obj.get("room_id")));
+                    System.out.println(obj.get("room_id") + " is in the timeframe");
                 }
             }
 

@@ -185,10 +185,12 @@ public class RoomPageContent {
             rc.setVgrow(Priority.SOMETIMES);
             list.getRowConstraints().add(rc);
         }
+        System.out.println("Adding all rooms!");
         for (int i = 0; i < selectedRooms.size(); i++) {
             JSONObject obj = selectedRooms.get(i);
             addRoom(obj, i);
         }
+        System.out.println("Adding rooms: Done!");
 
         if (ServerCommunication.getRole().equals("admin")) {
             addAdmin();
@@ -268,6 +270,7 @@ public class RoomPageContent {
         if (ServerCommunication.getToken().equals("invalid")) {
             reserveable.setStyle("-fx-text-fill: crimson;");
             reserveable.setText("Please log in first before making a reservation!");
+            reserveButton.setStyle("-fx-background-color: lightgray;");
         }
         reserveable.setLayoutX(scene.getWidth() - 333 - 350);
 
@@ -286,7 +289,11 @@ public class RoomPageContent {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                list.add(root, 0, i);
+                //try {
+                    list.add(root, 0, i);
+                //} catch (IndexOutOfBoundsException e) {
+                    //list.add(root, 0, i);
+                //}
             }
         });
 

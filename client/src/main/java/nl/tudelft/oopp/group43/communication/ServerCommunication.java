@@ -499,7 +499,7 @@ public class ServerCommunication {
         if (response == null) {
             return "Communication with server failed";
         }
-        System.out.println(response.body());
+        //System.out.println(response.body());
         return response.body();
     }
 
