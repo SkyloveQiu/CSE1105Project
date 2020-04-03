@@ -23,6 +23,29 @@
     -fx-border-width: 0;
 }
 
+.buildingBlock {
+    -fx-background-color: rgb(86, 128, 176);
+    -fx-background-radius: 2;
+}
+
+.buildingBlock:hover {
+    -fx-background-color: rgb(96, 138, 186);
+}
+
+.buildingName {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 20;
+    -fx-padding: 10;
+}
+
+.infoPane {
+    -fx-background-color: rgb(86, 128, 176);
+    -fx-background-radius: 2;
+    -fx-border-width: 1;
+    -fx-border-color: rgb(6, 48, 96);
+    -fx-border-radius: 2;
+}
+
 .text_labels {
     -fx-text-fill: silver;
 }
