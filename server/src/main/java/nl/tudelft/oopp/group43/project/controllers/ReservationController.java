@@ -129,6 +129,7 @@ public class ReservationController {
 
             repository.save(newReservation);
             ReservationResponse roomReservation = new ReservationResponse("Room RESERVED", HttpStatus.OK.value());
+            roomReservation.setReservation(newReservation);
             return new ResponseEntity<>(roomReservation, HttpStatus.OK);
         }
     }
