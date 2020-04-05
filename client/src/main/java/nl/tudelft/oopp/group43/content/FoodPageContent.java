@@ -1,7 +1,11 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
+
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -26,6 +30,7 @@ public class FoodPageContent {
     private static JSONArray array;
 
     private static ArrayList<String> selectedFood;
+    private static String selectedBuilding;
 
     /**
      * Add dynamic content to the food page.
@@ -33,8 +38,22 @@ public class FoodPageContent {
      */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
+        addTime();
         addBuildings();
-        addFood();
+    }
+
+    /**
+     * Add the times to the time choice box.
+     */
+    private static void addTime() {
+        ChoiceBox<String> timeBox = (ChoiceBox<String>) scene.lookup("#timeList");
+
+        ArrayList<String> times = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            times.add(i + ":00:00");
+        }
+
+        timeBox.setItems(FXCollections.observableArrayList(times));
     }
 
     /**
@@ -86,8 +105,35 @@ public class FoodPageContent {
             e.printStackTrace();
         }
 
-        buildingBox.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> addRooms(newValue));
+        buildingBox.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> selectBuilding(v, oldValue, newValue));
+    }
 
+    /**
+     * Event that occurs when a building is selected.
+     * @param v observable value of the choice box
+     * @param oldValue old value of the choice box
+     * @param newValue new value of the choice box
+     */
+    private static void selectBuilding(ObservableValue<? extends String> v, String oldValue, String newValue) {
+        for (Object obj : array) {
+            JSONObject jsonObject = (JSONObject) obj;
+            if (jsonObject.get("building_name").equals(newValue)) {
+                selectedBuilding = jsonObject.get("building_number").toString();
+                break;
+            }
+        }
+        removeFood();
+        addFood();
+    }
+
+    /**
+     * Removes all food from the food page.
+     */
+    private static void removeFood() {
+        selectedFood = new ArrayList<>();
+        GridPane foodGrid = (GridPane) scene.lookup("#foodGrid");
+        foodGrid.getChildren().clear();
+        foodGrid.getRowConstraints().clear();
     }
 
     /**
@@ -99,7 +145,8 @@ public class FoodPageContent {
         GridPane foodGrid = (GridPane) scene.lookup("#foodGrid");
         JSONParser jsonParser = new JSONParser();
         try {
-            JSONArray foodItemsJson = (JSONArray) jsonParser.parse(ServerCommunication.getFood());
+
+            JSONArray foodItemsJson = (JSONArray) jsonParser.parse(ServerCommunication.getFoodByBuilding(selectedBuilding));
 
             ArrayList<JSONObject> foodItems = new ArrayList<>();
             for (Object obj : foodItemsJson) {
@@ -113,8 +160,9 @@ public class FoodPageContent {
                     foodGrid.getRowConstraints().add(rowConstraints);
                 }
 
-                Label label = new Label(foodItems.get(i).get("name") + " €" + foodItems.get(i).get("price") + "\n" + foodItems.get(i).get("description"));
-                label.setId(foodItems.get(i).get("id").toString());
+                JSONObject foodProduct = (JSONObject) foodItems.get(i).get("foodProduct");
+                Label label = new Label(foodProduct.get("name") + " €" + foodProduct.get("price") + "\n" + foodProduct.get("description"));
+                label.setId(((JSONObject) foodItems.get(i).get("id")).get("foodProduct").toString());
                 label.setMinSize(100, 100);
                 label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 label.getStyleClass().add("foodLabels");
@@ -147,7 +195,32 @@ public class FoodPageContent {
         label.setCursor(Cursor.HAND);
     }
 
+    /**
+     * Gets all food selected in the correct format.
+     * @return Gets all food
+     */
     public static ArrayList<String> getSelectedFood() {
-        return selectedFood;
+        ArrayList<String> formatted = new ArrayList<>();
+        for (String s : selectedFood) {
+            formatted.add(selectedBuilding + "-" + s + "-1");
+        }
+        return formatted;
+    }
+
+    /**
+     * Gets the selected building.
+     * @return selected building
+     */
+    public static String getSelectedBuilding() {
+        return selectedBuilding;
+    }
+
+    /**
+     * Gets the selected time.
+     * @return selected time
+     */
+    public static String getSelectedTime() {
+        ChoiceBox<String> timeBox = (ChoiceBox<String>) scene.lookup("#timeList");
+        return timeBox.getValue();
     }
 }

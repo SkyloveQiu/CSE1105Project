@@ -34,12 +34,24 @@ public class FoodPageController {
         }
         String processedFood = String.join("-", food);
 
+        if (FoodPageContent.getSelectedTime() == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You haven't selected any time!");
+            alert.showAndWait();
+            return;
+        }
 
+        String body = "{\"building\":\"" + FoodPageContent.getSelectedBuilding() + "\",\"reservation\":\"0\",\"user\":\"" + ServerCommunication.getUsername() + "\",\"time\":\"" + FoodPageContent.getSelectedTime() + "\"}";
 
-        String response = ServerCommunication.createFoodOrder(processedFood, "invalid");
+        String response = ServerCommunication.createFoodOrder(processedFood, true, body);
         if (!response.equals("OK")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Something went wrong!");
+            alert.showAndWait();
+            return;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You reserved your food!");
             alert.showAndWait();
             return;
         }

@@ -26,7 +26,7 @@
 
       <ChoiceBox fx:id="returnBuildingList" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="320.0" prefWidth="280.0"/>
 
-      <ChoiceBox fx:id="returnRoomsList" AnchorPane.topAnchor="300.0" AnchorPane.rightAnchor="234.0" prefWidth="280.0"/>
+      <ChoiceBox fx:id="timeList" AnchorPane.topAnchor="300.0" AnchorPane.rightAnchor="234.0" prefWidth="280.0"/>
 
       <ScrollPane fx:id="foodList" style="-fx-background-color: white;" fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="188.0" AnchorPane.topAnchor="365.0" AnchorPane.rightAnchor="100.0" prefWidth="700.0" prefHeight="330.0" >
          <content>

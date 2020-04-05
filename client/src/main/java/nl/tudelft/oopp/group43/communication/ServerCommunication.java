@@ -743,14 +743,30 @@ public class ServerCommunication {
     }
 
     /**
+     * Gets all food in a specific building
+     * @param building The building id
+     * @return All foods in json format
+     */
+    public static String getFoodByBuilding(String building) {
+        String url = cURL + "buildingFoodProduct/moreDetails?building=" + building;
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
      * Creates a food order.
-     * @param order the order in the following format: foodID-foodID-foodID-...
+     * @param order the order in the following format: buildingID-foodID-amount-...
      * @param away
      * @return Confirmation message if the order was successful or not.
      */
-    public static String createFoodOrder(String order, String away) {
+        public static String createFoodOrder(String order, Boolean away, String body) {
         String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order + "&away=" + away;
-        HttpResponse<String> response = post(url);
+        HttpResponse<String> response = post(url, body, "Content-Type", "application/json;charset=UTF-8");
 
         if (response == null) {
             return  "Communication with server failed";
