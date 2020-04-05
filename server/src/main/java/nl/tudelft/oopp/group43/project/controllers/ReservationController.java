@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import nl.tudelft.oopp.group43.project.payload.ReservationResponse;
 import nl.tudelft.oopp.group43.project.repositories.ReservationRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -98,6 +101,27 @@ public class ReservationController {
 
             ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This user does not exist or the token is invalid(try).", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (roomRepository.existsRoomById(newReservation.getRoomId())) {
+
+            String attributes = roomRepository.getRoomById(newReservation.getRoomId()).getAttributes();
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(attributes);
+            if (object.get("Only_Employee").toString() != null) {
+                Boolean value = Boolean.valueOf(object.get("Only_Employee").toString());
+                if (value) {
+                    String role = userRepository.findUserByToken(token).getRole();
+                    System.out.println(role);
+
+                    if (!(role.equals("employee") || role.equals("admin"))) {
+                        System.out.println("privilege error");
+                        ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This is a employee only room.", HttpStatus.FORBIDDEN.value());
+                        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+
+                    }
+                }
+            }
         }
 
 
