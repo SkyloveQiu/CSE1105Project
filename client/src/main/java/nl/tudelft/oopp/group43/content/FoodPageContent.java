@@ -1,6 +1,8 @@
 package nl.tudelft.oopp.group43.content;
 
 import java.io.Console;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -13,10 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -155,22 +154,38 @@ public class FoodPageContent {
 
                 JSONObject foodProduct = (JSONObject) foodItems.get(i).get("foodProduct");
 
-                HBox hBox = new HBox();
-                hBox.getStyleClass().add("foodLabels");
-                hBox.setId(((JSONObject) foodItems.get(i).get("id")).get("foodProduct").toString());
-                hBox.setMinSize(100, 100);
-                hBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                AnchorPane anchorPane = new AnchorPane();
+                anchorPane.getStyleClass().add("foodLabels");
+                anchorPane.setId(((JSONObject) foodItems.get(i).get("id")).get("foodProduct").toString());
+                anchorPane.setMinSize(100, 100);
+                anchorPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-                Label label = new Label(foodProduct.get("name") + " €" + foodProduct.get("price") + "\n" + foodProduct.get("description"));
-                label.setId(((JSONObject) foodItems.get(i).get("id")).get("foodProduct").toString());
+                Label foodName = new Label(foodProduct.get("name").toString());
+                foodName.getStyleClass().add("foodName");
+                AnchorPane.setLeftAnchor(foodName, 40d);
+                AnchorPane.setTopAnchor(foodName, 20d);
+
+                Label foodDescription = new Label(foodProduct.get("description").toString());
+                foodDescription.getStyleClass().add("foodDescription");
+                AnchorPane.setLeftAnchor(foodDescription, 40d);
+                AnchorPane.setTopAnchor(foodDescription, 55d);
+
+                double price = Double.parseDouble(foodProduct.get("price").toString());
+                DecimalFormat formatter = new DecimalFormat("0.00");
+                Label foodPrice = new Label("€" + formatter.format(price));
+                foodPrice.getStyleClass().add("foodPrice");
+                AnchorPane.setRightAnchor(foodPrice, 275d);
+                AnchorPane.setTopAnchor(foodPrice, 40d);
 
                 Spinner<Integer> spinner = new Spinner<>();
                 SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0);
                 spinner.setValueFactory(valueFactory);
+                AnchorPane.setRightAnchor(spinner, 40d);
+                AnchorPane.setTopAnchor(spinner, 35d);
 
-                hBox.getChildren().addAll(label, spinner);
+                anchorPane.getChildren().addAll(foodName, foodDescription, foodPrice, spinner);
 
-                foodGrid.add(hBox, 0, i);
+                foodGrid.add(anchorPane, 0, i);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -187,14 +202,22 @@ public class FoodPageContent {
         for (Object obj : foodGrid.getChildren()) {
             if (obj instanceof HBox) {
                 HBox foodProduct = (HBox) obj;
+
+                String spinnerValue = "0";
+                for (Object foodObj : foodProduct.getChildren()) {
+                    if (foodObj instanceof Spinner) {
+                        Spinner spinner = (Spinner) foodObj;
+                        spinnerValue = spinner.getValue().toString();
+                    }
+                }
+
+                if (!spinnerValue.equals("0")) {
+                    selectedFood.add(selectedBuilding + "-" + foodProduct.getId() + "-" + spinnerValue);
+                }
             }
         }
 
-        ArrayList<String> formatted = new ArrayList<>();
-        for (String s : selectedFood) {
-            formatted.add(selectedBuilding + "-" + s + "-1");
-        }
-        return formatted;
+        return selectedFood;
     }
 
     /**

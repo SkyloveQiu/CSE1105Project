@@ -766,6 +766,7 @@ public class ServerCommunication {
      */
         public static String createFoodOrder(String order, Boolean away, String body) {
         String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order + "&away=" + away;
+        System.out.println(url);
         HttpResponse<String> response = post(url, body, "Content-Type", "application/json;charset=UTF-8");
 
         if (response == null) {

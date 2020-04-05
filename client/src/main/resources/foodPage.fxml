@@ -28,12 +28,15 @@
 
       <ChoiceBox fx:id="timeList" AnchorPane.topAnchor="300.0" AnchorPane.rightAnchor="234.0" prefWidth="280.0"/>
 
-      <ScrollPane fx:id="foodList" style="-fx-background-color: white;" fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="188.0" AnchorPane.topAnchor="365.0" AnchorPane.rightAnchor="100.0" prefWidth="700.0" prefHeight="330.0" >
+      <ScrollPane fx:id="foodList" style="-fx-background-color: transparent; -fx-background: transparent" fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="365.0" AnchorPane.rightAnchor="0.0" prefWidth="700.0" prefHeight="330.0" >
          <content>
-            <GridPane fx:id="foodGrid" style="-fx-background-color: #29293d;" minHeight="700" hgap="20.0" vgap="20.0" >
+            <GridPane fx:id="foodGrid" style="-fx-background-color: #29293d;" minHeight="700" hgap="20.0" vgap="20.0">
                <columnConstraints>
                   <ColumnConstraints percentWidth="100" />
                </columnConstraints>
+               <padding>
+                  <Insets left="100" right="100" />
+               </padding>
             </GridPane>
          </content>
       </ScrollPane>

@@ -7,6 +7,16 @@
     -fx-font-size: 15px;
 }
 
+.foodName {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 1.5em;
+}
+
+.foodDescription {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-style: italic;
+}
+
 .selected_food {
     -fx-background-color: forestgreen;
 }
