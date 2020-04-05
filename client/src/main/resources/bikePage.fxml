@@ -129,8 +129,8 @@
             <children>
                <AnchorPane maxHeight="Infinity" maxWidth="Infinity" GridPane.columnSpan="2">
                   <DatePicker fx:id="reservationStartingDate" AnchorPane.leftAnchor="20" />
-                  <Label alignment="CENTER" style="-fx-text-fill: #e7f2fe;" text="Select starting date, end date and building:" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Label>
-                  <DatePicker fx:id="reservationEndingDate" AnchorPane.rightAnchor="20" />
+                  <Label alignment="CENTER" style="-fx-text-fill: #e7f2fe;" text="Select starting date and building:" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="200" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Label>
+                  <!--<DatePicker fx:id="reservationEndingDate" AnchorPane.rightAnchor="20" />-->
                </AnchorPane>
 
                <ScrollPane fitToWidth="true" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" GridPane.rowIndex="1">
@@ -146,7 +146,7 @@
                   </content>
                </ScrollPane>
 
-               <Button fx:id="reserveBike" maxHeight="Infinity" maxWidth="Infinity" styleClass="menuButtons" text="Return" GridPane.columnIndex="1" GridPane.rowIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
+               <Button fx:id="reserveBike" maxHeight="Infinity" maxWidth="Infinity" styleClass="menuButtons" text="Reserver" GridPane.columnIndex="1" GridPane.rowIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
             </children>
          </GridPane>
 
