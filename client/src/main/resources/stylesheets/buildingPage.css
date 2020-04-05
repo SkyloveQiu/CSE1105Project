@@ -13,7 +13,7 @@
 
 .scroll-bar:vertical .thumb {
     -fx-background-color: skyblue;
-    -fx-background-radius: 0;
+    -fx-background-radius: 3;
     -fx-border-width: 0;
 }
 
@@ -21,6 +21,35 @@
     -fx-background-color: #2d3a61;
     -fx-background-radius: 0;
     -fx-border-width: 0;
+}
+
+.buildingBlock {
+    -fx-background-color: rgb(86, 128, 176);
+    -fx-background-radius: 2;
+}
+
+.buildingBlock:hover {
+    -fx-background-color: rgb(96, 138, 186);
+}
+
+.buildingName {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 20;
+    -fx-padding: 10;
+}
+
+.buildingId {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 28;
+    -fx-padding: 10;
+}
+
+.infoPane {
+    -fx-background-color: rgb(86, 128, 176);
+    -fx-background-radius: 2;
+    -fx-border-width: 1;
+    -fx-border-color: rgb(6, 48, 96);
+    -fx-border-radius: 2;
 }
 
 .text_labels {

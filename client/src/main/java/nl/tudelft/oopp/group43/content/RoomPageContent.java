@@ -7,12 +7,14 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -20,6 +22,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -58,6 +61,7 @@ public class RoomPageContent {
     private static LocalDate date;
     private static String hoursFrom;
     private static String hoursTil;
+    private static boolean timeSelected = false;
 
     private static AnchorPane ap;
     private static GridPane list;
@@ -67,6 +71,7 @@ public class RoomPageContent {
 
     private static JSONArray databaseRooms;
     private static ArrayList<JSONObject> selectedRooms;
+    private static ArrayList<String> unavailableRooms;
 
     private static boolean adminAdded = false;
     private static ArrayList<CheckBox> checkBoxes;
@@ -97,28 +102,19 @@ public class RoomPageContent {
         addGridPaneSizeListener(list);
 
         selectedRooms = new ArrayList<>();
+        unavailableRooms = new ArrayList<>();
 
-        addChoiceboxContent();
         addDatepickerListener();
-    }
+        disableDatePickerDates();
 
-    /**
-     * Adds the content to the hour choiceboxes.
-     */
-    private static void addChoiceboxContent() {
-        ArrayList<String> hours = new ArrayList<>();
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {
-                hours.add("0" + i + ":00");
-            } else {
-                hours.add(i + ":00");
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getAndAddRooms();
             }
-        }
-        ObservableList<String> list = FXCollections.observableArrayList(hours);
-        fromTime.setItems(list);
-        untilTime.setItems(list);
-
-        addChoiceboxListener();
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
@@ -134,9 +130,11 @@ public class RoomPageContent {
                     Pane root = (Pane) node;
                     Button button = (Button) ((Pane) root.getChildren().get(0)).getChildren().get(1);
                     Line line = (Line) ((Pane) root.getChildren().get(0)).getChildren().get(5);
+                    Label reservable = (Label) ((Pane) root.getChildren().get(0)).getChildren().get(6);
 
                     line.setEndX((double) newValue - 80);
                     button.setLayoutX((double) newValue - 220);
+                    reservable.setLayoutX((double) newValue - 230 - reservable.getWidth());
                 }
                 if (editButtons != null) {
                     for (Button editButton : editButtons) {
@@ -149,69 +147,21 @@ public class RoomPageContent {
     }
 
     /**
-     * Adds listeners to the choiceboxes that set the hours when one is selected + gets the available rooms when all fields are inputted.
+     * Gets and adds all rooms from the database and adds them in the arrays.
      */
-    private static void addChoiceboxListener() {
-        fromTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                setHoursFrom(fromTime.getItems().get((Integer) number2));
-
-                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                    try {
-                        JSONParser json = new JSONParser();
-                        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                        databaseRooms = rooms;
-                        for (int i = 0; i < rooms.size(); i++) {
-                            selectedRooms.add((JSONObject) rooms.get(i));
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
+    public static void getAndAddRooms() {
+        try {
+            JSONParser json = new JSONParser();
+            JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+            databaseRooms = rooms;
+            for (int i = 0; i < rooms.size(); i++) {
+                selectedRooms.add((JSONObject) rooms.get(i));
             }
-        });
-        untilTime.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                setHoursTil(untilTime.getItems().get((Integer) number2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                    try {
-                        JSONParser json = new JSONParser();
-                        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                        databaseRooms = rooms;
-                        for (int i = 0; i < rooms.size(); i++) {
-                            selectedRooms.add((JSONObject) rooms.get(i));
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Adds a listener to the datepicker that sets the date when one is selected + gets the available rooms when all fields are inputted.
-     */
-    private static void addDatepickerListener() {
-        datepicker.valueProperty().addListener((ov, oldValue, newValue) -> {
-            setDate(newValue);
-
-            if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-                try {
-                    JSONParser json = new JSONParser();
-                    JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                    databaseRooms = rooms;
-                    for (int i = 0; i < rooms.size(); i++) {
-                        selectedRooms.add((JSONObject) rooms.get(i));
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        addRooms();
     }
 
     /**
@@ -219,12 +169,20 @@ public class RoomPageContent {
      */
     public static void addRooms() {
         list = (GridPane) scene.lookup("#roomList");
+        checkBoxes = new ArrayList<>();
+        editButtons = new ArrayList<>();
 
-        while (list.getRowConstraints().size() > 0) {
-            list.getRowConstraints().remove(0);
-        }
-        while (list.getChildren().size() > 0) {
-            list.getChildren().remove(0);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                list.getRowConstraints().clear();
+                list.getChildren().clear();
+            }
+        });
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         for (int i = 0; i < selectedRooms.size(); i++) {
@@ -232,10 +190,13 @@ public class RoomPageContent {
             rc.setMinHeight(100);
             rc.setVgrow(Priority.SOMETIMES);
             list.getRowConstraints().add(rc);
-
+        }
+        System.out.println("Adding all rooms!");
+        for (int i = 0; i < selectedRooms.size(); i++) {
             JSONObject obj = selectedRooms.get(i);
             addRoom(obj, i);
         }
+        System.out.println("Adding rooms: Done!");
 
         if (ServerCommunication.getRole().equals("admin")) {
             addAdmin();
@@ -265,18 +226,33 @@ public class RoomPageContent {
         name.setLayoutY(30);
         name.setFont(new Font("Arial", 20));
 
+        Label reserveable = new Label();
+        reserveable.setLayoutY(33);
+        reserveable.setPrefHeight(30);
+        reserveable.setPrefWidth(350);
+        reserveable.setFont(new Font("Arial", 15));
+        reserveable.setAlignment(Pos.CENTER_RIGHT);
+
         Button reserveButton = new Button("Reserve");
-        reserveButton.setStyle("-fx-background-color: mediumseagreen;");
         reserveButton.setPrefSize(100, 30);
         reserveButton.setLayoutX(scene.getWidth() - 323);
         reserveButton.setLayoutY(33);
-        addReservationButtonEvent(reserveButton, id);
+        if (!unavailableRooms.contains(id.split(";")[0]) && timeSelected) {
+            reserveButton.setStyle("-fx-background-color: mediumseagreen;");
+            addReservationButtonEvent(reserveButton, id);
+            reserveable.setText("available");
+            reserveable.setStyle("-fx-text-fill: darkseagreen;");
+        } else {
+            reserveButton.setStyle("-fx-background-color: lightgray;");
+            reserveable.setText("unavailable");
+            reserveable.setStyle("-fx-text-fill: crimson;");
+        }
 
         Label building = new Label((String) ((JSONObject) obj.get("building")).get("building_name"));
         building.setLayoutX(35);
         building.setLayoutY(55);
         building.setFont(new Font("Arial", 12));
-        building.setTextFill(Color.FORESTGREEN);
+        building.setTextFill(Color.SILVER);
 
         Line line = new Line();
         line.setStartX(0);
@@ -294,18 +270,106 @@ public class RoomPageContent {
         Label expanded = new Label("false");
         expanded.setVisible(false);
 
+        if (!timeSelected) {
+            reserveable.setText("Please select a time and date!");
+        }
+        if (ServerCommunication.getToken().equals("invalid")) {
+            reserveable.setStyle("-fx-text-fill: crimson;");
+            reserveable.setText("Please log in first before making a reservation!");
+            reserveButton.setStyle("-fx-background-color: lightgray;");
+        }
+        reserveable.setLayoutX(scene.getWidth() - 680);
+
         content.getChildren().add(name);
         content.getChildren().add(reserveButton);
         content.getChildren().add(expanded);
         content.getChildren().add(building);
         content.getChildren().add(info);
         content.getChildren().add(line);
-        content.setStyle("-fx-background-color: paleturquoise; -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
+        content.getChildren().add(reserveable);
+        content.setStyle("-fx-background-color: rgb(86, 128, 176); -fx-background-radius: 20 20 20 20; -fx-border-color: black; -fx-border-radius: 20 20 20 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 3, 5)");
         content.setPrefHeight(100);
         content.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         //System.out.println("add room: " + name.getText());
-        list.add(root, 0, i);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                //try {
+                list.add(root, 0, i);
+                //} catch (IndexOutOfBoundsException e) {
+                //list.add(root, 0, i);
+                //}
+            }
+        });
+
+        if (ServerCommunication.getRole().equals("admin")) {
+            CheckBox checkBox = new CheckBox();
+            checkBox.setLayoutX(10);
+            checkBox.setLayoutY(40);
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    System.out.println("ticked room: " + root.getId());
+                    deleteRoomList.add(root.getId());
+                } else {
+                    for (int in = 0; in < deleteRoomList.size(); in++) {
+                        if (deleteRoomList.get(in).equals(root.getId())) {
+                            deleteRoomList.remove(in);
+                        }
+                    }
+                    System.out.println("unticked room: " + root.getId());
+                }
+            });
+
+            checkBoxes.add(checkBox);
+
+            Button edit = new Button("Edit room");
+            edit.setLayoutY(400);
+            edit.setLayoutX(750);
+            edit.getStyleClass().add("edit");
+            edit.setMinSize(200, 75);
+            edit.setVisible(false);
+            editButtons.add(edit);
+            ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
+            img.setFitHeight(25.0);
+            img.setFitWidth(25.0);
+            edit.setGraphic(img);
+            edit.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    scene.lookup("#grayBackground").setVisible(true);
+                    scene.lookup("#addMenu").setVisible(false);
+                    menu = "edit";
+
+                    ((TextField) scene.lookup("#editRoomName")).setText(((Label) ((Pane) root.getChildren().get(0)).getChildren().get(0)).getText());
+                    ((Label) scene.lookup("#editRoomNumber")).setText("Room being edited: " + root.getId().split(";")[0]);
+                    ((Label) scene.lookup("#editId")).setText(root.getId());
+                    updateFields((AnchorPane) scene.lookup("#editFields"), info.getText());
+
+                    AnchorPane editFields = (AnchorPane) scene.lookup("#editFields");
+                    for (Node n : editFields.getChildren()) {
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
+                        }
+                    }
+                    editFields = (AnchorPane) scene.lookup("#edit");
+                    for (Node n : editFields.getChildren()) {
+                        if (n.getId() != null && n.getId().contains("Check")) {
+                            ((Label) n).setText("");
+                        }
+                    }
+
+                    scene.lookup("#editMenu").setVisible(true);
+                }
+            });
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    root.getChildren().add(checkBox);
+                    content.getChildren().add(edit);
+                }
+            });
+        }
     }
 
     /**
@@ -366,7 +430,9 @@ public class RoomPageContent {
                         Pane node = (Pane) n;
                         node = (Pane) node.getChildren().get(0);
                         for (int i = 4; i < node.getChildren().size(); i++) {
-                            node.getChildren().get(i).setVisible(false);
+                            if (i != 6) { // this is so that this does not make the label with the reserve status invisible
+                                node.getChildren().get(i).setVisible(false);
+                            }
                         }
                     }
 
@@ -381,7 +447,9 @@ public class RoomPageContent {
                         Pane node = (Pane) n;
                         node = (Pane) node.getChildren().get(0);
                         for (int i = 4; i < node.getChildren().size(); i++) {
-                            node.getChildren().get(i).setVisible(false);
+                            if (i != 6) { // this is so that this does not make the label with the reserve status invisible
+                                node.getChildren().get(i).setVisible(false);
+                            }
                         }
                     }
 
@@ -402,7 +470,7 @@ public class RoomPageContent {
             public void handle(MouseEvent event) {
                 if (!ServerCommunication.getToken().equals("invalid")) {
                     ArrayList selectedHours = ReservationConfig.getSelectedHours();
-                    ReservationConfig.setSelectedRoom(Long.parseLong(id));
+                    ReservationConfig.setSelectedRoom(Long.parseLong(id.split(";")[0]));
 
                     String response = "";
 
@@ -440,72 +508,6 @@ public class RoomPageContent {
      * Adds the admin buttons for CRUD.
      */
     private static void addAdmin() {
-        checkBoxes = new ArrayList<>();
-        editButtons = new ArrayList<>();
-
-        for (Node node : list.getChildren()) {
-            Pane root = (Pane) node;
-            CheckBox checkBox = new CheckBox();
-            checkBox.setLayoutX(10);
-            checkBox.setLayoutY(40);
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    System.out.println("ticked room: " + root.getId());
-                    deleteRoomList.add(root.getId());
-                } else {
-                    for (int i = 0; i < deleteRoomList.size(); i++) {
-                        if (deleteRoomList.get(i).equals(root.getId())) {
-                            deleteRoomList.remove(i);
-                        }
-                    }
-                    System.out.println("unticked room: " + root.getId());
-                }
-            });
-            root.getChildren().add(checkBox);
-            checkBoxes.add(checkBox);
-
-            Button edit = new Button("Edit room");
-            edit.setLayoutY(400);
-            edit.setLayoutX(750);
-            edit.getStyleClass().add("edit");
-            edit.setMinSize(200, 75);
-            edit.setVisible(false);
-            editButtons.add(edit);
-            ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
-            img.setFitHeight(25.0);
-            img.setFitWidth(25.0);
-            edit.setGraphic(img);
-            ((Pane) root.getChildren().get(0)).getChildren().add(edit);
-            edit.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    scene.lookup("#grayBackground").setVisible(true);
-                    scene.lookup("#addMenu").setVisible(false);
-                    menu = "edit";
-
-                    ((TextField) scene.lookup("#editRoomName")).setText(((Label) ((Pane) root.getChildren().get(0)).getChildren().get(0)).getText());
-                    ((Label) scene.lookup("#editRoomNumber")).setText("Room being edited: " + root.getId().split(";")[0]);
-                    ((Label) scene.lookup("#editId")).setText(root.getId());
-                    updateFields((AnchorPane) scene.lookup("#editFields"), ((Label) ((Pane) root.getChildren().get(0)).getChildren().get(4)).getText());
-
-                    AnchorPane editFields = (AnchorPane) scene.lookup("#editFields");
-                    for (Node n : editFields.getChildren()) {
-                        if (n.getId() != null && n.getId().contains("Check")) {
-                            ((Label) n).setText("");
-                        }
-                    }
-                    editFields = (AnchorPane) scene.lookup("#edit");
-                    for (Node n : editFields.getChildren()) {
-                        if (n.getId() != null && n.getId().contains("Check")) {
-                            ((Label) n).setText("");
-                        }
-                    }
-
-                    scene.lookup("#editMenu").setVisible(true);
-                }
-            });
-        }
-
         if (!adminAdded) {
             adminAdded = true;
             ThreadLock lock = new ThreadLock();
@@ -524,7 +526,6 @@ public class RoomPageContent {
             delete.setEffect(blend);
             delete.setCache(true);
             delete.setCacheHint(CacheHint.SPEED);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, delete);
             delete.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -539,7 +540,6 @@ public class RoomPageContent {
             deleteHover.setLayoutY(263);
             deleteHover.getStyleClass().add("deleteHover");
             addHover(delete, deleteHover);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
 
             Label deselect = new Label("deselect all");
             deselect.setPrefSize(124, 40);
@@ -557,15 +557,12 @@ public class RoomPageContent {
             deselectHover.setLayoutY(263);
             deselectHover.getStyleClass().add("filler"); //this is a filler because otherwise the addHover method does not work XD
             addHover(deselect, deselectHover);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselect);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselectHover);
 
             Label seperator = new Label();
             seperator.setPrefSize(5, 44);
             seperator.setLayoutX(316);
             seperator.setLayoutY(263);
             seperator.getStyleClass().add("seperator");
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, seperator);
 
             ImageView add = new ImageView();
             add.setImage(new Image("/icons/add-icon.png"));
@@ -632,7 +629,6 @@ public class RoomPageContent {
                     scene.lookup("#addMenu").setVisible(true);
                 }
             });
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, add);
 
             Pane addHover = new Pane();
             addHover.setPrefSize(44, 44);
@@ -640,7 +636,19 @@ public class RoomPageContent {
             addHover.setLayoutY(263);
             addHover.getStyleClass().add("deleteHover");
             addHover(add, addHover);
-            ((AnchorPane) scene.lookup("#root")).getChildren().add(9, addHover);
+
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, delete);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deleteHover);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselect);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, deselectHover);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, seperator);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, add);
+                    ((AnchorPane) scene.lookup("#root")).getChildren().add(9, addHover);
+                }
+            });
         }
     }
 
@@ -685,6 +693,108 @@ public class RoomPageContent {
                 index++;
             }
         }
+    }
+
+    private static void deleteRooms(MouseEvent event) {
+        // if(deleteRoomList.size() == 0)
+        //   return;
+        String verification = "OK";
+        for (int i = 0; i < deleteRoomList.size(); i++) {
+            String index = deleteRoomList.get(i);
+
+            String message = ServerCommunication.sendDeleteRoom(index.split(";")[0]);
+            if (!message.equals("OK")) {
+                verification = "NOT OK";
+                break;
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (verification.equals("NOT OK")) {
+            alert.setContentText("Something goes wrong during the procedure!" + "\n" + " Please try again!");
+        } else {
+            alert.setContentText("The operation has been successfully done!");
+            reloadRooms();
+        }
+        alert.showAndWait();
+
+    }
+
+    /**
+     * Reloads the rooms, after an operation is done.
+     */
+    public static void reloadRooms() {
+        SceneLoader.configureBuildingMap();
+
+        if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+            try {
+                JSONParser json = new JSONParser();
+                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+                databaseRooms = rooms;
+                for (int i = 0; i < rooms.size(); i++) {
+                    selectedRooms.add((JSONObject) rooms.get(i));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        addRooms();
+    }
+
+    /**
+     * Adds listeners to the choiceboxes that set the hours when one is selected + gets the available rooms when all fields are inputted.
+     */
+    private static void addChoiceboxListener() {
+        fromTime.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println(newValue);
+                setHoursFrom(newValue);
+
+                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+                    timeSelected = true;
+                }
+            }
+        });
+        untilTime.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println(newValue);
+                setHoursTil(newValue);
+
+                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+                    timeSelected = true;
+                }
+            }
+        });
+    }
+
+    /**
+     * Adds a listener to the datepicker that sets the date when one is selected + gets the available rooms when all fields are inputted.
+     */
+    private static void addDatepickerListener() {
+        datepicker.valueProperty().addListener((ov, oldValue, newValue) -> {
+            setDate(newValue);
+
+            if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+                timeSelected = true;
+            }
+        });
+    }
+
+    /**
+     * Disables all dates in the date picker that are in the past.
+     */
+    private static void disableDatePickerDates() {
+        DatePicker startingDatePicker = (DatePicker) scene.lookup("#date");
+        startingDatePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
     }
 
     /**
@@ -759,50 +869,6 @@ public class RoomPageContent {
         RoomPageContent.date = date;
     }
 
-    private static void deleteRooms(MouseEvent event) {
-        // if(deleteRoomList.size() == 0)
-        //   return;
-        String verification = "OK";
-        for (int i = 0; i < deleteRoomList.size(); i++) {
-            String index = deleteRoomList.get(i);
-
-            String message = ServerCommunication.sendDeleteRoom(index.split(";")[0]);
-            if (!message.equals("OK")) {
-                verification = "NOT OK";
-                break;
-            }
-        }
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        if (verification.equals("NOT OK")) {
-            alert.setContentText("Something goes wrong during the procedure!" + "\n" + " Please try again!");
-        } else {
-            alert.setContentText("The operation has been successfully done!");
-            reloadRooms();
-        }
-        alert.showAndWait();
-
-    }
-
-    /**
-     * Reloads the rooms, after an operation is done.
-     */
-    public static void reloadRooms() {
-        if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-            try {
-                JSONParser json = new JSONParser();
-                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                databaseRooms = rooms;
-                for (int i = 0; i < rooms.size(); i++) {
-                    selectedRooms.add((JSONObject) rooms.get(i));
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        addRooms();
-    }
-
     public static String getMenu() {
         return menu;
     }
@@ -813,7 +879,14 @@ public class RoomPageContent {
 
     public static void setAdminAdd(boolean admin) {
         adminAdded = admin;
+    }
 
+    public static ArrayList<String> getUnavailableRooms() {
+        return unavailableRooms;
+    }
+
+    public static void setTimeSelected(boolean b) {
+        timeSelected = b;
     }
 
     /**

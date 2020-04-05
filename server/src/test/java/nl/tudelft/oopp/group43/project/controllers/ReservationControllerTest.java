@@ -84,7 +84,7 @@ public class ReservationControllerTest {
         when(mockRepository.save(any(Reservation.class))).thenReturn(new Reservation(0));
 
 
-        final ResponseEntity result = reservationControllerUnderTest.createBuildingReservation(newReservation, "token");
+        final ResponseEntity result = reservationControllerUnderTest.createBuildingReservation(newReservation, "token", "name");
 
         assertNotNull(result);
     }

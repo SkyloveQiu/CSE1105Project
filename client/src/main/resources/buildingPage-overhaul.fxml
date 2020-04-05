@@ -1,56 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" stylesheets="stylesheets/buildingPage.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BuildingPageController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" stylesheets="stylesheets/buildingPage.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BuildingPageController">
    <children>
-      <TextField fx:id="searchBar" onAction="#searchBuildings" prefHeight="65.0" promptText="Search for buildings" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="109.0" AnchorPane.topAnchor="180.0">
-         <font>
-            <Font name="Arial" size="35.0" />
-         </font>
-      </TextField>
-
-      <Pane prefHeight="65" prefWidth="65" style="-fx-background-color: cornflowerblue;" AnchorPane.rightAnchor="105" AnchorPane.topAnchor="180" />
-      <ImageView fx:id="search" fitHeight="65.0" fitWidth="65.0" layoutX="1175.0" layoutY="180.0" onMouseClicked="#searchBuildings" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="181.0">
-         <image>
-            <Image url="@/icons/search-icon.png" />
-         </image>
-      </ImageView>
-
-      <Pane fx:id="editPane" prefWidth="39" prefHeight="39" AnchorPane.leftAnchor="124" AnchorPane.topAnchor="256" />
-      <ImageView fx:id="edit" fitHeight="29" fitWidth="29" onMouseClicked="#showEditMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="129" AnchorPane.topAnchor="261">
-         <image>
-            <Image url="@/icons/edit-icon.png" />
-         </image>
-      </ImageView>
-      <Pane fx:id="addPane" prefWidth="39" prefHeight="39" AnchorPane.leftAnchor="170" AnchorPane.topAnchor="256" />
-      <ImageView fx:id="add" fitHeight="35" fitWidth="35" onMouseClicked="#showAddMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="172" AnchorPane.topAnchor="258">
-         <image>
-            <Image url="@/icons/add-icon.png" />
-         </image>
-      </ImageView>
-      <Pane fx:id="deletePane" prefWidth="39" prefHeight="39" AnchorPane.leftAnchor="214" AnchorPane.topAnchor="256" />
-      <ImageView fx:id="delete" fitHeight="35" fitWidth="35" onMouseClicked="#showDeleteMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="216" AnchorPane.topAnchor="258">
-         <image>
-            <Image url="@/icons/delete-icon.png" />
-         </image>
-      </ImageView>
-
-      <ScrollPane fx:id="buildings" hbarPolicy="NEVER" fitToWidth="true" style="-fx-background-color: #29293d;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="308">
+      <ScrollPane fx:id="buildings" fitToWidth="true" style="-fx-background-color: #29293d;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="308">
          <content>
-            <GridPane fx:id="buildings_grid" hgap="20.0" minWidth="600" minHeight="700" style="-fx-background-color: #29293d;" vgap="20.0">
+            <GridPane fx:id="buildings_grid" hgap="20.0" minHeight="700" minWidth="600" style="-fx-background-color: #29293d;" vgap="20.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
                   <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
@@ -65,6 +26,47 @@
             </GridPane>
          </content>
       </ScrollPane>
+      <AnchorPane fx:id="infoPane" prefHeight="400" prefWidth="400" styleClass="infoPane" visible="false">
+         <children>
+            <Rectangle fill="rgb(86, 128, 176)" stroke="rgb(6, 48, 96)" height="40" rotate="45.0" width="40" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="-20.0" />
+            <Pane style="-fx-background-color: rgb(86, 128, 176);" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" />
+            <Label text="Rooms of the building:" alignment="CENTER" textFill="ghostwhite" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="195" ><font><Font name="Arial" size="25" /></font></Label>
+         </children>
+      </AnchorPane>
+
+      <Pane prefHeight="308" style="-fx-background-color: #29293d;" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+      <TextField fx:id="searchBar" onAction="#searchBuildings" prefHeight="65.0" promptText="Search for buildings" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="109.0" AnchorPane.topAnchor="180.0">
+         <font>
+            <Font name="Arial" size="35.0" />
+         </font>
+      </TextField>
+
+      <Pane prefHeight="65" prefWidth="65" style="-fx-background-color: cornflowerblue;" AnchorPane.rightAnchor="105" AnchorPane.topAnchor="180" />
+      <ImageView fx:id="search" fitHeight="65.0" fitWidth="65.0" layoutX="1175.0" layoutY="180.0" onMouseClicked="#searchBuildings" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="181.0">
+         <image>
+            <Image url="@/icons/search-icon.png" />
+         </image>
+      </ImageView>
+
+      <Pane fx:id="editPane" prefHeight="39" prefWidth="39" AnchorPane.leftAnchor="124" AnchorPane.topAnchor="256" />
+      <ImageView fx:id="edit" fitHeight="29" fitWidth="29" onMouseClicked="#showEditMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="129" AnchorPane.topAnchor="261">
+         <image>
+            <Image url="@/icons/edit-icon.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="addPane" prefHeight="39" prefWidth="39" AnchorPane.leftAnchor="170" AnchorPane.topAnchor="256" />
+      <ImageView fx:id="add" fitHeight="35" fitWidth="35" onMouseClicked="#showAddMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="172" AnchorPane.topAnchor="258">
+         <image>
+            <Image url="@/icons/add-icon.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="deletePane" prefHeight="39" prefWidth="39" AnchorPane.leftAnchor="214" AnchorPane.topAnchor="256" />
+      <ImageView fx:id="delete" fitHeight="35" fitWidth="35" onMouseClicked="#showDeleteMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="216" AnchorPane.topAnchor="258">
+         <image>
+            <Image url="@/icons/delete-icon.png" />
+         </image>
+      </ImageView>
 
       <Pane fx:id="grayBackground" style="-fx-background-color: rgba(40, 40, 40, 0.65);" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141" />
 
@@ -77,6 +79,7 @@
          </rowConstraints>
          <children>
             <AnchorPane maxHeight="750.0" maxWidth="900.0" style="-fx-background-color: rgb(57, 72, 102); -fx-background-radius: 7;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <Button text="Add exceptions" onAction="#addExceptions" fx:id="addExceptionsButton" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="18.0"></Button>
                <Label prefHeight="20.0" prefWidth="196.0" styleClass="text_labels" text="Choose a building to edit it" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="67.0">
                   <font>
                      <Font size="14.0" />
@@ -91,10 +94,10 @@
                      <AnchorPane minWidth="100.0" prefHeight="800" style="-fx-background-color: transparent;">
                         <children>
                            <Label styleClass="text_labels" text="Building Name" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20"><font><Font name="Arial" size="17.0" /></font></Label>
-                           <TextField fx:id="editBuildingName" onKeyTyped="#editCheckField" layoutX="20.0" layoutY="47.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="47.0" />
+                           <TextField fx:id="editBuildingName" layoutX="20.0" layoutY="47.0" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="47.0" />
                            <Label fx:id="editNameCheck" textFill="#d51414" AnchorPane.leftAnchor="475.0" AnchorPane.topAnchor="59.0" />
                            <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Address" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="100.0"><font><Font name="Arial" size="17.0" /></font></Label>
-                           <TextField fx:id="editBuildingAddress" onKeyTyped="#editCheckField" layoutX="20.0" layoutY="129.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="129.0" />
+                           <TextField fx:id="editBuildingAddress" layoutX="20.0" layoutY="129.0" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="129.0" />
                            <Label fx:id="editAddressCheck" textFill="#d51414" AnchorPane.leftAnchor="469.0" AnchorPane.topAnchor="94.0" />
 
 
@@ -200,7 +203,7 @@
                      </content>
                   </ScrollPane>
 
-                  <Button mnemonicParsing="false" onAction="#addConfirm" prefHeight="50" text="Add Building" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30" AnchorPane.bottomAnchor="7" />
+                  <Button mnemonicParsing="false" onAction="#addConfirm" prefHeight="50" text="Add Building" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30" />
                   <Button alignment="CENTER" onAction="#closeAddMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
                </children>
                <GridPane.margin>
@@ -220,7 +223,7 @@
          <children>
             <AnchorPane maxHeight="400.0" maxWidth="600.0" style="-fx-background-color: rgb(57, 72, 102);" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <Label text="Choose a building to delete it" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="35.0"><font><Font size="14.0" /></font></Label>
-               <ScrollPane fx:id="deleteBuildingList" styleClass="deleteBuildings" fitToWidth="true" prefWidth="300.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="65.0" />
+               <ScrollPane fx:id="deleteBuildingList" fitToWidth="true" prefWidth="300.0" styleClass="deleteBuildings" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="65.0" />
                <Label fx:id="deleteMsg" prefHeight="18.0" textFill="#d51414" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
                <Button mnemonicParsing="false" onAction="#deleteConfirm" text="Delete Building" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="40.0" />
                <Button alignment="CENTER" onAction="#closeDeleteMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
@@ -232,9 +235,9 @@
          </children>
       </GridPane>
 
-      <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+      <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="logo" style="-fx-opacity: 0.8;" fitHeight="100" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="60">
+            <ImageView fx:id="logo" fitHeight="100" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.8;" AnchorPane.rightAnchor="60" AnchorPane.topAnchor="10">
                <image>
                   <Image url="@/icons/tu-delft-logo.png" />
                </image>
