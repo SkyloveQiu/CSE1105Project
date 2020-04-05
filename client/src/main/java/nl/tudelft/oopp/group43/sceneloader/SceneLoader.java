@@ -42,7 +42,7 @@ public class SceneLoader extends Application {
 
         switch (sceneString) {
             case "building":
-                URL buildingUrl = getClass().getResource("/buildingPage-overhaul.fxml");
+                URL buildingUrl = getClass().getResource("/buildingPage.fxml");
                 loader.setLocation(buildingUrl);
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
@@ -64,7 +64,7 @@ public class SceneLoader extends Application {
                 BuildingPageContent.addContent(scene);
                 break;
             case "room":
-                URL roomUrl = getClass().getResource("/roomPage-overhaul.fxml");
+                URL roomUrl = getClass().getResource("/roomPagefxml");
                 loader.setLocation(roomUrl);
                 root = loader.load();
                 scene = new Scene(root);
@@ -163,7 +163,7 @@ public class SceneLoader extends Application {
                 CalendarPageContent.addContent(scene);
                 break;
             case "login":
-                URL loginUrl = getClass().getResource("/loginPage-overhaul.fxml");
+                URL loginUrl = getClass().getResource("/loginPage.fxml");
                 loader.setLocation(loginUrl);
                 root = loader.load();
                 scene = new Scene(root);
@@ -183,7 +183,7 @@ public class SceneLoader extends Application {
                 primaryStage.show();
                 break;
             case "register":
-                URL registerUrl = getClass().getResource("/registerPage-overhaul.fxml");
+                URL registerUrl = getClass().getResource("/registerPage.fxml");
                 loader.setLocation(registerUrl);
                 root = loader.load();
                 scene = new Scene(root);
@@ -248,7 +248,7 @@ public class SceneLoader extends Application {
                 MyReservationsPageContent.addContent(scene);
                 break;
             default:
-                URL xmlUrl = getClass().getResource("/mainPage-overhaul.fxml");
+                URL xmlUrl = getClass().getResource("/mainPage.fxml");
                 loader.setLocation(xmlUrl);
                 root = loader.load();
                 scene = new Scene(root);
