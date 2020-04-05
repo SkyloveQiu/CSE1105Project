@@ -32,7 +32,8 @@
          <content>
             <GridPane fx:id="foodGrid" style="-fx-background-color: #29293d;" minHeight="700" hgap="20.0" vgap="20.0" >
                <columnConstraints>
-                  <ColumnConstraints percentWidth="100" />
+                  <ColumnConstraints percentWidth="50" />
+                  <ColumnConstraints percentWidth="50" />
                </columnConstraints>
             </GridPane>
          </content>

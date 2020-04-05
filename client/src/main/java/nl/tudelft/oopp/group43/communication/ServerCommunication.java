@@ -742,8 +742,24 @@ public class ServerCommunication {
         return response.body();
     }
 
-    public static String createFoodOrder() {
-        return "";
+    /**
+     * Creates a food order.
+     * @param order the order in the following format: foodID-foodID-foodID-...
+     * @param away
+     * @return Confirmation message if the order was successful or not.
+     */
+    public static String createFoodOrder(String order, String away) {
+        String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order + "&away=" + away;
+        HttpResponse<String> response = post(url);
+
+        if (response == null) {
+            return  "Communication with server failed";
+        }
+
+        if (response.statusCode() != 200) {
+            return "WRONG";
+        }
+        return "OK";
     }
 }
 
