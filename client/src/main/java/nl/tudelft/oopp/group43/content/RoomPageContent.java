@@ -272,7 +272,7 @@ public class RoomPageContent {
             reserveable.setText("Please log in first before making a reservation!");
             reserveButton.setStyle("-fx-background-color: lightgray;");
         }
-        reserveable.setLayoutX(scene.getWidth() - 333 - 350);
+        reserveable.setLayoutX(scene.getWidth() - 680);
 
         content.getChildren().add(name);
         content.getChildren().add(reserveButton);

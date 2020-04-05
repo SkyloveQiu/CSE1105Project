@@ -788,14 +788,24 @@ public class RoomPageController {
                 JSONObject obj = BuildingMap.getAll().get(i);
                 System.out.println("testing building: " + obj.get("building_number"));
                 JSONObject openingHours = (JSONObject) json.parse((String) obj.get("opening_hours"));
-                LocalTime start = LocalTime.parse(((String) openingHours.get(today)).split("-")[0]);
-                LocalTime end = LocalTime.parse(((String) openingHours.get(today)).split("-")[1]);
-                if (start.compareTo(selectedStart) > 0 || end.compareTo(selectedEnd) < 0) {
+                if (openingHours.get(today).equals("closed")) {
                     JSONArray arr = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
                     for (Object object : arr) {
                         JSONObject room = (JSONObject) object;
                         unavailableRooms.add(Long.toString((long) room.get("id")));
-                        System.out.println("Timeframe is outside of opening hours for room: " + room.get("id"));
+                        //System.out.println("Timeframe is outside of opening hours for room: " + room.get("id"));
+                    }
+                } else {
+                    LocalTime start = LocalTime.parse(((String) openingHours.get(today)).split("-")[0]);
+                    LocalTime end = LocalTime.parse(((String) openingHours.get(today)).split("-")[1]);
+                    if (start.compareTo(selectedStart) > 0 || end.compareTo(selectedEnd) < 0) {
+                        JSONArray arr = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
+                        //System.out.println("Building: " + obj.get("building_number") + " is closed!");
+                        for (Object object : arr) {
+                            JSONObject room = (JSONObject) object;
+                            unavailableRooms.add(Long.toString((long) room.get("id")));
+                            //System.out.println("Timeframe is outside of opening hours for room: " + room.get("id"));
+                        }
                     }
                 }
             }
@@ -814,7 +824,7 @@ public class RoomPageController {
 
                 if (isInTimeFrame && !unavailableRooms.contains(obj.get("room_id"))) {
                     unavailableRooms.add(Long.toString((Long) obj.get("room_id")));
-                    System.out.println(obj.get("room_id") + " is in the timeframe");
+                    //System.out.println(obj.get("room_id") + " is in the timeframe");
                 }
             }
 
