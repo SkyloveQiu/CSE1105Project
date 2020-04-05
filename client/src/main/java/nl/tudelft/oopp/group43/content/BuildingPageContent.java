@@ -378,7 +378,7 @@ public class BuildingPageContent {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 //width of a tile = (newValue/3) - 40 (for the hgap)
-                double tileWidth = ((double) newValue/3) - 40;
+                double tileWidth = ((double) newValue / 3) - 40;
                 label.setPrefWidth(tileWidth);
             }
         });
