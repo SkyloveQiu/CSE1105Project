@@ -682,6 +682,22 @@ public class ServerCommunication {
     }
 
     /**
+     * Reserve bike with bikeId at time.
+     * @param bikeId bike Id
+     * @param time time for reservation
+     * @return response
+     */
+    public static String reserveBike(String bikeId, String time) {
+        String url = cURL + "bikeReservation/createWithTime?BikeId=" + bikeId + "&token=" + getToken() + "&time=" + time;
+        HttpResponse<String> response = post(url);
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return "OK";
+    }
+
+    /**
      * Retrieves the bikes that are rented by the user from the server.
      * @return the bike reservations
      */

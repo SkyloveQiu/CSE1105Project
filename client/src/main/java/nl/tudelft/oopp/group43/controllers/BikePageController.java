@@ -1,6 +1,7 @@
 package nl.tudelft.oopp.group43.controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -160,6 +161,74 @@ public class BikePageController {
     }
     */
     @FXML
+    private void reserveBike(ActionEvent event) throws IOException {
+        if (ServerCommunication.getToken().equals("invalid")) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You are not logged in! Please login!");
+            alert.showAndWait();
+
+            SceneLoader.setScene("login");
+            SceneLoader sl = new SceneLoader();
+            sl.start((Stage) ((Node) event.getSource()).getScene().getWindow());
+            return;
+        }
+
+        String building = BikePageContent.getSelectedBuilding();
+        if (building == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You haven't selected a building!");
+            alert.showAndWait();
+            return;
+        }
+
+        String bike = null;
+        JSONParser parser = new JSONParser();
+        try {
+            JSONArray bikeJson = (JSONArray) parser.parse(ServerCommunication.getBikeRenting(building));
+
+            Boolean bikesAvailable = false;
+            for (Object obj : bikeJson) {
+                JSONObject json = (JSONObject) obj;
+                if (json.get("bikes_available").toString().equals("true")) {
+                    bikesAvailable = true;
+                    bike = json.get("bikeId").toString();
+                }
+            }
+
+            if (!bikesAvailable) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("There are no bikes available!");
+                alert.showAndWait();
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+
+        LocalDate date = BikePageContent.getSelectedDate();
+        if (date == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You haven't selected a starting date!");
+            alert.showAndWait();
+            return;
+        }
+
+        String response = ServerCommunication.reserveBike(bike, date.toString());
+        if (!response.equals("OK")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Something went wrong!");
+            alert.showAndWait();
+            return;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You successfully reserved a bike!");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
     private void returnBike(ActionEvent event) throws IOException {
         if (ServerCommunication.getToken().equals("invalid")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -190,7 +259,7 @@ public class BikePageController {
             return;
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("You successfully reserved a bike!");
+            alert.setContentText("You successfully returned a bike!");
             alert.showAndWait();
         }
         closeReturnMenu(event);

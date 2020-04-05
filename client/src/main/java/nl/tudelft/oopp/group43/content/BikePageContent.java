@@ -109,6 +109,7 @@ public class BikePageContent {
                 addSelectEvent(labelRent, rentBikeBuildingList);*/
 
                 Label labelReserve = new Label(buildings.get(i));
+                labelReserve.setId(buildingsID.get(i));
                 labelReserve.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 labelReserve.getStyleClass().add("buildingLabels");
                 reserveBikeBuildingList.add(labelReserve, 0, i);
@@ -209,6 +210,15 @@ public class BikePageContent {
                 setDisable(empty || date.compareTo(today) < 0);
             }
         });
+    }
+
+    /**
+     * Get the selected date.
+     * @return
+     */
+    public static LocalDate getSelectedDate() {
+        DatePicker startingDatePicker = (DatePicker) scene.lookup("#reservationStartingDate");
+        return startingDatePicker.getValue();
     }
 
     /**
