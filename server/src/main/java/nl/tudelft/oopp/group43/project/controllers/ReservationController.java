@@ -108,7 +108,7 @@ public class ReservationController {
             String attributes = roomRepository.getRoomById(newReservation.getRoomId()).getAttributes();
             JSONParser parser = new JSONParser();
             JSONObject object = (JSONObject) parser.parse(attributes);
-            if (object.get("Only_Employee").toString() != null) {
+            if (object.get("Only_Employee") != null) {
                 Boolean value = Boolean.valueOf(object.get("Only_Employee").toString());
                 if (value) {
                     String role = userRepository.findUserByToken(token).getRole();
