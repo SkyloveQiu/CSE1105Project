@@ -299,25 +299,6 @@ public class ServerCommunication {
     }
 
     /**
-     * Retrieves all reservations from the server by current user.
-     *
-     * @return the body of a get request to the server.
-     * @throws Exception if communication with the server fails.
-     */
-
-    public static String getRoomByRoomId(Long roomId) {
-        String url = cURL + "room/getName/" + roomId;
-
-        HttpResponse<String> response = get(url);
-
-        if (response == null) {
-            return "Communication with server failed";
-        }
-
-        return response.body();
-    }
-
-    /**
      * Gets the rooms from the database.
      *
      * @return A String with in it a JSONArray or Object of all rooms
@@ -451,6 +432,24 @@ public class ServerCommunication {
     }
 
     /**
+     * Returns the name of the room.
+     * @param id the id of the room
+     * @return the name of the room
+     */
+    public static String getRoomName(long id) {
+        String url = cURL + "room/getName/" + id;
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+
+    /**
      * Sends the buildID for deleting it.
      *
      * @param buildID - the id of the building
@@ -551,6 +550,26 @@ public class ServerCommunication {
 
         return response.body();
     }
+
+    /**
+     * Gets the reservations that exist in between the time frame.
+     * @param startDate the starting date.
+     * @param endDate the ending date (for single day it is startDate +1 day)
+     * @return The information returned by the api
+     */
+    public static String getReservationsByDate(String startDate, String endDate) {
+        String url = cURL + "reservation/" + startDate + "/" + endDate;
+        System.out.println(startDate + " ; " + endDate);
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with server failed";
+        }
+        System.out.println(response.body());
+        return response.body();
+    }
+
 
     /**
      * Takes a map as input and translates the pairs to a json.

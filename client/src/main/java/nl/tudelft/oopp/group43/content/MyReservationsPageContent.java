@@ -58,7 +58,7 @@ public class MyReservationsPageContent {
                 String startDate = getFancyText((String) obj.get("starting_date"));
                 String endDate = getFancyText((String) obj.get("end_date"));
                 timeLabel.setText("The room is reserved from " + startDate + " to " + endDate);
-                roomLabel.setText(ServerCommunication.getRoomByRoomId((Long) obj.get("room_id")));
+                roomLabel.setText(ServerCommunication.getRoomName((Long) obj.get("room_id")));
 
                 AnchorPane.setLeftAnchor(timeLabel, 50.0);
                 AnchorPane.setLeftAnchor(roomLabel, 50.0);
