@@ -1,0 +1,12 @@
+
+.foodLabels {
+    -fx-background-color: mediumslateblue;
+    -fx-background-radius: 15 15 15 15;
+    -fx-alignment: center;
+    -fx-font-family: Arial;
+    -fx-font-size: 15px;
+}
+
+.selected_food {
+    -fx-background-color: forestgreen;
+}

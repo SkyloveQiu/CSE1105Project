@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.geometry.Insets?>
-<AnchorPane fx:id="root" fx:controller="nl.tudelft.oopp.group43.controllers.FoodPageController" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" fx:controller="nl.tudelft.oopp.group43.controllers.FoodPageController" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="stylesheets/foodPage.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
    <children>
 
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" style="-fx-text-fill: #e7f2fe;" text="Order food" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
