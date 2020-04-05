@@ -704,13 +704,17 @@ public class BuildingPageController {
         });
     }
 
+    /**
+     * When an admin presses the add exceptions button, he can add exceptions for opening hours of a building.
+     * @param actionEvent the action event corresponding to this on click.
+     */
+
     public void addExceptions(ActionEvent actionEvent) {
         Stage stage = new Stage();
         SceneLoader.setScene("exceptions");
         SceneLoader sl = new SceneLoader();
         try {
             sl.start(stage);
-            System.out.println("dankjewel");
         } catch (IOException e) {
             e.printStackTrace();
         }
