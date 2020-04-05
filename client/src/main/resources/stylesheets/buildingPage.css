@@ -38,6 +38,12 @@
     -fx-padding: 10;
 }
 
+.buildingId {
+    -fx-font-family: 'Helvetica', Arial, sans-serif;
+    -fx-font-size: 28;
+    -fx-padding: 10;
+}
+
 .infoPane {
     -fx-background-color: rgb(86, 128, 176);
     -fx-background-radius: 2;

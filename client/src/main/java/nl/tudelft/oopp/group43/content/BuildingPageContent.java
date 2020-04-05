@@ -240,7 +240,18 @@ public class BuildingPageContent {
             addinfoPaneHListener();
 
             pane.getChildren().add(expanded);
-            pane.getChildren().add(labelArr[i]);
+
+            Label buildingId = new Label(labelArr[i].getText().split("\n")[0]);
+            buildingId.setId(labelArr[i].getId());
+            buildingId.getStyleClass().add("buildingId");
+            Label buildingName = new Label(labelArr[i].getText().split("\n")[1]);
+            buildingName.setLayoutY(40);
+            buildingName.getStyleClass().add("buildingName");
+            buildingName.setWrapText(true);
+            buildingLabelListener(buildingName);
+
+            pane.getChildren().add(buildingId);
+            pane.getChildren().add(buildingName);
 
             gp.add(pane, i % 3, row);
         }
@@ -356,6 +367,21 @@ public class BuildingPageContent {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * This adds a listener to the pane width and sets the label to the width of the grid.
+     * @param label the label to change.
+     */
+    private static void buildingLabelListener(Label label) {
+        gp.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                //width of a tile = (newValue/3) - 40 (for the hgap)
+                double tileWidth = ((double) newValue / 3) - 40;
+                label.setPrefWidth(tileWidth);
+            }
+        });
     }
 
     /**
