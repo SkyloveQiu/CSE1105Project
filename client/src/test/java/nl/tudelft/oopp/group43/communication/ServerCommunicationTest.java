@@ -237,7 +237,7 @@ public class ServerCommunicationTest {
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendBikeRenting("1"));
-        httpClientMock.verify().post(cURL + "bikeReservation/create?BikeId=1&token=1").called();
+        httpClientMock.verify().post(curl + "bikeReservation/create?BikeId=1&token=1").called();
     }
 
     @Test
@@ -245,11 +245,11 @@ public class ServerCommunicationTest {
        HttpClientMock httpClientMock = new HttpClientMock();
        ServerCommunication.setClient(httpClientMock);
 
-       httpClientMock.onPost(cURL + "bikeReservation/user?token=1").doReturn("bikes");
+       httpClientMock.onPost(curl + "bikeReservation/user?token=1").doReturn("bikes");
 
        ServerCommunication.setToken("1");
        assertEquals("bikes", ServerCommunication.getBikesRentedByUser());
-       httpClientMock.verify().post(cURL + "bikeReservation/user?token=1").called();
+       httpClientMock.verify().post(curl + "bikeReservation/user?token=1").called();
     }
 
     @Test
@@ -257,11 +257,11 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "bikeReservation/return?reservationId=1&token=1&building=1").doReturnStatus(200);
+        httpClientMock.onPost(curl + "bikeReservation/return?reservationId=1&token=1&building=1").doReturnStatus(200);
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.returnBike("1", "1"));
-        httpClientMock.verify().post(cURL + "bikeReservation/return?reservationId=1&token=1&building=1").called();
+        httpClientMock.verify().post(curl + "bikeReservation/return?reservationId=1&token=1&building=1").called();
     }
 
     @Test
@@ -269,11 +269,11 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "bikeReservation/return?reservationId=1&token=1&building=1").doReturnStatus(201);
+        httpClientMock.onPost(curl + "bikeReservation/return?reservationId=1&token=1&building=1").doReturnStatus(201);
 
         ServerCommunication.setToken("1");
         assertEquals("WRONG", ServerCommunication.returnBike("1", "1"));
-        httpClientMock.verify().post(cURL + "bikeReservation/return?reservationId=1&token=1&building=1").called();
+        httpClientMock.verify().post(curl + "bikeReservation/return?reservationId=1&token=1&building=1").called();
     }
 
     @Test
@@ -285,7 +285,7 @@ public class ServerCommunicationTest {
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendChangePassword("a", "b"));
-        httpClientMock.verify().post(cURL + "changePassword?oldPassword=a&newPassword=b&token=1").called();
+        httpClientMock.verify().post(curl + "changePassword?oldPassword=a&newPassword=b&token=1").called();
     }
 
     @Test
