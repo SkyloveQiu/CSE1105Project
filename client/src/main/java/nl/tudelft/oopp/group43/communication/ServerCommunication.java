@@ -569,25 +569,6 @@ public class ServerCommunication {
         return response.body();
     }
 
-    /**
-     * Gets the reservations that exist in between the time frame.
-     * @param startDate the starting date.
-     * @param endDate the ending date (for single day it is startDate +1 day)
-     * @return The information returned by the api
-     */
-    public static String getReservationsByDate(String startDate, String endDate) {
-        String url = cURL + "reservation/" + startDate + "/" + endDate;
-        System.out.println(startDate + " ; " + endDate);
-
-        HttpResponse<String> response = get(url);
-
-        if (response == null || response.statusCode() != 200) {
-            return "Communication with server failed";
-        }
-        System.out.println(response.body());
-        return response.body();
-    }
-
 
     /**
      * Takes a map as input and translates the pairs to a json.
