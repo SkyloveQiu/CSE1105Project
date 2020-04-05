@@ -1,8 +1,12 @@
 package nl.tudelft.oopp.group43.controllers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.classes.StringChecker;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -40,6 +45,8 @@ public class RoomPageController {
     private ChoiceBox<String> fromTime;
     @FXML
     private ChoiceBox<String> untilTime;
+    @FXML
+    private Label warning;
     @FXML
     private DatePicker date;
     @FXML
@@ -72,10 +79,10 @@ public class RoomPageController {
     private Label checkSpace;
     @FXML
     private GridPane roomList;
-
+    @FXML
+    private Label checkBuildingNumber;
     @FXML
     private ScrollPane filterPanel;
-
     @FXML
     private Pane grayBackground;
     @FXML
@@ -86,8 +93,6 @@ public class RoomPageController {
     private Label editId;
     @FXML
     private Label addNumberCheck;
-    @FXML
-    private TextField addBuildingId;
     @FXML
     private TextField addRoomNumber;
     @FXML
@@ -210,79 +215,8 @@ public class RoomPageController {
     private Label editWheelchairCheck;
     @FXML
     private Label editRoomNameCheck;
-
-
-    /**
-     * Sets the hours in the choicebox to only the hours before until time choicebox.
-     *
-     * @param event Event passed by the box when clicked on
-     */
     @FXML
-    private void fromHourSelected(MouseEvent event) {
-        String untilHour = untilTime.getValue();
-
-        if (untilHour != null) {
-            int i = 0;
-            String time = "00:00";
-            while (!untilHour.equals(time)) {
-                i++;
-                if (i < 10) {
-                    time = "0" + i + ":00";
-                } else {
-                    time = i + ":00";
-                }
-            }
-
-            ArrayList<String> hours = new ArrayList<>();
-            for (int j = 0; j < i; j++) {
-                if (j < 10) {
-                    hours.add("0" + j + ":00");
-                } else {
-                    hours.add(j + ":00");
-                }
-            }
-            ObservableList<String> list = FXCollections.observableArrayList(hours);
-            fromTime.setItems(list);
-
-            RoomPageContent.setHoursFrom("");
-        }
-    }
-
-    /**
-     * Sets the hours in the choicebox to only the hours after the from time choicebox.
-     *
-     * @param event Event passed by the box when clicked on
-     */
-    @FXML
-    private void untilHourSelected(MouseEvent event) {
-        String fromHour = fromTime.getValue();
-
-        if (fromHour != null) {
-            int i = 0;
-            String time = "00:00";
-            while (!fromHour.substring(0, 2).equals(time.substring(0, 2))) {
-                i++;
-                if (i < 10) {
-                    time = "0" + i + ":59";
-                } else {
-                    time = i + ":59";
-                }
-            }
-
-            ArrayList<String> hours = new ArrayList<>();
-            for (; i < 24; i++) {
-                if (i < 10) {
-                    hours.add("0" + i + ":59");
-                } else {
-                    hours.add(i + ":59");
-                }
-            }
-            ObservableList<String> list = FXCollections.observableArrayList(hours);
-            untilTime.setItems(list);
-
-            RoomPageContent.setHoursTil("");
-        }
-    }
+    private ChoiceBox<String> addBuildings;
 
     /**
      * Searches for the rooms with the given query.
@@ -304,16 +238,30 @@ public class RoomPageController {
                 }
             }
 
-            RoomPageContent.setSelectedRooms(newRooms);
-            RoomPageContent.addRooms();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RoomPageContent.setSelectedRooms(newRooms);
+                    RoomPageContent.addRooms();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
         } else {
             JSONArray rooms = RoomPageContent.getDatabaseRooms();
             ArrayList<JSONObject> selectedRooms = new ArrayList<>();
             for (int i = 0; i < rooms.size(); i++) {
                 selectedRooms.add((JSONObject) rooms.get(i));
             }
-            RoomPageContent.setSelectedRooms(selectedRooms);
-            RoomPageContent.addRooms();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RoomPageContent.setSelectedRooms(selectedRooms);
+                    RoomPageContent.addRooms();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
         }
     }
 
@@ -330,6 +278,8 @@ public class RoomPageController {
         grayBackground.setVisible(false);
         addMenu.setVisible(false);
         RoomPageContent.setMenu(null);
+        addBuildings.getItems().clear();
+
     }
 
     /**
@@ -341,7 +291,11 @@ public class RoomPageController {
     @SuppressWarnings("unchecked")
     private void addConfirm(ActionEvent event) {
 
-        boolean ok = !addBuildingId.getText().isEmpty();
+        Long buildingNumber = RoomPageContent.getBuildingNumberAdd();
+        boolean ok = true;
+        if (buildingNumber < 0) {
+            ok = false;
+        }
         ok = checkRoomName() && ok;
         ok = checkRoomNumber() && ok;
         ok = checkSpaceType() && ok;
@@ -360,14 +314,14 @@ public class RoomPageController {
         ok = checkSurfaceArea() && ok;
 
         if (ok) {
-            System.out.println("dai balan");
+
             JSONObject building = new JSONObject();
-            building.put("building_number", Long.valueOf(addBuildingId.getText()));
+            building.put("building_number", buildingNumber);
+
 
             JSONObject room = new JSONObject();
             room.put("room_name", addRoomName.getText());
 
-            //room.put("id", Long.valueOf(addRoomNumber.getText()));
             room.put("building", building);
 
             JSONObject attributes = new JSONObject();
@@ -402,41 +356,6 @@ public class RoomPageController {
         }
     }
 
-    /**
-     * Checks if the user put a number which is greater than 0 and smaller than long.MAX_VALUE and show a proper message to the user.
-     */
-    private boolean checkBuildingNumber() {
-        if (RoomPageContent.getMenu().equals("add")) {
-            if (addBuildingId.getText().isEmpty()) {
-                addNumberCheck.setText("You cannot have this field empty");
-                return false;
-            }
-            try {
-                String nunmberString = addBuildingId.getText();
-                long number = Long.valueOf(nunmberString);
-                addNumberCheck.setText("");
-                return true;
-            } catch (Exception e) {
-                addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-                return false;
-            }
-        } else {
-            if (addBuildingId.getText().isEmpty()) {
-                addNumberCheck.setText("You cannot have this field empty");
-                return false;
-            }
-            try {
-                String nunmberString = addBuildingId.getText();
-                long number = Long.valueOf(nunmberString);
-                addNumberCheck.setText("");
-                return true;
-            } catch (Exception e) {
-                addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-                return false;
-            }
-        }
-    }
-
     private boolean checkRoomNumber() {
 
         if (addRoomNumber.getText().isEmpty()) {
@@ -452,7 +371,6 @@ public class RoomPageController {
             addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
             return false;
         }
-
     }
 
     @FXML
@@ -632,35 +550,68 @@ public class RoomPageController {
      * Takes the rooms from the server with the chosen attributes.
      */
     public void getRoomsFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
-        JSONParser json = new JSONParser();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                JSONParser json = new JSONParser();
 
-        try {
-            String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
+                try {
+                    String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, space);
 
-            Label load = new Label("Loading Rooms");
-            roomList.getChildren().add(0, load);
+                    Label load = new Label("Loading Rooms");
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            roomList.getChildren().add(0, load);
+                        }
+                    });
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-            /*
-            Checks if the rooms are in JSONArray format or in JSONObject format.
-            If it is something other than this it means there was an error with the server communication.
-            If that happens it shows an 'useful' error :).
-             */
-            if (response.charAt(0) == '[') {
-                JSONArray rooms = (JSONArray) json.parse(response);
-                ArrayList<JSONObject> filterSelection = new ArrayList<>();
+                    /*
+                    Checks if the rooms are in JSONArray format or in JSONObject format.
+                    If it is something other than this it means there was an error with the server communication.
+                    If that happens it shows an 'useful' error :).
+                     */
+                    if (response.charAt(0) == '[') {
+                        JSONArray rooms = (JSONArray) json.parse(response);
+                        ArrayList<JSONObject> filterSelection = new ArrayList<>();
 
-                for (int i = 0; i < rooms.size(); i++) {
-                    filterSelection.add((JSONObject) rooms.get(i));
+                        for (int i = 0; i < rooms.size(); i++) {
+                            filterSelection.add((JSONObject) rooms.get(i));
+                        }
+                        RoomPageContent.setSelectedRooms(filterSelection);
+                        RoomPageContent.addRooms();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                load.setText("");
+                                dropFilter(null);
+                            }
+                        });
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
+                            }
+                        });
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-                RoomPageContent.setSelectedRooms(filterSelection);
-                load.setText("");
-                RoomPageContent.addRooms();
-            } else {
-                load.setText("Oops, something went wrong,\nplease check your internet connection and try again");
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
@@ -699,65 +650,169 @@ public class RoomPageController {
      */
     @FXML
     private void confirmDateTime(ActionEvent event) {
+        RoomPageContent.setHoursFrom(fromTime.getValue());
+        RoomPageContent.setHoursTil(untilTime.getValue());
+
         if (!RoomPageContent.getHoursFrom().equals("") && !RoomPageContent.getHoursTil().equals("") && RoomPageContent.getDate() != null) {
-            ReservationConfig.resetSelectedHours();
+            if (Integer.parseInt(RoomPageContent.getHoursFrom().substring(0, 2)) <= Integer.parseInt(RoomPageContent.getHoursTil().substring(0, 2))) {
+                RoomPageContent.setTimeSelected(true);
+                warning.setText("");
+                ReservationConfig.resetSelectedHours();
 
-            LocalDate localDate = date.getValue();
+                LocalDate localDate = date.getValue();
 
-            String month = Integer.toString(localDate.getMonthValue());
-            String day = Integer.toString(localDate.getDayOfMonth());
-            if (localDate.getMonthValue() < 10) {
-                month = "0" + localDate.getMonthValue();
-            }
-            if (localDate.getDayOfMonth() < 10) {
-                day = "0" + localDate.getDayOfMonth();
-            }
-            String dateString = localDate.getYear() + "-" + month + "-" + day;
-            int hoursBetween = Integer.parseInt(untilTime.getValue().substring(0, 2)) - Integer.parseInt(fromTime.getValue().substring(0, 2));
-
-            for (int i = 0; i <= hoursBetween; i++) {
-                int offset = i + Integer.parseInt(fromTime.getValue().substring(0, 2));
-                String hourOffset = "";
-                if (offset < 10) {
-                    hourOffset = "-0" + offset;
-                } else {
-                    hourOffset = "-" + offset;
+                String month = Integer.toString(localDate.getMonthValue());
+                String day = Integer.toString(localDate.getDayOfMonth());
+                if (localDate.getMonthValue() < 10) {
+                    month = "0" + localDate.getMonthValue();
                 }
-                String hour = dateString + hourOffset;
-                ReservationConfig.addHour(hour);
+                if (localDate.getDayOfMonth() < 10) {
+                    day = "0" + localDate.getDayOfMonth();
+                }
+                String dateString = localDate.getYear() + "-" + month + "-" + day;
+                int hoursBetween = Integer.parseInt(untilTime.getValue().substring(0, 2)) - Integer.parseInt(fromTime.getValue().substring(0, 2));
+
+                for (int i = 0; i <= hoursBetween; i++) {
+                    int offset = i + Integer.parseInt(fromTime.getValue().substring(0, 2));
+                    String hourOffset = "";
+                    if (offset < 10) {
+                        hourOffset = "-0" + offset;
+                    } else {
+                        hourOffset = "-" + offset;
+                    }
+                    String hour = dateString + hourOffset;
+                    ReservationConfig.addHour(hour);
+                }
+
+                timeDateSelect.setVisible(false);
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getUnavailableRooms(localDate, dateString);
+                    }
+                });
+                thread.setDaemon(true);
+                thread.start();
+            } else {
+                warning.setText("Please provide a starting time less than the ending time!");
+            }
+        }
+    }
+
+    /**
+     * Gets all unavailable rooms of the database and puts them in a list.
+     * @param localDate The local date of the selected day
+     * @param dateString The string version of the selected day (yyyy-MM-dd)
+     */
+    private void getUnavailableRooms(LocalDate localDate, String dateString) {
+        String month = Integer.toString(localDate.plusDays(1).getMonthValue());
+        String day = Integer.toString(localDate.plusDays(1).getDayOfMonth());
+        if (localDate.plusDays(1).getMonthValue() < 10) {
+            month = "0" + localDate.plusDays(1).getMonthValue();
+        }
+        if (localDate.plusDays(1).getDayOfMonth() < 10) {
+            day = "0" + localDate.plusDays(1).getDayOfMonth();
+        }
+        String startDate = dateString;
+        String endDate = localDate.plusDays(1).getYear() + "-" + month + "-" + day;
+        String today = "";
+        switch (localDate.getDayOfWeek()) {
+            case MONDAY:
+                today = "mo";
+                break;
+            case TUESDAY:
+                today = "tu";
+                break;
+            case WEDNESDAY:
+                today = "we";
+                break;
+            case THURSDAY:
+                today = "th";
+                break;
+            case FRIDAY:
+                today = "fr";
+                break;
+            case SATURDAY:
+                today = "sa";
+                break;
+            case SUNDAY:
+                today = "su";
+                break;
+            default:
+                break;
+        }
+
+        String jsonString = ServerCommunication.getReservationsByDate(startDate, endDate);
+        ArrayList<String> unavailableRooms = RoomPageContent.getUnavailableRooms();
+        try {
+            JSONParser json = new JSONParser();
+            JSONArray reservedRooms = (JSONArray) json.parse(jsonString);
+            DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00.000+0000'");
+
+            final int endHour = Integer.parseInt(untilTime.getValue().substring(0, 2)) + 1;
+            final int startHour = Integer.parseInt(fromTime.getValue().substring(0, 2));
+            final LocalTime selectedStart = LocalTime.of(startHour, 0);
+            final LocalTime selectedEnd = LocalTime.of(endHour - 1, 59);
+
+            for (int i = 0; i < BuildingMap.getAll().size(); i++) {
+                JSONObject obj = BuildingMap.getAll().get(i);
+                System.out.println("testing building: " + obj.get("building_number"));
+                JSONObject openingHours = (JSONObject) json.parse((String) obj.get("opening_hours"));
+                if (openingHours.get(today).equals("closed")) {
+                    JSONArray arr = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
+                    for (Object object : arr) {
+                        JSONObject room = (JSONObject) object;
+                        unavailableRooms.add(Long.toString((long) room.get("id")));
+                        //System.out.println("Timeframe is outside of opening hours for room: " + room.get("id"));
+                    }
+                } else {
+                    LocalTime start = LocalTime.parse(((String) openingHours.get(today)).split("-")[0]);
+                    LocalTime end = LocalTime.parse(((String) openingHours.get(today)).split("-")[1]);
+                    if (start.compareTo(selectedStart) > 0 || end.compareTo(selectedEnd) < 0) {
+                        JSONArray arr = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
+                        //System.out.println("Building: " + obj.get("building_number") + " is closed!");
+                        for (Object object : arr) {
+                            JSONObject room = (JSONObject) object;
+                            unavailableRooms.add(Long.toString((long) room.get("id")));
+                            //System.out.println("Timeframe is outside of opening hours for room: " + room.get("id"));
+                        }
+                    }
+                }
             }
 
+            for (Object object : reservedRooms) {
+                JSONObject obj = (JSONObject) object;
+                boolean isInTimeFrame = false;
+                LocalDateTime startTime = LocalDateTime.parse((String) obj.get("starting_date"), customFormatter);
+                LocalDateTime endTime = LocalDateTime.parse((String) obj.get("end_date"), customFormatter);
+                System.out.println(startHour + " : " + endHour);
+                System.out.println("testing room: " + obj.toJSONString());
 
-            /*
-            ===========================================
-             */
+                if ((startTime.getHour() >= startHour && endTime.getHour() <= endHour) || (startTime.getHour() >= startHour && startTime.getHour() < endHour) || (endTime.getHour() > startHour && endTime.getHour() <= endHour)) {
+                    isInTimeFrame = true;
+                }
 
+                if (isInTimeFrame && !unavailableRooms.contains(obj.get("room_id"))) {
+                    unavailableRooms.add(Long.toString((Long) obj.get("room_id")));
+                    //System.out.println(obj.get("room_id") + " is in the timeframe");
+                }
+            }
 
-            //ArrayList selectedHours = ReservationConfig.getSelectedHours();
-            //
-            //String response = "";
-            //
-            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
-            //formatter.withZone(ZoneId.of("UTC"));
-            //for (int i = 0; i < selectedHours.size(); i++) {
-            //    LocalDateTime startDate = LocalDateTime.parse((String) selectedHours.get(i), formatter);
-            //    LocalDateTime endDate = startDate.plusHours(1);
-            //
-            //    String startTime = startDate.toString() + ":00.000+0000";
-            //    String endTime = endDate.toString() + ":00.000+0000";
-            //    System.out.println(startTime);
-            //    response = ServerCommunication.reserveRoomForHour(startTime, endTime);
-            //
-            //    System.out.println(response);
-            //}
-
-
-            /*
-            ==========================================
-             */
-            timeDateSelect.setVisible(false);
-            RoomPageContent.addRooms();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
+        RoomPageContent.addRooms();
+    }
+
+    @FXML
+    private void addHoursFrom(MouseEvent event) {
+        RoomPageContent.setHoursFrom((String) ((ChoiceBox) event.getSource()).getValue());
+    }
+
+    @FXML
+    private void addHoursUntil(MouseEvent event) {
+        RoomPageContent.setHoursTil((String) ((ChoiceBox) event.getSource()).getValue());
     }
 
     /**
@@ -768,14 +823,14 @@ public class RoomPageController {
     private boolean checkChalkboard() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addChalkboard.getText().isEmpty() || (!addChalkboard.getText().equals("true") && !addChalkboard.getText().equals("false"))) {
-                addChalkboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addChalkboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addChalkboardCheck.setText("");
             return true;
         } else {
             if (editChalkboard.getText().isEmpty() || (!editChalkboard.getText().equals("true") && !editChalkboard.getText().equals("false"))) {
-                editChalkboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editChalkboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editChalkboardCheck.setText("");
@@ -803,14 +858,14 @@ public class RoomPageController {
     private boolean checkWhiteboard() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addWhiteboard.getText().isEmpty() || (!addWhiteboard.getText().equals("true") && !addWhiteboard.getText().equals("false"))) {
-                addWhiteboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addWhiteboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addWhiteboardCheck.setText("");
             return true;
         } else {
             if (editWhiteboard.getText().isEmpty() || (!editWhiteboard.getText().equals("true") && !editWhiteboard.getText().equals("false"))) {
-                editWhiteboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editWhiteboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editWhiteboardCheck.setText("");
@@ -837,14 +892,14 @@ public class RoomPageController {
     private boolean checkSmartbaord() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addSmartboard.getText().isEmpty() || (!addSmartboard.getText().equals("true") && !addSmartboard.getText().equals("false"))) {
-                addSmartboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addSmartboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addSmartboardCheck.setText("");
             return true;
         } else {
             if (editSmartboard.getText().isEmpty() || (!editSmartboard.getText().equals("true") && !editSmartboard.getText().equals("false"))) {
-                editSmartboardCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editSmartboardCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editSmartboardCheck.setText("");
@@ -872,14 +927,14 @@ public class RoomPageController {
     private boolean checkBlinds() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addBlinds.getText().isEmpty() || (!addBlinds.getText().equals("true") && !addBlinds.getText().equals("false"))) {
-                addBlindsCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addBlindsCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addBlindsCheck.setText("");
             return true;
         } else {
             if (editBlinds.getText().isEmpty() || (!editBlinds.getText().equals("true") && !editBlinds.getText().equals("false"))) {
-                editBlindsCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editBlindsCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editBlindsCheck.setText("");
@@ -907,14 +962,14 @@ public class RoomPageController {
         if (RoomPageContent.getMenu().equals("add")) {
 
             if (addDisplay.getText().isEmpty() || (!addDisplay.getText().equals("true") && !addDisplay.getText().equals("false"))) {
-                addDisplayCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addDisplayCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addDisplayCheck.setText("");
             return true;
         } else {
             if (editDisplay.getText().isEmpty() || (!editDisplay.getText().equals("true") && !editDisplay.getText().equals("false"))) {
-                editDisplayCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editDisplayCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editDisplayCheck.setText("");
@@ -944,14 +999,14 @@ public class RoomPageController {
     private boolean checkDesktop() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addDesktopPc.getText().isEmpty() || (!addDesktopPc.getText().equals("true") && !addDesktopPc.getText().equals("false"))) {
-                addDesktopPcCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addDesktopPcCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addDesktopPcCheck.setText("");
             return true;
         } else {
             if (editDesktopPc.getText().isEmpty() || (!editDesktopPc.getText().equals("true") && !editDesktopPc.getText().equals("false"))) {
-                editDesktopPcCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editDesktopPcCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editDesktopPcCheck.setText("");
@@ -979,14 +1034,14 @@ public class RoomPageController {
     private boolean checkProjector() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addProjector.getText().isEmpty() || (!addProjector.getText().equals("true") && !addProjector.getText().equals("false"))) {
-                addProjectorCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addProjectorCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addProjectorCheck.setText("");
             return true;
         } else {
             if (editProjector.getText().isEmpty() || (!editProjector.getText().equals("true") && !editProjector.getText().equals("false"))) {
-                editProjectorCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editProjectorCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editProjectorCheck.setText("");
@@ -1013,14 +1068,14 @@ public class RoomPageController {
     private boolean checkPowerSupply() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addPowerSupply.getText().isEmpty() || (!addPowerSupply.getText().equals("true") && !addPowerSupply.getText().equals("false"))) {
-                addPowerSupplyCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addPowerSupplyCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addPowerSupplyCheck.setText("");
             return true;
         } else {
             if (editPowerSupply.getText().isEmpty() || (!editPowerSupply.getText().equals("true") && !editPowerSupply.getText().equals("false"))) {
-                editPowerSupplyCheck.setText("You have to complete this field with 'true' or 'false' !");
+                editPowerSupplyCheck.setText("You have to complete this field with 'true'or 'false' !");
                 return false;
             }
             editPowerSupplyCheck.setText("");
@@ -1156,7 +1211,7 @@ public class RoomPageController {
     private boolean checkMicrophone() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addMicrophone.getText().isEmpty() || (!addMicrophone.getText().equals("true") && !addMicrophone.getText().equals("false"))) {
-                addMicrophoneCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addMicrophoneCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addMicrophoneCheck.setText("");
@@ -1164,7 +1219,7 @@ public class RoomPageController {
 
         } else {
             if (editMicrophone.getText().isEmpty() || (!editMicrophone.getText().equals("true") && !editMicrophone.getText().equals("false"))) {
-                editMicrophoneCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editMicrophoneCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editMicrophoneCheck.setText("");
@@ -1191,14 +1246,14 @@ public class RoomPageController {
     private boolean checkSoundInstallation() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addSoundInstallation.getText().isEmpty() || (!addSoundInstallation.getText().equals("true") && !addSoundInstallation.getText().equals("false"))) {
-                addSoundInstallationCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addSoundInstallationCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addSoundInstallationCheck.setText("");
             return true;
         } else {
             if (editSoundInstallation.getText().isEmpty() || (!editSoundInstallation.getText().equals("true") && !editSoundInstallation.getText().equals("false"))) {
-                editSoundInstallationCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editSoundInstallationCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editSoundInstallationCheck.setText("");
@@ -1225,14 +1280,14 @@ public class RoomPageController {
     private boolean checkWheelchair() {
         if (RoomPageContent.getMenu().equals("add")) {
             if (addWheelchair.getText().isEmpty() || (!addWheelchair.getText().equals("true") && !addWheelchair.getText().equals("false"))) {
-                addWheelchairCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                addWheelchairCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             addWheelchairCheck.setText("");
             return true;
         } else {
             if (editWheelchair.getText().isEmpty() || (!editWheelchair.getText().equals("true") && !editWheelchair.getText().equals("false"))) {
-                editWheelchairCheck.setText("You have to complete this field with 'true'  or 'false' !");
+                editWheelchairCheck.setText("You have to complete this field with 'true' or 'false' !");
                 return false;
             }
             editWheelchairCheck.setText("");
@@ -1324,5 +1379,13 @@ public class RoomPageController {
         checkRoomName();
     }
 
+    @FXML
+    private void closeTimeMenu(ActionEvent event) {
+        timeDateSelect.setVisible(false);
+    }
 
+    @FXML
+    private void showTimeMenu(MouseEvent event) {
+        timeDateSelect.setVisible(true);
+    }
 }
