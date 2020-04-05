@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.beans.property.StringProperty;
@@ -23,6 +24,7 @@ import nl.tudelft.oopp.group43.classes.StringChecker;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
+import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 import org.json.simple.JSONObject;
 
 public class BuildingPageController {
@@ -700,5 +702,21 @@ public class BuildingPageController {
                 }
             }
         });
+    }
+
+    /**
+     * When an admin presses the add exceptions button, he can add exceptions for opening hours of a building.
+     * @param actionEvent the action event corresponding to this on click.
+     */
+
+    public void addExceptions(ActionEvent actionEvent) {
+        Stage stage = new Stage();
+        SceneLoader.setScene("exceptions");
+        SceneLoader sl = new SceneLoader();
+        try {
+            sl.start(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -79,6 +79,7 @@
          </rowConstraints>
          <children>
             <AnchorPane maxHeight="750.0" maxWidth="900.0" style="-fx-background-color: rgb(57, 72, 102); -fx-background-radius: 7;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <Button text="Add exceptions" onAction="#addExceptions" fx:id="addExceptionsButton" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="18.0"></Button>
                <Label prefHeight="20.0" prefWidth="196.0" styleClass="text_labels" text="Choose a building to edit it" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="67.0">
                   <font>
                      <Font size="14.0" />
