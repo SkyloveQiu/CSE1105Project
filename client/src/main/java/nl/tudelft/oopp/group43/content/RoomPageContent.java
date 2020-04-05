@@ -724,6 +724,8 @@ public class RoomPageContent {
      * Reloads the rooms, after an operation is done.
      */
     public static void reloadRooms() {
+        SceneLoader.configureBuildingMap();
+
         if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
             try {
                 JSONParser json = new JSONParser();
