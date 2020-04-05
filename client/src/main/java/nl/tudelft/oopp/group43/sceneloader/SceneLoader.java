@@ -48,8 +48,9 @@ public class SceneLoader extends Application {
         FXMLLoader loader = new FXMLLoader();
         RoomPageContent.setAdminAdd(false);
 
-        if(primaryStage.getIcons().size()<1)
+        if (primaryStage.getIcons().size() < 1) {
             primaryStage.getIcons().add(new Image("/icons/app_logo.png"));
+        }
 
         switch (sceneString) {
             case "building":
