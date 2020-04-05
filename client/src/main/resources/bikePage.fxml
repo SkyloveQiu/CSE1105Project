@@ -153,7 +153,15 @@
          <Button alignment="CENTER" onAction="#closeReserveMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="100" AnchorPane.topAnchor="40"><font><Font name="Arial" size="15" /></font></Button>
       </AnchorPane>
 
-      <Pane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+         <children>
+            <ImageView fx:id="logo" style="-fx-opacity: 0.8;" fitHeight="100" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="60">
+               <image>
+                  <Image url="@/icons/tu-delft-logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
 
       <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

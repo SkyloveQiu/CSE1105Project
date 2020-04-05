@@ -1,53 +1,31 @@
 package nl.tudelft.oopp.group43.communication;
 
-
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.pgssoft.httpclient.HttpClientMock;
-import javafx.application.Application;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.ResourceLock;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ServerCommunicationTest {
 
-    private final String cURL = "http://localhost:8000/";
+    private final String curl = "http://localhost:8000/";
 
-   @Test
+    @Test
     public void testGetBuildings() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onGet(cURL + "building").doReturn("buildings");
+        httpClientMock.onGet(curl + "building").doReturn("buildings");
 
         assertEquals("buildings", ServerCommunication.getBuilding());
-        httpClientMock.verify().get(cURL + "building").called();
+        httpClientMock.verify().get(curl + "building").called();
     }
 
     @Test
@@ -55,10 +33,10 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onGet(cURL + "room").doReturn("rooms");
+        httpClientMock.onGet(curl + "room").doReturn("rooms");
 
         assertEquals("rooms", ServerCommunication.getRooms());
-        httpClientMock.verify().get(cURL + "room").called();
+        httpClientMock.verify().get(curl + "room").called();
     }
 
     @Test
@@ -66,10 +44,10 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "registration?firstName=a&lastName=b&username=c&password=d&role=e").doReturnStatus(200);
+        httpClientMock.onPost(curl + "registration?firstName=a&lastName=b&username=c&password=d&role=e").doReturnStatus(200);
 
         assertEquals("OK", ServerCommunication.confirmRegistration("a", "b", "c", "d", "e"));
-        httpClientMock.verify().post(cURL + "registration?firstName=a&lastName=b&username=c&password=d&role=e").called();
+        httpClientMock.verify().post(curl + "registration?firstName=a&lastName=b&username=c&password=d&role=e").called();
     }
 
     @Test
@@ -77,10 +55,10 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "registration?firstName=a&lastName=b&username=c&password=d&role=e").doReturnStatus(201);
+        httpClientMock.onPost(curl + "registration?firstName=a&lastName=b&username=c&password=d&role=e").doReturnStatus(201);
 
         assertEquals("Exists", ServerCommunication.confirmRegistration("a", "b", "c", "d", "e"));
-        httpClientMock.verify().post(cURL + "registration?firstName=a&lastName=b&username=c&password=d&role=e").called();
+        httpClientMock.verify().post(curl + "registration?firstName=a&lastName=b&username=c&password=d&role=e").called();
     }
 
     @Test
@@ -88,21 +66,21 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "token?username=a&password=b").doReturn("{\"token\":\"c\"}").doReturnStatus(200);
+        httpClientMock.onPost(curl + "token?username=a&password=b").doReturn("{\"token\":\"c\"}").doReturnStatus(200);
 
         assertEquals("OK", ServerCommunication.loginToken("a", "b"));
-        httpClientMock.verify().post(cURL + "token?username=a&password=b");
+        httpClientMock.verify().post(curl + "token?username=a&password=b");
     }
 
     @Test
-    public void testLoginTokenWRONG() throws ParseException {
+    public void testLoginTokenWrong() throws ParseException {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "token?username=a&password=b").doReturnStatus(201);
+        httpClientMock.onPost(curl + "token?username=a&password=b").doReturnStatus(201);
 
         assertEquals("WRONG", ServerCommunication.loginToken("a", "b"));
-        httpClientMock.verify().post(cURL + "token?username=a&password=b");
+        httpClientMock.verify().post(curl + "token?username=a&password=b");
     }
 
     @Test
@@ -110,11 +88,11 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "name?token=a").doReturn("{\"first_name\":\"b\",\"last_name\":\"c\"}").doReturnStatus(200);
+        httpClientMock.onPost(curl + "name?token=a").doReturn("{\"first_name\":\"b\",\"last_name\":\"c\"}").doReturnStatus(200);
 
         ServerCommunication.setToken("a");
         assertEquals("OK", ServerCommunication.getUserInformation());
-        httpClientMock.verify().post(cURL + "name?token=a").called();
+        httpClientMock.verify().post(curl + "name?token=a").called();
     }
 
     @Test
@@ -122,11 +100,11 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "name?token=a").doReturnStatus(201);
+        httpClientMock.onPost(curl + "name?token=a").doReturnStatus(201);
 
         ServerCommunication.setToken("a");
         assertEquals("ERROR OBTAINING INFO", ServerCommunication.getUserInformation());
-        httpClientMock.verify().post(cURL + "name?token=a").called();
+        httpClientMock.verify().post(curl + "name?token=a").called();
     }
 
     @Test
@@ -134,10 +112,10 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onGet(cURL + "room/1").doReturn("rooms");
+        httpClientMock.onGet(curl + "room/1").doReturn("rooms");
 
         assertEquals("rooms", ServerCommunication.getRoomsFromBuilding("1"));
-        httpClientMock.verify().get(cURL + "room/1").called();
+        httpClientMock.verify().get(curl + "room/1").called();
     }
 
     @Test
@@ -145,10 +123,10 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onDelete(cURL + "building/1").doReturnStatus(200);
+        httpClientMock.onDelete(curl + "building/1").doReturnStatus(200);
 
         assertEquals("OK", ServerCommunication.sendDeleteBuilding("1"));
-        httpClientMock.verify().delete(cURL + "building/1").called();
+        httpClientMock.verify().delete(curl + "building/1").called();
     }
 
     @Test
@@ -159,10 +137,10 @@ public class ServerCommunicationTest {
         String jsonBuildingString = "{\"a\":\"aaa\",\"b\":\"bbb\"}";
         JSONObject jsonBuildingObj = (JSONObject) new JSONParser().parse(jsonBuildingString);
 
-        httpClientMock.onPost(cURL + "building/update").doReturnStatus(200);
+        httpClientMock.onPost(curl + "building/update").doReturnStatus(200);
 
         assertEquals("OK", ServerCommunication.sendEditBuilding(jsonBuildingObj));
-        httpClientMock.verify().post(cURL + "building/update");
+        httpClientMock.verify().post(curl + "building/update");
     }
 
     @Test
@@ -171,7 +149,7 @@ public class ServerCommunicationTest {
         ServerCommunication.setClient(httpClientMock);
 
         String jsonResponse = "[{\"starting_date\":\"2020-01-01T12:00:00.000+0000\",\"end_date\":\"2020-01-01T13:00:00.000+0000\"},{\"starting_date\":\"2020-01-01T16:00:00.000+0000\",\"end_date\":\"2020-01-01T17:00:00.000+0000\"}]";
-        httpClientMock.onGet(cURL + "reservation/1/2020-01-01/2020-01-01").doReturn(jsonResponse);
+        httpClientMock.onGet(curl + "reservation/1/2020-01-01/2020-01-01").doReturn(jsonResponse);
 
         String[] expected = new String[24];
         for (int i = 0; i < expected.length; i++) {
@@ -180,7 +158,7 @@ public class ServerCommunicationTest {
         expected[12] = expected[16] = "booked";
 
         assertArrayEquals(expected, ServerCommunication.getAvailableRoomHours(1, "2020-01-01", "2020-01-01"));
-        httpClientMock.verify().get(cURL + "reservation/1/2020-01-01/2020-01-01").called();
+        httpClientMock.verify().get(curl + "reservation/1/2020-01-01/2020-01-01").called();
     }
 
     @Test
@@ -188,10 +166,16 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "reservation").doReturn("response");
+        httpClientMock.onPost(curl + "reservation?token=1&username=name").doReturn("response");
 
+        final String tempToken = ServerCommunication.getToken();
+        final String tempName = ServerCommunication.getUsername();
+        ServerCommunication.setToken("1");
+        ServerCommunication.setUsername("name");
         assertEquals("response", ServerCommunication.reserveRoomForHour("2020-01-01T12:00:00.000+0000", "2020-01-01T13:00:00.000+0000"));
-        httpClientMock.verify().post(cURL + "reservation").called();
+        httpClientMock.verify().post(curl + "reservation?token=1&username=name").called();
+        ServerCommunication.setToken(tempToken);
+        ServerCommunication.setUsername(tempName);
     }
 
     @Test
@@ -199,23 +183,23 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "building").doReturn("NEW BUILDING: <building_name>");
+        httpClientMock.onPost(curl + "building").doReturn("NEW BUILDING: <building_name>");
 
         JSONObject obj = new JSONObject();
         assertEquals("OK", ServerCommunication.sendAddBuilding(obj));
-        httpClientMock.verify().post(cURL + "building").called();
+        httpClientMock.verify().post(curl + "building").called();
     }
 
     @Test
-    public void testSendAddBuildingNOTOK() {
+    public void testSendAddBuildingNotOK() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "building").doReturn("BUILDING WITH NUMBER: <building_number> ALREADY EXISTS.");
+        httpClientMock.onPost(curl + "building").doReturn("BUILDING WITH NUMBER: <building_number> ALREADY EXISTS.");
 
         JSONObject obj = new JSONObject();
         assertEquals("NOT OK", ServerCommunication.sendAddBuilding(obj));
-        httpClientMock.verify().post(cURL + "building").called();
+        httpClientMock.verify().post(curl + "building").called();
     }
 
     @Test
@@ -223,14 +207,14 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onGet(cURL + "filter?" +
-                "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&" +
-                "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").doReturn("rooms");
+        httpClientMock.onGet(curl + "filter?"
+                + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
+                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").doReturn("rooms");
 
         assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d","e","f", "g", "h", "i", "j", "k"));
-        httpClientMock.verify().get(cURL + "filter?" +
-                "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&" +
-                "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").called();
+        httpClientMock.verify().get(curl + "filter?"
+                + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
+                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").called();
     }
 
     @Test
@@ -238,10 +222,10 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onGet(cURL + "bike/1").doReturn("bike");
+        httpClientMock.onGet(curl + "bike/1").doReturn("bike");
 
         assertEquals("bike", ServerCommunication.getBikeRenting("1"));
-        httpClientMock.verify().get(cURL + "bike/1").called();
+        httpClientMock.verify().get(curl + "bike/1").called();
     }
 
     @Test
@@ -249,7 +233,7 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "bikeReservation/create?BikeId=1&token=1").doReturnStatus(200);
+        httpClientMock.onPost(curl + "bikeReservation/create?BikeId=1&token=1").doReturnStatus(200);
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendBikeRenting("1"));
@@ -297,7 +281,7 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "changePassword?oldPassword=a&newPassword=b&token=1").doReturnStatus(200);
+        httpClientMock.onPost(curl + "changePassword?oldPassword=a&newPassword=b&token=1").doReturnStatus(200);
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendChangePassword("a", "b"));
@@ -305,15 +289,71 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testSendChangePasswordNOTOK() {
+    public void testSendChangePasswordNotOK() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(cURL + "changePassword?oldPassword=a&newPassword=b&token=1").doReturnStatus(201);
+        httpClientMock.onPost(curl + "changePassword?oldPassword=a&newPassword=b&token=1").doReturnStatus(201);
 
         ServerCommunication.setToken("1");
         assertEquals("NOT OK", ServerCommunication.sendChangePassword("a", "b"));
-        httpClientMock.verify().post(cURL + "changePassword?oldPassword=a&newPassword=b&token=1").called();
+        httpClientMock.verify().post(curl + "changePassword?oldPassword=a&newPassword=b&token=1");
+    }
+
+    @Test
+    public void testGetReservationsFromDate() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "reservation/0000-00-00/0000-00-00").doReturn("[]");
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("[]", ServerCommunication.getReservationsByDate("0000-00-00", "0000-00-00"));
+        httpClientMock.verify().get(curl + "reservation/0000-00-00/0000-00-00").called();
+        ServerCommunication.setToken(tempToken);
+    }
+
+    @Test
+    public void testGetReservationsFromDateErrorCode() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "reservation/0000-00-00/0000-00-00").doReturnStatus(201);
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("Communication with server failed", ServerCommunication.getReservationsByDate("0000-00-00", "0000-00-00"));
+        httpClientMock.verify().get(curl + "reservation/0000-00-00/0000-00-00").called();
+        ServerCommunication.setToken(tempToken);
+    }
+
+    @Test
+    public void testGetRoomName() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "room/getName/0").doReturn("room");
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("room", ServerCommunication.getRoomName(0));
+        httpClientMock.verify().get(curl + "room/getName/0").called();
+        ServerCommunication.setToken(tempToken);
+    }
+
+    @Test
+    public void testGetRoomNameErrorCode() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "room/getName/0").doReturnStatus(201);
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        assertEquals("Communication with server failed", ServerCommunication.getRoomName(0));
+        httpClientMock.verify().get(curl + "room/getName/0").called();
+        ServerCommunication.setToken(tempToken);
     }
 
     /*
