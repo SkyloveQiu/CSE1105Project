@@ -26,6 +26,7 @@ import javafx.scene.layout.Pane;
 import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import nl.tudelft.oopp.group43.classes.StringChecker;
+import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
 import org.json.simple.JSONArray;
@@ -132,6 +133,8 @@ public class RoomPageController {
     @FXML
     private TextField addWheelchair;
     @FXML
+    private CheckBox addIsEmployeeOnly;
+    @FXML
     private TextField editRoomName;
     @FXML
     private TextField editSpaceType;
@@ -161,6 +164,8 @@ public class RoomPageController {
     private TextField editSoundInstallation;
     @FXML
     private TextField editWheelchair;
+    @FXML
+    private CheckBox editIsEmployeeOnly;
     @FXML
     private Label addSpaceTypeCheck;
     @FXML
@@ -343,6 +348,7 @@ public class RoomPageController {
             attributes.put("seatCapacity", Long.valueOf(addSeatCapacity.getText()));
             attributes.put("soundInstallation", Boolean.valueOf(addSoundInstallation.getText()));
             attributes.put("wheelChairAccessible", Boolean.valueOf(addWheelchair.getText()));
+            attributes.put("Only_Employee", addIsEmployeeOnly.isSelected());
             room.put("attributes", attributes.toJSONString());
 
             String message = ServerCommunication.sendRoom(room);
@@ -454,6 +460,7 @@ public class RoomPageController {
             attributes.put("seatCapacity", Long.valueOf(editSeatCapacity.getText()));
             attributes.put("soundInstallation", Boolean.valueOf(editSoundInstallation.getText()));
             attributes.put("wheelChairAccessible", Boolean.valueOf(editWheelchair.getText()));
+            attributes.put("Only_Employee", editIsEmployeeOnly.isSelected());
             room.put("attributes", attributes.toJSONString());
 
             String message = ServerCommunication.sendRoom(room);
@@ -463,10 +470,16 @@ public class RoomPageController {
 
             } else {
                 alert.setContentText("The operation has been successfully done!");
-                RoomPageContent.reloadRooms();
             }
 
             alert.showAndWait();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RoomPageContent.reloadRooms();
+                }
+            });
+            thread.start();
 
             closeEditMenu();
 
@@ -512,6 +525,7 @@ public class RoomPageController {
         String employeeOnlyString = "false";
 
         String roomTypeString = roomType.getValue();
+        System.out.println(roomTypeString);
         if (roomTypeString.equals("-- ignore room type --")) {
             roomTypeString = "ignored";
         }
@@ -570,6 +584,7 @@ public class RoomPageController {
 
                 try {
                     String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, employeeOnly, space, roomType);
+                    System.out.println(response);
 
                     Label load = new Label("Loading Rooms");
                     Platform.runLater(new Runnable() {
@@ -596,6 +611,7 @@ public class RoomPageController {
                         for (int i = 0; i < rooms.size(); i++) {
                             filterSelection.add((JSONObject) rooms.get(i));
                         }
+
                         RoomPageContent.setSelectedRooms(filterSelection);
                         RoomPageContent.addRooms();
                         Platform.runLater(new Runnable() {
@@ -816,6 +832,9 @@ public class RoomPageController {
             e.printStackTrace();
         }
 
+        while (ThreadLock.flag != 0) {
+            //wait
+        }
         RoomPageContent.addRooms();
     }
 

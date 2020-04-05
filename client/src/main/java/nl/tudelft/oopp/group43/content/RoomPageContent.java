@@ -172,6 +172,8 @@ public class RoomPageContent {
         checkBoxes = new ArrayList<>();
         editButtons = new ArrayList<>();
 
+        ThreadLock.flag = 1;
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -196,6 +198,7 @@ public class RoomPageContent {
             JSONObject obj = selectedRooms.get(i);
             addRoom(obj, i);
         }
+        ThreadLock.flag = 0;
         System.out.println("Adding rooms: Done!");
 
         if (ServerCommunication.getRole().equals("admin")) {
@@ -407,25 +410,38 @@ public class RoomPageContent {
             }
 
             String information = "Space type: \t\t\t" + attr.get("spaceType")
-                    + "\nChalkboard: \t\t\t" + attr.get("chalkBoard")
-                    + "\nWhiteboard: \t\t\t" + attr.get("whiteBoard")
-                    + "\nSmartboard: \t\t\t" + attr.get("smartBoard")
-                    + "\nBlinds: \t\t\t\t" + attr.get("blinds")
-                    + "\nDisplay Screen: \t\t" + attr.get("display")
-                    + "\nDesktop PC: \t\t\t" + attr.get("desktopPc")
-                    + "\nProjector: \t\t\t" + attr.get("projector")
-                    + "\nPower supply: \t\t\t" + attr.get("powerSupply")
+                    + "\nChalkboard: \t\t\t" + getTrueFalse((boolean) attr.get("chalkBoard"))
+                    + "\nWhiteboard: \t\t\t" + getTrueFalse((boolean) attr.get("whiteBoard"))
+                    + "\nSmartboard: \t\t\t" + getTrueFalse((boolean) attr.get("smartBoard"))
+                    + "\nBlinds: \t\t\t\t" + getTrueFalse((boolean) attr.get("blinds"))
+                    + "\nDisplay Screen: \t\t" + getTrueFalse((boolean) attr.get("display"))
+                    + "\nDesktop PC: \t\t\t" + getTrueFalse((boolean) attr.get("desktopPc"))
+                    + "\nProjector: \t\t\t" + getTrueFalse((boolean) attr.get("projector"))
+                    + "\nPower supply: \t\t\t" + getTrueFalse((boolean) attr.get("powerSupply"))
                     + "\nSurface area: \t\t\t" + attr.get("surfaceArea")
                     + "\nSeat capacity: \t\t\t" + attr.get("seatCapacity")
-                    + "\nMicrophone: \t\t\t" + attr.get("microphone")
-                    + "\nSound-installation: \t\t" + attr.get("soundInstallation")
-                    + "\nWheelchair accessible: \t" + attr.get("wheelChairAccessible")
-                    + "\nIs employee only: \t\t" + isEmployeeOnly;
+                    + "\nMicrophone: \t\t\t" + getTrueFalse((boolean) attr.get("microphone"))
+                    + "\nSound-installation: \t\t" + getTrueFalse((boolean) attr.get("soundInstallation"))
+                    + "\nWheelchair accessible: \t" + getTrueFalse((boolean) attr.get("wheelChairAccessible"))
+                    + "\nIs employee only: \t\t" + getTrueFalse(isEmployeeOnly);
 
             info.setText(information);
             info.setFont(new Font("Arial", 18));
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * If the boolean is true it returns a checkmark, a cross if otherwise.
+     * @param bool the boolean
+     * @return returns a ✔ if true and a ✘ if otherwise
+     */
+    private static String getTrueFalse(boolean bool) {
+        if (bool) {
+            return "✔";
+        } else {
+            return "✘";
         }
     }
 
@@ -733,7 +749,19 @@ public class RoomPageContent {
         int index = 0;
         for (Node n : root.getChildren()) {
             if (n instanceof TextField) {
-                ((TextField) n).setText(fields[index][fields[index].length - 1]);
+                if (fields[index][fields[index].length - 1].equals("✔")) {
+                    ((TextField) n).setText("true");
+                } else {
+                    ((TextField) n).setText("false");
+                }
+                index++;
+            }
+            if (n instanceof CheckBox) {
+                if (fields[index][fields[index].length - 1].equals("✔")) {
+                    ((CheckBox) n).setSelected(true);
+                } else {
+                    ((CheckBox) n).setSelected(false);
+                }
                 index++;
             }
         }

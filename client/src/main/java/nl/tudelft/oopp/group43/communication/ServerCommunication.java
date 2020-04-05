@@ -626,9 +626,13 @@ public class ServerCommunication {
         url = url + "&powerSupply=" + powerSupply;
         url = url + "&soundInstallation=" + soundInstallation;
         url = url + "&wheelChair=" + wheelChair;
-        url = url + "&employee=" + employeeOnly;
+        if (employeeOnly.equals("true")) {
+            url = url + "&employee=" + employeeOnly;
+        }
         url = url + "&minSpace=" + space;
-        url = url + "&type=" + utf8EncodeValue(roomType);
+        if (!roomType.equals("ignore")) {
+            url = url + "&type=" + utf8EncodeValue(roomType);
+        }
         HttpResponse<String> response = get(url);
 
         if (response == null) {

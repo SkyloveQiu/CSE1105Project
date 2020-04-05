@@ -75,7 +75,7 @@
             <CheckBox fx:id="wheelChair" mnemonicParsing="false" text="Wheel Chair Accessible" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="350" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
             <CheckBox fx:id="employeeOnly" mnemonicParsing="false" text="Employee only" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="380" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
 
-            <ChoiceBox fx:id="roomType" AnchorPane.leftAnchor="30" AnchorPane.topAnchor="410" value="-- select room type --">
+            <ChoiceBox fx:id="roomType" AnchorPane.leftAnchor="30" AnchorPane.topAnchor="410" value="-- ignore room type --">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="-- ignore room type --" />
@@ -118,7 +118,7 @@
                <Label alignment="CENTER" styleClass="text_labels" text="Room facilities:" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="165.0"><font><Font name="Arial" size="30.0" /></font></Label>
                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" styleClass="editFields" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="200">
                   <content>
-                     <AnchorPane fx:id="editFields" minWidth="100.0" prefHeight="1200" style="-fx-background-color: transparent;">
+                     <AnchorPane fx:id="editFields" minWidth="100.0" prefHeight="1260" style="-fx-background-color: transparent;">
                         <children>
                            <Label styleClass="text_labels" text="Space type" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="35.0"><font><Font name="Arial" size="17.0" /></font></Label>
                            <TextField fx:id="editSpaceType"  onKeyTyped="#checkSpaceType" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="60.0" />
@@ -175,6 +175,8 @@
                            <Label styleClass="text_labels" text="Wheelchair accessible (true/false)" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1060.0"><font><Font name="Arial" size="17.0" /></font></Label>
                            <TextField fx:id="editWheelchair" onKeyPressed="#checkWheelchair" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1100.0" />
                            <Label fx:id="editWheelchairCheck"  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1130.0"  textFill="D51414" />
+
+                           <CheckBox fx:id="editIsEmployeeOnly" text="Room is employee only" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1160.0" />
                         </children>
                      </AnchorPane>
                   </content>
@@ -213,7 +215,7 @@
                   <Label alignment="CENTER" styleClass="text_labels" text="Room facilities:" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="180.0"><font><Font name="Arial" size="20.0" /></font></Label>
                   <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" styleClass="editFields" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="210">
                      <content>
-                        <AnchorPane fx:id="addFacilities" minWidth="100.0" prefHeight="1200" style="-fx-background-color: transparent;">
+                        <AnchorPane fx:id="addFacilities" minWidth="100.0" prefHeight="1260" style="-fx-background-color: transparent;">
                            <children>
                               <Label styleClass="text_labels" text="Space type" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="35.0"><font><Font name="Arial" size="17.0" /></font></Label>
                               <TextField fx:id="addSpaceType"  onKeyTyped="#checkSpaceType" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="60.0" />
@@ -270,6 +272,8 @@
                               <Label styleClass="text_labels" text="Wheelchair accessible (true/false)" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1060.0"><font><Font name="Arial" size="17.0" /></font></Label>
                               <TextField fx:id="addWheelchair" onKeyTyped="#checkWheelchair" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1100.0" />
                               <Label fx:id="addWheelchairCheck"  AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1130.0" textFill="D51414" />
+
+                              <CheckBox fx:id="addIsEmployeeOnly" text="Room is employee only" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="1160.0" />
                            </children>
                         </AnchorPane>
                      </content>
