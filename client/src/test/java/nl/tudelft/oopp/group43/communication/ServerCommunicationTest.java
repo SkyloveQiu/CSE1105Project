@@ -245,11 +245,11 @@ public class ServerCommunicationTest {
        HttpClientMock httpClientMock = new HttpClientMock();
        ServerCommunication.setClient(httpClientMock);
 
-       httpClientMock.onPost(curl + "bikeReservation/user?token=1").doReturn("bikes");
+       httpClientMock.onGet(curl + "bikeReservation/notReturned?token=1").doReturn("bikes");
 
        ServerCommunication.setToken("1");
        assertEquals("bikes", ServerCommunication.getBikesRentedByUser());
-       httpClientMock.verify().post(curl + "bikeReservation/user?token=1").called();
+       httpClientMock.verify().get(curl + "bikeReservation/notReturned?token=1").called();
     }
 
     @Test

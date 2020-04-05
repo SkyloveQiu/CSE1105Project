@@ -702,8 +702,8 @@ public class ServerCommunication {
      * @return the bike reservations
      */
     public static String getBikesRentedByUser() {
-        String url = cURL + "bikeReservation/user?token=" + getToken();
-        HttpResponse<String> response = post(url);
+        String url = cURL + "bikeReservation/notReturned?token=" + getToken();
+        HttpResponse<String> response = get(url);
         if (response == null) {
             return "Communication with server failed";
         }
