@@ -11,12 +11,11 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
@@ -29,7 +28,6 @@ public class FoodPageContent {
     private static Scene scene;
     private static JSONArray array;
 
-    private static ArrayList<String> selectedFood;
     private static String selectedBuilding;
 
     /**
@@ -130,7 +128,6 @@ public class FoodPageContent {
      * Removes all food from the food page.
      */
     private static void removeFood() {
-        selectedFood = new ArrayList<>();
         GridPane foodGrid = (GridPane) scene.lookup("#foodGrid");
         foodGrid.getChildren().clear();
         foodGrid.getRowConstraints().clear();
@@ -140,8 +137,6 @@ public class FoodPageContent {
      * Add all food items on the food page.
      */
     private static void addFood() {
-        selectedFood = new ArrayList<>();
-
         GridPane foodGrid = (GridPane) scene.lookup("#foodGrid");
         JSONParser jsonParser = new JSONParser();
         try {
@@ -154,21 +149,28 @@ public class FoodPageContent {
             }
 
             for (int i = 0; i < foodItems.size(); i++) {
-                if (i % 2 == 0) {
-                    RowConstraints rowConstraints = new RowConstraints();
-                    rowConstraints.setPrefHeight(100);
-                    foodGrid.getRowConstraints().add(rowConstraints);
-                }
+                RowConstraints rowConstraints = new RowConstraints();
+                rowConstraints.setPrefHeight(100);
+                foodGrid.getRowConstraints().add(rowConstraints);
 
                 JSONObject foodProduct = (JSONObject) foodItems.get(i).get("foodProduct");
+
+                HBox hBox = new HBox();
+                hBox.getStyleClass().add("foodLabels");
+                hBox.setId(((JSONObject) foodItems.get(i).get("id")).get("foodProduct").toString());
+                hBox.setMinSize(100, 100);
+                hBox.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
                 Label label = new Label(foodProduct.get("name") + " €" + foodProduct.get("price") + "\n" + foodProduct.get("description"));
                 label.setId(((JSONObject) foodItems.get(i).get("id")).get("foodProduct").toString());
-                label.setMinSize(100, 100);
-                label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                label.getStyleClass().add("foodLabels");
 
-                foodGrid.add(label, i % 2, i / 2);
-                addSelectEvent(label);
+                Spinner<Integer> spinner = new Spinner<>();
+                SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 0);
+                spinner.setValueFactory(valueFactory);
+
+                hBox.getChildren().addAll(label, spinner);
+
+                foodGrid.add(hBox, 0, i);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -176,30 +178,18 @@ public class FoodPageContent {
     }
 
     /**
-     * Add the selection events when a food item is clicked.
-     * @param label the label that needs an event.
-     */
-    private static void addSelectEvent(Label label) {
-        label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (label.getStyleClass().size() > 2) {
-                    selectedFood.remove(selectedFood.indexOf(label.getId()));
-                    label.getStyleClass().remove(2);
-                } else {
-                    selectedFood.add(label.getId());
-                    label.getStyleClass().add("selected_food");
-                }
-            }
-        });
-        label.setCursor(Cursor.HAND);
-    }
-
-    /**
      * Gets all food selected in the correct format.
      * @return Gets all food
      */
     public static ArrayList<String> getSelectedFood() {
+        GridPane foodGrid = (GridPane) scene.lookup("#foodGrid");
+        ArrayList<String> selectedFood = new ArrayList<>();
+        for (Object obj : foodGrid.getChildren()) {
+            if (obj instanceof HBox) {
+                HBox foodProduct = (HBox) obj;
+            }
+        }
+
         ArrayList<String> formatted = new ArrayList<>();
         for (String s : selectedFood) {
             formatted.add(selectedBuilding + "-" + s + "-1");
