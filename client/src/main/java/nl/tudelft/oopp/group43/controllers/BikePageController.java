@@ -188,6 +188,10 @@ public class BikePageController {
             alert.setContentText("Something went wrong!");
             alert.showAndWait();
             return;
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("You successfully reserved a bike!");
+            alert.showAndWait();
         }
         closeReturnMenu(event);
         BikePageContent.refreshRentedBikes();

@@ -146,7 +146,7 @@
                   </content>
                </ScrollPane>
 
-               <Button fx:id="reserveBike" maxHeight="Infinity" maxWidth="Infinity" styleClass="menuButtons" text="Reserver" GridPane.columnIndex="1" GridPane.rowIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
+               <Button fx:id="reserveBike" maxHeight="Infinity" maxWidth="Infinity" styleClass="menuButtons" text="Reserve" GridPane.columnIndex="1" GridPane.rowIndex="1"><font><Font name="Arial" size="35.0" /></font></Button>
             </children>
          </GridPane>
 
