@@ -19,6 +19,7 @@ import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.BikePageContent;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import nl.tudelft.oopp.group43.content.CalendarPageContent;
+import nl.tudelft.oopp.group43.content.ExceptionsPageContent;
 import nl.tudelft.oopp.group43.content.FoodPageContent;
 import nl.tudelft.oopp.group43.content.MainPageContent;
 import nl.tudelft.oopp.group43.content.MyReservationsPageContent;
@@ -246,6 +247,23 @@ public class SceneLoader extends Application {
 
                 primaryStage.show();
                 MyReservationsPageContent.addContent(scene);
+                break;
+
+            case "exceptions":
+                URL exceptionsUrl = getClass().getResource("/exceptionsPage.fxml");
+                loader.setLocation(exceptionsUrl);
+                root = loader.load();
+                scene = new Scene(root);
+
+                primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+                primaryStage.setMaxHeight(ap.getPrefHeight());
+                primaryStage.setMaxWidth(ap.getPrefWidth());
+
+                primaryStage.show();
+                ExceptionsPageContent.addContent(scene);
                 break;
             default:
                 URL xmlUrl = getClass().getResource("/mainPage-overhaul.fxml");
