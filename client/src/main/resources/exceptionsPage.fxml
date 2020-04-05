@@ -12,12 +12,14 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Button?>
 <AnchorPane fx:id="root" fx:controller="nl.tudelft.oopp.group43.controllers.ExceptionsPageController" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane fx:id="exceptionsPage" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" minWidth="600.0" minHeight="400.0">
          <children>
             <DatePicker fx:id="exceptionsDatePicker" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" style="-fx-background-color: white;" prefWidth="174.0" prefHeight="25.0"></DatePicker>
             <ChoiceBox fx:id="buildings" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="320.0" prefWidth="150.0"></ChoiceBox>
+            <Button fx:id="confirm" onAction="#confirmExpection" text="Confirm" style="-fx-text-fill: white; -fx-background-color: seagreen" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="500.0" prefWidth="75.0"></Button>
             <RadioButton fx:id="closed" mnemonicParsing="false" AnchorPane.topAnchor="200.0" AnchorPane.leftAnchor="20.0" text="Closed" style="-fx-text-fill: white;"></RadioButton>
             <RadioButton fx:id="different" mnemonicParsing="false" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="200.0" text="Different opening hours" style="-fx-text-fill: white;"></RadioButton>
             <ChoiceBox fx:id="fromTime" visible="false" prefWidth="150.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0"></ChoiceBox>
