@@ -2,26 +2,27 @@ package nl.tudelft.oopp.group43.content;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 public class ExceptionsPageContent {
 
     private static Scene scene;
-    private static ChoiceBox<String> fromTime;
-    private static ChoiceBox<String> untilTime;
+    private static TextField time;
     private static RadioButton differentButton;
+    private static ArrayList <String> buildingName;
+    private static ArrayList <Long> buildingNumber;
+
 
     /**
      * Adds the content of the page.
@@ -37,7 +38,25 @@ public class ExceptionsPageContent {
         RadioButton differentButton = (RadioButton) scene.lookup("#different");
         closedButton.setToggleGroup(radioButtons);
         differentButton.setToggleGroup(radioButtons);
-        addCheckBoxes();
+     //   addCheckBoxes();
+        time = (TextField) scene.lookup("#time");
+        time.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 0) {
+                if (newValue.length() > 11) {
+                    ((StringProperty) observable).setValue(oldValue);
+                    return;
+                }
+                if (newValue.charAt(newValue.length() - 1) < 48 || newValue.charAt(newValue.length() - 1) > 57) {
+                    if (newValue.charAt(newValue.length() - 1) != ':' && newValue.length() - 1 != 2 && newValue.length() - 1 != 8 && newValue.charAt(newValue.length() - 1) != '-' && newValue.length() - 1 != 5) {
+                        String comp = "closed";
+                        if (newValue.length() > comp.length() || newValue.charAt(newValue.length() - 1) != comp.charAt(newValue.length() - 1)) {
+                            ((StringProperty) observable).setValue(oldValue);
+                        }
+                    }
+                }
+            }
+        });
+
         differentButton.selectedProperty().addListener((observable, oldValue, newValue) -> toggleCheckBoxes(newValue));
     }
 
@@ -47,30 +66,37 @@ public class ExceptionsPageContent {
         try {
             JSONArray array = (JSONArray) json.parse(ServerCommunication.getBuilding());
             ArrayList<String> buildings = new ArrayList<String>();
+            buildingName = new ArrayList<>();
+            buildingNumber = new ArrayList<>();
             for (Object obj : array) {
                 JSONObject jsonObject = (JSONObject) obj;
-                buildings.add((String) jsonObject.get("building_name"));
+                String name = (String) jsonObject.get("building_name");
+                Long number = (Long) jsonObject.get("building_number");
+                buildings.add(name);
+                buildingName.add(name);
+                buildingNumber.add(number);
             }
 
             buildingBox.setItems(FXCollections.observableArrayList(buildings));
+            buildingBox.getSelectionModel().selectFirst();
+
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private static void toggleCheckBoxes(Boolean newValue) {
+   private static void toggleCheckBoxes(Boolean newValue) {
         if (newValue) {
-            fromTime.setVisible(true);
-            untilTime.setVisible(true);
+            time.setVisible(true);
         } else {
-            fromTime.setVisible(false);
-            untilTime.setVisible(false);
+            time.setVisible(false);
         }
     }
 
     private static void addCheckBoxes() {
-        fromTime = (ChoiceBox<String>) scene.lookup("#fromTime");
-        untilTime = (ChoiceBox<String>) scene.lookup("#untilTime");
+
         ArrayList<String> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             if (i < 10) {
@@ -80,8 +106,9 @@ public class ExceptionsPageContent {
             }
         }
         ObservableList<String> list = FXCollections.observableArrayList(hours);
-        fromTime.setItems(list);
-        untilTime.setItems(list);
+
+
+
     }
 
 
@@ -95,5 +122,20 @@ public class ExceptionsPageContent {
                 setDisable(empty || date.compareTo(today) < 0);
             }
         });
+    }
+
+    private static Long getBuilding(String building)
+    {
+        int i;
+        Long nr = Long.valueOf(-1);
+        for(i = 0; i <buildingName.size(); i++)
+        {
+            if(building.equals(buildingName.get(i)) == true) {
+               nr = buildingNumber.get(i);
+               break;
+            }
+        }
+        return  nr;
+
     }
 }
