@@ -59,34 +59,43 @@
 
       <Label text="select time and date" onMouseClicked="#showTimeMenu" styleClass="selectTime" alignment="CENTER_RIGHT" prefHeight="40" AnchorPane.rightAnchor="80" AnchorPane.topAnchor="259" ><padding><Insets left="5" right="5" /></padding></Label>
 
-      <ScrollPane fx:id="filterPanel" fitToHeight="true" fitToWidth="true" prefHeight="430.0" prefWidth="400.0" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="245.0">
-         <content>
-            <AnchorPane prefHeight="430.0" prefWidth="400.0" style="-fx-background-color: azure;" >
-               <children>
-                  <Label text="Filters" alignment="CENTER" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="40" ><font><Font name="Arial" size="20.0" /></font></Label>
+      <AnchorPane fx:id="filterPanel" prefHeight="560.0" prefWidth="400.0" style="-fx-background-color: azure;" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="245.0">
+         <children>
+            <Label text="Filters" alignment="CENTER" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="40" ><font><Font name="Arial" size="20.0" /></font></Label>
 
-                  <CheckBox fx:id="blinds" mnemonicParsing="false" text="Blinds" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="80" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="desktop" mnemonicParsing="false" text="Desktop PC" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="110" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="projector" mnemonicParsing="false" text="Projector" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="140" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="chalkBoard" mnemonicParsing="false" text="Chalk board" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="170" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="microphone" mnemonicParsing="false" text="Smart board" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="200" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="smartBoard" mnemonicParsing="false" text="Microphone" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="230" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="whiteBoard" mnemonicParsing="false" text="White board" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="260" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="powerSupply"  mnemonicParsing="false" text="Power Supply" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="290" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="soundInstallation" mnemonicParsing="false" text="Sound Installation" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="320" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="wheelChair" mnemonicParsing="false" text="Wheel Chair Accessible" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="350" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
-                  <CheckBox fx:id="employeeOnly" mnemonicParsing="false" text="Employee only" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="380" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="blinds" mnemonicParsing="false" text="Blinds" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="80" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="desktop" mnemonicParsing="false" text="Desktop PC" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="110" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="projector" mnemonicParsing="false" text="Projector" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="140" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="chalkBoard" mnemonicParsing="false" text="Chalk board" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="170" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="microphone" mnemonicParsing="false" text="Smart board" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="200" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="smartBoard" mnemonicParsing="false" text="Microphone" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="230" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="whiteBoard" mnemonicParsing="false" text="White board" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="260" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="powerSupply"  mnemonicParsing="false" text="Power Supply" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="290" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="soundInstallation" mnemonicParsing="false" text="Sound Installation" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="320" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="wheelChair" mnemonicParsing="false" text="Wheel Chair Accessible" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="350" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
+            <CheckBox fx:id="employeeOnly" mnemonicParsing="false" text="Employee only" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="380" ><font><Font name="Arial" size="15.0" /></font></CheckBox>
 
-                  <Label text="Minimum number of seats:" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="410" ><font><Font name="Arial" size="15.0" /></font></Label>
-                  <TextField fx:id="space" AnchorPane.leftAnchor="230" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="410" ><font><Font name="Arial" size="15.0" /></font></TextField>
+            <ChoiceBox fx:id="roomType" AnchorPane.leftAnchor="30" AnchorPane.topAnchor="410" value="-- select room type --">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="-- ignore room type --" />
+                     <String fx:value="PC hall" />
+                     <String fx:value="Instruction hall" />
+                     <String fx:value="Exam hall" />
+                     <String fx:value="Project hall" />
+                     <String fx:value="Lecture hall" />
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
 
-                  <Label fx:id="checkSpace" AnchorPane.topAnchor="430" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="0.0"  textFill="#d51414" onKeyTyped="#checkNumber" />
+            <Label text="Minimum number of seats:" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="440" ><font><Font name="Arial" size="15.0" /></font></Label>
+            <TextField fx:id="space" AnchorPane.leftAnchor="230" AnchorPane.rightAnchor="30" AnchorPane.topAnchor="440" ><font><Font name="Arial" size="15.0" /></font></TextField>
 
-                  <Button fx:id="confirmFilter" style="-fx-background-color: cornflowerblue; -fx-background-radius: 50 50 50 50; fx-border-radius: 50 50 50 50;" mnemonicParsing="false" onAction="#confirmFilters" text="Confirm Filters" AnchorPane.leftAnchor="150" AnchorPane.rightAnchor="50" AnchorPane.bottomAnchor="25" ><font><Font name="Arial" size="20.0" /></font></Button>
-               </children>
-            </AnchorPane>
-         </content>
-      </ScrollPane>
+            <Label fx:id="checkSpace" AnchorPane.topAnchor="460" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="0.0"  textFill="#d51414" onKeyTyped="#checkNumber" />
+
+            <Button fx:id="confirmFilter" style="-fx-background-color: cornflowerblue; -fx-background-radius: 50 50 50 50; fx-border-radius: 50 50 50 50;" mnemonicParsing="false" onAction="#confirmFilters" text="Confirm Filters" AnchorPane.leftAnchor="150" AnchorPane.rightAnchor="50" AnchorPane.bottomAnchor="25" ><font><Font name="Arial" size="20.0" /></font></Button>
+         </children>
+      </AnchorPane>
 
       <Pane fx:id="grayBackground" style="-fx-background-color: rgba(40, 40, 40, 0.65);" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141" />
 

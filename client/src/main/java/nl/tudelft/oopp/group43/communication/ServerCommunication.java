@@ -609,11 +609,12 @@ public class ServerCommunication {
      * @param wheelChair        - String which represents if the room has the facilities for people with wheel chair or not.
      * @param employeeOnly      - String which represents if the room is employee only.
      * @param space             - String which represents the minimum space capacity of the room (nr. of people).
+     * @param roomType          - String which represents the room type the user wants to filter on.
      * @return a String which can have 2 values:
      *         - "Communication with server failed" if the communication with the server failed.
      *         - the rooms selected by the filters.
      */
-    public static String getRoomFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String employeeOnly, String space) {
+    public static String getRoomFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String employeeOnly, String space, String roomType) {
         String url = cURL + "filter?";
         url = url + "blinds=" + blinds;
         url = url + "&desktop=" + desktop;
@@ -627,6 +628,7 @@ public class ServerCommunication {
         url = url + "&wheelChair=" + wheelChair;
         url = url + "&employee=" + employeeOnly;
         url = url + "&minSpace=" + space;
+        url = url + "&type=" + utf8EncodeValue(roomType);
         HttpResponse<String> response = get(url);
 
         if (response == null) {

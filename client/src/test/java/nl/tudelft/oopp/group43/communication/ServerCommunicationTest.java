@@ -209,12 +209,12 @@ public class ServerCommunicationTest {
 
         httpClientMock.onGet(curl + "filter?"
                 + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
-                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&employee=k&minSpace=m").doReturn("rooms");
+                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&employee=k&minSpace=m&type=n").doReturn("rooms");
 
-        assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d","e","f", "g", "h", "i", "j", "k", "m"));
+        assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d","e","f", "g", "h", "i", "j", "k", "m", "n"));
         httpClientMock.verify().get(curl + "filter?"
                 + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
-                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&employee=k&minSpace=m").called();
+                + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&employee=k&minSpace=m&type=n").called();
     }
 
     @Test

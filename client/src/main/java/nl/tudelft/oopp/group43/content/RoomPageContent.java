@@ -315,11 +315,7 @@ public class RoomPageContent {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                //try {
                 list.add(root, 0, i);
-                //} catch (IndexOutOfBoundsException e) {
-                //list.add(root, 0, i);
-                //}
             }
         });
 

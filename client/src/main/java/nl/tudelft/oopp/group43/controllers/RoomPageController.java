@@ -76,6 +76,8 @@ public class RoomPageController {
     @FXML
     private CheckBox employeeOnly;
     @FXML
+    private ChoiceBox<String> roomType;
+    @FXML
     private TextField space;
     @FXML
     private Label checkSpace;
@@ -84,7 +86,7 @@ public class RoomPageController {
     @FXML
     private Label checkBuildingNumber;
     @FXML
-    private ScrollPane filterPanel;
+    private AnchorPane filterPanel;
     @FXML
     private Pane grayBackground;
     @FXML
@@ -509,6 +511,11 @@ public class RoomPageController {
         String wheelChairString = "false";
         String employeeOnlyString = "false";
 
+        String roomTypeString = roomType.getValue();
+        if (roomTypeString.equals("-- ignore room type --")) {
+            roomTypeString = "ignored";
+        }
+
         if (blinds.isSelected()) {
             blindsString = "true";
         }
@@ -546,7 +553,7 @@ public class RoomPageController {
 
         if (checkNumber() == true) {
             getRoomsFilter(blindsString, desktopString, projectorString, chalkBoardString, microphoneString, smartBoardString, whiteBoardString, powerSupplyString,
-                    soundInstallationString, wheelChairString, employeeOnlyString, space.getText());
+                    soundInstallationString, wheelChairString, employeeOnlyString, space.getText(), roomTypeString);
         }
 
 
@@ -555,14 +562,14 @@ public class RoomPageController {
     /**
      * Takes the rooms from the server with the chosen attributes.
      */
-    public void getRoomsFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String employeeOnly, String space) {
+    public void getRoomsFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String employeeOnly, String space, String roomType) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 JSONParser json = new JSONParser();
 
                 try {
-                    String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, employeeOnly, space);
+                    String response = ServerCommunication.getRoomFilter(blinds, desktop, projector, chalkBoard, microphone, smartBoard, whiteBoard, powerSupply, soundInstallation, wheelChair, employeeOnly, space, roomType);
 
                     Label load = new Label("Loading Rooms");
                     Platform.runLater(new Runnable() {
