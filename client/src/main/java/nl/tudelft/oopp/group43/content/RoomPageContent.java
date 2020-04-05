@@ -403,6 +403,13 @@ public class RoomPageContent {
         try {
             JSONObject attr = (JSONObject) json.parse((String) obj.get("attributes"));
 
+            boolean isEmployeeOnly;
+            try {
+                isEmployeeOnly = (boolean) attr.get("Only_Employee");
+            } catch (NullPointerException e) {
+                isEmployeeOnly = false;
+            }
+
             String information = "Space type: \t\t\t" + attr.get("spaceType")
                     + "\nChalkboard: \t\t\t" + attr.get("chalkBoard")
                     + "\nWhiteboard: \t\t\t" + attr.get("whiteBoard")
@@ -416,7 +423,8 @@ public class RoomPageContent {
                     + "\nSeat capacity: \t\t\t" + attr.get("seatCapacity")
                     + "\nMicrophone: \t\t\t" + attr.get("microphone")
                     + "\nSound-installation: \t\t" + attr.get("soundInstallation")
-                    + "\nWheelchair accessible: \t" + attr.get("wheelChairAccessible");
+                    + "\nWheelchair accessible: \t" + attr.get("wheelChairAccessible")
+                    + "\nIs employee only: \t\t" + isEmployeeOnly;
 
             info.setText(information);
             info.setFont(new Font("Arial", 18));
