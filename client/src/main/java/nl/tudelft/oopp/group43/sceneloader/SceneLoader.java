@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -46,6 +47,9 @@ public class SceneLoader extends Application {
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         RoomPageContent.setAdminAdd(false);
+
+        if(primaryStage.getIcons().size()<1)
+            primaryStage.getIcons().add(new Image("/icons/app_logo.png"));
 
         switch (sceneString) {
             case "building":
@@ -315,6 +319,7 @@ public class SceneLoader extends Application {
             thread.setDaemon(true);
             thread.start();
         }
+
     }
 
     /**
