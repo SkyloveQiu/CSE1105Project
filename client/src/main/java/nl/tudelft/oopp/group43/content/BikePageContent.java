@@ -45,9 +45,9 @@ public class BikePageContent {
     public static void addContent(Scene currentScene) {
         scene = currentScene;
 
-        //Button rentButton = (Button) scene.lookup("#rent");
+        Button returnButton = (Button) scene.lookup("#return");
         Button reserveButton = (Button) scene.lookup("#reserve");
-        //GridPane.setHalignment(rentButton, HPos.RIGHT);
+        GridPane.setHalignment(returnButton, HPos.CENTER);
         GridPane.setHalignment(reserveButton, HPos.CENTER);
 
         scene.heightProperty().addListener(new ChangeListener<Number>() {
