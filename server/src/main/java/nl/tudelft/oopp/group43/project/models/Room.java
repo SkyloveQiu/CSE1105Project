@@ -58,6 +58,17 @@ public class Room implements java.io.Serializable {
 
     }
 
+    /**
+     * Clones a specific room.
+     *
+     * @return return the cloned room.
+     * @throws CloneNotSupportedException if clone is not supported
+     */
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return new Room(this.getBuilding(),this.getRoomName(),this.getAttributes());
+    }
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", unique = true, nullable = false)

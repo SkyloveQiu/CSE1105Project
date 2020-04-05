@@ -155,5 +155,9 @@ public class RoomAttributesUpdater implements Runnable {
         }
     }
 
+    public static boolean verify(Room r) {
+        return (!r.getRoomName().equals("deleted"));
+    }
+
 
 }
