@@ -13,7 +13,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.BikePageContent;
@@ -25,6 +27,10 @@ import nl.tudelft.oopp.group43.content.MyReservationsPageContent;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
 import nl.tudelft.oopp.group43.content.RegisterPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 public class SceneLoader extends Application {
@@ -280,7 +286,44 @@ public class SceneLoader extends Application {
         //primaryStage.show();
 
         System.out.println("moved to: " + this.sceneString);
+
+        if (BuildingMap.isNull()) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    configureBuildingMap();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
+        }
     }
+
+    /**
+     * Adds all buildings to the Building hashmap, and also gives a reference to which room belongs to which building.
+     */
+    public static void configureBuildingMap() {
+        BuildingMap.init();
+        JSONParser json = new JSONParser();
+        try {
+            System.out.println("Adding all buildings to map");
+            JSONArray buildings = (JSONArray) json.parse(ServerCommunication.getBuilding());
+            for (Object object : buildings) {
+                JSONObject obj = (JSONObject) object;
+                BuildingMap.put((long) obj.get("building_number"), obj);
+
+                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
+                for (Object roomObj : rooms) {
+                    JSONObject room = (JSONObject) roomObj;
+                    BuildingMap.setBuildingToRoom((long) obj.get("building_number"), (long) room.get("id"));
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Adding buildings to map: Done!");
+    }
+
 
     public static void setScene(String newScene) {
         sceneString = newScene;

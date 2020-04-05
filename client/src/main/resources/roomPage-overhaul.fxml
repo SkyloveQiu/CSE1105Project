@@ -17,6 +17,8 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.RoomPageController" stylesheets="stylesheets/roomPage.css">
    <children>
       <TextField fx:id="searchBar" layoutX="129.0" layoutY="184.0" prefHeight="65.0" prefWidth="967.0" promptText="Search for rooms" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="180.0">
@@ -38,7 +40,6 @@
             <Image url="@/icons/filter-icon.png" />
          </image>
       </ImageView>
-      <Pane prefHeight="500.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="245.0" />
 
       <ScrollPane fx:id="scrollpane" fitToHeight="true" fitToWidth="true" layoutX="88.0" layoutY="362.0" prefHeight="492.0" prefWidth="1192.0" style="-fx-background-color: #29293d; -fx-border-width: 0 0 0 0;" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="310.0">
          <content>
@@ -83,6 +84,8 @@
             </AnchorPane>
          </content>
       </ScrollPane>
+
+      <Label text="select time and date" onMouseClicked="#showTimeMenu" styleClass="selectTime" alignment="CENTER_RIGHT" prefHeight="40" AnchorPane.rightAnchor="80" AnchorPane.topAnchor="259" ><padding><Insets left="5" right="5" /></padding></Label>
 
       <Pane fx:id="grayBackground" style="-fx-background-color: rgba(40, 40, 40, 0.65);" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141" />
 
@@ -272,33 +275,98 @@
          </children>
       </GridPane>
 
-      <AnchorPane fx:id="timeDateSelect" style="-fx-background-color: rgba(255,255,255,0.6)" visible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="141">
-         <Label alignment="CENTER" text="Please select a time and date:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="100.0">
-            <font>
-               <Font name="Arial" size="50" />
-            </font>
-         </Label>
+      <AnchorPane fx:id="timeDateSelect" style="-fx-background-color: rgba(0, 0, 0, 0.3)" visible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="141">
+         <AnchorPane style="-fx-background-color: rgb(57, 72, 102);" AnchorPane.topAnchor="80" AnchorPane.leftAnchor="300" >
+            <Label alignment="CENTER" textFill="silver" text="Please select a time and date:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="20.0">
+               <font>
+                  <Font name="Arial" size="30" />
+               </font>
+               <padding>
+                  <Insets left="20" right="20" />
+               </padding>
+            </Label>
 
-         <DatePicker fx:id="date" prefWidth="214.0" AnchorPane.leftAnchor="489" AnchorPane.rightAnchor="489" AnchorPane.topAnchor="237.0" />
-         <Label alignment="CENTER" text="From:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="290.0">
-            <font>
-               <Font name="Arial" size="20" />
-            </font>
-         </Label>
-         <ChoiceBox fx:id="fromTime" layoutX="521.0" onMouseClicked="#fromHourSelected" prefWidth="150.0" AnchorPane.topAnchor="317.0" />
+            <DatePicker fx:id="date" prefWidth="214.0" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="157.0" />
+            <Label alignment="CENTER" textFill="silver" text="From:" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="210.0">
+               <font>
+                  <Font name="Arial" size="20" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="fromTime" onMouseClicked="#addHoursFrom" prefWidth="150.0" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="237.0" >
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="00:00" />
+                     <String fx:value="01:00" />
+                     <String fx:value="02:00" />
+                     <String fx:value="03:00" />
+                     <String fx:value="04:00" />
+                     <String fx:value="05:00" />
+                     <String fx:value="06:00" />
+                     <String fx:value="07:00" />
+                     <String fx:value="08:00" />
+                     <String fx:value="09:00" />
+                     <String fx:value="10:00" />
+                     <String fx:value="11:00" />
+                     <String fx:value="12:00" />
+                     <String fx:value="13:00" />
+                     <String fx:value="14:00" />
+                     <String fx:value="15:00" />
+                     <String fx:value="16:00" />
+                     <String fx:value="17:00" />
+                     <String fx:value="18:00" />
+                     <String fx:value="19:00" />
+                     <String fx:value="20:00" />
+                     <String fx:value="21:00" />
+                     <String fx:value="22:00" />
+                     <String fx:value="23:00" />
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
 
-         <Label alignment="CENTER" text="Until:" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="350.0">
-            <font>
-               <Font name="Arial" size="20" />
-            </font>
-         </Label>
-         <ChoiceBox fx:id="untilTime" layoutX="521.0" onMouseClicked="#untilHourSelected" prefWidth="150.0" AnchorPane.topAnchor="380.0" />
+            <Label alignment="CENTER" textFill="silver" text="Until:" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="270.0">
+               <font>
+                  <Font name="Arial" size="20" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="untilTime" onMouseClicked="#addHoursUntil" prefWidth="150.0" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="300.0" >
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="00:59" />
+                     <String fx:value="01:59" />
+                     <String fx:value="02:59" />
+                     <String fx:value="03:59" />
+                     <String fx:value="04:59" />
+                     <String fx:value="05:59" />
+                     <String fx:value="06:59" />
+                     <String fx:value="07:59" />
+                     <String fx:value="08:59" />
+                     <String fx:value="09:59" />
+                     <String fx:value="10:59" />
+                     <String fx:value="11:59" />
+                     <String fx:value="12:59" />
+                     <String fx:value="13:59" />
+                     <String fx:value="14:59" />
+                     <String fx:value="15:59" />
+                     <String fx:value="16:59" />
+                     <String fx:value="17:59" />
+                     <String fx:value="18:59" />
+                     <String fx:value="19:59" />
+                     <String fx:value="20:59" />
+                     <String fx:value="21:59" />
+                     <String fx:value="22:59" />
+                     <String fx:value="23:59" />
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
 
-         <Button alignment="CENTER" onAction="#confirmDateTime" text="Confirm" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="500.0">
-            <font>
-               <Font name="Arial" size="20" />
-            </font>
-         </Button>
+            <Label fx:id="warning" text="" textFill="crimson" alignment="CENTER" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="360.0" />
+            <Button alignment="CENTER" onAction="#confirmDateTime" text="Confirm" maxWidth="200" AnchorPane.leftAnchor="200" AnchorPane.topAnchor="380.0">
+               <font>
+                  <Font name="Arial" size="20" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" onAction="#closeTimeMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
+         </AnchorPane>
       </AnchorPane>
 
       <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
