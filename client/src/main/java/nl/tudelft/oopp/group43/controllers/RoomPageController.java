@@ -789,6 +789,7 @@ public class RoomPageController {
             for (Object object : reservedRooms) {
                 JSONObject obj = (JSONObject) object;
                 boolean isInTimeFrame = false;
+                boolean isEmployeeOnlyAndIsNotEmployee = false;
                 LocalDateTime startTime = LocalDateTime.parse((String) obj.get("starting_date"), customFormatter);
                 LocalDateTime endTime = LocalDateTime.parse((String) obj.get("end_date"), customFormatter);
                 System.out.println(startHour + " : " + endHour);

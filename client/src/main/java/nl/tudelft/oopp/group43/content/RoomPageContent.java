@@ -246,6 +246,7 @@ public class RoomPageContent {
             reserveButton.setStyle("-fx-background-color: lightgray;");
             reserveable.setText("unavailable");
             reserveable.setStyle("-fx-text-fill: crimson;");
+            reserveButton.setDisable(true);
         }
 
         Label building = new Label((String) ((JSONObject) obj.get("building")).get("building_name"));
@@ -272,11 +273,30 @@ public class RoomPageContent {
 
         if (!timeSelected) {
             reserveable.setText("Please select a time and date!");
+            reserveButton.setDisable(true);
         }
         if (ServerCommunication.getToken().equals("invalid")) {
             reserveable.setStyle("-fx-text-fill: crimson;");
             reserveable.setText("Please log in first before making a reservation!");
             reserveButton.setStyle("-fx-background-color: lightgray;");
+            reserveButton.setDisable(true);
+        }
+        boolean isEmployeeOnlyAndIsNotEmployee = false;
+        try {
+            JSONParser json = new JSONParser();
+            JSONObject attr = (JSONObject) json.parse((String) obj.get("attributes"));
+            isEmployeeOnlyAndIsNotEmployee = (boolean) attr.get("Only_Employee");
+            if (isEmployeeOnlyAndIsNotEmployee) {
+                isEmployeeOnlyAndIsNotEmployee = !ServerCommunication.getRole().equals("employee") || !ServerCommunication.getRole().equals("admin");
+            }
+        } catch (NullPointerException | ParseException e) {
+            isEmployeeOnlyAndIsNotEmployee = false;
+        }
+        if (isEmployeeOnlyAndIsNotEmployee) {
+            reserveable.setText("This room is employee only!");
+            reserveable.setStyle("-fx-text-fill: crimson;");
+            reserveButton.setStyle("-fx-background-color: lightgray;");
+            reserveButton.setDisable(true);
         }
         reserveable.setLayoutX(scene.getWidth() - 680);
 
@@ -473,6 +493,7 @@ public class RoomPageContent {
                     ReservationConfig.setSelectedRoom(Long.parseLong(id.split(";")[0]));
 
                     String response = "";
+                    boolean succesfulReservation = true;
 
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH");
                     formatter.withZone(ZoneId.of("UTC"));
@@ -484,9 +505,28 @@ public class RoomPageContent {
                         String endTime = endDate.toString() + ":00.000+0000";
                         System.out.println(startTime);
                         response = ServerCommunication.reserveRoomForHour(startTime, endTime);
+
+                        JSONParser json = new JSONParser();
+                        try {
+                            JSONObject obj = (JSONObject) json.parse(response);
+                            if (!((String) obj.get("message")).equalsIgnoreCase("room reserved")) {
+                                succesfulReservation = false;
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     ReservationPageContent.setDateString("");
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    if (succesfulReservation) {
+                        alert.setContentText("Room " + ServerCommunication.getRoomName(Long.parseLong(id.split(";")[0])) + " has successfully been reserved!");
+                    } else {
+                        alert.setAlertType(Alert.AlertType.ERROR);
+                        alert.setContentText("Oops, something went wrong during reservation, sorry please try again...");
+                    }
+                    alert.showAndWait();
                 } else {
                     SceneLoader.setScene("login");
                     SceneLoader sl = new SceneLoader();
