@@ -13,9 +13,15 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -152,7 +158,6 @@ public class FoodPageContent {
                 rowConstraints.setPrefHeight(100);
                 foodGrid.getRowConstraints().add(rowConstraints);
 
-                JSONObject foodProduct = (JSONObject) foodItems.get(i).get("foodProduct");
 
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.getStyleClass().add("foodLabels");
@@ -160,6 +165,7 @@ public class FoodPageContent {
                 anchorPane.setMinSize(100, 100);
                 anchorPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
+                JSONObject foodProduct = (JSONObject) foodItems.get(i).get("foodProduct");
                 Label foodName = new Label(foodProduct.get("name").toString());
                 foodName.getStyleClass().add("foodName");
                 AnchorPane.setLeftAnchor(foodName, 40d);

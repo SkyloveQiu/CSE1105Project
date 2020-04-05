@@ -743,7 +743,7 @@ public class ServerCommunication {
     }
 
     /**
-     * Gets all food in a specific building
+     * Gets all food in a specific building.
      * @param building The building id
      * @return All foods in json format
      */
@@ -761,10 +761,10 @@ public class ServerCommunication {
     /**
      * Creates a food order.
      * @param order the order in the following format: buildingID-foodID-amount-...
-     * @param away
+     * @param away If the food is takeaway or not
      * @return Confirmation message if the order was successful or not.
      */
-        public static String createFoodOrder(String order, Boolean away, String body) {
+    public static String createFoodOrder(String order, Boolean away, String body) {
         String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order + "&away=" + away;
         System.out.println(url);
         HttpResponse<String> response = post(url, body, "Content-Type", "application/json;charset=UTF-8");

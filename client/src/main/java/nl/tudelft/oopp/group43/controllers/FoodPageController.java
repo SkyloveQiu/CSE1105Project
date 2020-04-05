@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.controllers;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -9,10 +11,13 @@ import nl.tudelft.oopp.group43.content.BikePageContent;
 import nl.tudelft.oopp.group43.content.FoodPageContent;
 import nl.tudelft.oopp.group43.sceneloader.SceneLoader;
 
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class FoodPageController {
+    /**
+     * Order food.
+     * @param event event
+     * @throws IOException exception
+     */
     public void orderFood(ActionEvent event) throws IOException {
         if (ServerCommunication.getToken().equals("invalid")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
