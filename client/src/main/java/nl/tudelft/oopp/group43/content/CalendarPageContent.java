@@ -27,6 +27,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import org.json.simple.JSONArray;
@@ -219,13 +220,12 @@ public class CalendarPageContent {
                 LocalDateTime start = LocalDateTime.parse((String) ((JSONObject) jsonArray.get(i)).get("starting_date"), customFormatter);
                 LocalDateTime end = LocalDateTime.parse((String) ((JSONObject) jsonArray.get(i)).get("end_date"), customFormatter);
                 Interval interval = new Interval(start, end);
-                System.out.println((String) ((JSONObject) jsonArray.get(i)).get("starting_date") + " : " + (String) ((JSONObject) jsonArray.get(i)).get("end_date"));
+                System.out.println(((JSONObject) jsonArray.get(i)).get("starting_date") + " : " + ((JSONObject) jsonArray.get(i)).get("end_date"));
 
-                //TODO: change the room id to the room name
-                Entry entry = new Entry("Reservation in: " + ((JSONObject) jsonArray.get(i)).get("room_id"), interval);
-                //TODO: get and set the location to the building address
-                entry.setLocation("building address");
-                System.out.println("Reservation in: " + ((JSONObject) jsonArray.get(i)).get("room_id"));
+                Entry entry = new Entry("Reservation in: " + ServerCommunication.getRoomName((long) ((JSONObject) jsonArray.get(i)).get("room_id")), interval);
+                JSONObject building = BuildingMap.getBuildingOfRoom((Long) ((JSONObject) jsonArray.get(i)).get("room_id"));
+                entry.setLocation((String) building.get("address"));
+                System.out.println("Reservation in: " + ((JSONObject) jsonArray.get(i)).get("room_id") + ", address: " + building.get("address"));
 
                 room.addEntry(entry);
             }

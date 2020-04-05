@@ -1,14 +1,12 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import java.text.ParseException;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import nl.tudelft.oopp.group43.project.models.Bike;
@@ -104,7 +102,7 @@ public class BikeControllerTest {
     }
 
     @Test
-    public void testCreateReservationWithTime() {
+    public void testCreateReservationWithTime() throws ParseException {
 
         final Bike bike = new Bike(new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>()), false);
         when(mockBikeRepository.findBikeBybikeId(0)).thenReturn(bike);
@@ -120,7 +118,7 @@ public class BikeControllerTest {
         when(mockReservationRepository.save(any(BikeReservation.class))).thenReturn(new BikeReservation());
 
 
-        final ResponseEntity result = bikeControllerUnderTest.createReservationWithTime(0, "token", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime());
+        final ResponseEntity result = bikeControllerUnderTest.createReservationWithTime(0, "token", "2020-01-09");
 
         assertNotNull(result);
     }

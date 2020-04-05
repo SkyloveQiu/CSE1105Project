@@ -34,6 +34,9 @@ public class BikePageContent {
     private static ArrayList<String> buildingsID;
     private static String selectedBuilding;
 
+    private static ArrayList<String> bikesID;
+    private static String selectedBike;
+
     /**
      * Adds the dynamic content to the bike Page.
      *
@@ -42,9 +45,9 @@ public class BikePageContent {
     public static void addContent(Scene currentScene) {
         scene = currentScene;
 
-        Button rentButton = (Button) scene.lookup("#rent");
+        Button returnButton = (Button) scene.lookup("#return");
         Button reserveButton = (Button) scene.lookup("#reserve");
-        GridPane.setHalignment(rentButton, HPos.RIGHT);
+        GridPane.setHalignment(returnButton, HPos.CENTER);
         GridPane.setHalignment(reserveButton, HPos.CENTER);
 
         scene.heightProperty().addListener(new ChangeListener<Number>() {
@@ -55,6 +58,7 @@ public class BikePageContent {
         });
 
         addBuildings();
+        addRentedBikes();
         disableDatePickerDates();
     }
 
@@ -73,9 +77,9 @@ public class BikePageContent {
     private static void addBuildings() {
         ChoiceBox<String> returnBuildingList = (ChoiceBox<String>) scene.lookup("#returnBuildingList");
         GridPane reserveBikeBuildingList = (GridPane) scene.lookup("#reserveBikeBuildingList");
-        GridPane rentBikeBuildingList = (GridPane) scene.lookup("#rentBikeBuildingList");
+        //GridPane rentBikeBuildingList = (GridPane) scene.lookup("#rentBikeBuildingList");
         reserveBikeBuildingList.setVgap(20);
-        rentBikeBuildingList.setVgap(20);
+        //rentBikeBuildingList.setVgap(20);
         selectedBuilding = null;
         buildingsID = new ArrayList<>();
         JSONParser json = new JSONParser();
@@ -95,20 +99,98 @@ public class BikePageContent {
                 RowConstraints rc = new RowConstraints();
                 rc.setPrefHeight(50);
                 reserveBikeBuildingList.getRowConstraints().add(rc);
-                rentBikeBuildingList.getRowConstraints().add(rc);
+                //rentBikeBuildingList.getRowConstraints().add(rc);
 
-                Label labelRent = new Label(buildings.get(i));
+                /*Label labelRent = new Label(buildings.get(i));
                 labelRent.setId(buildingsID.get(i));
                 labelRent.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 labelRent.getStyleClass().add("buildingLabels");
                 rentBikeBuildingList.add(labelRent, 0, i);
-                addSelectEvent(labelRent, rentBikeBuildingList);
+                addSelectEvent(labelRent, rentBikeBuildingList);*/
 
                 Label labelReserve = new Label(buildings.get(i));
+                labelReserve.setId(buildingsID.get(i));
                 labelReserve.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 labelReserve.getStyleClass().add("buildingLabels");
                 reserveBikeBuildingList.add(labelReserve, 0, i);
                 addSelectEvent(labelReserve, reserveBikeBuildingList);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gets the id of the currently selected bike.
+     *
+     * @return String with the id of the currently selected bike
+     */
+    public static String getSelectedBike() {
+        return selectedBike;
+    }
+
+    /**
+     * Gets the id of the currently selected building.
+     * @return
+     */
+    public static String getSelectedReturnBuilding() {
+        int index = ((ChoiceBox<String>) scene.lookup("#returnBuildingList")).getSelectionModel().getSelectedIndex();
+        if (index == -1) {
+            return "-1";
+        }
+        return buildingsID.get(index);
+    }
+
+    /**
+     * Refreshes the rented bikes in the interface.
+     */
+    public static void refreshRentedBikes() {
+        removeRentedBikes();
+        addRentedBikes();
+    }
+
+    /**
+     * Clears the rented bikes from the interface.
+     */
+    private static void removeRentedBikes() {
+        GridPane returnBikeList = (GridPane) scene.lookup("#returnBikeList");
+        returnBikeList.getRowConstraints().clear();
+        returnBikeList.getChildren().clear();
+    }
+
+    /**
+     * Adds the rented bike to the return bike panel.
+     */
+    private static void addRentedBikes() {
+        GridPane returnBikeList = (GridPane) scene.lookup("#returnBikeList");
+        returnBikeList.setVgap(20);
+
+        JSONParser jsonParser = new JSONParser();
+        try {
+            if (ServerCommunication.getToken().equals("invalid")) {
+                return;
+            }
+
+            JSONArray array = (JSONArray)jsonParser.parse(ServerCommunication.getBikesRentedByUser());
+            ArrayList<JSONObject> bikes = new ArrayList<>();
+            for (Object obj : array) {
+                bikes.add((JSONObject) obj);
+            }
+
+            for (int i = 0; i < bikes.size(); i++) {
+                RowConstraints rowConstraints = new RowConstraints();
+                rowConstraints.setPrefHeight(50);
+                returnBikeList.getRowConstraints().add(rowConstraints);
+
+                String buildingName = ((JSONObject)bikes.get(i).get("buildingByBuildingStart")).get("building_name").toString();
+                String date = bikes.get(i).get("datetimeStart").toString();
+
+                Label label = new Label(buildingName + " : " + date);
+                label.setId(bikes.get(i).get("bikeReservationId").toString());
+                label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                label.getStyleClass().add("buildingLabels");
+                returnBikeList.add(label, 0, i);
+                addBikeSelectEvent(label, returnBikeList);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -128,16 +210,15 @@ public class BikePageContent {
                 setDisable(empty || date.compareTo(today) < 0);
             }
         });
+    }
 
-        DatePicker endingDatePicker = (DatePicker) scene.lookup("#reservationEndingDate");
-        endingDatePicker.setDayCellFactory(picker -> new DateCell() {
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                LocalDate today = LocalDate.now();
-
-                setDisable(empty || date.compareTo(today) < 0);
-            }
-        });
+    /**
+     * Get the selected date.
+     * @return
+     */
+    public static LocalDate getSelectedDate() {
+        DatePicker startingDatePicker = (DatePicker) scene.lookup("#reservationStartingDate");
+        return startingDatePicker.getValue();
     }
 
     /**
@@ -163,6 +244,35 @@ public class BikePageContent {
                 if (!selected) {
                     label.getStyleClass().add("selected_building");
                     selectedBuilding = label.getId();
+                }
+            }
+        });
+        label.setCursor(Cursor.HAND);
+    }
+
+    /**
+     * Adds an event to the label when it gets clicked.
+     *
+     * @param label the label to add the event to
+     * @param list  the list of the label
+     */
+    private static void addBikeSelectEvent(Label label, GridPane list) {
+        label.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                boolean selected = false;
+                if (label.getStyleClass().size() > 2) {
+                    selected = true;
+                }
+
+                for (Node node : list.getChildren()) {
+                    if (node.getStyleClass().size() > 2) {
+                        node.getStyleClass().remove(2);
+                    }
+                }
+                if (!selected) {
+                    label.getStyleClass().add("selected_building");
+                    selectedBike = label.getId();
                 }
             }
         });

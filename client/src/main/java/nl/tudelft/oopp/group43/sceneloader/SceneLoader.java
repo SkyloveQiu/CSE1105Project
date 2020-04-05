@@ -9,22 +9,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.classes.ThreadLock;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
 import nl.tudelft.oopp.group43.components.BackButton;
 import nl.tudelft.oopp.group43.components.SideBarMenu;
 import nl.tudelft.oopp.group43.content.BikePageContent;
 import nl.tudelft.oopp.group43.content.BuildingPageContent;
 import nl.tudelft.oopp.group43.content.CalendarPageContent;
+import nl.tudelft.oopp.group43.content.ExceptionsPageContent;
 import nl.tudelft.oopp.group43.content.FoodPageContent;
 import nl.tudelft.oopp.group43.content.MainPageContent;
 import nl.tudelft.oopp.group43.content.MyReservationsPageContent;
 import nl.tudelft.oopp.group43.content.ProfilePageContent;
 import nl.tudelft.oopp.group43.content.RegisterPageContent;
 import nl.tudelft.oopp.group43.content.RoomPageContent;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 public class SceneLoader extends Application {
@@ -40,9 +48,13 @@ public class SceneLoader extends Application {
         FXMLLoader loader = new FXMLLoader();
         RoomPageContent.setAdminAdd(false);
 
+        if (primaryStage.getIcons().size() < 1) {
+            primaryStage.getIcons().add(new Image("/icons/app_logo.png"));
+        }
+
         switch (sceneString) {
             case "building":
-                URL buildingUrl = getClass().getResource("/buildingPage-overhaul.fxml");
+                URL buildingUrl = getClass().getResource("/buildingPage.fxml");
                 loader.setLocation(buildingUrl);
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
@@ -64,7 +76,7 @@ public class SceneLoader extends Application {
                 BuildingPageContent.addContent(scene);
                 break;
             case "room":
-                URL roomUrl = getClass().getResource("/roomPage-overhaul.fxml");
+                URL roomUrl = getClass().getResource("/roomPagefxml");
                 loader.setLocation(roomUrl);
                 root = loader.load();
                 scene = new Scene(root);
@@ -163,7 +175,7 @@ public class SceneLoader extends Application {
                 CalendarPageContent.addContent(scene);
                 break;
             case "login":
-                URL loginUrl = getClass().getResource("/loginPage-overhaul.fxml");
+                URL loginUrl = getClass().getResource("/loginPage.fxml");
                 loader.setLocation(loginUrl);
                 root = loader.load();
                 scene = new Scene(root);
@@ -183,7 +195,7 @@ public class SceneLoader extends Application {
                 primaryStage.show();
                 break;
             case "register":
-                URL registerUrl = getClass().getResource("/registerPage-overhaul.fxml");
+                URL registerUrl = getClass().getResource("/registerPage.fxml");
                 loader.setLocation(registerUrl);
                 root = loader.load();
                 scene = new Scene(root);
@@ -247,8 +259,25 @@ public class SceneLoader extends Application {
                 primaryStage.show();
                 MyReservationsPageContent.addContent(scene);
                 break;
+
+            case "exceptions":
+                URL exceptionsUrl = getClass().getResource("/exceptionsPage.fxml");
+                loader.setLocation(exceptionsUrl);
+                root = loader.load();
+                scene = new Scene(root);
+
+                primaryStage.setScene(scene);
+                ap = (AnchorPane) scene.lookup("#root");
+                primaryStage.setMinHeight(ap.getPrefHeight());
+                primaryStage.setMinWidth(ap.getPrefWidth());
+                primaryStage.setMaxHeight(ap.getPrefHeight());
+                primaryStage.setMaxWidth(ap.getPrefWidth());
+
+                primaryStage.show();
+                ExceptionsPageContent.addContent(scene);
+                break;
             default:
-                URL xmlUrl = getClass().getResource("/mainPage-overhaul.fxml");
+                URL xmlUrl = getClass().getResource("/mainPage.fxml");
                 loader.setLocation(xmlUrl);
                 root = loader.load();
                 scene = new Scene(root);
@@ -280,7 +309,45 @@ public class SceneLoader extends Application {
         //primaryStage.show();
 
         System.out.println("moved to: " + this.sceneString);
+
+        if (BuildingMap.isNull()) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    configureBuildingMap();
+                }
+            });
+            thread.setDaemon(true);
+            thread.start();
+        }
+
     }
+
+    /**
+     * Adds all buildings to the Building hashmap, and also gives a reference to which room belongs to which building.
+     */
+    public static void configureBuildingMap() {
+        BuildingMap.init();
+        JSONParser json = new JSONParser();
+        try {
+            System.out.println("Adding all buildings to map");
+            JSONArray buildings = (JSONArray) json.parse(ServerCommunication.getBuilding());
+            for (Object object : buildings) {
+                JSONObject obj = (JSONObject) object;
+                BuildingMap.put((long) obj.get("building_number"), obj);
+
+                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
+                for (Object roomObj : rooms) {
+                    JSONObject room = (JSONObject) roomObj;
+                    BuildingMap.setBuildingToRoom((long) obj.get("building_number"), (long) room.get("id"));
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Adding buildings to map: Done!");
+    }
+
 
     public static void setScene(String newScene) {
         sceneString = newScene;
