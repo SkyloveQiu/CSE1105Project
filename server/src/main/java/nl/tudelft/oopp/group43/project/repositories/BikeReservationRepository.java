@@ -1,6 +1,7 @@
 package nl.tudelft.oopp.group43.project.repositories;
 
 import java.util.List;
+import nl.tudelft.oopp.group43.project.models.Bike;
 import nl.tudelft.oopp.group43.project.models.BikeReservation;
 import nl.tudelft.oopp.group43.project.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface BikeReservationRepository extends JpaRepository<BikeReservation
     List<BikeReservation> findByUser(User user);
 
     BikeReservation findBybikeReservationId(int id);
+
+    List<BikeReservation> findByUserAndBuildingByBuildingEndIsNull(User user);
 }

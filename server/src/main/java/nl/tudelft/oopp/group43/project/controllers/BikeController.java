@@ -206,4 +206,17 @@ public class BikeController {
         BikeReservationResponse bikeReservationResponse = new BikeReservationResponse(bikeReservation, "return bike success", HttpStatus.OK.value());
         return new ResponseEntity<>(bikeReservationResponse, HttpStatus.OK);
     }
+
+    /**
+     * get all of the user's bike reservation history that has not been returned.
+     * @param token the token to find user.
+     * @return the result of history.
+     */
+    @GetMapping(value = "/bikeReservation/notReturned")
+    @ResponseBody
+    public List<BikeReservation> findUserReservationsNotReturned(@RequestParam("token") String token) {
+        User user = userRepository.findUserByToken(token);
+        List<BikeReservation> bikeReservations = reservationRepository.findByUserAndBuildingByBuildingEndIsNull(user);
+        return bikeReservations;
+    }
 }

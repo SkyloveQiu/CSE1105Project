@@ -226,6 +226,7 @@ public class BikePageController {
             alert.setContentText("You successfully reserved a bike!");
             alert.showAndWait();
         }
+        BikePageContent.refreshRentedBikes();
     }
 
     @FXML
