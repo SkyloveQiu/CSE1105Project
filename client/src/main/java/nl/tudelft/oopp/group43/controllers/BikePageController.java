@@ -23,8 +23,8 @@ import org.json.simple.parser.ParseException;
 
 public class BikePageController {
 
-    @FXML
-    private AnchorPane rentMenu;
+    /*@FXML
+    private AnchorPane rentMenu;*/
     @FXML
     private AnchorPane returnMenu;
     @FXML
@@ -41,7 +41,7 @@ public class BikePageController {
         trans.play();
         returnMenu.setVisible(true);
     }
-
+    /*
     @FXML
     private void showRentBikeMenu(ActionEvent event) {
         TranslateTransition trans = new TranslateTransition(Duration.millis(1000), rentMenu);
@@ -52,7 +52,7 @@ public class BikePageController {
         trans.play();
         rentMenu.setVisible(true);
     }
-
+    */
     @FXML
     private void showReserveBikeMenu(ActionEvent event) {
         TranslateTransition trans = new TranslateTransition(Duration.millis(1000), reserveMenu);
@@ -63,7 +63,7 @@ public class BikePageController {
         trans.play();
         reserveMenu.setVisible(true);
     }
-
+    /*
     @FXML
     private void closeRentMenu(ActionEvent event) {
         TranslateTransition trans = new TranslateTransition(Duration.millis(1000), rentMenu);
@@ -74,7 +74,7 @@ public class BikePageController {
         trans.setOnFinished(e -> rentMenu.setVisible(false));
         trans.play();
     }
-
+    */
     @FXML
     private void closeReturnMenu(ActionEvent event) {
         TranslateTransition trans = new TranslateTransition(Duration.millis(1000), returnMenu);
@@ -104,7 +104,7 @@ public class BikePageController {
      * @param event - the button "Rent" is pressed.
      * @throws ParseException - if something goes wrong with the JSON parser.
      * @throws IOException    - if something oes wrong moving to the Login Page.
-     */
+     *//*
     @FXML
     private void confirmRent(ActionEvent event) throws ParseException, IOException {
         String selectedBuilding = BikePageContent.getSelectedBuilding();
@@ -158,7 +158,7 @@ public class BikePageController {
         }
 
     }
-
+    */
     @FXML
     private void returnBike(ActionEvent event) throws IOException {
         if (ServerCommunication.getToken().equals("invalid")) {

@@ -45,9 +45,9 @@ public class BikePageContent {
     public static void addContent(Scene currentScene) {
         scene = currentScene;
 
-        Button rentButton = (Button) scene.lookup("#rent");
+        //Button rentButton = (Button) scene.lookup("#rent");
         Button reserveButton = (Button) scene.lookup("#reserve");
-        GridPane.setHalignment(rentButton, HPos.RIGHT);
+        //GridPane.setHalignment(rentButton, HPos.RIGHT);
         GridPane.setHalignment(reserveButton, HPos.CENTER);
 
         scene.heightProperty().addListener(new ChangeListener<Number>() {
@@ -77,9 +77,9 @@ public class BikePageContent {
     private static void addBuildings() {
         ChoiceBox<String> returnBuildingList = (ChoiceBox<String>) scene.lookup("#returnBuildingList");
         GridPane reserveBikeBuildingList = (GridPane) scene.lookup("#reserveBikeBuildingList");
-        GridPane rentBikeBuildingList = (GridPane) scene.lookup("#rentBikeBuildingList");
+        //GridPane rentBikeBuildingList = (GridPane) scene.lookup("#rentBikeBuildingList");
         reserveBikeBuildingList.setVgap(20);
-        rentBikeBuildingList.setVgap(20);
+        //rentBikeBuildingList.setVgap(20);
         selectedBuilding = null;
         buildingsID = new ArrayList<>();
         JSONParser json = new JSONParser();
@@ -99,14 +99,14 @@ public class BikePageContent {
                 RowConstraints rc = new RowConstraints();
                 rc.setPrefHeight(50);
                 reserveBikeBuildingList.getRowConstraints().add(rc);
-                rentBikeBuildingList.getRowConstraints().add(rc);
+                //rentBikeBuildingList.getRowConstraints().add(rc);
 
-                Label labelRent = new Label(buildings.get(i));
+                /*Label labelRent = new Label(buildings.get(i));
                 labelRent.setId(buildingsID.get(i));
                 labelRent.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                 labelRent.getStyleClass().add("buildingLabels");
                 rentBikeBuildingList.add(labelRent, 0, i);
-                addSelectEvent(labelRent, rentBikeBuildingList);
+                addSelectEvent(labelRent, rentBikeBuildingList);*/
 
                 Label labelReserve = new Label(buildings.get(i));
                 labelReserve.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
