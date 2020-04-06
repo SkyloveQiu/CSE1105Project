@@ -17,6 +17,7 @@ import nl.tudelft.oopp.group43.project.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -54,6 +55,7 @@ public class UserController {
      * @param model         the model of the user.
      * @return the result of registration.
      */
+    @Transactional
     @PostMapping("/registration")
     public ResponseEntity registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
         userValidator.validate(userForm, bindingResult);

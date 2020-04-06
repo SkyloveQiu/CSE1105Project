@@ -237,7 +237,43 @@ public class ServerCommunicationTest {
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendBikeRenting("1"));
-        httpClientMock.verify().post(curl + "bikeReservation/create?BikeIde=1&token=1");
+        httpClientMock.verify().post(curl + "bikeReservation/create?BikeId=1&token=1").called();
+    }
+
+    @Test
+    public void testGetBikesRentedByUser() {
+       HttpClientMock httpClientMock = new HttpClientMock();
+       ServerCommunication.setClient(httpClientMock);
+
+       httpClientMock.onGet(curl + "bikeReservation/notReturned?token=1").doReturn("bikes");
+
+       ServerCommunication.setToken("1");
+       assertEquals("bikes", ServerCommunication.getBikesRentedByUser());
+       httpClientMock.verify().get(curl + "bikeReservation/notReturned?token=1").called();
+    }
+
+    @Test
+    public void testReturnBikeOK() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onPost(curl + "bikeReservation/return?reservationId=1&token=1&building=1").doReturnStatus(200);
+
+        ServerCommunication.setToken("1");
+        assertEquals("OK", ServerCommunication.returnBike("1", "1"));
+        httpClientMock.verify().post(curl + "bikeReservation/return?reservationId=1&token=1&building=1").called();
+    }
+
+    @Test
+    public void testReturnBikeWRONG() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onPost(curl + "bikeReservation/return?reservationId=1&token=1&building=1").doReturnStatus(201);
+
+        ServerCommunication.setToken("1");
+        assertEquals("WRONG", ServerCommunication.returnBike("1", "1"));
+        httpClientMock.verify().post(curl + "bikeReservation/return?reservationId=1&token=1&building=1").called();
     }
 
     @Test
@@ -249,7 +285,7 @@ public class ServerCommunicationTest {
 
         ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendChangePassword("a", "b"));
-        httpClientMock.verify().post(curl + "changePassword?oldPassword=a&newPassword=b&token=1");
+        httpClientMock.verify().post(curl + "changePassword?oldPassword=a&newPassword=b&token=1").called();
     }
 
     @Test

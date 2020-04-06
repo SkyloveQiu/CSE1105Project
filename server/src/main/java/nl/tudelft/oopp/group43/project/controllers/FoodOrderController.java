@@ -12,6 +12,7 @@ import nl.tudelft.oopp.group43.project.models.Reservation;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.repositories.BuildingFoodProductRepository;
+import nl.tudelft.oopp.group43.project.repositories.ExceptionDatesRepository;
 import nl.tudelft.oopp.group43.project.repositories.FoodOrderDetailsRepository;
 import nl.tudelft.oopp.group43.project.repositories.FoodOrderRepository;
 import nl.tudelft.oopp.group43.project.repositories.ReservationRepository;
@@ -19,6 +20,7 @@ import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +46,8 @@ public class FoodOrderController {
     @Autowired
     private BuildingFoodProductRepository buildingFoodProductRepository;
 
+    @Autowired
+    private ExceptionDatesRepository exceptionDatesRepository;
 
     @GetMapping("/foodOrder")
     @ResponseBody
@@ -59,6 +63,7 @@ public class FoodOrderController {
      * @param newFoodOrder describes a new FoodOrder
      * @return returns a message
      */
+    @Transactional
     @PostMapping("/foodOrder")
     @ResponseBody
     public ResponseEntity createFoodOrder(@RequestBody FoodOrder newFoodOrder,
@@ -86,6 +91,10 @@ public class FoodOrderController {
             newFoodOrder.setReservation(new Reservation(1));
         }
 
+        if (exceptionDatesRepository.existsExceptionDateByQuery(newFoodOrder.getTime(), newFoodOrder.getBuilding().getBuildingNumber())) {
+            ErrorResponse errorResponse = new ErrorResponse("Food Reservation error", "This date is not available.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
 
         String processedOrder;
         processedOrder = order.replaceAll("-", " ");

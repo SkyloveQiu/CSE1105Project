@@ -3,13 +3,12 @@ package nl.tudelft.oopp.group43.project.controllers;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.Date;
 import java.util.List;
-
 import nl.tudelft.oopp.group43.project.models.Reservation;
 import nl.tudelft.oopp.group43.project.models.Room;
 import nl.tudelft.oopp.group43.project.models.User;
-import nl.tudelft.oopp.group43.project.payload.BikeReservationResponse;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
 import nl.tudelft.oopp.group43.project.payload.ReservationResponse;
+import nl.tudelft.oopp.group43.project.repositories.ExceptionDatesRepository;
 import nl.tudelft.oopp.group43.project.repositories.ReservationRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +40,8 @@ public class ReservationController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ExceptionDatesRepository exceptionDatesRepository;
 
     @GetMapping("/reservation")
     @ResponseBody
@@ -82,6 +84,7 @@ public class ReservationController {
      * @return the building details and result.
      * @throws Exception the exception of the create.
      */
+    @Transactional
     @PostMapping("/reservation")
     @ResponseBody
     public ResponseEntity createBuildingReservation(@RequestBody Reservation newReservation,
@@ -125,9 +128,9 @@ public class ReservationController {
         }
 
 
-        if (repository.existsReservationByStartingDateAndAndEndDateAndRoomId(newReservation.getStartingDate(),
-            newReservation.getEndDate(),
-            newReservation.getRoomId())) {
+        if (repository.existsReservationByStartingDateAndEndDateAndRoomId(newReservation.getStartingDate(),
+                newReservation.getEndDate(),
+                newReservation.getRoomId())) {
             ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This room is already booked for this time slot.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         } else {
@@ -137,7 +140,7 @@ public class ReservationController {
             }
 
             double diffInMinutes = Math.abs((double) ((newReservation.getStartingDate().getTime() - newReservation.getEndDate().getTime())
-                / (1000 * 60)));
+                    / (1000 * 60)));
 
             if (diffInMinutes > 60) {
 
