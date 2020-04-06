@@ -185,9 +185,9 @@ public class ReservationController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        if (!userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+        if (userRepository.findUserByToken(token) != null && userRepository.findUserByToken(token).getRole().equals("admin")) {
             System.out.print("");
-        } else if (userRepository.findUserByToken(token) == null || repository.getByReservationId(reservationId) == null || !userRepository.findUserByToken(token).getUsername().equals(repository.getByReservationId(reservationId))) {
+        } else if (userRepository.findUserByToken(token) == null || repository.getByReservationId(reservationId) == null || !userRepository.findUserByToken(token).getUsername().equals(repository.getByReservationId(reservationId).getUser().getUsername())) {
             ErrorResponse errorResponse = new ErrorResponse("Reservation delete error", "Only the administrator or user can delete reservations.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
