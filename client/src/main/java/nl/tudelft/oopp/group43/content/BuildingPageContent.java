@@ -218,7 +218,7 @@ public class BuildingPageContent {
                     if (status.equals("false")) {
                         expanded.setText("true");
 
-                        if (pane.getLayoutY() >= gp.getHeight() - 220) {
+                        if (pane.getLayoutY() >= gp.getHeight() - 500) {
                             gp.setPadding(new Insets(40, 40, 40 + infoPane.getHeight(), 40));
                         }
 

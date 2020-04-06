@@ -751,8 +751,10 @@ public class RoomPageContent {
             if (n instanceof TextField) {
                 if (fields[index][fields[index].length - 1].equals("✔")) {
                     ((TextField) n).setText("true");
-                } else {
+                } else if (fields[index][fields[index].length - 1].equals("✘")) {
                     ((TextField) n).setText("false");
+                } else {
+                    ((TextField) n).setText(fields[index][fields[index].length - 1]);
                 }
                 index++;
             }
