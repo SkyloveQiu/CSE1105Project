@@ -205,9 +205,10 @@ public class FoodPageContent {
     public static ArrayList<String> getSelectedFood() {
         GridPane foodGrid = (GridPane) scene.lookup("#foodGrid");
         ArrayList<String> selectedFood = new ArrayList<>();
+        System.out.println(foodGrid.getChildren().size());
         for (Object obj : foodGrid.getChildren()) {
-            if (obj instanceof HBox) {
-                HBox foodProduct = (HBox) obj;
+            if (obj instanceof AnchorPane) {
+                AnchorPane foodProduct = (AnchorPane) obj;
 
                 String spinnerValue = "0";
                 for (Object foodObj : foodProduct.getChildren()) {
