@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.content;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,11 +9,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.controllers.MyReservationsPageController;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -30,76 +32,80 @@ public class MyReservationsPageContent {
      */
     public static void addContent(Scene currentScene) {
         scene = currentScene;
+        try {
+            getJsonArray();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        gp = (GridPane) scene.lookup("#reservations");
+        createGrid();
         addReservations();
         ScrollPane sp = (ScrollPane) scene.lookup("#reservationScroll");
         sp.setContent(gp);
+    }
+
+    private static void getJsonArray() throws ParseException {
+        JSONParser jsonParser = new JSONParser();
+        jsonArray = (JSONArray) jsonParser.parse(ServerCommunication.getReservationsByUser());
     }
 
     /**
      * Adds the reservations to the gridpane.
      */
     private static void addReservations() {
-        gp = (GridPane) scene.lookup("#reservations");
-        JSONParser jsonParser = new JSONParser();
-        try {
-            jsonArray = (JSONArray) jsonParser.parse(ServerCommunication.getReservationsByUser());
-            createGrid();
-            for (int i = 0; i < jsonArray.size(); i++) {
-                AnchorPane reservation = new AnchorPane();
-                //reservation.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                Label timeLabel = new Label();
-                Label roomLabel = new Label();
-                timeLabel.getStyleClass().add("time-label");
-                roomLabel.getStyleClass().add("reservation-label");
-                reservation.getStyleClass().add("reservation-box");
-                JSONObject obj = (JSONObject) jsonArray.get(i);
-                String startDate = getFancyText((String) obj.get("starting_date"));
-                String endDate = getFancyText((String) obj.get("end_date"));
-                timeLabel.setText("The room is reserved from " + startDate + " to " + endDate);
-                roomLabel.setText("Room number " + obj.get("room_id"));
 
-                AnchorPane.setLeftAnchor(timeLabel, 50.0);
-                AnchorPane.setLeftAnchor(roomLabel, 50.0);
+        for (int i = 0; i < jsonArray.size(); i++) {
+            AnchorPane reservation = new AnchorPane();
+            //reservation.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            Label timeLabel = new Label();
+            Label roomLabel = new Label();
+            timeLabel.getStyleClass().add("time-label");
+            roomLabel.getStyleClass().add("reservation-label");
+            reservation.getStyleClass().add("reservation-box");
+            JSONObject obj = (JSONObject) jsonArray.get(i);
+            String startDate = getFancyText((String) obj.get("starting_date"));
+            String endDate = getFancyText((String) obj.get("end_date"));
+            timeLabel.setText("The room is reserved from " + startDate + " to " + endDate);
+            roomLabel.setText(ServerCommunication.getRoomName((Long) obj.get("room_id")));
 
-                AnchorPane.setTopAnchor(roomLabel, 10.0);
-                AnchorPane.setTopAnchor(timeLabel, 50.0);
+            AnchorPane.setLeftAnchor(timeLabel, 50.0);
+            AnchorPane.setLeftAnchor(roomLabel, 50.0);
 
-                reservation.getChildren().add(roomLabel);
-                reservation.getChildren().add(timeLabel);
-                gp.add(reservation, 0, i);
+            AnchorPane.setTopAnchor(roomLabel, 10.0);
+            AnchorPane.setTopAnchor(timeLabel, 50.0);
 
-                //edit button
-                Button editButton = new Button();
-                editButton.setMinSize(75.0, 75.0);
-                editButton.setPrefSize(75.0, 75.0);
-                editButton.setMaxSize(75.0, 75.0);
-                editButton.getStyleClass().add("button");
-                ImageView img = new ImageView(new Image("/icons/edit-icon.png"));
-                img.setFitHeight(40.0);
-                img.setFitWidth(40.0);
-                editButton.setGraphic(img);
-
-                //cancel button
-                Button cancelButton = new Button();
-                cancelButton.setMinSize(75.0, 75.0);
-                cancelButton.setPrefSize(75.0, 75.0);
-                cancelButton.setMaxSize(75.0, 75.0);
-                cancelButton.getStyleClass().add("button");
-                ImageView img2 = new ImageView(new Image("/icons/delete-icon.png"));
-                img2.setFitHeight(40.0);
-                img2.setFitWidth(40.0);
-                cancelButton.setGraphic(img2);
-
-                //vbox
-                VBox box = new VBox();
-                box.getChildren().add(editButton);
-                box.getChildren().add(cancelButton);
-                gp.add(box, 1, i);
+            reservation.getChildren().add(roomLabel);
+            reservation.getChildren().add(timeLabel);
+            gp.add(reservation, 0, i);
 
 
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+            //cancel button
+            Button cancelButton = new Button();
+            cancelButton.setMinSize(150.0, 150.0);
+            cancelButton.setPrefSize(150.0, 150.0);
+            cancelButton.setMaxSize(150.0, 150.0);
+            cancelButton.getStyleClass().add("button");
+            ImageView img2 = new ImageView(new Image("/icons/delete-icon.png"));
+            img2.setFitHeight(80.0);
+            img2.setFitWidth(80.0);
+            cancelButton.setGraphic(img2);
+            cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Long resId = (Long) obj.get("reservationId");
+                    MyReservationsPageController.deleteReservation(resId);
+                    gp.getChildren().clear();
+                    gp.getRowConstraints().clear();
+                    addContent(scene);
+                }
+            });
+
+            //vbox
+            VBox box = new VBox();
+            box.getChildren().add(cancelButton);
+            gp.add(box, 1, i);
+
+
         }
     }
 

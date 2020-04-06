@@ -8,8 +8,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import org.json.simple.JSONArray;
@@ -224,25 +222,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
-            return "Communication with server failed";
-        }
-
-        return response.body();
-    }
-
-    /**
-     * Retrieves all reservations from the server.
-     *
-     * @return the body of a get request to the server.
-     * @throws Exception if communication with the server fails.
-     */
-    public static String getReservations() {
-        String url = cURL + "reservation";
-
-        HttpResponse<String> response = get(url);
-
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -261,11 +241,41 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
         return response.body();
+    }
+
+    /**
+     * Gives the room which has to be delete.
+     * @param resId - String which represents the index of the room which has to benn deleted.
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server could delete the room
+     *         - "NOT OK" if the server could delete the room
+     *
+     */
+    public static String sendDeleteReservation(String resId) {
+        String url = cURL + "reservation/" + resId + "?token=" + getToken();
+        HttpResponse<String> response = delete(url);
+
+        if (response == null) {
+            System.out.println("Communication with server failed");
+            return "Communication with server failed";
+
+        }
+
+        if (response.statusCode() != 200) {
+            System.out.println(response.body());
+            return "NOT OK";
+        } else {
+
+            return "OK";
+        }
+
+
     }
 
     /**
@@ -278,7 +288,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -372,12 +382,10 @@ public class ServerCommunication {
                 setFirstName((String) obj.get("first_name"));
                 setLastName((String) obj.get("last_name"));
                 setRole((String) obj.get("role"));
-                //System.out.println(response.body());
 
                 return "OK";
             } catch (ParseException e) {
                 e.printStackTrace();
-                System.out.println(response.body());
                 return "ERROR OBTAINING INFO";
             }
         }
@@ -394,7 +402,24 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
+     * Returns the name of the room.
+     * @param id the id of the room
+     * @return the name of the room
+     */
+    public static String getRoomName(long id) {
+        String url = cURL + "room/getName/" + id;
+
+        HttpResponse<String> response = get(url);
+
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -410,11 +435,11 @@ public class ServerCommunication {
      *         - "OK" if the building could be deleted from the Buildings Database
      */
     public static String sendDeleteBuilding(String buildID) {
-        String url = cURL + "building/" + buildID;
+        String url = cURL + "building/" + buildID + "?token=" + token;
 
         HttpResponse<String> response = delete(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -430,11 +455,11 @@ public class ServerCommunication {
      *         - "OK" if the building could be edit from the Buildings Database
      */
     public static String sendEditBuilding(JSONObject obj) {
-        String url = cURL + "building/update";
+        String url = cURL + "building/update?token=" + token;
 
         HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -469,6 +494,7 @@ public class ServerCommunication {
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
+                return null;
             }
         }
 
@@ -484,50 +510,38 @@ public class ServerCommunication {
      */
     public static String reserveRoomForHour(String startHour, String endHour) {
         // form parameters
-        Map<Object, Object> data = new HashMap<>();
-        data.put("user", "{\"username\":\"" + username + "\"}");
+        JSONObject data = new JSONObject();
         data.put("room_id", ReservationConfig.getSelectedRoom());
         data.put("starting_date", startHour);
         data.put("end_date", endHour);
 
-        String url = cURL + "reservation";
+        String url = cURL + "reservation?token=" + token + "&username=" + username;
 
-        HttpResponse<String> response = post(url, buildFormDataFromMap(data),
+        HttpResponse<String> response = post(url, data.toJSONString(),
                 "User-Agent", "Java 11 HttpClient Bot",
                 "Content-Type", "application/json");
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
-
         return response.body();
     }
 
     /**
-     * Takes a map as input and translates the pairs to a json.
-     *
-     * @param data the map containing the json pairs/values
-     * @return a string with the json content
+     * Gets the reservations that exist in between the time frame.
+     * @param startDate the starting date.
+     * @param endDate the ending date (for single day it is startDate +1 day)
+     * @return The information returned by the api
      */
-    private static String buildFormDataFromMap(Map<Object, Object> data) {
-        var builder = new StringBuilder();
-        builder.append("{");
-        for (Map.Entry<Object, Object> entry : data.entrySet()) {
-            if (builder.length() > 1) {
-                builder.append(",");
-            }
-            builder.append("\"" + entry.getKey().toString() + "\"");
-            builder.append(":");
-            if (entry.getKey().toString() == "room_id" || entry.getKey().toString() == "user") {
-                builder.append(entry.getValue());
-            } else {
-                builder.append("\"" + entry.getValue().toString() + "\"");
-            }
-        }
-        builder.append("}");
+    public static String getReservationsByDate(String startDate, String endDate) {
+        String url = cURL + "reservation/" + startDate + "/" + endDate;
 
-        System.out.println(builder.toString());
-        return builder.toString();
+        HttpResponse<String> response = get(url);
+
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with server failed";
+        }
+        return response.body();
     }
 
     /**
@@ -539,12 +553,12 @@ public class ServerCommunication {
      *         - "NOT OK" if the building could not be added to the Buildings Database
      */
     public static String sendAddBuilding(JSONObject obj) {
-        String url = cURL + "building";
+        String url = cURL + "building?token=" + token;
 
         HttpResponse<String> response = post(url, obj.toJSONString(),
                 "Content-Type", "application/json;charset=UTF-8");
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -571,12 +585,14 @@ public class ServerCommunication {
      * @param powerSupply       - String which represents if the room has power supply or not.
      * @param soundInstallation - String which represents if the room has soundInstallation or not.
      * @param wheelChair        - String which represents if the room has the facilities for people with wheel chair or not.
+     * @param employeeOnly      - String which represents if the room is employee only.
      * @param space             - String which represents the minimum space capacity of the room (nr. of people).
+     * @param roomType          - String which represents the room type the user wants to filter on.
      * @return a String which can have 2 values:
      *         - "Communication with server failed" if the communication with the server failed.
      *         - the rooms selected by the filters.
      */
-    public static String getRoomFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String space) {
+    public static String getRoomFilter(String blinds, String desktop, String projector, String chalkBoard, String microphone, String smartBoard, String whiteBoard, String powerSupply, String soundInstallation, String wheelChair, String employeeOnly, String space, String roomType) {
         String url = cURL + "filter?";
         url = url + "blinds=" + blinds;
         url = url + "&desktop=" + desktop;
@@ -588,10 +604,16 @@ public class ServerCommunication {
         url = url + "&powerSupply=" + powerSupply;
         url = url + "&soundInstallation=" + soundInstallation;
         url = url + "&wheelChair=" + wheelChair;
+        if (employeeOnly.equals("true")) {
+            url = url + "&employee=" + employeeOnly;
+        }
         url = url + "&minSpace=" + space;
+        if (!roomType.equals("ignore")) {
+            url = url + "&type=" + utf8EncodeValue(roomType);
+        }
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -619,7 +641,7 @@ public class ServerCommunication {
     public static String getBikeRenting(String buildingID) {
         String url = cURL + "bike/" + buildingID;
         HttpResponse<String> response = get(url);
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -637,7 +659,7 @@ public class ServerCommunication {
     public static String sendBikeRenting(String bikeId) {
         String url = cURL + "bikeReservation/create?BikeId=" + bikeId + "&token=" + getToken();
         HttpResponse<String> response = post(url);
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -646,10 +668,59 @@ public class ServerCommunication {
     }
 
     /**
+     * Reserve bike with bikeId at time.
+     * @param bikeId bike Id
+     * @param time time for reservation
+     * @return response
+     */
+    public static String reserveBike(String bikeId, String time) {
+        String url = cURL + "bikeReservation/createWithTime?BikeId=" + bikeId + "&token=" + getToken() + "&time=" + time;
+        HttpResponse<String> response = post(url);
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with server failed";
+        }
+
+        return "OK";
+    }
+
+    /**
+     * Retrieves the bikes that are rented by the user from the server.
+     * @return the bike reservations
+     */
+    public static String getBikesRentedByUser() {
+        String url = cURL + "bikeReservation/notReturned?token=" + getToken();
+        HttpResponse<String> response = get(url);
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
+     * Returns a bike that was reserved by a user.
+     * @param reservationId the reservation id of the bike reservation
+     * @param buildingNumber the building number of the building where the bike was returned
+     * @return status message if something went wrong or not
+     */
+    public static String returnBike(String reservationId, String buildingNumber) {
+        String url = cURL + "bikeReservation/return?reservationId=" + reservationId + "&token=" + getToken() + "&building=" + buildingNumber;
+        HttpResponse<String> response = post(url);
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        if (response.statusCode() != 200) {
+            return "WRONG";
+        }
+        return "OK";
+    }
+
+    /**
      * Gives the new password of the user account.
      *
      * @param oldPassword - String which represents the old password of the account
-     * @param newPassword - String whcih represents the new password of the account
+     * @param newPassword - String which represents the new password of the account
      * @return a String which can have 3 values:
      *         - "Communication with server failed" if the communication with the server failed.
      *         - "OK" if the server could change the password.
@@ -683,13 +754,11 @@ public class ServerCommunication {
         HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
 
         if (response == null) {
-            System.out.println("Communication with server failed");
             return "Communication with server failed";
 
         }
 
         if (response.statusCode() != 200) {
-            System.out.println(response.body());
             return "NOT OK";
         } else {
 
@@ -711,13 +780,11 @@ public class ServerCommunication {
         HttpResponse<String> response = delete(url);
 
         if (response == null) {
-            System.out.println("Communication with server failed");
             return "Communication with server failed";
 
         }
 
         if (response.statusCode() != 200) {
-            System.out.println(response.body());
             return "NOT OK";
         } else {
 
@@ -726,5 +793,99 @@ public class ServerCommunication {
 
 
     }
+
+    /**
+     * Gets all food from the server.
+     * @return All foods in json format
+     */
+    public static String getFood() {
+        String url = cURL + "foodProduct";
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
+     * Gets all food in a specific building.
+     * @param building The building id
+     * @return All foods in json format
+     */
+    public static String getFoodByBuilding(String building) {
+        String url = cURL + "buildingFoodProduct/moreDetails?building=" + building;
+        HttpResponse<String> response = get(url);
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        return response.body();
+    }
+
+    /**
+     * Creates a food order.
+     * @param order the order in the following format: buildingID-foodID-amount-...
+     * @param away If the food is takeaway or not
+     * @return Confirmation message if the order was successful or not.
+     */
+    public static String createFoodOrder(String order, Boolean away, String body) {
+        String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order;
+        if (away) {
+            url += "&away=true";
+        }
+        HttpResponse<String> response = post(url, body, "Content-Type", "application/json;charset=UTF-8");
+
+        if (response == null) {
+            return  "Communication with server failed";
+        }
+
+        if (response.statusCode() != 200) {
+            return "WRONG";
+        }
+        return "OK";
+    }
+
+    /**
+     * Gives the exception for a specific building to the server.
+     * @param obj - JSONObject which represents the exception building input.
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server could put the exception in the database.
+     *         - "NOT OK" if the server could not put the exception in the database.
+     */
+    public static String sendBuildingException(JSONObject obj) {
+        String url = cURL + "building/" + "exception" + "?token=" + getToken();
+        HttpResponse<String> response =  post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
+
+        if (response == null) {
+            return "Communication with server failed";
+        }
+
+        if (response.statusCode() != 200) {
+            return "NOT OK";
+        } else {
+            return "OK";
+        }
+    }
+
+    /**
+     * Gets all exception dates for a specific building.
+     * @param id the id of the building.
+     * @return A string with the json information of the exceptions
+     */
+    public static String getBuildingException(Long id) {
+        String url = cURL + "building/exception/" + id;
+        HttpResponse<String> response = get(url);
+
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with the server failed";
+        }
+        //System.out.println(response.body());
+        return response.body();
+    }
+
 }
 

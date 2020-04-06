@@ -43,8 +43,8 @@ public class User implements java.io.Serializable {
     }
 
 
-    public User(String email) {
-        this.username = email;
+    public User(@JsonProperty("username") String username) {
+        this.username = username;
     }
 
     /**

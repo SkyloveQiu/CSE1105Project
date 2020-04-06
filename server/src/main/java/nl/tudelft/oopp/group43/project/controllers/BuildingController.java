@@ -1,10 +1,12 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
 import java.util.List;
-
 import nl.tudelft.oopp.group43.project.models.Building;
+import nl.tudelft.oopp.group43.project.models.ExceptionDates;
 import nl.tudelft.oopp.group43.project.payload.ErrorResponse;
+import nl.tudelft.oopp.group43.project.payload.SuccessResponse;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
+import nl.tudelft.oopp.group43.project.repositories.ExceptionDatesRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,9 @@ public class BuildingController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ExceptionDatesRepository exceptionDatesRepository;
 
     /*
     get method to request all the building list.
@@ -54,7 +59,7 @@ public class BuildingController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getRole().equals("admin")) {
             ErrorResponse errorResponse = new ErrorResponse("Building creation error", "Only the administrator can create new buildings.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
@@ -85,7 +90,7 @@ public class BuildingController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getRole().equals("admin")) {
             ErrorResponse errorResponse = new ErrorResponse("Building update error", "Only the administrator can update buildings.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
@@ -110,7 +115,7 @@ public class BuildingController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getUsername().equals("admin@tudelft.nl")) {
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getRole().equals("admin")) {
             ErrorResponse errorResponse = new ErrorResponse("Building delete error", "Only the administrator can delete buildings.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
@@ -120,5 +125,56 @@ public class BuildingController {
         return new ResponseEntity<>(okResponse, HttpStatus.OK);
     }
 
+    /**
+     * add exception date to the server.
+     * @param exceptionDates the date model.
+     * @param token the token of the user, must be admin.
+     * @return the result of creation.
+     */
+    @PostMapping("building/exception")
+    @ResponseBody
+    public ResponseEntity addExceptionDate(@RequestBody ExceptionDates exceptionDates, @RequestParam(value = "token", defaultValue = "invalid") String token) {
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Building delete error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getRole().equals("admin")) {
+            ErrorResponse errorResponse = new ErrorResponse("Building delete error", "Only the administrator can delete buildings.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+        exceptionDatesRepository.save(exceptionDates);
+        SuccessResponse response = new SuccessResponse("create exception success", 200);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("building/exception/{buildingId}")
+    @ResponseBody
+    public List<ExceptionDates> getExceptionDate(@PathVariable int buildingId) {
+        return exceptionDatesRepository.findAllByBuildingNumber(buildingId);
+    }
+
+    /**
+     * Delete the exception date.
+     * @param exceptionDates the date of exception.
+     * @param token the token of the user.
+     * @return the result of verification.
+     */
+    @DeleteMapping("building/exception")
+    @ResponseBody
+    public ResponseEntity deleteExceptionDate(@RequestBody ExceptionDates exceptionDates, @RequestParam(value = "token", defaultValue = "invalid") String token) {
+        if (token.equals("invalid")) {
+            ErrorResponse errorResponse = new ErrorResponse("Building delete error", "Check if you sent the token", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+
+        if (userRepository.findUserByToken(token) == null || !userRepository.findUserByToken(token).getRole().equals("admin")) {
+            ErrorResponse errorResponse = new ErrorResponse("Building delete error", "Only the administrator can delete buildings.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+        exceptionDatesRepository.delete(exceptionDates);
+        SuccessResponse response = new SuccessResponse("delete exception success", 200);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 }

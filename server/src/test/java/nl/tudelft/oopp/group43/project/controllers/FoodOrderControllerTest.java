@@ -19,6 +19,7 @@ import nl.tudelft.oopp.group43.project.models.FoodProduct;
 import nl.tudelft.oopp.group43.project.models.Reservation;
 import nl.tudelft.oopp.group43.project.models.User;
 import nl.tudelft.oopp.group43.project.repositories.BuildingFoodProductRepository;
+import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
 import nl.tudelft.oopp.group43.project.repositories.FoodOrderDetailsRepository;
 import nl.tudelft.oopp.group43.project.repositories.FoodOrderRepository;
 import nl.tudelft.oopp.group43.project.repositories.ReservationRepository;
@@ -41,9 +42,14 @@ public class FoodOrderControllerTest {
     private UserRepository mockUserRepository;
     @Mock
     private BuildingFoodProductRepository mockBuildingFoodProductRepository;
+    @Mock
+    private BuildingRepository mockRepository;
 
     @InjectMocks
     private FoodOrderController foodOrderControllerUnderTest;
+
+    @InjectMocks
+    private BuildingController buildingControllerUnderTest;
 
     @Before
     public void setUp() {
@@ -52,13 +58,10 @@ public class FoodOrderControllerTest {
 
     @Test
     public void testGetFoodOrder() {
-        // Setup
 
-        // Configure FoodOrderRepository.findAll(...).
         final List<FoodOrder> foodOrders = Arrays.asList(new FoodOrder(0, 0, "user", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime()));
         when(mockFoodOrderrepository.findAll()).thenReturn(foodOrders);
 
-        // Run the test
         final List<FoodOrder> result = foodOrderControllerUnderTest.getFoodOrder();
 
         assertNotNull(result);
@@ -66,10 +69,9 @@ public class FoodOrderControllerTest {
 
     @Test
     public void testCreateFoodOrder() {
-        // Setup
+
         final FoodOrder newFoodOrder = new FoodOrder(0, 0, "user", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime());
 
-        // Configure UserRepository.findUserByToken(...).
         final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
@@ -85,7 +87,31 @@ public class FoodOrderControllerTest {
         when(mockFoodOrderDetailsRepository.save(any(FoodOrderDetails.class))).thenReturn(foodOrderDetails);
 
         // Run the test
-        final ResponseEntity result = foodOrderControllerUnderTest.createFoodOrder(newFoodOrder, "token", "order","true");
+        final ResponseEntity result = foodOrderControllerUnderTest.createFoodOrder(newFoodOrder, "token", "order", "true");
+
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testGetMoreDetails() {
+        final Building newBuilding = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+
+
+        final User user = new User("admin@tudelft.nl", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
+
+        when(mockRepository.existsBuildingByBuildingNumber(0)).thenReturn(false);
+
+
+        final Building building = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
+        when(mockRepository.save(any(Building.class))).thenReturn(building);
+
+        buildingControllerUnderTest.createBuilding(newBuilding, "token");
+
+        final List<FoodOrder> foodOrders = Arrays.asList(new FoodOrder(0, 0, "user", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime()));
+        when(mockFoodOrderrepository.findAll()).thenReturn(foodOrders);
+
+        final List<FoodOrder> result = foodOrderControllerUnderTest.getFoodOrderByUser("token");
 
         assertNotNull(result);
     }
