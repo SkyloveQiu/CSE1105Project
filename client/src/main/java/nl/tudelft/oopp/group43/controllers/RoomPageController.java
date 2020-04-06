@@ -97,10 +97,6 @@ public class RoomPageController {
     @FXML
     private Label editId;
     @FXML
-    private Label addNumberCheck;
-    @FXML
-    private TextField addRoomNumber;
-    @FXML
     private TextField addRoomName;
     @FXML
     private Label addRoomNameCheck;
@@ -306,7 +302,6 @@ public class RoomPageController {
             ok = false;
         }
         ok = checkRoomName() && ok;
-        ok = checkRoomNumber() && ok;
         ok = checkSpaceType() && ok;
         ok = checkChalkboard() && ok;
         ok = checkBlinds() && ok;
@@ -358,35 +353,12 @@ public class RoomPageController {
 
             } else {
                 alert.setContentText("The operation has been successfully done!");
-                RoomPageContent.reloadRooms();
             }
 
             alert.showAndWait();
             closeAddMenu();
+            RoomPageContent.reloadRooms();
         }
-    }
-
-    private boolean checkRoomNumber() {
-
-        if (addRoomNumber.getText().isEmpty()) {
-            addNumberCheck.setText("You cannot have this field empty");
-            return false;
-        }
-        try {
-            String nunmberString = addRoomNumber.getText();
-            long number = Long.valueOf(nunmberString);
-            addNumberCheck.setText("");
-            return true;
-        } catch (Exception e) {
-            addNumberCheck.setText("You must put a number which is greater than 0 and less than " + Long.MAX_VALUE);
-            return false;
-        }
-    }
-
-    @FXML
-    private void checkRoomNumber(KeyEvent event) {
-        checkRoomNumber();
-
     }
 
 

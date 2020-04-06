@@ -652,7 +652,6 @@ public class RoomPageContent {
 
                     ChoiceBox<String> addBuildings = (ChoiceBox<String>) scene.lookup("#addBuildings");
                     addBuildings.setItems(FXCollections.observableArrayList(buildings));
-                    addBuildings.getSelectionModel().selectFirst();
                     if (buildingListener == null) {
                         buildingListener = new ChangeListener<String>() {
                             @Override
@@ -788,31 +787,37 @@ public class RoomPageContent {
             alert.setContentText("Something goes wrong during the procedure!" + "\n" + " Please try again!");
         } else {
             alert.setContentText("The operation has been successfully done!");
-            reloadRooms();
         }
         alert.showAndWait();
-
+        reloadRooms();
     }
 
     /**
      * Reloads the rooms, after an operation is done.
      */
     public static void reloadRooms() {
-        SceneLoader.configureBuildingMap();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SceneLoader.configureBuildingMap();
 
-        if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
-            try {
-                JSONParser json = new JSONParser();
-                JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
-                databaseRooms = rooms;
-                for (int i = 0; i < rooms.size(); i++) {
-                    selectedRooms.add((JSONObject) rooms.get(i));
+                if (!hoursFrom.equals("") && !hoursTil.equals("") && date != null) {
+                    try {
+                        JSONParser json = new JSONParser();
+                        JSONArray rooms = (JSONArray) json.parse(ServerCommunication.getRooms());
+                        databaseRooms = rooms;
+                        for (int i = 0; i < rooms.size(); i++) {
+                            selectedRooms.add((JSONObject) rooms.get(i));
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+                addRooms();
             }
-        }
-        addRooms();
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     /**
