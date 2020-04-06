@@ -358,7 +358,48 @@ public class ServerCommunicationTest {
         ServerCommunication.setToken(tempToken);
     }
 
+    @Test
+    public void testSendBuildingException() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
 
+        httpClientMock.onPost(curl + "building/exception?token=1").doReturn("[]");
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        JSONObject obj = new JSONObject();
+        Long buildingNumber = Long.valueOf(9090);
+        String startDate = "2020-04-20T00:00:00";
+        String endDate = "2020-04-20T23:00:00";
+        obj.put("buildingNumber", buildingNumber);
+        obj.put("startingDate", startDate);
+        obj.put("endDate", endDate);
+        assertEquals("OK", ServerCommunication.sendBuildingException(obj));
+        httpClientMock.verify().post(curl + "building/exception?token=1").called();
+        ServerCommunication.setToken(tempToken);
+    }
+
+    @Test
+    public void testSendBuildingExceptionErrorCode() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onPost(curl + "building/exception?token=1").doReturnStatus(201);
+
+        final String tempToken = ServerCommunication.getToken();
+        ServerCommunication.setToken("1");
+        JSONObject obj = new JSONObject();
+        Long buildingNumber = Long.valueOf(9090);
+        String startDate = "2020-04-20T00:00:00";
+        String endDate = "2020-04-20T23:00:00";
+        obj.put("buildingNumber", buildingNumber);
+        obj.put("startingDate", startDate);
+        obj.put("endDate", endDate);
+        assertEquals("NOT OK", ServerCommunication.sendBuildingException(obj));
+        httpClientMock.verify().post(curl + "building/exception?token=1").called();
+        ServerCommunication.setToken(tempToken);
+    }
+    
     @Test
     public void testSendDeleteReservation() {
         HttpClientMock httpClientMock = new HttpClientMock();
