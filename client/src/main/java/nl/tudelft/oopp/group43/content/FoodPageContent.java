@@ -194,9 +194,8 @@ public class FoodPageContent {
 
             for (int i = 0; i < foodItems.size(); i++) {
                 RowConstraints rowConstraints = new RowConstraints();
-                rowConstraints.setPrefHeight(100);
+                rowConstraints.setPrefHeight(100.0);
                 foodGrid.getRowConstraints().add(rowConstraints);
-
 
                 AnchorPane anchorPane = new AnchorPane();
                 anchorPane.getStyleClass().add("foodLabels");

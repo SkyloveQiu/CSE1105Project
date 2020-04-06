@@ -23,7 +23,7 @@
 
       <ScrollPane fx:id="foodList" fitToHeight="true" fitToWidth="true" prefHeight="330.0" prefWidth="700.0" style="-fx-background-color: transparent; -fx-background: transparent" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="365.0">
          <content>
-            <GridPane fx:id="foodGrid" hgap="20.0" minHeight="700" style="-fx-background-color: #29293d;" vgap="20.0">
+            <GridPane fx:id="foodGrid" hgap="20.0" style="-fx-background-color: #29293d;" vgap="20.0">
                <columnConstraints>
                   <ColumnConstraints percentWidth="100" />
                </columnConstraints>
