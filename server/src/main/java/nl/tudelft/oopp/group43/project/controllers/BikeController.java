@@ -1,5 +1,7 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import nl.tudelft.oopp.group43.project.models.Bike;
@@ -12,10 +14,12 @@ import nl.tudelft.oopp.group43.project.payload.SuccessResponse;
 import nl.tudelft.oopp.group43.project.repositories.BikeRepository;
 import nl.tudelft.oopp.group43.project.repositories.BikeReservationRepository;
 import nl.tudelft.oopp.group43.project.repositories.BuildingRepository;
+import nl.tudelft.oopp.group43.project.repositories.ExceptionDatesRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +43,9 @@ public class BikeController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ExceptionDatesRepository exceptionDatesRepository;
+
     @GetMapping("/bike/{buildingId}")
     @ResponseBody
     public List<Bike> getBike(@PathVariable int buildingId) {
@@ -54,11 +61,16 @@ public class BikeController {
      * @param buildingNumber describes a new building
      * @return a message regarding the bike
      */
+    @Transactional
     @PostMapping(value = "/bike")
     @ResponseBody
-    public ResponseEntity createBike(@RequestParam("Building") final int buildingNumber,@RequestParam("token") String token) {
+    public ResponseEntity createBike(@RequestParam("Building") final int buildingNumber, @RequestParam("token") String token) {
         User user = userRepository.findUserByToken(token);
         System.out.println(user.getRole());
+        if (user == null) {
+            ErrorResponse errorResponse = new ErrorResponse("creating fail", "no permission", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
         if (!user.getRole().equals("admin")) {
             ErrorResponse errorResponse = new ErrorResponse("creating fail", "no permission", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -76,8 +88,9 @@ public class BikeController {
 
     /**
      * create a reservation base on user and token and bike.
+     *
      * @param bikeId the bike he wants to rent.
-     * @param token the token he wants to use.
+     * @param token  the token he wants to use.
      * @return the result.
      */
     @PostMapping(value = "/bikeReservation/create")
@@ -90,7 +103,7 @@ public class BikeController {
             ErrorResponse errorResponse = new ErrorResponse("creating fail", "bike does not exist.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
-
+        System.out.println("I am here");
         if (foundBike.getBikesAvailable() == false) {
             ErrorResponse errorResponse = new ErrorResponse("creating fail", "bike has occupied or is not available now.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
@@ -107,28 +120,34 @@ public class BikeController {
 
     /**
      * create the reservation with time.
+     *
      * @param bikeId the bike you want to reserve.
-     * @param token the token you want to use.
-     * @param date the date you want to book.
+     * @param token  the token you want to use.
+     * @param time   the date you want to book.
      * @return reserve order.
      */
     @PostMapping(value = "/bikeReservation/createWithTime")
     @ResponseBody
-    public ResponseEntity createReservationWithTime(@RequestParam("BikeId") int bikeId, @RequestParam("token") String token,@RequestParam("time") Date date) {
-
+    public ResponseEntity createReservationWithTime(@RequestParam("BikeId") int bikeId, @RequestParam("token") String token, @RequestParam("time") String time) throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(time);
         Bike foundBike = bikeRepository.findBikeBybikeId(bikeId);
-        if (foundBike.getBikesAvailable() == false) {
+        if (foundBike == null || foundBike.getBikesAvailable() == false) {
             ErrorResponse errorResponse = new ErrorResponse("creating fail", "bike has occupied or is not available now.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        foundBike.setBikesAvailable(false);
-        bikeRepository.save(foundBike);
         User user = userRepository.findUserByToken(token);
-        if (date.before(new Date())) {
-            ErrorResponse errorResponse = new ErrorResponse("creating fail", "booking time is earlier than now, creating reservation failed.", HttpStatus.FORBIDDEN.value());
+        if (date.before(new Date()) || exceptionDatesRepository.existsExceptionDateByQuery(date, foundBike.getBuilding().getBuildingNumber())) {
+            ErrorResponse errorResponse = new ErrorResponse("creating fail", "booking time is not available, creating reservation failed.", HttpStatus.FORBIDDEN.value());
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
+
+        if (user == null) {
+            ErrorResponse errorResponse = new ErrorResponse("creating fail", "no user founded.", HttpStatus.FORBIDDEN.value());
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+        foundBike.setBikesAvailable(false);
+        bikeRepository.save(foundBike);
         BikeReservation bikeReservation = new BikeReservation(foundBike.getBuilding(), date, user, foundBike);
         BikeReservationResponse bikeReservationResponse = new BikeReservationResponse(bikeReservation, "rent bike success", HttpStatus.OK.value());
         reservationRepository.save(bikeReservation);
@@ -137,6 +156,7 @@ public class BikeController {
 
     /**
      * get all of the user's bike reservation history.
+     *
      * @param token the token to find user.
      * @return the result of history.
      */
@@ -153,8 +173,9 @@ public class BikeController {
 
     /**
      * return the bike.
-     * @param reservationId the reservation user want to return.
-     * @param token the token of the user has.
+     *
+     * @param reservationId  the reservation user want to return.
+     * @param token          the token of the user has.
      * @param buildingNumber the number of return building.
      * @return the result of return.
      */
@@ -184,5 +205,18 @@ public class BikeController {
         reservationRepository.save(bikeReservation);
         BikeReservationResponse bikeReservationResponse = new BikeReservationResponse(bikeReservation, "return bike success", HttpStatus.OK.value());
         return new ResponseEntity<>(bikeReservationResponse, HttpStatus.OK);
+    }
+
+    /**
+     * get all of the user's bike reservation history that has not been returned.
+     * @param token the token to find user.
+     * @return the result of history.
+     */
+    @GetMapping(value = "/bikeReservation/notReturned")
+    @ResponseBody
+    public List<BikeReservation> findUserReservationsNotReturned(@RequestParam("token") String token) {
+        User user = userRepository.findUserByToken(token);
+        List<BikeReservation> bikeReservations = reservationRepository.findByUserAndBuildingByBuildingEndIsNull(user);
+        return bikeReservations;
     }
 }

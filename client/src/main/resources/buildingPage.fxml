@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" stylesheets="stylesheets/buildingPage.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.BuildingPageController">
+   <children>
+      <ScrollPane fx:id="buildings" fitToWidth="true" style="-fx-background-color: #29293d;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="308">
+         <content>
+            <GridPane fx:id="buildings_grid" hgap="20.0" minHeight="700" minWidth="600" style="-fx-background-color: #29293d;" vgap="20.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
+                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="33" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="360" prefHeight="360" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </GridPane>
+         </content>
+      </ScrollPane>
+      <AnchorPane fx:id="infoPane" prefHeight="400" prefWidth="400" styleClass="infoPane" visible="false">
+         <children>
+            <Rectangle fill="rgb(86, 128, 176)" stroke="rgb(6, 48, 96)" height="40" rotate="45.0" width="40" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="-20.0" />
+            <Pane style="-fx-background-color: rgb(86, 128, 176);" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" />
+            <Label text="Rooms of the building:" alignment="CENTER" textFill="ghostwhite" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="195" ><font><Font name="Arial" size="25" /></font></Label>
+         </children>
+      </AnchorPane>
+
+      <Pane prefHeight="308" style="-fx-background-color: #29293d;" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+      <TextField fx:id="searchBar" onAction="#searchBuildings" prefHeight="65.0" promptText="Search for buildings" AnchorPane.leftAnchor="124.0" AnchorPane.rightAnchor="109.0" AnchorPane.topAnchor="180.0">
+         <font>
+            <Font name="Arial" size="35.0" />
+         </font>
+      </TextField>
+
+      <Pane prefHeight="65" prefWidth="65" style="-fx-background-color: cornflowerblue;" AnchorPane.rightAnchor="105" AnchorPane.topAnchor="180" />
+      <ImageView fx:id="search" fitHeight="65.0" fitWidth="65.0" layoutX="1175.0" layoutY="180.0" onMouseClicked="#searchBuildings" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="181.0">
+         <image>
+            <Image url="@/icons/search-icon.png" />
+         </image>
+      </ImageView>
+
+      <Pane fx:id="editPane" prefHeight="39" prefWidth="39" AnchorPane.leftAnchor="124" AnchorPane.topAnchor="256" />
+      <ImageView fx:id="edit" fitHeight="29" fitWidth="29" onMouseClicked="#showEditMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="129" AnchorPane.topAnchor="261">
+         <image>
+            <Image url="@/icons/edit-icon.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="addPane" prefHeight="39" prefWidth="39" AnchorPane.leftAnchor="170" AnchorPane.topAnchor="256" />
+      <ImageView fx:id="add" fitHeight="35" fitWidth="35" onMouseClicked="#showAddMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="172" AnchorPane.topAnchor="258">
+         <image>
+            <Image url="@/icons/add-icon.png" />
+         </image>
+      </ImageView>
+      <Pane fx:id="deletePane" prefHeight="39" prefWidth="39" AnchorPane.leftAnchor="214" AnchorPane.topAnchor="256" />
+      <ImageView fx:id="delete" fitHeight="35" fitWidth="35" onMouseClicked="#showDeleteMenu" pickOnBounds="true" preserveRatio="true" visible="false" AnchorPane.leftAnchor="216" AnchorPane.topAnchor="258">
+         <image>
+            <Image url="@/icons/delete-icon.png" />
+         </image>
+      </ImageView>
+
+      <Pane fx:id="grayBackground" style="-fx-background-color: rgba(40, 40, 40, 0.65);" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141" />
+
+      <GridPane fx:id="editMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141">
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="750.0" maxWidth="900.0" style="-fx-background-color: rgb(57, 72, 102); -fx-background-radius: 7;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <Button text="Add exceptions" onAction="#addExceptions" fx:id="addExceptionsButton" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="18.0"></Button>
+               <Label prefHeight="20.0" prefWidth="196.0" styleClass="text_labels" text="Choose a building to edit it" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="67.0">
+                  <font>
+                     <Font size="14.0" />
+                  </font>>
+               </Label>
+               <ScrollPane fx:id="editBuildingList" fitToWidth="true" prefHeight="290.0" prefWidth="500.0" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="96.0" />
+
+               <Label fx:id="editBuildingNumber" alignment="CENTER" styleClass="text_labels" text="Building being edited: " AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="23.0"><font><Font name="Arial" size="25" /></font></Label>
+
+               <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" styleClass="editFields" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="500" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="80">
+                  <content>
+                     <AnchorPane minWidth="100.0" prefHeight="800" style="-fx-background-color: transparent;">
+                        <children>
+                           <Label styleClass="text_labels" text="Building Name" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editBuildingName" layoutX="20.0" layoutY="47.0" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="47.0" />
+                           <Label fx:id="editNameCheck" textFill="#d51414" AnchorPane.leftAnchor="475.0" AnchorPane.topAnchor="59.0" />
+                           <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Address" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="100.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editBuildingAddress" layoutX="20.0" layoutY="129.0" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="129.0" />
+                           <Label fx:id="editAddressCheck" textFill="#d51414" AnchorPane.leftAnchor="469.0" AnchorPane.topAnchor="94.0" />
+
+
+                           <Label alignment="CENTER" styleClass="text_labels" text="Opening Hours:" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="180.0"><font><Font name="Arial" size="20.0" /></font></Label>
+                           <Label styleClass="text_labels" text="Monday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="235.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editMondayHours" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="260.0" />
+                           <Label fx:id="editMondayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="283.0" />
+
+                           <Label layoutX="20.0" layoutY="315.0" styleClass="text_labels" text="Tuesday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="315.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editTuesdayHours" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="340.0" />
+                           <Label fx:id="editTuesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="168.0" />
+
+                           <Label layoutX="20.0" layoutY="393.0" styleClass="text_labels" text="Wednesday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="395.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editWednesdayHours" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="420.0" />
+                           <Label fx:id="editWednesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="443.0" />
+
+                           <Label styleClass="text_labels" text="Thursday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="475.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editThursdayHours" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="500.0" />
+                           <Label fx:id="editThursdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="523.0" />
+
+                           <Label styleClass="text_labels" text="Friday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="555.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editFridayHours" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="580.0" />
+                           <Label fx:id="editFridayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="603.0" />
+
+                           <Label styleClass="text_labels" text="Saturday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="620.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editSaturdayHours" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="660.0" />
+                           <Label fx:id="editSaturdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="683.0" />
+
+                           <Label styleClass="text_labels" text="Sunday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="700.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                           <TextField fx:id="editSundayHours" onKeyTyped="#editCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="740.0" />
+                           <Label fx:id="editSundayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="763.0" />
+
+                           <Label fx:id="editMsg" prefHeight="18.0" prefWidth="250.0" textFill="#d51414" AnchorPane.leftAnchor="218.0" AnchorPane.topAnchor="368.0" />
+                        </children>
+                     </AnchorPane>
+                  </content>
+               </ScrollPane>
+
+               <Button mnemonicParsing="false" onAction="#editConfirm" prefHeight="50" text="Confirm Changes" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="530" AnchorPane.rightAnchor="30" />
+               <Button alignment="CENTER" onAction="#closeEditMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
+               <Label fx:id="editId" text="" visible="false" />
+               <GridPane.margin>
+                  <Insets bottom="40.0" top="40.0" />
+               </GridPane.margin>
+            </AnchorPane>
+         </children>
+      </GridPane>
+
+      <GridPane fx:id="addMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141">
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="700.0" maxWidth="600.0" style="-fx-background-color: rgb(57, 72, 102);" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Number" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="27.0" />
+                  <TextField fx:id="addBuildingNumber" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="24.0" />
+                  <Label fx:id="addNumberCheck" prefHeight="18.0" textFill="#d51414" AnchorPane.leftAnchor="274.0" AnchorPane.topAnchor="27.0" />
+                  <Label styleClass="text_labels" text="Building Name" AnchorPane.leftAnchor="17.0" AnchorPane.topAnchor="64.0" />
+                  <TextField fx:id="addBuildingName" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="60.0" />
+                  <Label fx:id="addNameCheck" prefHeight="18.0" textFill="#d51414" AnchorPane.leftAnchor="274.0" AnchorPane.topAnchor="64.0" />
+                  <Label prefHeight="18.0" prefWidth="91.0" styleClass="text_labels" text="Building Address" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="98.0" />
+                  <TextField fx:id="addBuildingAddress" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="95.0" />
+                  <Label fx:id="addAddressCheck" prefHeight="18.0" textFill="#d51414" AnchorPane.leftAnchor="274.0" AnchorPane.topAnchor="98.0" />
+
+                  <Label alignment="CENTER" styleClass="text_labels" text="Opening Hours:" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="180.0"><font><Font name="Arial" size="20.0" /></font></Label>
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: rgba(57, 72, 102, 0.0); -fx-background-color: rgba(57, 72, 102, 0.0);" styleClass="editFields" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="210">
+                     <content>
+                        <AnchorPane minWidth="100.0" prefHeight="640" style="-fx-background-color: transparent;">
+                           <children>
+                              <Label styleClass="text_labels" text="Monday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="35.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addMondayHours" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="60.0" />
+                              <Label fx:id="addMondayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="83.0" />
+
+                              <Label layoutX="20.0" layoutY="315.0" styleClass="text_labels" text="Tuesday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="115.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addTuesdayHours" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="140.0" />
+                              <Label fx:id="addTuesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="163.0" />
+
+                              <Label layoutX="20.0" layoutY="393.0" styleClass="text_labels" text="Wednesday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="195.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addWednesdayHours" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="220.0" />
+                              <Label fx:id="addWednesdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="243.0" />
+
+                              <Label styleClass="text_labels" text="Thursday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="275.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addThursdayHours" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="300.0" />
+                              <Label fx:id="addThursdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="323.0" />
+
+                              <Label styleClass="text_labels" text="Friday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="355.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addFridayHours" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="380.0" />
+                              <Label fx:id="addFridayMsg" textFill="#d51414" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="403.0" />
+
+                              <Label styleClass="text_labels" text="Saturday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="420.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addSaturdayHours" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="460.0" />
+                              <Label fx:id="addSaturdayMsg" textFill="#d51414" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="483.0" />
+
+                              <Label styleClass="text_labels" text="Sunday (HH:mm-HH:mm / 'closed')" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="500.0"><font><Font name="Arial" size="17.0" /></font></Label>
+                              <TextField fx:id="addSundayHours" onKeyTyped="#addCheckField" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="540.0" />
+                              <Label fx:id="addSundayMsg" textFill="#d51414" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="563.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+
+                  <Button mnemonicParsing="false" onAction="#addConfirm" prefHeight="50" text="Add Building" AnchorPane.bottomAnchor="7" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30" />
+                  <Button alignment="CENTER" onAction="#closeAddMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
+               </children>
+               <GridPane.margin>
+                  <Insets bottom="40.0" top="40.0" />
+               </GridPane.margin>
+            </AnchorPane>
+         </children>
+      </GridPane>
+
+      <GridPane fx:id="deleteMenu" visible="false" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="88" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="141">
+         <columnConstraints>
+            <ColumnConstraints percentWidth="100" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="100" />
+         </rowConstraints>
+         <children>
+            <AnchorPane maxHeight="400.0" maxWidth="600.0" style="-fx-background-color: rgb(57, 72, 102);" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <Label text="Choose a building to delete it" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="35.0"><font><Font size="14.0" /></font></Label>
+               <ScrollPane fx:id="deleteBuildingList" fitToWidth="true" prefWidth="300.0" styleClass="deleteBuildings" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="65.0" />
+               <Label fx:id="deleteMsg" prefHeight="18.0" textFill="#d51414" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" />
+               <Button mnemonicParsing="false" onAction="#deleteConfirm" text="Delete Building" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="40.0" />
+               <Button alignment="CENTER" onAction="#closeDeleteMenu" prefHeight="18" prefWidth="18" style="-fx-text-fill: aliceblue; -fx-background-color: midnightblue;" text="X" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0"><font><Font name="Arial" size="15" /></font></Button>
+               <Label fx:id="deleteId" text="0" visible="false" />
+               <GridPane.margin>
+                  <Insets bottom="40.0" top="40.0" />
+               </GridPane.margin>
+            </AnchorPane>
+         </children>
+      </GridPane>
+
+      <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="logo" fitHeight="100" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.8;" AnchorPane.rightAnchor="60" AnchorPane.topAnchor="10">
+               <image>
+                  <Image url="@/icons/tu-delft-logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+
+      <AnchorPane fx:id="side_bar" prefHeight="713.0" prefWidth="88.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="back_arrow" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/back-arrow-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="buildingIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/building-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="roomIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/room.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="bikeIcon" fitHeight="63.0" fitWidth="63.0" layoutX="13.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/bike-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="foodIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="322.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/food-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="calendarIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@/icons/calendar-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="userIcon" fitHeight="63.0" fitWidth="63.0" layoutX="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0">
+               <image>
+                  <Image url="@/icons/user-icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -17,7 +17,6 @@ import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
@@ -78,13 +77,13 @@ public class ReservationControllerTest {
         final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
-        when(mockRepository.existsReservationByStartingDateAndAndEndDateAndRoomId(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
+        when(mockRepository.existsReservationByStartingDateAndEndDateAndRoomId(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
         when(mockRoomRepository.existsRoomById(0)).thenReturn(false);
         when(mockUserRepository.existsUserByUsername("username")).thenReturn(false);
         when(mockRepository.save(any(Reservation.class))).thenReturn(new Reservation(0));
 
 
-        final ResponseEntity result = reservationControllerUnderTest.createBuildingReservation(newReservation, "token");
+        final ResponseEntity result = reservationControllerUnderTest.createBuildingReservation(newReservation, "token", "name");
 
         assertNotNull(result);
     }
