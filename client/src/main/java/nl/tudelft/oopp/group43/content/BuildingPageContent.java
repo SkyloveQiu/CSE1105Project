@@ -213,9 +213,14 @@ public class BuildingPageContent {
                     for (Node node : gp.getChildren()) {
                         Label expanded = (Label) ((AnchorPane) node).getChildren().get(0);
                         expanded.setText("false");
+                        gp.setPadding(new Insets(40));
                     }
                     if (status.equals("false")) {
                         expanded.setText("true");
+
+                        if (pane.getLayoutY() >= gp.getHeight() - 220) {
+                            gp.setPadding(new Insets(40, 40, 40 + infoPane.getHeight(), 40));
+                        }
 
                         infoPane.setLayoutX(pane.getLayoutX() + 88);
                         double offset = ((ScrollPane) scene.lookup("#buildings")).vvalueProperty()
