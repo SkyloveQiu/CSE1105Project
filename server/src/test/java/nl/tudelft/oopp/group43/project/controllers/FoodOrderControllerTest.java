@@ -87,7 +87,7 @@ public class FoodOrderControllerTest {
         when(mockFoodOrderDetailsRepository.save(any(FoodOrderDetails.class))).thenReturn(foodOrderDetails);
 
         // Run the test
-        final ResponseEntity result = foodOrderControllerUnderTest.createFoodOrder(newFoodOrder, "token", "order","true");
+        final ResponseEntity result = foodOrderControllerUnderTest.createFoodOrder(newFoodOrder, "token", "order", "true");
 
         assertNotNull(result);
     }
@@ -106,7 +106,7 @@ public class FoodOrderControllerTest {
         final Building building = new Building(0, "buildingName", "address", "openingHours", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockRepository.save(any(Building.class))).thenReturn(building);
 
-       buildingControllerUnderTest.createBuilding(newBuilding, "token");
+        buildingControllerUnderTest.createBuilding(newBuilding, "token");
 
         final List<FoodOrder> foodOrders = Arrays.asList(new FoodOrder(0, 0, "user", new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime()));
         when(mockFoodOrderrepository.findAll()).thenReturn(foodOrders);
