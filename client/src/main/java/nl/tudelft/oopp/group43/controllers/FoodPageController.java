@@ -58,7 +58,8 @@ public class FoodPageController {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("You reserved your food!");
             alert.showAndWait();
-            return;
         }
+
+        FoodPageContent.refreshFood();
     }
 }

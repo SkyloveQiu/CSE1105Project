@@ -161,6 +161,14 @@ public class FoodPageContent {
     }
 
     /**
+     * Refreshes the food page.
+     */
+    public static void refreshFood() {
+        removeFood();
+        addFood();
+    }
+
+    /**
      * Removes all food from the food page.
      */
     private static void removeFood() {
@@ -236,7 +244,6 @@ public class FoodPageContent {
     public static ArrayList<String> getSelectedFood() {
         GridPane foodGrid = (GridPane) scene.lookup("#foodGrid");
         ArrayList<String> selectedFood = new ArrayList<>();
-        System.out.println(foodGrid.getChildren().size());
         for (Object obj : foodGrid.getChildren()) {
             if (obj instanceof AnchorPane) {
                 AnchorPane foodProduct = (AnchorPane) obj;
