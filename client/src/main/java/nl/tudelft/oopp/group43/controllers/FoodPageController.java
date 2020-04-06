@@ -46,9 +46,9 @@ public class FoodPageController {
             return;
         }
 
-        String body = "{\"building\":\"" + FoodPageContent.getSelectedBuilding() + "\",\"reservation\":\"0\",\"user\":\"" + ServerCommunication.getUsername() + "\",\"time\":\"" + FoodPageContent.getSelectedTime() + "\"}";
+        String body = "{\"building\":\"" + FoodPageContent.getSelectedBuilding() + "\",\"reservation\":\"" + FoodPageContent.getSelectedReservation() + "\",\"user\":\"" + ServerCommunication.getUsername() + "\",\"time\":\"" + FoodPageContent.getSelectedTime() + "\"}";
 
-        String response = ServerCommunication.createFoodOrder(processedFood, true, body);
+        String response = ServerCommunication.createFoodOrder(processedFood, FoodPageContent.getTakeaway(), body);
         if (!response.equals("OK")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Something went wrong!");

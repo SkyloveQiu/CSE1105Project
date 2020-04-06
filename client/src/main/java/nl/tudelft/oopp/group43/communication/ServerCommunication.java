@@ -372,12 +372,10 @@ public class ServerCommunication {
                 setFirstName((String) obj.get("first_name"));
                 setLastName((String) obj.get("last_name"));
                 setRole((String) obj.get("role"));
-                //System.out.println(response.body());
 
                 return "OK";
             } catch (ParseException e) {
                 e.printStackTrace();
-                System.out.println(response.body());
                 return "ERROR OBTAINING INFO";
             }
         }
@@ -505,7 +503,6 @@ public class ServerCommunication {
         data.put("room_id", ReservationConfig.getSelectedRoom());
         data.put("starting_date", startHour);
         data.put("end_date", endHour);
-        System.out.println("making a reservation for: " + data.toJSONString() + " token = " + token);
 
         String url = cURL + "reservation?token=" + token + "&username=" + username;
 
@@ -516,7 +513,6 @@ public class ServerCommunication {
         if (response == null) {
             return "Communication with server failed";
         }
-        //System.out.println(response.body());
         return response.body();
     }
 
@@ -528,14 +524,12 @@ public class ServerCommunication {
      */
     public static String getReservationsByDate(String startDate, String endDate) {
         String url = cURL + "reservation/" + startDate + "/" + endDate;
-        System.out.println(startDate + " ; " + endDate);
 
         HttpResponse<String> response = get(url);
 
         if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
-        System.out.println(response.body());
         return response.body();
     }
 
@@ -562,7 +556,6 @@ public class ServerCommunication {
         }
         builder.append("}");
 
-        System.out.println(builder.toString());
         return builder.toString();
     }
 
@@ -768,13 +761,11 @@ public class ServerCommunication {
         HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
 
         if (response == null) {
-            System.out.println("Communication with server failed");
             return "Communication with server failed";
 
         }
 
         if (response.statusCode() != 200) {
-            System.out.println(response.body());
             return "NOT OK";
         } else {
 
@@ -796,13 +787,11 @@ public class ServerCommunication {
         HttpResponse<String> response = delete(url);
 
         if (response == null) {
-            System.out.println("Communication with server failed");
             return "Communication with server failed";
 
         }
 
         if (response.statusCode() != 200) {
-            System.out.println(response.body());
             return "NOT OK";
         } else {
 
@@ -851,7 +840,6 @@ public class ServerCommunication {
      */
     public static String createFoodOrder(String order, Boolean away, String body) {
         String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order + "&away=" + away;
-        System.out.println(url);
         HttpResponse<String> response = post(url, body, "Content-Type", "application/json;charset=UTF-8");
 
         if (response == null) {
