@@ -333,7 +333,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testGetRoomByRoomId(){
+    public void testGetRoomByRoomId() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -344,7 +344,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testGetReservationsByUser(){
+    public void testGetReservationsByUser() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
