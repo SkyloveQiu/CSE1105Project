@@ -24,7 +24,18 @@ Add your own name (do not add the names for others!) to the section below.
 <!-- - (please make sure the photos have the same size) --> 
 
 ## How to run it
+For running you have to use Gradle 6.1 or higher. For the server, the execution command is: "gradlew server:bootRun" and 
+for the client "gradlew client:run". Also if you want to contribute, you should respect our checkstyle protocol checking your coding style and tests with "gradle check".
 
 ## How to contribute to it
+Also if you want to contribute, you should respect our checkstyle protocol checking your coding style and tests with "gradle check". Furthermore, you can contribute using merge requests, weight your work and ask for approvals. The ones in charge will take a look on your code, 
+and if your addition will improve the quality of the project, the merge request will be accepted.
 
-## Copyright / License (opt.)
+## Copyright / License
+Copyright ©2020 GROUP 43 - TUDelft
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
