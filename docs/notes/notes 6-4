@@ -1,0 +1,35 @@
+The code/testing didn't receive feedback, because the code has to be handed in tonight.
+For the code coverage it will be tested throughout the meeting.
+
+For code reviewing not everyone participated.
+
+Einar didn't keep the deadlines. Jordy will check with head TA's what measurements will be taken.
+
+The group grade does not go down, only up when looking at the feedback. 
+Self-reflection: We presented problem and solution, but the issue is that it is not a concrete solution.
+Make the solution SMART.
+We're the only group that links branches to issues.
+
+Approvals for merge requests comment alright? Yes.
+
+Coverage looks allright, Jordy will do it himself as well.
+
+Make sure everything is tested.
+
+Ziang: How can we write about communication about http requests.
+
+It is important that we can explain what components are in the system and how they communicate with each other. Server is an api and has user acces points and that is relevant
+for the architecture part.
+
+Individual parts are in the video.
+
+Group process.
+Why you made certain design choices in the architecture. ModelViewController. 
+As long as you can explain your choices, it'd be nice.
+
+Thom's personal question: I didn't do scorion last night ;(. 
+Jordy says: oei bad foei.
+
+Grading looks at line coverage.
+
+Individual videos will be personal and are to be uploaded on Brightspace.
