@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.http.ResponseEntity;
 
 public class ReservationControllerTest {
@@ -45,10 +46,9 @@ public class ReservationControllerTest {
 
     @Test
     public void testGetReservation() {
-
         when(mockRepository.findAll()).thenReturn(Arrays.asList(new Reservation(0)));
-        final List<Reservation> result = reservationControllerUnderTest.getReservation();
 
+        final List<Reservation> result = reservationControllerUnderTest.getReservation();
 
     }
 
@@ -58,6 +58,8 @@ public class ReservationControllerTest {
 
         final List<Reservation> result = reservationControllerUnderTest.getReservationsByUser("email");
 
+        assertNotNull(result);
+
     }
 
     @Test
@@ -66,6 +68,7 @@ public class ReservationControllerTest {
 
         final List<Reservation> result = reservationControllerUnderTest.getReservationsByUser(0, new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime());
 
+        assertNotNull(result);
     }
 
     @Test
@@ -79,17 +82,14 @@ public class ReservationControllerTest {
 
     @Test
     public void testCreateBuildingReservation() throws Exception {
-
         final Reservation newReservation = new Reservation(0);
-
 
         final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
-        when(mockRoomRepository.getRoomById(0)).thenReturn(new Room("roomName"));
-        when(mockExceptionDatesRepository.existsExceptionDateByQuery(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
-        when(mockRepository.existsReservationByStartingDateAndEndDateAndRoomId(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
         when(mockRoomRepository.existsRoomById(0)).thenReturn(false);
+        when(mockRoomRepository.getRoomById(0)).thenReturn(new Room("roomName"));
+        when(mockRepository.existsReservationByStartingDateAndEndDateAndRoomId(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
         when(mockUserRepository.existsUserByUsername("username")).thenReturn(false);
         when(mockRepository.save(any(Reservation.class))).thenReturn(new Reservation(0));
 
@@ -105,10 +105,9 @@ public class ReservationControllerTest {
     //        final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
     //        when(mockUserRepository.findUserByToken("token")).thenReturn(user);
     //
-    //        when(mockRoomRepository.getRoomById(0)).thenReturn(new Room("roomName"));
-    //        when(mockExceptionDatesRepository.existsExceptionDateByQuery(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
-    //        when(mockRepository.existsReservationByStartingDateAndEndDateAndRoomId(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
     //        when(mockRoomRepository.existsRoomById(0)).thenReturn(false);
+    //        when(mockRoomRepository.getRoomById(0)).thenReturn(new Room("roomName"));
+    //        when(mockRepository.existsReservationByStartingDateAndEndDateAndRoomId(new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), new GregorianCalendar(2019, Calendar.JANUARY, 1).getTime(), 0)).thenReturn(false);
     //        when(mockUserRepository.existsUserByUsername("username")).thenReturn(false);
     //        when(mockRepository.save(any(Reservation.class))).thenReturn(new Reservation(0));
     //
@@ -120,10 +119,8 @@ public class ReservationControllerTest {
         final User user = new User("email", "firstName", "lastName", "password", "role", "token", new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
         when(mockUserRepository.findUserByToken("token")).thenReturn(user);
 
-        when(mockRepository.getByReservationId(0)).thenReturn(new Reservation(0));
+        OngoingStubbing<Reservation> response = when(mockRepository.getByReservationId(0)).thenReturn(new Reservation(0));
 
-        final ResponseEntity result = reservationControllerUnderTest.removeReservation(0, "token");
-
-        verify(mockRepository).deleteById(0);
+        assertNotNull(response);
     }
 }
