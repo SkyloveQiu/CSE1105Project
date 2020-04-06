@@ -26,9 +26,9 @@
             </GridPane>
          </content>
       </ScrollPane>
-      <AnchorPane fx:id="infoPane" prefHeight="400" prefWidth="400" styleClass="infoPane" visible="false">
+      <AnchorPane fx:id="infoPane" prefHeight="400" prefWidth="500" styleClass="infoPane" visible="false">
          <children>
-            <Rectangle fill="rgb(86, 128, 176)" stroke="rgb(6, 48, 96)" height="40" rotate="45.0" width="40" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="-20.0" />
+            <Rectangle fx:id="arrow" fill="rgb(86, 128, 176)" stroke="rgb(6, 48, 96)" height="40" rotate="45.0" width="40" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="-20.0" />
             <Pane style="-fx-background-color: rgb(86, 128, 176);" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" />
             <Label text="Rooms of the building:" alignment="CENTER" textFill="ghostwhite" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="195" ><font><Font name="Arial" size="25" /></font></Label>
          </children>
