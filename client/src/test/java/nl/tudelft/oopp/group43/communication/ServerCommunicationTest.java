@@ -4,13 +4,11 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.pgssoft.httpclient.HttpClientMock;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.DirtiesContext;
-
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ServerCommunicationTest {
@@ -123,10 +121,11 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onDelete(curl + "building/1").doReturnStatus(200);
+        httpClientMock.onDelete(curl + "building/1?token=1").doReturnStatus(200);
 
+        ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendDeleteBuilding("1"));
-        httpClientMock.verify().delete(curl + "building/1").called();
+        httpClientMock.verify().delete(curl + "building/1?token=1").called();
     }
 
     @Test
@@ -137,10 +136,11 @@ public class ServerCommunicationTest {
         String jsonBuildingString = "{\"a\":\"aaa\",\"b\":\"bbb\"}";
         JSONObject jsonBuildingObj = (JSONObject) new JSONParser().parse(jsonBuildingString);
 
-        httpClientMock.onPost(curl + "building/update").doReturnStatus(200);
+        httpClientMock.onPost(curl + "building/update?token=1").doReturnStatus(200);
 
+        ServerCommunication.setToken("1");
         assertEquals("OK", ServerCommunication.sendEditBuilding(jsonBuildingObj));
-        httpClientMock.verify().post(curl + "building/update");
+        httpClientMock.verify().post(curl + "building/update?token=1");
     }
 
     @Test
@@ -183,11 +183,12 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(curl + "building").doReturn("NEW BUILDING: <building_name>");
+        httpClientMock.onPost(curl + "building?token=1").doReturn("NEW BUILDING: <building_name>");
 
+        ServerCommunication.setToken("1");
         JSONObject obj = new JSONObject();
         assertEquals("OK", ServerCommunication.sendAddBuilding(obj));
-        httpClientMock.verify().post(curl + "building").called();
+        httpClientMock.verify().post(curl + "building?token=1").called();
     }
 
     @Test
@@ -195,11 +196,12 @@ public class ServerCommunicationTest {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
-        httpClientMock.onPost(curl + "building").doReturn("BUILDING WITH NUMBER: <building_number> ALREADY EXISTS.");
+        httpClientMock.onPost(curl + "building?token=1").doReturn("BUILDING WITH NUMBER: <building_number> ALREADY EXISTS.");
 
+        ServerCommunication.setToken("1");
         JSONObject obj = new JSONObject();
         assertEquals("NOT OK", ServerCommunication.sendAddBuilding(obj));
-        httpClientMock.verify().post(curl + "building").called();
+        httpClientMock.verify().post(curl + "building?token=1").called();
     }
 
     @Test
@@ -211,7 +213,7 @@ public class ServerCommunicationTest {
                 + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
                 + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").doReturn("rooms");
 
-        assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d","e","f", "g", "h", "i", "j", "k"));
+        assertEquals("rooms", ServerCommunication.getRoomFilter("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"));
         httpClientMock.verify().get(curl + "filter?"
                 + "blinds=a&desktop=b&projector=c&chalkBoard=d&microphone=e&smartBoard=f&"
                 + "whiteBoard=g&powerSupply=h&soundInstallation=i&wheelChair=j&minSpace=k").called();
@@ -242,14 +244,14 @@ public class ServerCommunicationTest {
 
     @Test
     public void testGetBikesRentedByUser() {
-       HttpClientMock httpClientMock = new HttpClientMock();
-       ServerCommunication.setClient(httpClientMock);
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
 
-       httpClientMock.onGet(curl + "bikeReservation/notReturned?token=1").doReturn("bikes");
+        httpClientMock.onGet(curl + "bikeReservation/notReturned?token=1").doReturn("bikes");
 
-       ServerCommunication.setToken("1");
-       assertEquals("bikes", ServerCommunication.getBikesRentedByUser());
-       httpClientMock.verify().get(curl + "bikeReservation/notReturned?token=1").called();
+        ServerCommunication.setToken("1");
+        assertEquals("bikes", ServerCommunication.getBikesRentedByUser());
+        httpClientMock.verify().get(curl + "bikeReservation/notReturned?token=1").called();
     }
 
     @Test
@@ -265,7 +267,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testReturnBikeWRONG() {
+    public void testReturnBikeWrong() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 

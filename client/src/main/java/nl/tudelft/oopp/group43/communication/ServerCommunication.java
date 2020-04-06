@@ -427,7 +427,7 @@ public class ServerCommunication {
      *         - "OK" if the building could be deleted from the Buildings Database
      */
     public static String sendDeleteBuilding(String buildID) {
-        String url = cURL + "building/" + buildID;
+        String url = cURL + "building/" + buildID + "?token=" + token;
 
         HttpResponse<String> response = delete(url);
 
@@ -447,7 +447,7 @@ public class ServerCommunication {
      *         - "OK" if the building could be edit from the Buildings Database
      */
     public static String sendEditBuilding(JSONObject obj) {
-        String url = cURL + "building/update";
+        String url = cURL + "building/update?token=" + token;
 
         HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
 
@@ -575,7 +575,7 @@ public class ServerCommunication {
      *         - "NOT OK" if the building could not be added to the Buildings Database
      */
     public static String sendAddBuilding(JSONObject obj) {
-        String url = cURL + "building";
+        String url = cURL + "building?token=" + token;
 
         HttpResponse<String> response = post(url, obj.toJSONString(),
                 "Content-Type", "application/json;charset=UTF-8");
