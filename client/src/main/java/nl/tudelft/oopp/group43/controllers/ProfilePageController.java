@@ -199,7 +199,7 @@ public class ProfilePageController {
         System.out.println(ok);
         if (ok == true) {
             String response = ServerCommunication.sendChangePassword(oldPassword.getText(), newPassword.getText());
-            System.out.println(response);
+
             String message = "";
             if (response.equals("OK")) {
                 message = "Your password have been successfully changed";
@@ -207,7 +207,7 @@ public class ProfilePageController {
             } else if (response.equals("NOT OK")) {
                 message = "Your old password was wrong!";
             } else {
-                message = "Somthing goes wrong with your connection!" + "\n" + "Please try again!";
+                message = "Something goes wrong with your connection!" + "\n" + "Please try again!";
             }
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText(message);
