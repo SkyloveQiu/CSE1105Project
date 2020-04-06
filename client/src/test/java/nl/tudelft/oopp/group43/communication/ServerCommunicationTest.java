@@ -38,7 +38,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testConfirmRegistrationOK() {
+    public void testConfirmRegistrationOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -60,7 +60,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testLoginTokenOK() throws ParseException {
+    public void testLoginTokenOk() throws ParseException {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -82,7 +82,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testGetUserInformationOK() {
+    public void testGetUserInformationOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -179,7 +179,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testSendAddBuildingOK() {
+    public void testSendAddBuildingOk() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -380,7 +380,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testSendBuildingExceptionErrorCode1() {
+    public void testSendBuildingExceptionErrorCode() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
@@ -400,6 +400,38 @@ public class ServerCommunicationTest {
         ServerCommunication.setToken(tempToken);
     }
     
+    @Test
+    public void testSendDeleteReservation() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onDelete(curl + "reservation/1?token=1").doReturnStatus(200);
+        ServerCommunication.setToken("1");
+        assertEquals("OK", ServerCommunication.sendDeleteReservation("1"));
+        httpClientMock.verify().delete(curl + "reservation/1?token=1").called();
+    }
+
+    @Test
+    public void testGetRoomByRoomId() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "room/getName/1").doReturn("rooms");
+
+        assertEquals("rooms", ServerCommunication.getRoomName((long) 1));
+        httpClientMock.verify().get(curl + "room/getName/1").called();
+    }
+
+    @Test
+    public void testGetReservationsByUser() {
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
+
+        httpClientMock.onGet(curl + "reservation/test@tudelft.nl").doReturn("reservations");
+        ServerCommunication.setUsername("test@tudelft.nl");
+        assertEquals("reservations", ServerCommunication.getReservationsByUser());
+        httpClientMock.verify().get(curl + "reservation/test@tudelft.nl").called();
+    }
 
     /*
     @Test
