@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.geometry.Insets?>
-<AnchorPane fx:id="root" fx:controller="nl.tudelft.oopp.group43.controllers.FoodPageController" style="-fx-background-color: #29293d;" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #29293d;" stylesheets="stylesheets/foodPage.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.oopp.group43.controllers.FoodPageController">
    <children>
 
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="101.0" prefWidth="363.0" style="-fx-text-fill: #e7f2fe;" text="Order food" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
@@ -24,32 +15,37 @@
          </font>
       </Label>
 
-      <ChoiceBox fx:id="returnBuildingList" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="320.0" prefWidth="280.0"/>
+      <ChoiceBox fx:id="returnBuildingList" prefWidth="280.0" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="300.0" />
 
-      <ChoiceBox fx:id="returnRoomsList" AnchorPane.topAnchor="300.0" AnchorPane.rightAnchor="234.0" prefWidth="280.0"/>
+      <CheckBox fx:id="takeAwayCheck" AnchorPane.topAnchor="300.0" AnchorPane.leftAnchor="626.0" AnchorPane.rightAnchor="540.0" mnemonicParsing="false" text="Takeaway" style="-fx-text-fill: #e7f2fe" />
 
-      <ScrollPane fx:id="foodList" style="-fx-background-color: white;" fitToWidth="true" fitToHeight="true" AnchorPane.leftAnchor="188.0" AnchorPane.topAnchor="365.0" AnchorPane.rightAnchor="100.0" prefWidth="700.0" prefHeight="330.0" >
+      <ChoiceBox fx:id="timeList" prefWidth="280.0" AnchorPane.rightAnchor="234.0" AnchorPane.topAnchor="300.0" />
+
+      <ScrollPane fx:id="foodList" fitToHeight="true" fitToWidth="true" prefHeight="330.0" prefWidth="700.0" style="-fx-background-color: transparent; -fx-background: transparent" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="365.0">
          <content>
-            <GridPane fx:id="food_grid" style="-fx-background-color: #29293d;" minHeight="700" hgap="20.0" vgap="20.0" >
+            <GridPane fx:id="foodGrid" hgap="20.0" style="-fx-background-color: #29293d;" vgap="20.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="100" />
+                  <ColumnConstraints percentWidth="100" />
                </columnConstraints>
+               <padding>
+                  <Insets left="100" right="100" />
+               </padding>
                <rowConstraints>
-                  <RowConstraints vgrow="SOMETIMES"  />
+                  <RowConstraints />
                </rowConstraints>
             </GridPane>
          </content>
       </ScrollPane>
 
-      <Button fx:id="orderFoodButton" onAction="#orderFood" alignment="CENTER"  mnemonicParsing="false" style="-fx-background-color: mediumslateblue;" text="Place order" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="234.0" AnchorPane.leftAnchor="320.0" prefHeight="70.0" >
+      <Button fx:id="orderFoodButton" alignment="CENTER" mnemonicParsing="false" onAction="#orderFood" prefHeight="70.0" style="-fx-background-color: mediumslateblue;" text="Place order" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="320.0" AnchorPane.rightAnchor="234.0">
          <font>
             <Font name="Arial" size="20.0" />
          </font>
       </Button>
 
-      <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+      <AnchorPane prefHeight="141.0" prefWidth="1280.0" style="-fx-background-color: #0d7fa5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 20, 0, 0, 0);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="logo" style="-fx-opacity: 0.8;" fitHeight="100" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="60">
+            <ImageView fx:id="logo" fitHeight="100" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.8;" AnchorPane.rightAnchor="60" AnchorPane.topAnchor="10">
                <image>
                   <Image url="@/icons/tu-delft-logo.png" />
                </image>
