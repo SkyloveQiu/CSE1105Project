@@ -1,10 +1,8 @@
-# Starting template
-
-This README will need to contain a description of your project, how to run it, how to set up the development environment, and who worked on it.
-This information can be added throughout the course, except for the names of the group members.
-Add your own name (do not add the names for others!) to the section below.
-
 ## Description of project
+The problem presented by the client consisted of the dificulty surrounding reserving a room on the university campus. With no booking system in place, there were no guarantees that when needed, the requested room would be available.
+To further facilitate the campus management, the client introduced the idea of reserving food from the stalls available on campus. In addition, if you were to reserve a room on campus, he thought it would be useful to be able to order food and have it delivered at the room you are working in.
+Moreover, the client mentioned the always have a bike at hand. His idea was to have bikes available to rent-for-a-day around the TU Delft campus.
+These concepts and ideas really excited us to start working on a solution to this problem!
 
 ## Group members
 
