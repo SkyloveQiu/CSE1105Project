@@ -39,6 +39,7 @@ public class ExceptionsPageContent {
         closedButton.setToggleGroup(radioButtons);
         differentButton.setToggleGroup(radioButtons);
      //   addCheckBoxes();
+        Label timeCheck = (Label) scene.lookup("#timeCheck");
         time = (TextField) scene.lookup("#time");
         time.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 0) {
@@ -46,13 +47,44 @@ public class ExceptionsPageContent {
                     ((StringProperty) observable).setValue(oldValue);
                     return;
                 }
-                if (newValue.charAt(newValue.length() - 1) < 48 || newValue.charAt(newValue.length() - 1) > 57) {
-                    if (newValue.charAt(newValue.length() - 1) != ':' && newValue.length() - 1 != 2 && newValue.length() - 1 != 8 && newValue.charAt(newValue.length() - 1) != '-' && newValue.length() - 1 != 5) {
-                        String comp = "closed";
-                        if (newValue.length() > comp.length() || newValue.charAt(newValue.length() - 1) != comp.charAt(newValue.length() - 1)) {
-                            ((StringProperty) observable).setValue(oldValue);
-                        }
+                if(newValue.length() == 3 || newValue.length() == 6 || newValue.length() == 9)
+                {
+                    if(newValue.length() == 6 && newValue.charAt(newValue.length()-1) != '-')
+                    {
+                        ((StringProperty) observable).setValue(oldValue);
+                        return;
                     }
+                    if( newValue.length() != 6 && newValue.charAt(newValue.length() -1) != ':')
+                    {
+                        ((StringProperty) observable).setValue(oldValue);
+                        return;
+                    }
+                }
+                else if (newValue.charAt(newValue.length() - 1) < 48 || newValue.charAt(newValue.length() - 1) > 57) {
+                        ((StringProperty) observable).setValue(oldValue);
+                }
+                else {
+                    timeCheck.setText("This field is not complete!");
+
+                }
+                if(newValue.length() == 11){
+                        String[] array = newValue.split("-");
+                        int value = array[0].compareTo(array[1]);
+                        boolean ok = checkHour(array[0], timeCheck);
+                        ok = ok &&  checkHour(array[1], timeCheck);
+                        if(ok == false){
+                            return;
+                        }
+                    if(value <= 0)
+                    {
+                        timeCheck.setText("");
+                        return;
+                    }
+                    else{
+                        timeCheck.setText("The starting hour must be smaller than the finish hour!");
+                        return;
+                    }
+
                 }
             }
         });
@@ -88,10 +120,19 @@ public class ExceptionsPageContent {
     }
 
    private static void toggleCheckBoxes(Boolean newValue) {
+        Label message  = (Label) scene.lookup("#message");
+        Label timeCheck = (Label) scene.lookup("#timeCheck");
+
         if (newValue) {
             time.setVisible(true);
+            message.setVisible(true);
+            timeCheck.setVisible(true);
+
+
         } else {
             time.setVisible(false);
+            message.setVisible(false);
+            timeCheck.setVisible(false);
         }
     }
 
@@ -124,7 +165,7 @@ public class ExceptionsPageContent {
         });
     }
 
-    private static Long getBuilding(String building)
+    public static Long getBuilding(String building)
     {
         int i;
         Long nr = Long.valueOf(-1);
@@ -136,6 +177,45 @@ public class ExceptionsPageContent {
             }
         }
         return  nr;
+    }
+
+    private static boolean checkHour(String s, Label text) {
+
+        boolean ok = true;
+        String[] array = s.split(":");
+        int value  = array[0].compareTo("00");
+        if(value < 0)
+        {
+            ok = false;
+        }
+        else{
+            value =  array[0].compareTo("23");
+            if(value > 0)
+            {
+                ok = false;
+            }
+        }
+         value  = array[1].compareTo("00");
+        if(value < 0)
+        {
+            ok = false;
+        }
+        else{
+            value =  array[1].compareTo("59");
+            if(value > 0)
+            {
+                ok = false;
+            }
+        }
+
+        if(ok == false)
+        {
+            text.setText("Something goes wrong with writing the opening/closing hour!!");
+        }
+        else{
+            text.setText("");
+        }
+        return ok;
 
     }
 }

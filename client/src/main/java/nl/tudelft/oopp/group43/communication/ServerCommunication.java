@@ -763,5 +763,27 @@ public class ServerCommunication {
 
     }
 
+    public static String sendBuildingException(JSONObject obj){
+
+        String url = cURL + "building/" + "exception" + "?token=" + getToken();
+        HttpResponse<String> response =  post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
+
+        if (response == null) {
+            System.out.println("Communication with server failed");
+            return "Communication with server failed";
+
+        }
+
+        if (response.statusCode() != 200) {
+            System.out.println(response.body());
+            return "NOT OK";
+        } else {
+
+            return "OK";
+        }
+
+
+    }
+
 }
 

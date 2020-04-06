@@ -5,6 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import nl.tudelft.oopp.group43.communication.ServerCommunication;
+import nl.tudelft.oopp.group43.content.ExceptionsPageContent;
+import org.json.simple.JSONObject;
 
 import java.time.LocalDate;
 
@@ -69,21 +72,51 @@ public class ExceptionsPageController {
         }
     }
 
-    public void confirmExpection (ActionEvent event) {
+    public void confirmException (ActionEvent event) {
 
         boolean ok = checkDate();
-        //ok = checkTime() && ok;
         ok = checkChoice() && ok;
         if(ok == true)
         {
+            String hours = "";
+            if(different.isSelected())
+            {
+                if(!timeCheck.getText().isEmpty())
+                    return;
+                hours = time.getText();
+            }
+            else{
+                hours = "00:00-23:59";
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            JSONObject obj = new JSONObject();
+
+
             LocalDate date = exceptionsDatePicker.getValue();
-            System.out.println(date);
+            String startDate = date.toString();
+            String endDate = date.toString();
+            String [] array = hours.split("-");
+            startDate = startDate +"T" + array[0] + ":00";
+            endDate = endDate + "T" + array[1] + ":00";
             String building = (String) buildings.getSelectionModel().getSelectedItem();
-             System.out.println(building);
-         //   String startTime = (String) fromTime.getSelectionModel().getSelectedItem();
-          //  String finishTime = (String) untilTime.getSelectionModel().getSelectedItem();
-         //   System.out.println(startTime);
-          //  System.out.println(finishTime);
+            Long buildingNumber = ExceptionsPageContent.getBuilding(building);
+            System.out.println(startDate);
+            System.out.println(endDate);
+            System.out.println(buildingNumber);
+            obj.put("buildingNumber", buildingNumber);
+            obj.put("startingDate", startDate);
+            obj.put("endDate", endDate);
+            String message = ServerCommunication.sendBuildingException(obj);
+            if(message == "OK"){
+                System.out.println("OK");
+            }
+            else
+            {
+                System.out.println("NOT OK");
+            }
+
+
 
         }
 
