@@ -242,14 +242,14 @@ public class ServerCommunicationTest {
 
     @Test
     public void testGetBikesRentedByUser() {
-       HttpClientMock httpClientMock = new HttpClientMock();
-       ServerCommunication.setClient(httpClientMock);
+        HttpClientMock httpClientMock = new HttpClientMock();
+        ServerCommunication.setClient(httpClientMock);
 
-       httpClientMock.onGet(curl + "bikeReservation/notReturned?token=1").doReturn("bikes");
+        httpClientMock.onGet(curl + "bikeReservation/notReturned?token=1").doReturn("bikes");
 
-       ServerCommunication.setToken("1");
-       assertEquals("bikes", ServerCommunication.getBikesRentedByUser());
-       httpClientMock.verify().get(curl + "bikeReservation/notReturned?token=1").called();
+        ServerCommunication.setToken("1");
+        assertEquals("bikes", ServerCommunication.getBikesRentedByUser());
+        httpClientMock.verify().get(curl + "bikeReservation/notReturned?token=1").called();
     }
 
     @Test
@@ -265,7 +265,7 @@ public class ServerCommunicationTest {
     }
 
     @Test
-    public void testReturnBikeWRONG() {
+    public void testReturnBikeWrong() {
         HttpClientMock httpClientMock = new HttpClientMock();
         ServerCommunication.setClient(httpClientMock);
 
