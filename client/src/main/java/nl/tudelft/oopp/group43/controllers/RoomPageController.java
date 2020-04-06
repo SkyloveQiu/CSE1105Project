@@ -787,6 +787,19 @@ public class RoomPageController {
                 JSONObject obj = BuildingMap.getAll().get(i);
                 System.out.println("testing building: " + obj.get("building_number"));
                 JSONObject openingHours = (JSONObject) json.parse((String) obj.get("opening_hours"));
+                String exceptionJson = ServerCommunication.getBuildingException((long) obj.get("building_number"));
+                JSONArray exceptions = (JSONArray) json.parse(exceptionJson);
+                for (Object object : exceptions) {
+                    JSONObject jsonObject = (JSONObject) object;
+
+                    LocalDate exception = LocalDate.parse((String) jsonObject.get("startingDate"), customFormatter);
+                    if (exception.isEqual(localDate)) {
+                        LocalTime start = LocalTime.parse((String) jsonObject.get("startingDate"), customFormatter);
+                        LocalTime end = LocalTime.parse((String) jsonObject.get("endDate"), customFormatter);
+                        String time = toTimeFormat(start) + "-" + toTimeFormat(end);
+                        openingHours.put(today, time);
+                    }
+                }
                 if (openingHours.get(today).equals("closed")) {
                     JSONArray arr = (JSONArray) json.parse(ServerCommunication.getRoomsFromBuilding(Long.toString((Long) obj.get("building_number"))));
                     for (Object object : arr) {
@@ -812,7 +825,6 @@ public class RoomPageController {
             for (Object object : reservedRooms) {
                 JSONObject obj = (JSONObject) object;
                 boolean isInTimeFrame = false;
-                boolean isEmployeeOnlyAndIsNotEmployee = false;
                 LocalDateTime startTime = LocalDateTime.parse((String) obj.get("starting_date"), customFormatter);
                 LocalDateTime endTime = LocalDateTime.parse((String) obj.get("end_date"), customFormatter);
                 System.out.println(startHour + " : " + endHour);
@@ -846,6 +858,26 @@ public class RoomPageController {
     @FXML
     private void addHoursUntil(MouseEvent event) {
         RoomPageContent.setHoursTil((String) ((ChoiceBox) event.getSource()).getValue());
+    }
+
+    /**
+     * Gets a local time and parses it to the string "HH:mm".
+     * @param localTime the local time to parse
+     * @return a string with "HH:mm"
+     */
+    private String toTimeFormat(LocalTime localTime) {
+        String time = "";
+        if (localTime.getHour() < 10) {
+            time = "0" + localTime.getHour() + ":";
+        } else {
+            time = "" + localTime.getHour() + ":";
+        }
+        if (localTime.getMinute() < 10) {
+            time += "0" + localTime.getMinute();
+        } else {
+            time += localTime.getMinute();
+        }
+        return time;
     }
 
     /**

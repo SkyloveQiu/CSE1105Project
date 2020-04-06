@@ -917,5 +917,21 @@ public class ServerCommunication {
         }
     }
 
+    /**
+     * Gets all exception dates for a specific building.
+     * @param id the id of the building.
+     * @return A string with the json information of the exceptions
+     */
+    public static String getBuildingException(Long id) {
+        String url = cURL + "building/exception/" + id;
+        HttpResponse<String> response = get(url);
+
+        if (response == null || response.statusCode() != 200) {
+            return "Communication with the server failed";
+        }
+        System.out.println(response.body());
+        return response.body();
+    }
+
 }
 
