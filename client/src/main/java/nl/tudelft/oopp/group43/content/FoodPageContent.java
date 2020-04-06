@@ -275,7 +275,7 @@ public class FoodPageContent {
         if (time) {
             return timeBox.getValue();
         } else {
-            String[] parts = timeBox.getValue().split(" - ");
+            String[] parts = timeBox.getSelectionModel().getSelectedItem().split(" - ");
             return parts[0].split(" ")[1];
         }
     }

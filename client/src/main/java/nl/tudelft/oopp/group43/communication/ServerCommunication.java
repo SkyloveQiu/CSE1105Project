@@ -839,7 +839,10 @@ public class ServerCommunication {
      * @return Confirmation message if the order was successful or not.
      */
     public static String createFoodOrder(String order, Boolean away, String body) {
-        String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order + "&away=" + away;
+        String url = cURL + "foodOrder?token=" + getToken() + "&order=" + order;
+        if (away) {
+            url += "&away=true";
+        }
         HttpResponse<String> response = post(url, body, "Content-Type", "application/json;charset=UTF-8");
 
         if (response == null) {
