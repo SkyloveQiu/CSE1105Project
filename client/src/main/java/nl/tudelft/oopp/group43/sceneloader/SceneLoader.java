@@ -76,7 +76,7 @@ public class SceneLoader extends Application {
                 BuildingPageContent.addContent(scene);
                 break;
             case "room":
-                URL roomUrl = getClass().getResource("/roomPagefxml");
+                URL roomUrl = getClass().getResource("/roomPage.fxml");
                 loader.setLocation(roomUrl);
                 root = loader.load();
                 scene = new Scene(root);

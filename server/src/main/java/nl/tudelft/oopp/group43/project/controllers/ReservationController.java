@@ -1,5 +1,6 @@
 package nl.tudelft.oopp.group43.project.controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.Date;
 import java.util.List;
 import nl.tudelft.oopp.group43.project.models.Reservation;
@@ -11,6 +12,8 @@ import nl.tudelft.oopp.group43.project.repositories.ExceptionDatesRepository;
 import nl.tudelft.oopp.group43.project.repositories.ReservationRepository;
 import nl.tudelft.oopp.group43.project.repositories.RoomRepository;
 import nl.tudelft.oopp.group43.project.repositories.UserRepository;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -103,11 +106,27 @@ public class ReservationController {
             return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
         }
 
-        Room room = roomRepository.getRoomById(newReservation.getRoomId());
-        if (room == null || exceptionDatesRepository.existsExceptionDateByQuery(newReservation.getStartingDate(), room.getBuilding().getBuildingNumber())) {
-            ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This room is not available at this time", HttpStatus.FORBIDDEN.value());
-            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        if (roomRepository.existsRoomById(newReservation.getRoomId())) {
+
+            String attributes = roomRepository.getRoomById(newReservation.getRoomId()).getAttributes();
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(attributes);
+            if (object.get("Only_Employee") != null) {
+                Boolean value = Boolean.valueOf(object.get("Only_Employee").toString());
+                if (value) {
+                    String role = userRepository.findUserByToken(token).getRole();
+                    System.out.println(role);
+
+                    if (!(role.equals("employee") || role.equals("admin"))) {
+                        System.out.println("privilege error");
+                        ErrorResponse errorResponse = new ErrorResponse("Booking Error", "This is a employee only room.", HttpStatus.FORBIDDEN.value());
+                        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+
+                    }
+                }
+            }
         }
+
 
         if (repository.existsReservationByStartingDateAndEndDateAndRoomId(newReservation.getStartingDate(),
                 newReservation.getEndDate(),
