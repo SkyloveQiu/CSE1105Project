@@ -734,7 +734,7 @@ public class ServerCommunication {
      * Gives the new password of the user account.
      *
      * @param oldPassword - String which represents the old password of the account
-     * @param newPassword - String whcih represents the new password of the account
+     * @param newPassword - String which represents the new password of the account
      * @return a String which can have 3 values:
      *         - "Communication with server failed" if the communication with the server failed.
      *         - "OK" if the server could change the password.
@@ -812,19 +812,24 @@ public class ServerCommunication {
 
     }
 
-    public static String sendBuildingException(JSONObject obj){
+    /**
+     * Gives the exception for a specific building to the server.
+     * @param obj - JSONObject which represents the exception building input.
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server could put the exception in the database.
+     *         - "NOT OK" if the server could not put the exception in the database.
+     */
+    public static String sendBuildingException(JSONObject obj) {
 
         String url = cURL + "building/" + "exception" + "?token=" + getToken();
         HttpResponse<String> response =  post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
 
         if (response == null) {
-            System.out.println("Communication with server failed");
             return "Communication with server failed";
-
         }
 
         if (response.statusCode() != 200) {
-            System.out.println(response.body());
             return "NOT OK";
         } else {
 
