@@ -83,7 +83,7 @@ public class ExceptionsPageController {
                 }
                 hours = time.getText();
             } else {
-                hours = "00:00-23:59";
+                hours = "00:00-00:00";
             }
 
             String alertText = "";

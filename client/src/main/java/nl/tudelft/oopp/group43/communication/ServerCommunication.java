@@ -929,7 +929,7 @@ public class ServerCommunication {
         if (response == null || response.statusCode() != 200) {
             return "Communication with the server failed";
         }
-        System.out.println(response.body());
+        //System.out.println(response.body());
         return response.body();
     }
 

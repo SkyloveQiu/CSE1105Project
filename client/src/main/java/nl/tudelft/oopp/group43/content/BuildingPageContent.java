@@ -1,11 +1,15 @@
 package nl.tudelft.oopp.group43.content;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,7 +26,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import nl.tudelft.oopp.group43.classes.BuildingMap;
 import nl.tudelft.oopp.group43.communication.ServerCommunication;
@@ -203,7 +210,7 @@ public class BuildingPageContent {
             pane.getStyleClass().add("buildingBlock");
             pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             pane.setMinSize(340, 200);
-            Label expanded = new Label("");
+            Label expanded = new Label("false");
             expanded.setVisible(false);
             pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -233,6 +240,13 @@ public class BuildingPageContent {
                         //System.out.println(vOffset);
                         infoPaneY = pane.getLayoutY();
                         infoPane.setLayoutY(pane.getLayoutY() - offset + 308 + 200);
+                        if (infoPane.getLayoutX() + 500 > scene.getWidth()) {
+                            double panePos = scene.getWidth() - 500;
+                            infoPane.setLayoutX(panePos);
+                            AnchorPane.setLeftAnchor(scene.lookup("#arrow"), ((pane.getLayoutX() + 88) - panePos) + 20);
+                        } else {
+                            AnchorPane.setLeftAnchor(scene.lookup("#arrow"), 20d);
+                        }
                         infoPane.setVisible(true);
                         //System.out.println("x: " + pane.getLayoutX() + "; y: " + pane.getLayoutY());
 
@@ -272,6 +286,14 @@ public class BuildingPageContent {
                 for (int i = 0; i < gp.getChildren().size(); i++) {
                     if (((Label) ((AnchorPane) gp.getChildren().get(i)).getChildren().get(0)).getText().equals("true")) {
                         infoPane.setLayoutX(gp.getChildren().get(i).getLayoutX() + 88);
+                        if (infoPane.getLayoutX() + 500 > scene.getWidth()) {
+                            double panePos = scene.getWidth() - 500;
+                            double layoutParent = gp.getChildren().get(i).getLayoutX();
+                            infoPane.setLayoutX(panePos);
+                            AnchorPane.setLeftAnchor(scene.lookup("#arrow"), ((layoutParent + 88) - panePos) + 20);
+                        } else {
+                            AnchorPane.setLeftAnchor(scene.lookup("#arrow"), 20d);
+                        }
                     }
                 }
             }
@@ -337,6 +359,54 @@ public class BuildingPageContent {
             address.setStyle("-fx-font-family: 'Helvetica', Arial, sans-serif; -fx-text-fill: silver; -fx-font-size: 15;");
             infoPane.getChildren().add(address);
 
+            Line line = new Line();
+            line.setStartY(20);
+            line.setEndY(180);
+            line.setStartX(250);
+            line.setEndX(250);
+            line.setStrokeWidth(2d);
+            line.setFill(Color.SILVER);
+            infoPane.getChildren().add(line);
+
+            Label exceptionTitle = new Label("Special opening-hours");
+            exceptionTitle.setTextFill(Color.SILVER);
+            exceptionTitle.setFont(new Font("Arial", 18));
+            exceptionTitle.setLayoutX(270);
+            exceptionTitle.setLayoutY(20);
+            infoPane.getChildren().add(exceptionTitle);
+
+            ScrollPane exceptionSP = new ScrollPane();
+            exceptionSP.setLayoutX(265);
+            exceptionSP.setLayoutY(50);
+            exceptionSP.setPrefSize(235, 130);
+            exceptionSP.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+            exceptionSP.setFitToWidth(true);
+            infoPane.getChildren().add(exceptionSP);
+
+            VBox exceptions = new VBox();
+            exceptionSP.setContent(exceptions);
+            exceptions.setSpacing(10);
+            exceptions.setAlignment(Pos.CENTER_LEFT);
+            exceptions.setStyle("-fx-background-color: transparent;");
+            JSONArray exceptionArr = (JSONArray) json.parse(ServerCommunication.getBuildingException(Long.parseLong(id)));
+            for (Object object : exceptionArr) {
+                JSONObject jsonObject = (JSONObject) object;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00.000+0000'");
+                LocalTime start = LocalTime.parse((String) jsonObject.get("startingDate"), formatter);
+                LocalTime end = LocalTime.parse((String) jsonObject.get("endDate"), formatter);
+                LocalDate date = LocalDate.parse((String) jsonObject.get("startingDate"), formatter);
+                String time = toTimeFormat(start) + "-" + toTimeFormat(end);
+                if (time.equals("00:00-00:00")) {
+                    time = "closed";
+                }
+
+                Label label = new Label(date.toString() + " \t " + time);
+                label.setFont(new Font("Arial", 15));
+                label.setWrapText(true);
+                label.setTextFill(Color.SILVER);
+                exceptions.getChildren().add(label);
+            }
+
             ScrollPane sp = new ScrollPane();
             sp.setFitToWidth(true);
             sp.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
@@ -372,6 +442,26 @@ public class BuildingPageContent {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Gets a local time and parses it to the string "HH:mm".
+     * @param localTime the local time to parse
+     * @return a string with "HH:mm"
+     */
+    private static String toTimeFormat(LocalTime localTime) {
+        String time = "";
+        if (localTime.getHour() < 10) {
+            time = "0" + localTime.getHour() + ":";
+        } else {
+            time = "" + localTime.getHour() + ":";
+        }
+        if (localTime.getMinute() < 10) {
+            time += "0" + localTime.getMinute();
+        } else {
+            time += localTime.getMinute();
+        }
+        return time;
     }
 
     /**
