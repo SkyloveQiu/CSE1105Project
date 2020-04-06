@@ -289,7 +289,7 @@ public class FoodPageContent {
             return "0";
         } else {
             ChoiceBox<String> timeBox = (ChoiceBox<String>) scene.lookup("#timeList");
-            String[] parts = timeBox.getValue().split(" - ");
+            String[] parts = timeBox.getSelectionModel().getSelectedItem().split(" - ");
 
             return parts[2];
         }
