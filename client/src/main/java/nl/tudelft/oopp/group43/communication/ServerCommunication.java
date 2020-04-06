@@ -269,6 +269,36 @@ public class ServerCommunication {
     }
 
     /**
+     * Gives the room which has to be delete.
+     * @param resId - String which represents the index of the room which has to benn deleted.
+     * @return a String which can have 3 values:
+     *         - "Communication with server failed" if the communication with the server failed.
+     *         - "OK" if the server could delete the room
+     *         - "NOT OK" if the server could delete the room
+     *
+     */
+    public static String sendDeleteReservation(String resId) {
+        String url = cURL + "reservation/" + resId + "?token=" + getToken();
+        HttpResponse<String> response = delete(url);
+
+        if (response == null) {
+            System.out.println("Communication with server failed");
+            return "Communication with server failed";
+
+        }
+
+        if (response.statusCode() != 200) {
+            System.out.println(response.body());
+            return "NOT OK";
+        } else {
+
+            return "OK";
+        }
+
+
+    }
+
+    /**
      * Gets the rooms from the database.
      *
      * @return A String with in it a JSONArray or Object of all rooms
@@ -427,7 +457,7 @@ public class ServerCommunication {
      *         - "OK" if the building could be deleted from the Buildings Database
      */
     public static String sendDeleteBuilding(String buildID) {
-        String url = cURL + "building/" + buildID;
+        String url = cURL + "building/" + buildID + "?token=" + token;
 
         HttpResponse<String> response = delete(url);
 
@@ -447,7 +477,7 @@ public class ServerCommunication {
      *         - "OK" if the building could be edit from the Buildings Database
      */
     public static String sendEditBuilding(JSONObject obj) {
-        String url = cURL + "building/update";
+        String url = cURL + "building/update?token=" + token;
 
         HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
 
@@ -539,6 +569,7 @@ public class ServerCommunication {
         return response.body();
     }
 
+
     /**
      * Takes a map as input and translates the pairs to a json.
      *
@@ -575,7 +606,7 @@ public class ServerCommunication {
      *         - "NOT OK" if the building could not be added to the Buildings Database
      */
     public static String sendAddBuilding(JSONObject obj) {
-        String url = cURL + "building";
+        String url = cURL + "building?token=" + token;
 
         HttpResponse<String> response = post(url, obj.toJSONString(),
                 "Content-Type", "application/json;charset=UTF-8");
