@@ -8,8 +8,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 import nl.tudelft.oopp.group43.classes.ReservationConfig;
 import org.json.simple.JSONArray;
@@ -224,25 +222,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
-            return "Communication with server failed";
-        }
-
-        return response.body();
-    }
-
-    /**
-     * Retrieves all reservations from the server.
-     *
-     * @return the body of a get request to the server.
-     * @throws Exception if communication with the server fails.
-     */
-    public static String getReservations() {
-        String url = cURL + "reservation";
-
-        HttpResponse<String> response = get(url);
-
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -261,7 +241,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -308,7 +288,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -422,7 +402,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -459,7 +439,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = delete(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -479,7 +459,7 @@ public class ServerCommunication {
 
         HttpResponse<String> response = post(url, obj.toJSONString(), "Content-Type", "application/json;charset=UTF-8");
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -514,6 +494,7 @@ public class ServerCommunication {
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
+                return null;
             }
         }
 
@@ -540,7 +521,7 @@ public class ServerCommunication {
                 "User-Agent", "Java 11 HttpClient Bot",
                 "Content-Type", "application/json");
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
         return response.body();
@@ -563,33 +544,6 @@ public class ServerCommunication {
         return response.body();
     }
 
-
-    /**
-     * Takes a map as input and translates the pairs to a json.
-     *
-     * @param data the map containing the json pairs/values
-     * @return a string with the json content
-     */
-    private static String buildFormDataFromMap(Map<Object, Object> data) {
-        var builder = new StringBuilder();
-        builder.append("{");
-        for (Map.Entry<Object, Object> entry : data.entrySet()) {
-            if (builder.length() > 1) {
-                builder.append(",");
-            }
-            builder.append("\"" + entry.getKey().toString() + "\"");
-            builder.append(":");
-            if (entry.getKey().toString() == "room_id" || entry.getKey().toString() == "user") {
-                builder.append(entry.getValue());
-            } else {
-                builder.append("\"" + entry.getValue().toString() + "\"");
-            }
-        }
-        builder.append("}");
-
-        return builder.toString();
-    }
-
     /**
      * Sends the building as a JSON Object for add it.
      *
@@ -604,7 +558,7 @@ public class ServerCommunication {
         HttpResponse<String> response = post(url, obj.toJSONString(),
                 "Content-Type", "application/json;charset=UTF-8");
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -659,7 +613,7 @@ public class ServerCommunication {
         }
         HttpResponse<String> response = get(url);
 
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -687,7 +641,7 @@ public class ServerCommunication {
     public static String getBikeRenting(String buildingID) {
         String url = cURL + "bike/" + buildingID;
         HttpResponse<String> response = get(url);
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -705,7 +659,7 @@ public class ServerCommunication {
     public static String sendBikeRenting(String bikeId) {
         String url = cURL + "bikeReservation/create?BikeId=" + bikeId + "&token=" + getToken();
         HttpResponse<String> response = post(url);
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -722,7 +676,7 @@ public class ServerCommunication {
     public static String reserveBike(String bikeId, String time) {
         String url = cURL + "bikeReservation/createWithTime?BikeId=" + bikeId + "&token=" + getToken() + "&time=" + time;
         HttpResponse<String> response = post(url);
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
@@ -736,7 +690,7 @@ public class ServerCommunication {
     public static String getBikesRentedByUser() {
         String url = cURL + "bikeReservation/notReturned?token=" + getToken();
         HttpResponse<String> response = get(url);
-        if (response == null) {
+        if (response == null || response.statusCode() != 200) {
             return "Communication with server failed";
         }
 
