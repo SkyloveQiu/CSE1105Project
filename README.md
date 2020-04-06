@@ -23,7 +23,7 @@ These concepts and ideas really excited us to start working on a solution to thi
 
 ## How to run it
 For running you have to use Gradle 6.1 or higher. For the server, the execution command is: "gradlew server:bootRun" and 
-for the client "gradlew client:run". Also if you want to contribute, you should respect our checkstyle protocol checking your coding style and tests with "gradle check".
+for the client "gradlew client:run".
 
 ## How to contribute to it
 Also if you want to contribute, you should respect our checkstyle protocol checking your coding style and tests with "gradle check". Furthermore, you can contribute using merge requests, weight your work and ask for approvals. The ones in charge will take a look on your code, 
